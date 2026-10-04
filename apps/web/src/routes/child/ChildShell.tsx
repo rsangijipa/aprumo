@@ -167,8 +167,6 @@ export default function ChildShell() {
           ref={frame}
           title="Atividade"
           src={`/game.html?app=${encodeURIComponent(run.appId)}`}
-          // Jogos de primeira parte, servidos da mesma origem. Jogos de terceiros: origem própria e sem allow-same-origin.
-          sandbox="allow-scripts allow-same-origin"
           allow="autoplay"
           referrerPolicy="no-referrer"
         />

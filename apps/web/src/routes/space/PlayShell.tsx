@@ -81,7 +81,7 @@ export default function PlayShell() {
         {overLimit ? (
           <div className="cs-play__done"><p className="cs-title">Hora de descansar a tela!</p><button className="cs-btn cs-btn--primary" onClick={() => nav(`/espaco/${childId}`)}>Voltar</button></div>
         ) : (
-          <iframe key={config?.runId} ref={frame} title={GAMES[appId]!.manifest.name} src={`/game.html?app=${encodeURIComponent(appId)}`} sandbox="allow-scripts allow-same-origin" allow="autoplay" />
+          <iframe key={config?.runId} ref={frame} title={GAMES[appId]!.manifest.name} src={`/game.html?app=${encodeURIComponent(appId)}`} allow="autoplay" />
         )}
         {result && (
           <div className="cs-play__done" role="status">

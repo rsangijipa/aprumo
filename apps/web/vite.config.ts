@@ -3,11 +3,27 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { resolve } from 'node:path';
 
+function cleanGameHtmlPlugin() {
+  return {
+    name: 'clean-game-html',
+    enforce: 'post' as const,
+    generateBundle(_options: unknown, bundle: Record<string, { type: string; source?: string | Uint8Array }>) {
+      const gameAsset = bundle['game.html'];
+      if (gameAsset && gameAsset.type === 'asset' && typeof gameAsset.source === 'string') {
+        gameAsset.source = gameAsset.source
+          .replace(/<link rel="manifest"[^>]*>/gi, '')
+          .replace(/<script id="vite-plugin-pwa:register-sw"[^>]*><\/script>/gi, '');
+      }
+    },
+  };
+}
+
 export default defineConfig({
   plugins: [
     react(),
     VitePWA({
       registerType: 'prompt',
+      useCredentials: true,
       includeAssets: ['favicon.svg'],
       manifest: {
         name: 'Aprumo',
@@ -26,6 +42,7 @@ export default defineConfig({
         navigateFallbackDenylist: [/^\/api/],
       },
     }),
+    cleanGameHtmlPlugin(),
   ],
   build: {
     rollupOptions: {
