@@ -62,3 +62,12 @@
 
 .qf[data-motion='static'] *, .qf[data-motion='static'] { animation: none !important; transition: none !important; }
 @media (prefers-reduced-motion: reduce) { .qf * { animation-duration: 0.01ms !important; } }
+.qf-reward__kicker { font-size: 11px; font-weight: 500; opacity: 0.75; }
+.qf[data-variant='sober'] {
+  --qf-wood: #dfe5ea; --qf-wood-light: #eef2f5; --qf-wood-dark: #4a5866; --qf-slot: #c3ccd4;
+  --qf-paper: #fff; --qf-ink: #2c3640; --qf-timer: #5e7d79;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.qf[data-variant='sober'] .qf-board { background: var(--qf-wood-light); border-width: 1.5px; box-shadow: 0 2px 8px rgb(0 0 0 / 0.08); }
+.qf[data-variant='sober'] .qf-slot { background: var(--qf-slot); box-shadow: inset 0 2px 4px rgb(0 0 0 / 0.15); }
+.qf[data-variant='sober'] .qf-token { animation: none; filter: none; }

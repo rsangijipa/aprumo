@@ -30,6 +30,7 @@ import { CURRENT_USER_ID } from '../../data/seed';
 import { currentStep, isSupabaseConfigured, signOut } from '../../data/supabase';
 import { actions, alertsForCase, db, outbox, syncNow, useStore } from '../../data/store';
 import { SyncPill } from './shared';
+import './pro-a11y.css';
 
 export default function ProLayout() {
   const [open, setOpen] = useState(false);

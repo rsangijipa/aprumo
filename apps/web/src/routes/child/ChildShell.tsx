@@ -13,8 +13,7 @@ import { TokenBoard, type TokenTheme } from '@aprumo/resource-quadro-de-fichas';
 import { VisualSchedule, type PictoKey } from '@aprumo/resource-agenda-visual';
 import { actions, db, getState, useStore } from '../../data/store';
 import './child.css';
-
-const HOLD_MS = 1200;
+import { HoldRing, useHoldPress } from './useHoldPress';
 
 /** Retrato (celular ou tablet na vertical): o quadro de fichas desce para baixo da atividade. */
 function usePortrait() {
@@ -42,8 +41,7 @@ export default function ChildShell() {
   const [trials, setTrials] = useState({ n: 0, ind: 0 });
   const [activityDone, setActivityDone] = useState(false);
   const [elapsed, setElapsed] = useState(0);
-  const [holding, setHolding] = useState(false);
-  const holdTimer = useRef<number | null>(null);
+  const hold = useHoldPress(() => setAdultOpen(true));
   const portrait = usePortrait();
 
   const goBack = useCallback(() => {
@@ -139,17 +137,6 @@ export default function ChildShell() {
 
   const a = run.config.adaptation;
   const motion = a.motion;
-  const startHold = () => {
-    setHolding(true);
-    holdTimer.current = window.setTimeout(() => {
-      setHolding(false);
-      setAdultOpen(true);
-    }, HOLD_MS);
-  };
-  const cancelHold = () => {
-    setHolding(false);
-    if (holdTimer.current) window.clearTimeout(holdTimer.current);
-  };
   const send = (m: Parameters<GameHost['send']>[0]) => host.current?.send(m);
   const hierarchy = run.config.clinical.targets[0]?.promptHierarchy ?? [];
   const therapistScoring = run.config.clinical.targets.some((t) => t.scoring === 'therapist');
@@ -169,20 +156,12 @@ export default function ChildShell() {
       <div className="kid-stage">
         <button
           className="kid-corner"
-          aria-label="Controles do adulto (manter pressionado)"
-          onPointerDown={startHold}
-          onPointerUp={cancelHold}
-          onPointerLeave={cancelHold}
-          onContextMenu={(e) => e.preventDefault()}
-          onKeyDown={(e) => { if (e.key === 'Enter') setAdultOpen(true); }}
+          type="button"
+          aria-label="Controles do adulto: mantenha pressionado por 1,2 segundo (ou segure Enter/Espaço)"
+          data-holding={hold.holding}
+          {...hold.bind}
         >
-          {holding && (
-            <svg className="kid-corner__ring" viewBox="0 0 26 26" aria-hidden="true">
-              <circle cx="13" cy="13" r="10" fill="none" stroke="rgb(0 0 0 / .35)" strokeWidth="3" strokeDasharray="63" strokeDashoffset="63">
-                <animate attributeName="stroke-dashoffset" from="63" to="0" dur={`${HOLD_MS}ms`} fill="freeze" />
-              </circle>
-            </svg>
-          )}
+          <HoldRing holding={hold.holding} ms={hold.ms} size={40} color="rgb(0 0 0 / .55)" className="kid-corner__ring" />
         </button>
         <iframe
           ref={frame}

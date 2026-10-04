@@ -281,3 +281,160 @@
 .ap-cmd-item__title { flex: 1; font-weight: 600; font-size: var(--ap-text-sm); }
 .ap-cmd-empty { padding: 1.5rem; text-align: center; }
 
+/* ------------------------------------------------------------ navegação e botões universais */
+.ap-back-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  min-height: 44px; min-width: 44px; padding: 0.4rem 0.85rem;
+  font-weight: 600; font-size: var(--ap-text-sm); color: var(--ap-text);
+  border-radius: var(--ap-radius-md); text-decoration: none; cursor: pointer;
+  transition: background var(--ap-dur-1) var(--ap-ease), color var(--ap-dur-1);
+}
+.ap-back-btn:hover { background: var(--ap-surface-sunken); color: var(--ap-primary); }
+.ap-back-btn:focus-visible { outline: 3px solid var(--ap-focus); outline-offset: 2px; }
+
+.ap-close-btn {
+  display: inline-grid; place-items: center;
+  min-width: 44px; min-height: 44px; width: 44px; height: 44px;
+  padding: 0; border: none; border-radius: var(--ap-radius-md);
+  background: transparent; color: var(--ap-text-muted); cursor: pointer;
+  transition: background var(--ap-dur-1), color var(--ap-dur-1), transform var(--ap-dur-1);
+}
+.ap-close-btn:hover { background: var(--ap-surface-sunken); color: var(--ap-text); }
+.ap-close-btn:active { transform: scale(0.95); }
+.ap-close-btn:focus-visible { outline: 3px solid var(--ap-focus); outline-offset: 2px; }
+
+.ap-btn--next { gap: 0.6rem; min-height: 46px; }
+.ap-btn--prev { gap: 0.6rem; min-height: 46px; }
+
+/* Migalhas de Pão (Breadcrumbs) */
+.ap-breadcrumbs-wrap { margin-bottom: 0.75rem; }
+.ap-breadcrumbs {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem;
+  margin: 0; padding: 0; list-style: none; font-size: var(--ap-text-xs);
+}
+.ap-breadcrumbs__item { display: inline-flex; align-items: center; gap: 0.4rem; }
+.ap-breadcrumbs__link {
+  color: var(--ap-text-muted); text-decoration: none; font-weight: 550;
+  padding: 0.25rem 0.35rem; border-radius: 4px; transition: color var(--ap-dur-1);
+}
+.ap-breadcrumbs__link:hover { color: var(--ap-primary); text-decoration: underline; }
+.ap-breadcrumbs__current { color: var(--ap-text); font-weight: 700; padding: 0.25rem 0; }
+.ap-breadcrumbs__sep { color: var(--ap-border-strong); user-select: none; }
+
+/* Tooltip Acessível */
+.ap-tooltip-root {
+  position: relative; display: inline-flex; cursor: help;
+}
+.ap-tooltip-bubble {
+  position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+  padding: 0.4rem 0.75rem; border-radius: var(--ap-radius-sm);
+  background: var(--ap-text); color: var(--ap-text-inverse);
+  font-size: var(--ap-text-xs); line-height: 1.3; font-weight: 500;
+  white-space: nowrap; pointer-events: none; opacity: 0;
+  visibility: hidden; transition: opacity var(--ap-dur-1), visibility var(--ap-dur-1);
+  box-shadow: var(--ap-shadow-2); z-index: 1000;
+}
+.ap-tooltip-root:hover .ap-tooltip-bubble,
+.ap-tooltip-root:focus-visible .ap-tooltip-bubble,
+.ap-tooltip-root:focus .ap-tooltip-bubble,
+.ap-tooltip-root:focus-within .ap-tooltip-bubble {
+  opacity: 1; visibility: visible;
+}
+.ap-tooltip--bottom .ap-tooltip-bubble { bottom: auto; top: calc(100% + 6px); }
+
+/* Controles de Escolha (Checkbox & Radio) */
+.ap-choice-label {
+  display: inline-flex; align-items: center; gap: 0.65rem;
+  min-height: 44px; padding: 0.3rem 0; font-size: var(--ap-text-sm);
+  color: var(--ap-text); cursor: pointer; user-select: none;
+}
+.ap-choice-label--disabled { opacity: 0.5; cursor: not-allowed; }
+.ap-checkbox, .ap-radio {
+  width: 22px; height: 22px; margin: 0;
+  accent-color: var(--ap-primary); cursor: pointer;
+}
+
+/* Cards Unificados */
+.ap-game-card {
+  background: var(--ap-surface); border: 1px solid var(--ap-border);
+  border-radius: var(--ap-radius-lg); overflow: hidden;
+  display: flex; flex-direction: column; box-shadow: var(--ap-shadow-1);
+  transition: transform var(--ap-dur-1), box-shadow var(--ap-dur-1), border-color var(--ap-dur-1);
+}
+.ap-game-card--clickable { cursor: pointer; }
+.ap-game-card--clickable:hover {
+  transform: translateY(-2px); box-shadow: var(--ap-shadow-2);
+  border-color: var(--ap-sage-300);
+}
+.ap-game-card__art { width: 100%; height: 140px; background: var(--ap-surface-sunken); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.ap-game-card__art svg { width: 100%; height: 100%; object-fit: cover; }
+.ap-game-card__body { padding: 1rem 1.15rem; display: flex; flex-direction: column; gap: 0.45rem; flex: 1; }
+.ap-game-card__title { font-size: var(--ap-text-md); font-weight: 700; color: var(--ap-text); }
+.ap-game-card__summary { font-size: var(--ap-text-xs); color: var(--ap-text-muted); line-height: 1.45; margin: 0; flex: 1; }
+.ap-game-card__actions { margin-top: 0.6rem; display: flex; gap: 0.5rem; }
+
+.ap-resource-card {
+  background: var(--ap-surface); border: 1px solid var(--ap-border);
+  border-radius: var(--ap-radius-lg); padding: 1.25rem;
+  display: flex; flex-direction: column; gap: 0.6rem; box-shadow: var(--ap-shadow-1);
+  transition: transform var(--ap-dur-1), box-shadow var(--ap-dur-1);
+}
+.ap-resource-card--clickable { cursor: pointer; }
+.ap-resource-card--clickable:hover { transform: translateY(-2px); box-shadow: var(--ap-shadow-2); border-color: var(--ap-sage-500); }
+.ap-resource-card__title { font-size: var(--ap-text-md); font-weight: 700; color: var(--ap-text); }
+.ap-resource-card__summary { font-size: var(--ap-text-sm); color: var(--ap-text-muted); line-height: 1.5; margin: 0; flex: 1; }
+.ap-resource-card__evidence { color: var(--ap-sage-700); font-weight: 550; }
+.ap-resource-card__actions { margin-top: 0.4rem; display: flex; gap: 0.5rem; }
+
+
+
+/* ------------------------------------------------------------ alvos de toque, foco e hover (WCAG 2.2: 2.5.8, 2.4.7, 2.4.13) */
+/* Área mínima de 44×44 px: controles visualmente menores ganham área invisível ao redor. */
+.ap-btn--sm, .ap-dialog__close, .ap-close-btn, .ap-breadcrumbs__link, .ap-back-link { position: relative; }
+.ap-btn--sm::before, .ap-dialog__close::before, .ap-breadcrumbs__link::before, .ap-back-link::before {
+  content: ''; position: absolute; inset: -4px;
+}
+.ap-btn--sm::before { inset: -4px 0; }
+.ap-dialog__close { min-width: 44px; min-height: 44px; }
+.ap-seg { gap: 4px; }
+.ap-seg button { min-height: 44px; min-width: 44px; touch-action: manipulation; }
+.ap-tab { min-height: 44px; }
+.ap-breadcrumbs { gap: 0.15rem 0.4rem; }
+.ap-breadcrumbs__link, .ap-breadcrumbs__current { display: inline-flex; align-items: center; min-height: 44px; }
+.ap-breadcrumbs__link::before { inset: 0 -2px; }
+.ap-back-link { min-height: 44px; display: inline-flex; align-items: center; }
+.ap-back-link::before { inset: 0 -4px; }
+.ap-stepper { gap: 8px; }
+.ap-cmd-item { min-height: 44px; }
+
+/* Foco sempre visível com 3 px na cor de foco, inclusive onde o estilo remove o contorno. */
+.ap-btn:focus-visible, .ap-seg button:focus-visible, .ap-tab:focus-visible, .ap-dialog__close:focus-visible,
+.ap-stepper button:focus-visible, .ap-breadcrumbs__link:focus-visible, .ap-back-link:focus-visible,
+.ap-checkbox:focus-visible, .ap-radio:focus-visible, .ap-tooltip-root:focus-visible {
+  outline: 3px solid var(--ap-focus); outline-offset: 2px;
+}
+.ap-cmd-item:focus-visible { outline: 3px solid var(--ap-focus); outline-offset: -3px; }
+.ap-input:focus-visible, .ap-select:focus-visible, .ap-textarea:focus-visible { outline: 3px solid var(--ap-focus); outline-offset: 1px; }
+
+/* Em telas sem hover (toque), nada depende de :hover; efeitos de elevação ficam só com mouse. */
+@media (hover: none) {
+  .ap-game-card--clickable:hover, .ap-resource-card--clickable:hover { transform: none; box-shadow: var(--ap-shadow-1); }
+  .ap-tab:not(.ap-tab--active):hover, .ap-breadcrumbs__link:hover, .ap-back-link:hover { color: var(--ap-text-muted); }
+}
+
+/* Movimento reduzido: sem translações nem escalas em interações. */
+@media (prefers-reduced-motion: reduce) {
+  .ap-btn, .ap-close-btn, .ap-back-btn, .ap-tab, .ap-game-card, .ap-resource-card, .ap-tooltip-bubble { transition: none; }
+  .ap-btn:active, .ap-close-btn:active { transform: none; }
+  .ap-game-card--clickable:hover, .ap-resource-card--clickable:hover { transform: none; }
+  .ap-dialog, .ap-cmd, .ap-drawer, .ap-sheet { animation: none !important; }
+}
+
+/* Cartões clicáveis: o botão do título estende sua área ao cartão todo. */
+.ap-game-card--clickable, .ap-resource-card--clickable { position: relative; }
+.ap-card-hit { all: unset; cursor: pointer; }
+.ap-card-hit::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
+.ap-card-hit:focus-visible { outline: none; }
+.ap-game-card--clickable:has(.ap-card-hit:focus-visible),
+.ap-resource-card--clickable:has(.ap-card-hit:focus-visible) { outline: 3px solid var(--ap-focus); outline-offset: 2px; }
+.ap-game-card__actions, .ap-resource-card__actions { position: relative; z-index: 1; }

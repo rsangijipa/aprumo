@@ -3,7 +3,8 @@
  * Gamificação saudável (P7, ECA Digital): estrelas de esforço, álbum com figurinhas visíveis e escolhidas,
  * conquistas pessoais. Sem ranking, sem sorteio, sem sequência de dias, sem notificações.
  */
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
+import { HoldRing, useHoldPress } from '../child/useHoldPress';
 import { useNavigate, useParams } from 'react-router';
 import '@fontsource/fredoka/400.css';
 import '@fontsource/fredoka/500.css';
@@ -38,7 +39,6 @@ export function Sticker({ id }: { id: string }) {
 }
 
 type Tab = 'inicio' | 'jogar' | 'album' | 'prancha' | 'calma';
-const HOLD_MS = 1200;
 
 export default function ChildSpace() {
   const { childId = '' } = useParams();
@@ -436,41 +436,25 @@ function SpaceSettings({
 
 /* ================================================================ sair com toque longo + PIN */
 export function HoldToExit({ onExit, label }: { onExit: () => void; label: string }) {
-  const [holding, setHolding] = useState(false);
   const [pinOpen, setPinOpen] = useState(false);
-  const t = useRef<number | null>(null);
-
-  const start = () => {
-    setHolding(true);
-    t.current = window.setTimeout(() => {
-      setHolding(false);
-      setPinOpen(true);
-    }, HOLD_MS);
-  };
-
-  const stop = () => {
-    setHolding(false);
-    if (t.current) window.clearTimeout(t.current);
-  };
+  const hold = useHoldPress(() => setPinOpen(true));
 
   return (
     <>
       <button
+        type="button"
         className="cs-exit"
-        data-holding={holding}
-        onPointerDown={start}
-        onPointerUp={stop}
-        onPointerLeave={stop}
-        onContextMenu={(e) => e.preventDefault()}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') setPinOpen(true);
-        }}
-        aria-label={`${label} (toque longo + PIN do adulto)`}
+        data-holding={hold.holding}
+        {...hold.bind}
+        aria-label={`${label}: mantenha pressionado por 1,2 segundo (ou segure Enter/Espaço) e depois digite o PIN do adulto`}
       >
+        <span className="cs-exit__icon">
+          <HoldRing holding={hold.holding} ms={hold.ms} size={40} className="cs-exit__ring" />
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M14 4.5H6.5v15H14M10.5 12H20M16.5 8.5 20 12l-3.5 3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
-        <span>{label}</span>
+        </span>
+        <span className="cs-exit__label">{label}</span>
       </button>
 
       {pinOpen && (

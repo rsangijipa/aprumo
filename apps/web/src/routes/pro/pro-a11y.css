@@ -1,0 +1,98 @@
+/* ================================================================
+   Área profissional: navegação, alvos de toque e responsividade
+   (APRUMO_FULL_AUDIT §3.1–3.3, ACCESSIBILITY_AUDIT, RESPONSIVE_AUDIT)
+   ================================================================ */
+
+/* ------------------------------------------------------------ trilha do caso */
+.case-crumbs { margin-bottom: -0.5rem; }
+.case-crumbs .ap-breadcrumbs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+.case-crumbs .ap-breadcrumbs::-webkit-scrollbar { display: none; }
+.case-crumbs .ap-breadcrumbs__item { flex: none; }
+.case-crumbs .ap-breadcrumbs__current { max-width: 22ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; line-height: 44px; }
+
+/* ------------------------------------------------------------ abas do caso: rolagem com snap e indicação de borda */
+.case-tabs-wrap { position: relative; min-width: 0; }
+.case-tabs-wrap::before, .case-tabs-wrap::after {
+  content: ''; position: absolute; top: 0; bottom: 1px; width: 2.5rem; pointer-events: none; z-index: 1;
+  opacity: 0; transition: opacity var(--ap-dur-1) var(--ap-ease);
+}
+.case-tabs-wrap::before { left: 0; background: linear-gradient(to right, var(--ap-bg) 20%, transparent); }
+.case-tabs-wrap::after { right: 0; background: linear-gradient(to left, var(--ap-bg) 20%, transparent); }
+.case-tabs-wrap[data-fade-start='true']::before, .case-tabs-wrap[data-fade-end='true']::after { opacity: 1; }
+/* Indicador de "há mais abas" além do degradê: seta discreta na borda. */
+.case-tabs-wrap[data-fade-end='true']::after {
+  background:
+    no-repeat right 0.35rem center / 14px 14px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b6b63' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E"),
+    linear-gradient(to left, var(--ap-bg) 35%, transparent);
+}
+.case-tabs-wrap[data-fade-start='true']::before {
+  background:
+    no-repeat left 0.35rem center / 14px 14px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b6b63' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E"),
+    linear-gradient(to right, var(--ap-bg) 35%, transparent);
+}
+.case-tabs { scroll-snap-type: x proximity; scroll-padding-inline: 2.5rem; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+.case-tabs a { scroll-snap-align: start; min-height: 44px; display: inline-flex; align-items: center; flex: none; }
+.case-tabs a:focus-visible { outline: 3px solid var(--ap-focus); outline-offset: -3px; border-radius: var(--ap-radius-sm, 6px); }
+@media (max-width: 640px) {
+  .case-tabs-wrap { margin-inline: -0.9rem; }
+  .case-tabs-wrap .case-tabs { margin-inline: 0; }
+}
+
+/* ------------------------------------------------------------ marcas de ação (chips) com área de toque de 44 px */
+.chip-input { gap: 0.5rem; }
+.chip button { position: relative; }
+.chip button::before { content: ''; position: absolute; inset: -8px; }
+.chip button:focus-visible { outline: 3px solid var(--ap-focus); outline-offset: 1px; }
+@media (hover: none) { .chip button:hover { background: transparent; } }
+
+/* Alvos menores de linhas de tabela e listas. */
+.target-pick { min-height: 48px; }
+.target-pick:focus-visible, .quick-btn:focus-visible, .response-btn:focus-visible,
+.prompt-seg button:focus-visible, .ioa-marks button:focus-visible, .comp-cell:focus-visible,
+.tpl-card:focus-visible { outline: 3px solid var(--ap-focus); outline-offset: 2px; }
+@media (hover: none) {
+  .target-pick:hover { background: none; }
+  .target-pick[aria-current='true']:hover { background: var(--ap-surface); }
+  .quick-btn:hover { border-color: var(--ap-border); }
+}
+
+/* ------------------------------------------------------------ SessionRunner: barra superior */
+.runner__actions { margin-left: auto; gap: 0.5rem; flex-wrap: nowrap; }
+/* "Encerrar" nunca colado em outra ação: separação extra e divisor visual. */
+.runner__actions .runner__end { margin-left: 0.75rem; position: relative; }
+.runner__actions .runner__end::before {
+  content: ''; position: absolute; left: calc(-0.375rem - 1px); top: 20%; bottom: 20%; width: 1px; background: var(--ap-border-strong);
+}
+@media (max-width: 420px) {
+  /* Celular estreito (320–420 px): ações em linha própria; Encerrar fica isolado na extremidade direita. */
+  .runner__actions { flex-basis: 100%; margin-left: 0; }
+  .runner__actions .runner__end { margin-left: auto; }
+  .runner__actions .runner__end::before { display: none; }
+}
+.response-grid { gap: max(0.5rem, 8px); }
+
+/* Tablet em retrato (768–1024 px): alvos sobem para uma faixa horizontal e a coluna central ganha a largura toda,
+   sem espremer os botões de resposta. */
+@media (min-width: 761px) and (max-width: 1180px) and (orientation: portrait) {
+  .runner__body { grid-template-columns: 1fr; }
+  .runner__targets { display: flex; overflow-x: auto; gap: 0.5rem; border-bottom: 1px solid var(--ap-border); scroll-snap-type: x proximity; }
+  .runner__targets > p { display: none; }
+  .runner__targets .target-pick { min-width: 220px; scroll-snap-align: start; }
+  .runner__col + .runner__col { border-left: none; }
+  .response-btn { min-height: 96px; }
+}
+
+/* ------------------------------------------------------------ monitores largos: medida de leitura */
+.pro-content .ap-textarea, .pro-content .page-head p, .pro-content .ap-card__body > p, .pro-content .form-error { max-width: 72ch; }
+.pro-content .ap-field:has(> .ap-textarea) { max-width: 720px; }
+@media (min-width: 1280px) {
+  .pro-content form:not([class]), .pro-content .form-narrow { max-width: 720px; }
+}
+
+/* ------------------------------------------------------------ movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  .case-tabs-wrap::before, .case-tabs-wrap::after, .response-btn, .target-pick { transition: none; }
+  .response-btn:active { transform: none; }
+  .case-tabs { scroll-behavior: auto; }
+  .runner-plan { animation: none; }
+}

@@ -4,7 +4,7 @@
  * dos eventos do protocolo. Visual, ritmo e interação continuam sendo de cada jogo.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { PromptSource, SessionConfig, StimulusRef, TargetConfig, TrialResponse } from '@aprumo/protocol';
+import type { InputMode, PromptSource, SessionConfig, StimulusRef, TargetConfig, TrialResponse } from '@aprumo/protocol';
 import type { GameClient } from './client';
 
 export interface SelectionTrial {
@@ -39,7 +39,13 @@ export function useTrialRunner<T extends SelectionTrial>(opts: {
   onTrialStart?: (t: T) => void;
   /** Enquanto false, a tentativa não começa (ex.: instrução falada em andamento). Latência conta a partir daqui. */
   gate?: boolean;
+  /**
+   * Emite os eventos opcionais do ciclo universal (STIMULUS_PRESENTED, RESPONSE_STARTED,
+   * REINFORCER_PRESENTED). Padrão: true. Use false para manter só os eventos legados.
+   */
+  runtimeEvents?: boolean;
 }) {
+  const runtime = opts.runtimeEvents !== false;
   const { client, config, trials, paused, latencyMaxMs, feedbackMs = 1100 } = opts;
   const [i, setI] = useState(0);
   const [stage, setStage] = useState<Stage>('awaiting');
@@ -54,6 +60,8 @@ export function useTrialRunner<T extends SelectionTrial>(opts: {
   /** Temporizador de transição (feedback → próxima): sobrevive à mudança de estágio. */
   const transition = useRef<number | null>(null);
   const pausedAt = useRef<number | null>(null);
+  /** RESPONSE_STARTED é emitido no máximo uma vez por tentativa (primeiro gesto). */
+  const responseStarted = useRef(false);
   const detailRef = useRef(opts.detail);
   detailRef.current = opts.detail;
   const onStartRef = useRef(opts.onTrialStart);
@@ -96,6 +104,13 @@ export function useTrialRunner<T extends SelectionTrial>(opts: {
       setLastSelected(selected);
       if (response === 'correct') {
         client.emit('REWARD_TRIGGERED', { kind: 'visual', contingentOn: trial.target.targetId });
+        if (runtime) {
+          client.emit('REINFORCER_PRESENTED', {
+            kind: 'visual',
+            contingentOn: trial.target.targetId,
+            intensity: config.adaptation.feedback === 'festive' ? 'festive' : 'subtle',
+          });
+        }
         setStage('feedback');
         scheduleAdvance(feedbackMs);
       } else {
@@ -105,7 +120,7 @@ export function useTrialRunner<T extends SelectionTrial>(opts: {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [trial, config, client, feedbackMs],
+    [trial, config, client, feedbackMs, runtime],
   );
 
   const iRef = useRef(0);
@@ -131,7 +146,14 @@ export function useTrialRunner<T extends SelectionTrial>(opts: {
     if (!trial || !config || stage !== 'awaiting' || paused || opts.gate === false) return;
     t0.current = performance.now();
     prompt.current = { level: 'IND', source: 'none' };
-    client.emit('TRIAL_STARTED', { targetId: trial.target.targetId, trialIndex: trial.index, presented: trial.options.map((o) => o.stimulusId) });
+    responseStarted.current = false;
+    const presented = trial.options.map((o) => o.stimulusId);
+    client.emit('TRIAL_STARTED', { targetId: trial.target.targetId, trialIndex: trial.index, presented });
+    if (runtime) {
+      client.emit('STIMULUS_PRESENTED', {
+        targetId: trial.target.targetId, trialIndex: trial.index, presented, positionOfTarget: trial.positionOfTarget,
+      });
+    }
     onStartRef.current?.(trial);
     const builtIn = config.adaptation.builtInPromptAfterMs;
     if (builtIn != null && builtIn < latencyMaxMs) {
@@ -182,10 +204,30 @@ export function useTrialRunner<T extends SelectionTrial>(opts: {
     [client, trial, stage, finish],
   );
 
+  /**
+   * Primeiro gesto de resposta (ex.: começou a arrastar). Emite RESPONSE_STARTED com a latência
+   * uma única vez por tentativa; `select` chama automaticamente se o jogo não chamou antes.
+   */
+  const markResponseStart = useCallback(
+    (position: number | null = null, inputMode: InputMode = 'tap') => {
+      if (!runtime || !trial || !config || paused || stage !== 'awaiting' || responseStarted.current) return;
+      responseStarted.current = true;
+      client.emit('RESPONSE_STARTED', {
+        targetId: trial.target.targetId,
+        trialIndex: trial.index,
+        latencyMs: Math.max(0, Math.round(performance.now() - t0.current)),
+        position,
+        inputMode,
+      });
+    },
+    [runtime, trial, config, paused, stage, client],
+  );
+
   const select = useCallback(
     (position: number): TrialResponse | 'ignored' => {
       if (!trial || paused) return 'ignored';
       if (stage === 'awaiting' && trial.target.scoring === 'auto') {
+        markResponseStart(position);
         const r: TrialResponse = position === trial.positionOfTarget ? 'correct' : 'incorrect';
         finish(r, position);
         return r;
@@ -200,9 +242,9 @@ export function useTrialRunner<T extends SelectionTrial>(opts: {
       return 'ignored';
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [trial, paused, stage, finish, feedbackMs],
+    [trial, paused, stage, finish, feedbackMs, markResponseStart],
   );
 
   const state: TrialRunnerState<T> = { trial, stage, hint, lastOutcome, lastSelected, completed: Math.min(i, trials.length), total: trials.length };
-  return { ...state, select };
+  return { ...state, select, markResponseStart };
 }

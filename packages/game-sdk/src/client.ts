@@ -15,7 +15,35 @@ import {
 
 type Command = Exclude<HostToGame, { kind: 'SESSION_CONFIG' } | { kind: 'EVENT_ACK' }>;
 
-export interface GameClient {
+/** Payload de TRIAL_COMPLETED com `detail` opcional (o protocolo preenche `{}`). */
+export type ResponseRecordedInput = Omit<EventPayload<'TRIAL_COMPLETED'>, 'detail'> & {
+  detail?: Record<string, unknown>;
+};
+
+/**
+ * Atalhos do ciclo universal do runtime (ver RUNTIME_CYCLE em @aprumo/protocol).
+ * Todos retornam o eventId e equivalem a `emit(<EVENTO>, payload)`.
+ */
+export interface RuntimeHelpers {
+  gameStarted(configVersion: string): string;
+  levelStarted(p: EventPayload<'LEVEL_STARTED'>): string;
+  trialStarted(p: EventPayload<'TRIAL_STARTED'>): string;
+  stimulusPresented(p: EventPayload<'STIMULUS_PRESENTED'>): string;
+  /** Registra dica apresentada (evento PROMPT_USED). */
+  promptPresented(p: EventPayload<'PROMPT_USED'>): string;
+  responseStarted(p: EventPayload<'RESPONSE_STARTED'>): string;
+  /** Registra a resposta pontuada (evento TRIAL_COMPLETED). */
+  responseRecorded(p: ResponseRecordedInput): string;
+  reinforcerPresented(p: EventPayload<'REINFORCER_PRESENTED'>): string;
+  levelCompleted(p: EventPayload<'LEVEL_COMPLETED'>): string;
+  gameCompleted(trialsCompleted: number): string;
+  paused(reason?: string | null): string;
+  resumed(): string;
+  /** Saída do jogo (APP_CLOSED). */
+  exited(reason: 'adult_exit' | 'timeout' | 'completed' | (string & {})): string;
+}
+
+export interface GameClient extends RuntimeHelpers {
   emit<T extends EventType>(type: T, payload: EventPayload<T>): string;
   onConfig(cb: (c: SessionConfig) => void): () => void;
   onCommand(cb: (c: Command) => void): () => void;
@@ -70,7 +98,7 @@ export function createGameClient(opts: { appId: string; appVersion: string; targ
     window.removeEventListener('message', onMessage);
   };
 
-  return {
+  const client: Omit<GameClient, keyof RuntimeHelpers> = {
     emit(type, payload) {
       if (!config) throw new Error('SESSION_CONFIG not received yet');
       const eventId = uid();
@@ -104,5 +132,25 @@ export function createGameClient(opts: { appId: string; appVersion: string; targ
     connect,
     disconnect,
     dispose: disconnect,
+  };
+  return { ...client, ...runtimeHelpers(client.emit) };
+}
+
+/** Constrói os atalhos do runtime sobre qualquer `emit` (útil para clientes de teste). */
+export function runtimeHelpers(emit: GameClient['emit']): RuntimeHelpers {
+  return {
+    gameStarted: (configVersion) => emit('SESSION_STARTED', { configVersion }),
+    levelStarted: (p) => emit('LEVEL_STARTED', p),
+    trialStarted: (p) => emit('TRIAL_STARTED', p),
+    stimulusPresented: (p) => emit('STIMULUS_PRESENTED', p),
+    promptPresented: (p) => emit('PROMPT_USED', p),
+    responseStarted: (p) => emit('RESPONSE_STARTED', p),
+    responseRecorded: (p) => emit('TRIAL_COMPLETED', { ...p, detail: p.detail ?? {} }),
+    reinforcerPresented: (p) => emit('REINFORCER_PRESENTED', p),
+    levelCompleted: (p) => emit('LEVEL_COMPLETED', p),
+    gameCompleted: (trialsCompleted) => emit('SESSION_COMPLETED', { trialsCompleted }),
+    paused: (reason = null) => emit('SESSION_PAUSED', { reason }),
+    resumed: () => emit('SESSION_RESUMED', {}),
+    exited: (reason) => emit('APP_CLOSED', { reason }),
   };
 }

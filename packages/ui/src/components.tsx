@@ -72,6 +72,7 @@ export function Card({
   children,
   className,
   bodyClassName,
+  id,
   as: As = 'section',
 }: {
   title?: ReactNode;
@@ -79,10 +80,11 @@ export function Card({
   children: ReactNode;
   className?: string;
   bodyClassName?: string;
+  id?: string;
   as?: 'section' | 'article' | 'div';
 }) {
   return (
-    <As className={cx('ap-card', className)}>
+    <As id={id} className={cx('ap-card', className)}>
       {(title || actions) && (
         <header className="ap-card__head">
           {title && <h2 className="ap-card__title">{title}</h2>}
@@ -736,4 +738,336 @@ export function CommandPalette({
     </div>
   );
 }
+
+/* ------------------------------------------------------------ navegação e botões universais */
+export function BackButton({
+  href,
+  onClick,
+  label = 'Voltar',
+  className,
+}: {
+  href?: string;
+  onClick?: () => void;
+  label?: string;
+  className?: string;
+}) {
+  const content = (
+    <>
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M15 18l-6-6 6-6" />
+      </svg>
+      <span>{label}</span>
+    </>
+  );
+
+  if (href) {
+    return (
+      <a href={href} className={cx('ap-btn ap-btn--ghost ap-back-btn', className)} aria-label={label}>
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      className={cx('ap-btn ap-btn--ghost ap-back-btn', className)}
+      onClick={onClick || (() => window.history.back())}
+      aria-label={label}
+    >
+      {content}
+    </button>
+  );
+}
+
+export function CloseButton({
+  onClick,
+  label = 'Fechar',
+  className,
+}: {
+  onClick?: () => void;
+  label?: string;
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      className={cx('ap-close-btn', className)}
+      onClick={onClick}
+      aria-label={label}
+      title={label}
+    >
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 6L6 18M6 6l12 12" />
+      </svg>
+    </button>
+  );
+}
+
+export function NextButton({
+  onClick,
+  label = 'Próximo',
+  disabled,
+  className,
+}: {
+  onClick?: () => void;
+  label?: string;
+  disabled?: boolean;
+  className?: string;
+}) {
+  return (
+    <Button
+      variant="primary"
+      onClick={onClick}
+      disabled={disabled}
+      className={cx('ap-btn--next', className)}
+    >
+      <span>{label}</span>
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 18l6-6-6-6" />
+      </svg>
+    </Button>
+  );
+}
+
+export function PreviousButton({
+  onClick,
+  label = 'Anterior',
+  disabled,
+  className,
+}: {
+  onClick?: () => void;
+  label?: string;
+  disabled?: boolean;
+  className?: string;
+}) {
+  return (
+    <Button
+      variant="default"
+      onClick={onClick}
+      disabled={disabled}
+      className={cx('ap-btn--prev', className)}
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M15 18l-6-6 6-6" />
+      </svg>
+      <span>{label}</span>
+    </Button>
+  );
+}
+
+export function Breadcrumbs({
+  items,
+  className,
+}: {
+  items: Array<{ label: ReactNode; href?: string; active?: boolean }>;
+  className?: string;
+}) {
+  return (
+    <nav className={cx('ap-breadcrumbs-wrap', className)} aria-label="Navegação estrutural">
+      <ol className="ap-breadcrumbs">
+        {items.map((it, idx) => {
+          const isLast = idx === items.length - 1 || it.active;
+          return (
+            <li key={idx} className="ap-breadcrumbs__item">
+              {it.href && !isLast ? (
+                <a href={it.href} className="ap-breadcrumbs__link">
+                  {it.label}
+                </a>
+              ) : (
+                <span className="ap-breadcrumbs__current" aria-current={isLast ? 'page' : undefined}>
+                  {it.label}
+                </span>
+              )}
+              {!isLast && <span className="ap-breadcrumbs__sep" aria-hidden="true">/</span>}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}
+
+export function Tooltip({
+  text,
+  children,
+  position = 'top',
+}: {
+  text: string;
+  children: ReactNode;
+  position?: 'top' | 'bottom' | 'left' | 'right';
+}) {
+  const id = useId();
+  return (
+    <span className={`ap-tooltip-root ap-tooltip--${position}`} aria-describedby={id}>
+      {children}
+      <span className="ap-tooltip-bubble" role="tooltip" id={id}>{text}</span>
+    </span>
+  );
+}
+
+/* ------------------------------------------------------------ controles de formulário padrão */
+export const Input = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
+  function Input({ className, ...props }, ref) {
+    return <input ref={ref} className={cx('ap-input', className)} {...props} />;
+  }
+);
+
+export const Select = forwardRef<HTMLSelectElement, React.SelectHTMLAttributes<HTMLSelectElement>>(
+  function Select({ className, children, ...props }, ref) {
+    return <select ref={ref} className={cx('ap-select', className)} {...props}>{children}</select>;
+  }
+);
+
+export function Checkbox({
+  label,
+  checked,
+  onChange,
+  disabled,
+  id,
+  className,
+}: {
+  label: ReactNode;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  disabled?: boolean;
+  id?: string;
+  className?: string;
+}) {
+  const generatedId = useId();
+  const inputId = id ?? generatedId;
+  return (
+    <label htmlFor={inputId} className={cx('ap-choice-label', disabled && 'ap-choice-label--disabled', className)}>
+      <input
+        type="checkbox"
+        id={inputId}
+        className="ap-checkbox"
+        checked={checked}
+        disabled={disabled}
+        onChange={(e) => onChange(e.target.checked)}
+      />
+      <span>{label}</span>
+    </label>
+  );
+}
+
+export function Radio<T extends string>({
+  name,
+  value,
+  selectedValue,
+  onChange,
+  label,
+  disabled,
+  id,
+  className,
+}: {
+  name: string;
+  value: T;
+  selectedValue: T;
+  onChange: (val: T) => void;
+  label: ReactNode;
+  disabled?: boolean;
+  id?: string;
+  className?: string;
+}) {
+  const generatedId = useId();
+  const inputId = id ?? generatedId;
+  return (
+    <label htmlFor={inputId} className={cx('ap-choice-label', disabled && 'ap-choice-label--disabled', className)}>
+      <input
+        type="radio"
+        name={name}
+        id={inputId}
+        value={value}
+        className="ap-radio"
+        checked={value === selectedValue}
+        disabled={disabled}
+        onChange={() => onChange(value)}
+      />
+      <span>{label}</span>
+    </label>
+  );
+}
+
+/* ------------------------------------------------------------ cards unificados */
+export function GameCard({
+  name,
+  tag,
+  summary,
+  ageRange,
+  art,
+  actions,
+  onClick,
+  badgeTone,
+  className,
+}: {
+  name: string;
+  tag?: string;
+  summary: string;
+  ageRange?: string;
+  art?: ReactNode;
+  actions?: ReactNode;
+  onClick?: () => void;
+  badgeTone?: 'aba' | 'denver' | 'success' | 'warning' | 'info';
+  className?: string;
+}) {
+  return (
+    <article className={cx('ap-game-card', onClick && 'ap-game-card--clickable', className)}>
+      {art && <div className="ap-game-card__art" aria-hidden="true">{art}</div>}
+      <div className="ap-game-card__body">
+        <div className="ap-row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+          {tag && <span className={cx('ap-badge', badgeTone && `ap-badge--${badgeTone}`)}>{tag}</span>}
+          {ageRange && <span className="ap-xs ap-muted">{ageRange}</span>}
+        </div>
+        <strong className="ap-game-card__title">
+          {onClick ? (
+            // Botão "esticado" cobre o cartão inteiro: clique em qualquer ponto, mas com semântica e teclado nativos.
+            <button type="button" className="ap-card-hit" onClick={onClick}>{name}</button>
+          ) : name}
+        </strong>
+        <p className="ap-game-card__summary">{summary}</p>
+        {actions && <div className="ap-game-card__actions">{actions}</div>}
+      </div>
+    </article>
+  );
+}
+
+export function ResourceCard({
+  name,
+  category,
+  summary,
+  evidence,
+  art,
+  onClick,
+  actions,
+  className,
+}: {
+  name: string;
+  category?: string;
+  summary: string;
+  evidence?: string;
+  art?: ReactNode;
+  onClick?: () => void;
+  actions?: ReactNode;
+  className?: string;
+}) {
+  return (
+    <article className={cx('ap-resource-card', onClick && 'ap-resource-card--clickable', className)}>
+      {art && <div className="ap-resource-card__art" aria-hidden="true">{art}</div>}
+      <div className="ap-resource-card__body">
+        {category && <span className="ap-badge">{category}</span>}
+        <strong className="ap-resource-card__title">
+          {onClick ? (
+            // Botão "esticado" cobre o cartão inteiro: clique em qualquer ponto, mas com semântica e teclado nativos.
+            <button type="button" className="ap-card-hit" onClick={onClick}>{name}</button>
+          ) : name}
+        </strong>
+        <p className="ap-resource-card__summary">{summary}</p>
+        {evidence && <span className="ap-xs ap-muted ap-resource-card__evidence">{evidence}</span>}
+        {actions && <div className="ap-resource-card__actions">{actions}</div>}
+      </div>
+    </article>
+  );
+}
+
 

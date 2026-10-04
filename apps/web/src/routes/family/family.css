@@ -428,3 +428,18 @@
     height: 20px;
   }
 }
+
+/* ------------------------------------------------------------ toque, foco e movimento (auditoria 3.2) */
+.fam-stepper { gap: 0.5rem; }
+.fam-tabbar-item { min-height: 48px; }
+.fam-guidance summary { min-height: 44px; }
+.fam-stepper button:focus-visible, .fam-likert button:focus-visible, .fam-tabbar-item:focus-visible,
+.fam-guidance summary:focus-visible { outline: 3px solid var(--ap-focus); outline-offset: 2px; }
+@media (hover: none) {
+  .fam-card:hover { transform: none; }
+  .fam-tabbar-item:not([aria-current="page"]):hover { color: var(--ap-text-muted); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fam-card { transition: none; }
+  .fam-card:hover { transform: none; }
+}

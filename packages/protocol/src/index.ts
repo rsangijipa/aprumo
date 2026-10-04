@@ -64,7 +64,7 @@ export const TargetConfig = z.object({
   name: z.string(),
   phase: TargetPhase,
   repertoire: Repertoire,
-  fieldSize: z.number().int().min(1).max(6),
+  fieldSize: z.number().int().min(1).max(12),
   stimulus: StimulusRef,
   distractors: z.array(StimulusRef),
   promptHierarchy: z.array(PromptLevelRef).min(1),
@@ -77,7 +77,7 @@ export const Adaptation = z.object({
   sound: z.enum(['off', 'low', 'normal']),
   feedback: z.enum(['none', 'subtle', 'festive']),
   palette: z.enum(['calm', 'vivid', 'high-contrast']),
-  maxChoices: z.number().int().min(1).max(6),
+  maxChoices: z.number().int().min(1).max(12),
   /** Multiplicador do tamanho dos alvos de toque (1 = 64px base). */
   touchScale: z.number().min(1).max(2),
   /** Dica embutida do jogo após N ms sem resposta; null desativa. */
@@ -135,8 +135,61 @@ const TrialCompletedPayload = z.object({
   promptSource: PromptSource,
   /** Detalhes próprios do jogo (ex.: instrução repetida, interrupções). */
   detail: z.record(z.string(), z.unknown()).default({}),
+  /** A criança trocou a escolha por conta própria antes da confirmação (resposta final vale). */
+  selfCorrected: z.boolean().optional(),
+  /** Quantas escolhas a criança fez antes da confirmação (1 = direto). */
+  attempts: z.number().int().min(1).optional(),
 });
 export type TrialCompletedPayload = z.infer<typeof TrialCompletedPayload>;
+
+/** Identificadores curtos e opacos (nunca nomes, CPF ou texto livre identificável). */
+const OpaqueId = z.string().min(1).max(64);
+
+/** Como a criança respondeu (para comparar modos de resposta entre jogos). */
+export const InputMode = z.enum(['tap', 'drag', 'keyboard', 'switch', 'voice', 'therapist']);
+export type InputMode = z.infer<typeof InputMode>;
+
+const LevelStartedPayload = z.object({
+  levelId: OpaqueId,
+  levelIndex: z.number().int().min(0),
+  /** Número de estímulos na tela neste nível (Match Lab vai até 12). */
+  fieldSize: z.number().int().min(1).max(12).optional(),
+  trialsPlanned: z.number().int().min(0).optional(),
+  difficulty: z.string().max(32).optional(),
+});
+const LevelCompletedPayload = z.object({
+  levelId: OpaqueId,
+  levelIndex: z.number().int().min(0),
+  trialsCompleted: z.number().int().min(0),
+  correct: z.number().int().min(0),
+  outcome: z.enum(['completed', 'advanced', 'repeated', 'stopped']).optional(),
+});
+const StimulusPresentedPayload = z.object({
+  targetId: z.string(),
+  trialIndex: z.number().int().min(0),
+  /** IDs apresentados, na ordem das posições na tela. */
+  presented: z.array(z.string()),
+  positionOfTarget: z.number().int().min(0).nullable(),
+  modality: z.enum(['visual', 'auditory', 'visual_auditory']).optional(),
+  /** Chave da instrução usada (ex.: 'ache-igual'), nunca a fala gravada. */
+  instructionId: OpaqueId.optional(),
+});
+const ResponseStartedPayload = z.object({
+  targetId: z.string(),
+  trialIndex: z.number().int().min(0),
+  /** Do estímulo apresentado até o primeiro gesto de resposta. */
+  latencyMs: z.number().int().min(0),
+  position: z.number().int().min(0).nullable().optional(),
+  inputMode: InputMode.optional(),
+});
+export const ReinforcerKind = z.enum(['visual', 'sound', 'token', 'access', 'social', 'animation']);
+export type ReinforcerKind = z.infer<typeof ReinforcerKind>;
+const ReinforcerPresentedPayload = z.object({
+  kind: ReinforcerKind,
+  reinforcerId: OpaqueId.nullable().optional(),
+  contingentOn: z.string().nullable(),
+  intensity: z.enum(['subtle', 'festive']).optional(),
+});
 
 export const EventPayloads = {
   SESSION_STARTED: z.object({ configVersion: z.string() }),
@@ -177,6 +230,12 @@ export const EventPayloads = {
   SESSION_COMPLETED: z.object({ trialsCompleted: z.number().int().min(0) }),
   ERROR_OCCURRED: z.object({ code: z.string(), recoverable: z.boolean() }),
   APP_CLOSED: z.object({ reason: z.string() }),
+  /* ---- ciclo universal do runtime (v2.1, aditivo e opcional para jogos antigos) ---- */
+  LEVEL_STARTED: LevelStartedPayload,
+  LEVEL_COMPLETED: LevelCompletedPayload,
+  STIMULUS_PRESENTED: StimulusPresentedPayload,
+  RESPONSE_STARTED: ResponseStartedPayload,
+  REINFORCER_PRESENTED: ReinforcerPresentedPayload,
 } as const;
 
 export type EventType = keyof typeof EventPayloads;
@@ -192,6 +251,54 @@ export const CLINICAL_EVENT_TYPES: ReadonlySet<EventType> = new Set<EventType>([
   'SCHEDULE_ITEM_STARTED',
   'SCHEDULE_ITEM_COMPLETED',
 ]);
+
+/**
+ * Ciclo universal do runtime de jogos. Cada etapa aponta para o evento do protocolo que a registra.
+ * Etapas antigas reaproveitam eventos já existentes (compatibilidade com hospedeiro e banco).
+ */
+export const RUNTIME_CYCLE = [
+  { step: 'game_started', event: 'SESSION_STARTED' },
+  { step: 'level_started', event: 'LEVEL_STARTED' },
+  { step: 'trial_started', event: 'TRIAL_STARTED' },
+  { step: 'stimulus_presented', event: 'STIMULUS_PRESENTED' },
+  { step: 'prompt_presented', event: 'PROMPT_USED' },
+  { step: 'response_started', event: 'RESPONSE_STARTED' },
+  { step: 'response_recorded', event: 'TRIAL_COMPLETED' },
+  { step: 'reinforcer_presented', event: 'REINFORCER_PRESENTED' },
+  { step: 'level_completed', event: 'LEVEL_COMPLETED' },
+  { step: 'game_completed', event: 'SESSION_COMPLETED' },
+] as const satisfies ReadonlyArray<{ step: string; event: EventType }>;
+
+/** Etapas fora da sequência linear (podem ocorrer a qualquer momento). */
+export const RUNTIME_CONTROL = {
+  game_paused: 'SESSION_PAUSED',
+  game_resumed: 'SESSION_RESUMED',
+  game_exited: 'APP_CLOSED',
+} as const satisfies Record<string, EventType>;
+
+export type RuntimeStep = (typeof RUNTIME_CYCLE)[number]['step'] | keyof typeof RUNTIME_CONTROL;
+
+/** Mapa etapa → evento (útil para documentação, testes e auditoria de manifestos). */
+export const RUNTIME_STEP_EVENT: Record<RuntimeStep, EventType> = {
+  ...Object.fromEntries(RUNTIME_CYCLE.map((c) => [c.step, c.event])),
+  ...RUNTIME_CONTROL,
+} as Record<RuntimeStep, EventType>;
+
+/** Etapas opcionais: jogos legados podem omiti-las sem invalidar a sessão. */
+export const OPTIONAL_RUNTIME_STEPS: ReadonlySet<RuntimeStep> = new Set<RuntimeStep>([
+  'level_started',
+  'stimulus_presented',
+  'prompt_presented',
+  'response_started',
+  'reinforcer_presented',
+  'level_completed',
+]);
+
+/** Desfecho do ciclo: as três respostas pontuáveis + autocorreção (derivada de `selfCorrected`). */
+export type RuntimeOutcome = TrialResponse | 'self_corrected';
+export function runtimeOutcome(p: Pick<TrialCompletedPayload, 'response' | 'selfCorrected'>): RuntimeOutcome {
+  return p.response === 'correct' && p.selfCorrected ? 'self_corrected' : p.response;
+}
 
 export const EventEnvelope = z.object({
   eventId: z.string().min(8),
@@ -276,7 +383,7 @@ export const GameManifest = z.object({
     trialUnit: z.string(),
     correctResponse: z.string(),
     minFieldSize: z.number().int().min(1),
-    maxFieldSize: z.number().int().max(6),
+    maxFieldSize: z.number().int().max(12),
     latencyMaxMs: z.number().int().positive(),
     builtInPrompts: z.array(
       z.object({ code: z.string(), afterMs: z.number().int(), intrusiveness: z.number().min(0).max(1) }),

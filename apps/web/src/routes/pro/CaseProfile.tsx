@@ -5,7 +5,7 @@
 import { useState, type ReactNode } from 'react';
 import { Link, useParams } from 'react-router';
 import type { Adaptation } from '@aprumo/protocol';
-import { TOKEN_THEMES, TokenArt, type TokenTheme } from '@aprumo/resource-quadro-de-fichas';
+import { LEGACY_TOKEN_THEMES, TOKEN_THEMES, TokenArt, type TokenTheme } from '@aprumo/resource-quadro-de-fichas';
 import { Badge, Button, Card, IconCheck, IconX, Segmented, Stepper, Toast } from '@aprumo/ui';
 import { actions, db, formatAge, useStore } from '../../data/store';
 import type { CaseRole, PrerequisiteSkill } from '../../data/types';
@@ -116,7 +116,8 @@ export default function CaseProfile() {
         <Card title="Tema das fichas">
           <p className="ap-xs ap-muted" style={{ marginBottom: '0.6rem' }}>Fichas ligadas ao interesse da criança costumam funcionar melhor que fichas genéricas.</p>
           <div className="theme-grid" role="radiogroup" aria-label="Tema das fichas">
-            {TOKEN_THEMES.map((t) => (
+            {/* Casos antigos com tema legado continuam vendo a escolha atual marcada. */}
+            {[...LEGACY_TOKEN_THEMES.filter((t) => t.id === c.tokenTheme), ...TOKEN_THEMES].map((t) => (
               <button key={t.id} type="button" role="radio" aria-checked={c.tokenTheme === t.id} onClick={() => actions.updateCaseProfile(caseId, { tokenTheme: t.id as TokenTheme })}>
                 <TokenArt theme={t.id} />
                 <span>{t.label}</span>

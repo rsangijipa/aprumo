@@ -60,6 +60,28 @@ describe('useTrialRunner', () => {
     expect([t.payload.promptLevel, t.payload.promptSource]).toEqual(['GES', 'built_in']);
   });
 
+  it('emite o ciclo universal: estímulo, início de resposta (uma vez) e reforçador', () => {
+    const { client, events } = fakeClient();
+    const { result } = renderHook(() => useTrialRunner({ client, config, trials, paused: false, latencyMaxMs: 8000 }));
+    act(() => { vi.advanceTimersByTime(700); });
+    act(() => { result.current.markResponseStart(0, 'drag'); });
+    act(() => { result.current.select(0); });
+    expect(events.map((e) => e.type)).toEqual([
+      'TRIAL_STARTED', 'STIMULUS_PRESENTED', 'RESPONSE_STARTED', 'TRIAL_COMPLETED', 'REWARD_TRIGGERED', 'REINFORCER_PRESENTED',
+    ]);
+    const rs = events.find((e) => e.type === 'RESPONSE_STARTED')!;
+    expect(rs.payload).toMatchObject({ trialIndex: 0, position: 0, inputMode: 'drag' });
+    expect(rs.payload.latencyMs).toBeGreaterThanOrEqual(0);
+    expect(events.find((e) => e.type === 'STIMULUS_PRESENTED')!.payload.positionOfTarget).toBe(0);
+  });
+
+  it('runtimeEvents: false mantém só os eventos legados', () => {
+    const { client, events } = fakeClient();
+    const { result } = renderHook(() => useTrialRunner({ client, config, trials, paused: false, latencyMaxMs: 8000, runtimeEvents: false }));
+    act(() => { result.current.select(0); });
+    expect(events.map((e) => e.type)).toEqual(['TRIAL_STARTED', 'TRIAL_COMPLETED', 'REWARD_TRIGGERED']);
+  });
+
   it('sem resposta no tempo-limite, depois correção sem nova pontuação', () => {
     const { client, events } = fakeClient();
     const { result } = renderHook(() => useTrialRunner({ client, config, trials, paused: false, latencyMaxMs: 8000, feedbackMs: 500 }));

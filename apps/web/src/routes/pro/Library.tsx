@@ -1,6 +1,6 @@
-import { useState, useEffect, type ReactNode } from 'react';
+import { useState, useEffect, useRef, type ReactNode } from 'react';
 import type { GameManifest } from '@aprumo/protocol';
-import { Badge, Card, Button, IconCheck, IconPrinter } from '@aprumo/ui';
+import { Badge, Card, Button, BackButton, CloseButton, IconCheck, IconPrinter } from '@aprumo/ui';
 import { speak, playTones } from '@aprumo/game-sdk';
 import { GAMES } from '../../game-host/registry';
 import { ArtListener, ArtMatch, ArtSchedule, ArtTokens, ArtTurns } from '../public/Landing';
@@ -396,6 +396,7 @@ function GameCard({ m }: { m: GameManifest }) {
 
 function ToolModal({ toolId, onClose }: { toolId: string; onClose: () => void }) {
   const meta = INTERACTIVE_RESOURCES.find((r) => r.id === toolId);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -405,17 +406,25 @@ function ToolModal({ toolId, onClose }: { toolId: string; onClose: () => void })
     return () => window.removeEventListener('keydown', handleKey);
   }, [onClose]);
 
+  // Foco entra no modal ao abrir e volta ao cartão de origem ao fechar.
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null;
+    dialogRef.current?.querySelector<HTMLElement>('.rs-modal-back')?.focus();
+    return () => previous?.focus?.();
+  }, []);
+
   if (!meta) return null;
 
   return (
     <div className="rs-modal-overlay">
-      <div className="rs-modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div ref={dialogRef} className="rs-modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <header className="rs-modal-head">
-          <div>
+          <BackButton className="rs-modal-back" label="Voltar ao catálogo" onClick={onClose} />
+          <div className="rs-modal-title">
             <h2 id="modal-title">{meta.name}</h2>
             <span className="ap-xs ap-muted">{meta.evidenceBase}</span>
           </div>
-          <button type="button" className="ap-btn ap-btn--ghost" onClick={onClose} aria-label="Fechar modal">✕</button>
+          <CloseButton label="Fechar e voltar ao catálogo (Esc)" onClick={onClose} />
         </header>
 
         <div className="rs-modal-body">
@@ -439,8 +448,8 @@ function ToolModal({ toolId, onClose }: { toolId: string; onClose: () => void })
               <IconPrinter /> Imprimir Ficha
             </Button>
           )}
-          <Button variant="primary" onClick={onClose}>
-            Concluir / Fechar
+          <Button variant="primary" size="lg" className="rs-modal-done" icon={<IconCheck />} onClick={onClose}>
+            Concluir e voltar ao catálogo
           </Button>
         </footer>
       </div>

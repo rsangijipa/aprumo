@@ -3,9 +3,17 @@
  * fichas genéricas. Cada tema tem a sua própria arte.
  */
 import type { ReactElement } from 'react';
+import { BOARD_THEMES, isBoardTheme, type BoardTheme, type LegacyTheme, type Variant } from './logic';
+import { ThemeTokenArt } from './themes-art';
 
-export type TokenTheme = 'estrela' | 'trem' | 'dinossauro' | 'coracao' | 'folha' | 'bola';
-export const TOKEN_THEMES: Array<{ id: TokenTheme; label: string }> = [
+/** Temas aceitos: os 8 temas do quadro + os 6 temas da v1 (casos já configurados). */
+export type TokenTheme = BoardTheme | LegacyTheme;
+const THEME_LABEL: Record<BoardTheme, string> = {
+  planetas: 'Planetas', dinossauros: 'Dinossauros', trens: 'Trens', carros: 'Carros',
+  animais: 'Animais', flores: 'Flores', formas: 'Formas', puzzle: 'Quebra-cabeça',
+};
+export const TOKEN_THEMES: Array<{ id: BoardTheme; label: string }> = BOARD_THEMES.map((id) => ({ id, label: THEME_LABEL[id] }));
+export const LEGACY_TOKEN_THEMES: Array<{ id: LegacyTheme; label: string }> = [
   { id: 'estrela', label: 'Estrela' },
   { id: 'trem', label: 'Trem' },
   { id: 'dinossauro', label: 'Dinossauro' },
@@ -14,7 +22,11 @@ export const TOKEN_THEMES: Array<{ id: TokenTheme; label: string }> = [
   { id: 'bola', label: 'Bola' },
 ];
 
-const ART: Record<TokenTheme, () => ReactElement> = {
+const LEGACY_TO_BOARD: Record<LegacyTheme, BoardTheme> = {
+  estrela: 'formas', trem: 'trens', dinossauro: 'dinossauros', coracao: 'formas', folha: 'flores', bola: 'formas',
+};
+
+const ART: Record<LegacyTheme, () => ReactElement> = {
   estrela: () => (
     <g>
       <circle cx="50" cy="50" r="46" fill="#ffd166" stroke="#c9952a" strokeWidth="4" />
@@ -63,8 +75,12 @@ const ART: Record<TokenTheme, () => ReactElement> = {
   ),
 };
 
-export function TokenArt({ theme }: { theme: TokenTheme }) {
-  return <svg viewBox="0 0 100 100" aria-hidden="true">{(ART[theme] ?? ART.estrela)()}</svg>;
+export function TokenArt({ theme, variant = 'playful', index = 0 }: { theme: TokenTheme; variant?: Variant; index?: number }) {
+  if (isBoardTheme(theme)) return <ThemeTokenArt theme={theme} variant={variant} index={index} />;
+  const draw = ART[theme as LegacyTheme];
+  // Sóbria (≥10 anos) ou tema desconhecido: equivalente entre os 8 temas.
+  if (variant === 'sober' || !draw) return <ThemeTokenArt theme={LEGACY_TO_BOARD[theme as LegacyTheme] ?? 'formas'} variant={variant} index={index} />;
+  return <svg viewBox="0 0 100 100" aria-hidden="true">{draw()}</svg>;
 }
 
 /** Ícone do reforçador de troca por categoria (o nome do item vai como texto acessível). */

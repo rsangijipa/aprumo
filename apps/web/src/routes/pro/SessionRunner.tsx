@@ -26,6 +26,7 @@ import { actions, db, getState, outbox, useStore } from '../../data/store';
 import type { Fact, SessionRecord, Target } from '../../data/types';
 import { GAMES } from '../../game-host/registry';
 import { SyncPill } from './shared';
+import './pro-a11y.css';
 
 const PLANNED: Record<string, number> = { baseline: 3, acquisition: 10, maintenance: 5, generalization: 5 };
 const DAY = 86_400_000;
@@ -60,7 +61,7 @@ function RunnerBar({ session, onEnd, children }: { session: SessionRecord; onEnd
       <span className="runner__timer" aria-label={`Tempo de sessão ${elapsed}`}>{elapsed}</span>
       {session.status === 'paused' && <span className="ap-badge ap-badge--warning">Pausada</span>}
       {session.status === 'completed' && <span className="ap-badge ap-badge--success">Sessão encerrada</span>}
-      <div className="ap-row" style={{ marginLeft: 'auto' }}>
+      <div className="ap-row runner__actions">
         {children}
         <SyncPill />
         {session.status === 'active' && (
@@ -74,7 +75,7 @@ function RunnerBar({ session, onEnd, children }: { session: SessionRecord; onEnd
           </Button>
         )}
         {session.status !== 'completed' && (
-          <Button variant="danger" icon={<IconStop />} onClick={onEnd}>
+          <Button variant="danger" className="runner__end" icon={<IconStop />} onClick={onEnd}>
             <span className="hide-sm">Encerrar sessão</span><span className="show-sm">Encerrar</span>
           </Button>
         )}

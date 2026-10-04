@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
-import { NavLink, Outlet, useNavigate, useParams } from 'react-router';
-import { Button, Dialog, IconPlay, ModelBadge, Segmented } from '@aprumo/ui';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
+import { NavLink, Outlet, useLocation, useNavigate, useParams } from 'react-router';
+import { BackButton, Breadcrumbs, Button, Dialog, EmptyState, IconPlay, ModelBadge, Segmented } from '@aprumo/ui';
 import { actions, db, formatAge, useStore } from '../../data/store';
 import type { SessionRecord } from '../../data/types';
 import { Avatar } from './shared';
+import './pro-a11y.css';
 
 const TABS = [
   ['', 'Visão geral'],
@@ -17,8 +18,61 @@ const TABS = [
   ['documentos', 'Documentos'],
 ] as const;
 
+/** Links internos (<a href>) renderizados por componentes do @aprumo/ui navegam pelo roteador, sem recarregar a página. */
+export function useSpaLinks() {
+  const nav = useNavigate();
+  return (e: MouseEvent) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const a = (e.target as HTMLElement).closest('a');
+    const href = a?.getAttribute('href');
+    if (!a || !href || !href.startsWith('/') || a.target) return;
+    e.preventDefault();
+    nav(href);
+  };
+}
+
+/** Abas do caso: rolagem horizontal com indicação de borda e aba ativa sempre visível. */
+function CaseTabs() {
+  const ref = useRef<HTMLElement>(null);
+  const { pathname } = useLocation();
+  const [edges, setEdges] = useState({ start: false, end: false });
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const update = () => {
+      const max = el.scrollWidth - el.clientWidth;
+      setEdges({ start: el.scrollLeft > 4, end: el.scrollLeft < max - 4 });
+    };
+    update();
+    el.addEventListener('scroll', update, { passive: true });
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null;
+    ro?.observe(el);
+    return () => {
+      el.removeEventListener('scroll', update);
+      ro?.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    const active = ref.current?.querySelector<HTMLElement>('[aria-current="page"]');
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    active?.scrollIntoView?.({ block: 'nearest', inline: 'center', behavior: reduce ? 'auto' : 'smooth' });
+  }, [pathname]);
+
+  return (
+    <div className="case-tabs-wrap" data-fade-start={edges.start} data-fade-end={edges.end}>
+      <nav ref={ref} className="case-tabs" aria-label="Seções do caso">
+        {TABS.map(([to, label]) => <NavLink key={to} to={to} end={to === ''}>{label}</NavLink>)}
+      </nav>
+    </div>
+  );
+}
+
 export default function CaseLayout() {
   const { caseId } = useParams();
+  const { pathname } = useLocation();
+  const spaLinks = useSpaLinks();
   const c = useStore((s) => s.cases.find((x) => x.id === caseId));
   const activeSession = useStore((s) => s.sessions.find((x) => x.caseId === caseId && x.status === 'active'));
   const nav = useNavigate();
@@ -31,13 +85,37 @@ export default function CaseLayout() {
     if (c) console.info('[auditoria] leitura do caso', c.id);
   }, [c?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!c) return <p>Caso não encontrado, ou você não tem vínculo com ele.</p>;
+  if (!c) {
+    return (
+      <div className="ap-stack">
+        <BackButton label="Voltar para casos" onClick={() => nav('/app/casos')} />
+        <EmptyState title="Caso não encontrado">
+          O endereço pode estar incorreto, o caso pode ter sido arquivado, ou você não tem vínculo com ele.
+        </EmptyState>
+        <div>
+          <Button variant="primary" onClick={() => nav('/app/casos')}>Ir para a lista de casos</Button>
+        </div>
+      </div>
+    );
+  }
   const child = db.childOf(c);
   const policy = db.screenPolicy(child.birthDate);
   const draft = c.planStatus === 'draft';
+  const base = `/app/casos/${c.id}`;
+  const seg = pathname.startsWith(base) ? pathname.slice(base.length).split('/').filter(Boolean)[0] ?? '' : '';
+  const tabLabel = TABS.find(([to]) => to === seg)?.[1];
+  const crumbs = [
+    { label: 'Início', href: '/app' },
+    { label: 'Casos', href: '/app/casos' },
+    { label: child.preferredName, href: seg ? base : undefined },
+    ...(seg && tabLabel ? [{ label: tabLabel }] : []),
+  ];
 
   return (
     <>
+      <div onClickCapture={spaLinks}>
+        <Breadcrumbs className="case-crumbs" items={crumbs} />
+      </div>
       <header className="case-header">
         <Avatar child={child} size="lg" />
         <div className="case-header__info">
@@ -74,9 +152,7 @@ export default function CaseLayout() {
         )}
       </header>
 
-      <nav className="case-tabs" aria-label="Seções do caso">
-        {TABS.map(([to, label]) => <NavLink key={to} to={to} end={to === ''}>{label}</NavLink>)}
-      </nav>
+      <CaseTabs />
 
       <Outlet />
 

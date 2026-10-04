@@ -1,69 +1,28 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { Link } from 'react-router';
 import {
   IconArrowRight,
   IconBook,
-
   IconCheck,
   IconCloudOff,
   IconEye,
   IconHeart,
-
   IconLock,
-  IconMenu,
   IconRoute,
   IconShield,
   IconSpark,
   IconTablet,
   IconTarget,
-  IconX,
   Logo,
 } from '@aprumo/ui';
-import { INSTITUTION_CONFIG } from '../../config/institution';
+import { PublicHeader, PublicFooter } from './PublicNav';
 import './landing.css';
 
 export function Landing() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menu, setMenu] = useState(false);
-  // Fecha o menu do celular ao navegar para uma seção.
-  useEffect(() => {
-    const close = () => setMenu(false);
-    window.addEventListener('hashchange', close);
-    return () => window.removeEventListener('hashchange', close);
-  }, []);
-  useEffect(() => {
-    const on = () => setScrolled(window.scrollY > 8);
-    on();
-    window.addEventListener('scroll', on, { passive: true });
-    return () => window.removeEventListener('scroll', on);
-  }, []);
-
   return (
     <div className="lp">
-      <a className="ap-skip-link" href="#conteudo">Pular para o conteúdo</a>
-      <header className="lp-header" data-scrolled={scrolled}>
-        <div className="lp-wrap lp-header__in">
-          <Logo />
-          <nav id="lp-nav" className="lp-nav" data-open={menu} aria-label="Navegação principal">
-            <a href="#como-funciona" onClick={() => setMenu(false)}>Produto</a>
-            <a href="#recursos" onClick={() => setMenu(false)}>Recursos</a>
-            <a href="#espacos" onClick={() => setMenu(false)}>Profissionais</a>
-            <a href="#familias" onClick={() => setMenu(false)}>Famílias</a>
-            <a href="#ciencia" onClick={() => setMenu(false)}>Fundamentação</a>
-            <Link className="lp-nav__enter hide-desktop" to="/entrar">Entrar</Link>
-          </nav>
-          <div className="ap-row lp-header__cta">
-            <Link className="ap-btn ap-btn--ghost hide-sm" to="/entrar">Entrar</Link>
-            <Link className="ap-btn ap-btn--primary" to="/entrar">
-              <span className="hide-sm">Explorar demonstração</span>
-              <span className="show-sm">Demonstração</span>
-            </Link>
-            <button type="button" className="lp-menu-btn" aria-expanded={menu} aria-controls="lp-nav" aria-label={menu ? 'Fechar menu' : 'Abrir menu'} onClick={() => setMenu((m) => !m)}>
-              {menu ? <IconX /> : <IconMenu />}
-            </button>
-          </div>
-        </div>
-      </header>
+      <a className="ap-skip-link" href="#conteudo">Pular para o conteúdo principal</a>
+      <PublicHeader />
 
       <main id="conteudo">
         {/* ------------------------------------------------------------ hero */}
@@ -75,13 +34,15 @@ export function Landing() {
                 Tudo o que acompanha uma intervenção, <em>no mesmo lugar.</em>
               </h1>
               <p className="lp-hero__lead">
-                Plano individualizado, aplicação de sessão em tablet ou celular, jogos terapêuticos e análise visual de dados com o alvo clínico no centro de tudo.
+                Plano individualizado operacional, aplicação de sessão em tablet ou celular com medição de latência, biblioteca de jogos terapêuticos e análise visual de dados com o alvo clínico no centro de tudo.
               </p>
               <div className="lp-hero__cta">
                 <Link className="ap-btn ap-btn--primary ap-btn--lg" to="/entrar">
                   Explorar demonstração <IconArrowRight />
                 </Link>
-                <a className="ap-btn ap-btn--lg" href="#como-funciona">Conhecer o Aprumo</a>
+                <Link className="ap-btn ap-btn--lg" to="/produto">
+                  Conhecer o Produto
+                </Link>
               </div>
               <div className="lp-trust" aria-label="Compromissos de projeto">
                 <span><IconShield /> Projetado para a LGPD e o ECA Digital</span>
@@ -228,6 +189,16 @@ export function Landing() {
               <GameCard tag="Apoio" name="Quadro de Fichas" text="Fichas do tema preferido. O reforçador é escolhido antes e fica à vista." art={<ArtTokens />} />
               <GameCard tag="Apoio" name="Agenda Visual" text="Varal de cartões e primeiro–depois. O aviso antecipa a transição." art={<ArtSchedule />} />
             </div>
+
+            <div className="ap-row" style={{ marginTop: '2rem', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+              <Link className="ap-btn ap-btn--primary" to="/recursos-terapeuticos">
+                Explorar todos os suportes visuais <IconArrowRight />
+              </Link>
+              <Link className="ap-btn" to="/games">
+                Ver catálogo completo de games →
+              </Link>
+            </div>
+
             <div className="lp-datacontract">
               <div>
                 <h3 style={{ color: '#fff', fontSize: 'var(--ap-text-xl)' }}>Um único contrato de dados</h3>
@@ -259,6 +230,11 @@ export function Landing() {
                 Após cada sessão sincronizada, quinze regras avaliam os dados de cada alvo e geram alertas com
                 evidência numérica e tamanho de amostra. Nenhuma regra altera o plano sozinha.
               </p>
+              <div style={{ marginTop: '1.5rem' }}>
+                <Link className="ap-btn" to="/dados-metricas">
+                  Ver detalhes das métricas e regras →
+                </Link>
+              </div>
             </div>
             <div className="lp-rules">
               <ul>
@@ -286,6 +262,11 @@ export function Landing() {
               <div><IconHeart /><strong>Sem engajamento predatório</strong><p>Sem ranking entre crianças, caixa-surpresa, notificações para a criança ou compras.</p></div>
               <div><IconTablet /><strong>Tela proporcional à idade</strong><p>Medidor diário por criança e nenhum acesso infantil autônomo abaixo dos 2 anos.</p></div>
               <div><IconShield /><strong>Sem triagem pública</strong><p>Nenhum escore sobre uma criança fora de um vínculo profissional e de consentimento.</p></div>
+            </div>
+            <div className="ap-row" style={{ marginTop: '2.5rem', justifyContent: 'center' }}>
+              <Link className="ap-btn ap-btn--lg" to="/seguranca-privacidade">
+                Saiba como cumprimos a LGPD e o ECA Digital →
+              </Link>
             </div>
           </div>
         </section>
@@ -340,28 +321,7 @@ export function Landing() {
         </section>
       </main>
 
-      <footer className="lp-footer">
-        <div className="lp-wrap lp-footer__in">
-          <div>
-            <Logo />
-            <p>
-              O Aprumo é uma ferramenta de apoio ao trabalho clínico. Não substitui avaliação, supervisão ou a
-              decisão do profissional responsável pelo caso.
-            </p>
-            <div style={{ fontSize: '0.8rem', color: 'var(--ap-muted)', marginTop: '0.75rem', lineHeight: '1.6' }}>
-              <div><strong>{INSTITUTION_CONFIG.companyName}</strong> · CNPJ {INSTITUTION_CONFIG.cnpj}</div>
-              <div>Responsável Técnico: {INSTITUTION_CONFIG.technicalLead} ({INSTITUTION_CONFIG.councilRegistration})</div>
-              <div>Canal do Encarregado (DPO · LGPD art. 41): <a href={`mailto:${INSTITUTION_CONFIG.dpoEmail}`}>{INSTITUTION_CONFIG.dpoEmail}</a></div>
-              <div>Hospedagem de dados de saúde: {INSTITUTION_CONFIG.dataRegion}</div>
-            </div>
-          </div>
-          <nav className="ap-stack" aria-label="Rodapé" style={{ gap: '0.4rem' }}>
-            <a href="#seguranca">Privacidade e segurança</a>
-            <a href="#ciencia">Fundamentação</a>
-            <Link to="/entrar">Entrar</Link>
-          </nav>
-        </div>
-      </footer>
+      <PublicFooter />
     </div>
   );
 }

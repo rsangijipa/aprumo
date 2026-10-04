@@ -59,7 +59,12 @@
 .cs-exit svg { width: 22px; height: 22px; flex: none; }
 .cs-exit::after { content: ''; position: absolute; inset: 0; background: color-mix(in srgb, var(--cs-primary) 25%, transparent); transform-origin: left; scale: 0 1; }
 .cs-exit[data-holding='true']::after { scale: 1 1; transition: scale 1.2s linear; }
-@media (max-width: 520px) { .cs-exit span { display: none; } }
+@media (max-width: 520px) { .cs-exit__label { display: none; } .cs-exit { padding: 0 0.6rem; } }
+.cs-exit { min-width: 48px; justify-content: center; touch-action: none; -webkit-touch-callout: none; user-select: none; }
+.cs-exit__icon { position: relative; display: grid; place-items: center; width: 28px; height: 28px; flex: none; z-index: 1; }
+.cs-exit .cs-exit__ring { position: absolute; left: -6px; top: -6px; width: 40px; height: 40px; color: var(--cs-primary); }
+.cs-exit__label { position: relative; z-index: 1; }
+.cs-exit[data-holding='true'] { color: var(--cs-ink); border-color: var(--cs-primary); }
 
 /* ------------------------------------------------------------ conteúdo */
 .cs-main { padding: 0.5rem clamp(0.9rem, 3vw, 1.75rem) calc(var(--cs-nav-h) + 1.5rem + env(safe-area-inset-bottom)); max-width: 1100px; margin: 0 auto; }

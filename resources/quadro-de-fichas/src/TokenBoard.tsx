@@ -7,6 +7,7 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { RewardIcon, TokenArt, type TokenTheme } from './tokens-art';
+import { resolveVariant, type Variant } from './logic';
 import './board.css';
 
 export interface TokenBoardProps {
@@ -22,10 +23,14 @@ export interface TokenBoardProps {
   onExchangeEnd: (endedBy: 'timer' | 'adult') => void;
   onExchangeStart?: () => void;
   layout?: 'rail' | 'full';
+  /** Idade em anos: ≥10 → variante sóbria (sem infantilizar). */
+  ageYears?: number | null;
+  variant?: Variant;
 }
 
 export function TokenBoard(p: TokenBoardProps) {
   const full = p.earned >= p.required;
+  const variant = resolveVariant({ variant: p.variant, ageYears: p.ageYears });
   const [left, setLeft] = useState(p.accessSec);
   const startedRef = useRef(false);
 
@@ -53,12 +58,12 @@ export function TokenBoard(p: TokenBoardProps) {
   const warn = full && left <= Math.min(10, p.accessSec * 0.25);
 
   return (
-    <section className="qf" data-layout={p.layout ?? 'rail'} data-motion={p.motion} data-palette={p.palette ?? 'calm'} data-full={full} aria-label={`Quadro de fichas: ${Math.min(p.earned, p.required)} de ${p.required}. Prêmio: ${p.reward.label}`}>
+    <section className="qf" data-layout={p.layout ?? 'rail'} data-motion={p.motion} data-palette={p.palette ?? 'calm'} data-full={full} data-variant={variant} aria-label={`Quadro de fichas: ${Math.min(p.earned, p.required)} de ${p.required}. Prêmio: ${p.reward.label}`}>
       <div className="qf-board">
         <div className="qf-slots">
           {Array.from({ length: p.required }, (_, k) => (
             <span key={k} className="qf-slot" data-filled={k < p.earned}>
-              {k < p.earned && <span className="qf-token"><TokenArt theme={p.theme} /></span>}
+              {k < p.earned && <span className="qf-token"><TokenArt theme={p.theme} variant={variant} index={k} /></span>}
             </span>
           ))}
         </div>
@@ -66,6 +71,7 @@ export function TokenBoard(p: TokenBoardProps) {
           <svg viewBox="0 0 40 24"><path d="M2 12h30M24 4l10 8-10 8" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </div>
         <div className="qf-reward" title={p.reward.label}>
+          <small className="qf-reward__kicker">Estou trabalhando para…</small>
           <RewardIcon category={p.reward.category} />
           <span>{p.reward.label}</span>
         </div>
