@@ -3,7 +3,7 @@ import type { GameManifest } from '@aprumo/protocol';
 import { Badge, Card, Button, BackButton, CloseButton, IconCheck, IconPrinter } from '@aprumo/ui';
 import { speak, playTones } from '@aprumo/game-sdk';
 import { GAMES } from '../../game-host/registry';
-import { ArtListener, ArtMatch, ArtSchedule, ArtTokens, ArtTurns } from '../public/Landing';
+import { ArtListener, ArtMatch, ArtSchedule, ArtTokens, ArtTurns, ArtDetective, ArtExecutive, ArtMiniWorlds } from '../public/Landing';
 import { TaskAnalysisStudio } from './resources/TaskAnalysisStudio';
 import { ChoiceBoardStudio } from './resources/ChoiceBoardStudio';
 import { CommunicationBoardStudio } from './resources/CommunicationBoardStudio';
@@ -17,7 +17,19 @@ const ART: Record<string, ReactNode> = {
   'minha-vez-sua-vez': <ArtTurns />,
   'quadro-de-fichas': <ArtTokens />,
   'agenda-visual': <ArtSchedule />,
+  'detetive-das-emocoes': <ArtDetective />,
+  'circuito-executivo': <ArtExecutive />,
+  'minimundos': <ArtMiniWorlds />,
 };
+
+const DefaultGameArt = ({ name }: { name: string }) => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="var(--ap-sage-100)" />
+    <circle cx="80" cy="50" r="28" fill="var(--ap-sage-200)" />
+    <path d="M70 42 L95 50 L70 58 Z" fill="var(--ap-primary)" />
+    <text x="80" y="96" textAnchor="middle" fontSize="10" fontWeight="600" fill="var(--ap-sage-800)">{name}</text>
+  </svg>
+);
 
 const REPERTOIRE: Record<string, string> = { matching: 'pareamento', listener: 'ouvinte', tact: 'tato', social: 'social', play: 'brincar' };
 const PLAY: Record<string, string> = { constructive: 'construtivo', functional: 'funcional', reciprocal: 'recíproco / turnos' };
@@ -202,9 +214,9 @@ export default function Library() {
         </div>
 
         <div className="rs-top-meta">
-          <span><strong>12</strong> Ferramentas Interativas</span>
+          <span><strong>{filteredInteractive.length}</strong> Ferramentas Interativas</span>
           <span>·</span>
-          <span><strong>3</strong> Jogos Clínicos Integrados</span>
+          <span><strong>{Object.keys(GAMES).length}</strong> Jogos Clínicos Integrados</span>
           <span>·</span>
           <span>Protocolo Clínico Aprumo v2.0</span>
           <span>·</span>
@@ -417,7 +429,7 @@ function GameCard({ m }: { m: GameManifest }) {
   return (
     <Card as="article" bodyClassName="ap-stack">
       <div style={{ margin: '-1.25rem -1.25rem 0', aspectRatio: '16 / 8', overflow: 'hidden', borderRadius: '16px 16px 0 0' }} aria-hidden="true">
-        {ART[m.appId]}
+        {ART[m.appId] ?? <DefaultGameArt name={m.name} />}
       </div>
       <div className="ap-row" style={{ justifyContent: 'space-between' }}>
         <h3 style={{ fontSize: 'var(--ap-text-lg)', margin: 0 }}>{m.name}</h3>

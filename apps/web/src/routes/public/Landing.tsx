@@ -303,4 +303,54 @@ export const ArtSchedule = () => (
   </svg>
 );
 
+export const ArtDetective = () => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="#2d3748" />
+    <circle cx="80" cy="55" r="32" fill="#4a5568" opacity="0.6" />
+    <circle cx="70" cy="50" r="24" fill="#e2e8f0" stroke="#cbd5e0" strokeWidth="3" opacity="0.9" />
+    <circle cx="70" cy="50" r="18" fill="#fbd38d" />
+    <circle cx="64" cy="46" r="2.5" fill="#2d3748" />
+    <circle cx="76" cy="46" r="2.5" fill="#2d3748" />
+    <path d="M 64 54 Q 70 60 76 54" fill="none" stroke="#2d3748" strokeWidth="2" strokeLinecap="round" />
+    <line x1="87" y1="67" x2="108" y2="88" stroke="#b7791f" strokeWidth="6" strokeLinecap="round" />
+    <path d="M 50 28 Q 70 18 90 28 L 94 33 L 46 33 Z" fill="#744210" />
+    <rect x="42" y="32" width="56" height="4" rx="2" fill="#975a16" />
+    <circle cx="125" cy="35" r="4" fill="#ecc94b" />
+    <circle cx="35" cy="80" r="3" fill="#63b3ed" />
+  </svg>
+);
+
+export const ArtExecutive = () => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="#1a365d" />
+    <path d="M 20 60 H 60 V 30 H 100 V 90 H 140" fill="none" stroke="#2b6cb0" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="45" cy="60" r="12" fill="#38a169" stroke="#22543d" strokeWidth="2" />
+    <path d="M 40 60 L 44 64 L 51 56" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="80" cy="30" r="12" fill="#e53e3e" stroke="#742a2a" strokeWidth="2" />
+    <path d="M 75 25 L 85 35 M 85 25 L 75 35" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
+    <circle cx="100" cy="90" r="12" fill="#ecc94b" stroke="#744210" strokeWidth="2" />
+    <circle cx="100" cy="90" r="5" fill="#fff" />
+    <circle cx="130" cy="90" r="6" fill="#63b3ed" opacity="0.8" />
+    <path d="M 120 40 L 135 25" stroke="#4fd1c5" strokeWidth="2" strokeDasharray="3 3" />
+  </svg>
+);
+
+export const ArtMiniWorlds = () => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="#234e52" />
+    <polygon points="80,35 135,62 80,90 25,62" fill="#319795" />
+    <polygon points="25,62 80,90 80,102 25,74" fill="#285e61" />
+    <polygon points="135,62 80,90 80,102 135,74" fill="#1d4044" />
+    <polygon points="65,50 85,38 105,50 85,62" fill="#f6ad55" />
+    <polygon points="65,50 85,62 85,74 65,62" fill="#dd6b20" />
+    <polygon points="105,50 85,62 85,74 105,62" fill="#c05621" />
+    <polygon points="85,26 62,40 85,52 108,40" fill="#e53e3e" />
+    <rect x="42" y="55" width="4" height="10" fill="#744210" />
+    <circle cx="44" cy="50" r="8" fill="#48bb78" />
+    <rect x="100" y="65" width="14" height="8" rx="2" fill="#4299e1" />
+    <circle cx="103" cy="73" r="2.5" fill="#1a202c" />
+    <circle cx="111" cy="73" r="2.5" fill="#1a202c" />
+  </svg>
+);
+
 export default Landing;

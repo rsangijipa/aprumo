@@ -50,6 +50,12 @@ importers:
       '@aprumo/game-causa-efeito':
         specifier: workspace:*
         version: link:../../games/causa-efeito
+      '@aprumo/game-circuito-executivo':
+        specifier: workspace:*
+        version: link:../../games/circuito-executivo
+      '@aprumo/game-detetive-das-emocoes':
+        specifier: workspace:*
+        version: link:../../games/detetive-das-emocoes
       '@aprumo/game-encontre-o-igual':
         specifier: workspace:*
         version: link:../../games/encontre-o-igual
@@ -68,6 +74,9 @@ importers:
       '@aprumo/game-minha-vez-sua-vez':
         specifier: workspace:*
         version: link:../../games/minha-vez-sua-vez
+      '@aprumo/game-minimundos':
+        specifier: workspace:*
+        version: link:../../games/minimundos
       '@aprumo/game-missao-independencia':
         specifier: workspace:*
         version: link:../../games/missao-independencia
@@ -203,6 +212,44 @@ importers:
         specifier: ^19.3.0
         version: 19.3.0
 
+  games/circuito-executivo:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@aprumo/stimuli':
+        specifier: workspace:*
+        version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
+  games/detetive-das-emocoes:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@aprumo/stimuli':
+        specifier: workspace:*
+        version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
   games/encontre-o-igual:
     dependencies:
       '@aprumo/game-sdk':
@@ -299,6 +346,25 @@ importers:
         version: 19.3.0
 
   games/minha-vez-sua-vez:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@aprumo/stimuli':
+        specifier: workspace:*
+        version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
+  games/minimundos:
     dependencies:
       '@aprumo/game-sdk':
         specifier: workspace:*

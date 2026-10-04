@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { FeatureCard, PublicPageLayout, Section } from '../PublicNav';
-import { ArtListener, ArtMatch, ArtTurns } from '../Landing';
+import { ArtListener, ArtMatch, ArtTurns, ArtDetective, ArtExecutive, ArtMiniWorlds } from '../Landing';
 
 interface GameItem {
   id: string;
@@ -22,11 +22,11 @@ const GAMES: GameItem[] = [
     summary: 'Avatar 3D que demonstra gestos simples, ações motoras finas e manipulação de objetos, com pontuação feita pelo terapeuta.' },
   { id: 'olha-comigo', name: 'Olha Comigo', repertoire: 'Atenção compartilhada', age: '2 a 7 anos',
     summary: 'Seguir pistas sociais — apontar e orientação da cabeça — em cenários limpos de quarto, parque e fazenda.' },
-  { id: 'minimundos', name: 'MiniMundos', repertoire: 'Brincar simbólico', age: '3 a 11 anos',
+  { id: 'minimundos', name: 'MiniMundos', repertoire: 'Brincar simbólico', age: '3 a 11 anos', art: <ArtMiniWorlds />,
     summary: 'Mundo modular em miniatura (casa, mercado, consultório) para exploração funcional e missões configuráveis, sem pontuação.' },
-  { id: 'detetive-emocoes', name: 'Detetive das Emoções', repertoire: 'Cognição social', age: '6 a 15+ anos',
+  { id: 'detetive-emocoes', name: 'Detetive das Emoções', repertoire: 'Cognição social', age: '6 a 15+ anos', art: <ArtDetective />,
     summary: 'Identificar pistas de contexto, expressões faciais e entonação em situações sociais, aceitando mais de uma resposta válida.' },
-  { id: 'circuito-executivo', name: 'Circuito Executivo', repertoire: 'Funções executivas', age: '7 a 16 anos',
+  { id: 'circuito-executivo', name: 'Circuito Executivo', repertoire: 'Funções executivas', age: '7 a 16 anos', art: <ArtExecutive />,
     summary: 'Minijogos de controle inibitório (go/no-go), flexibilidade para trocar de regra e memória operacional visuoespacial.' },
   { id: 'missao-independencia', name: 'Missão Independência', repertoire: 'Autonomia e AVDs', age: '7 a 17 anos',
     summary: 'Desafios da vida real em 2D isométrico: arrumar a mochila, fazer a lista do mercado, conferir o troco e o itinerário.' },

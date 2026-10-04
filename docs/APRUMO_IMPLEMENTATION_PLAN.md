@@ -157,3 +157,36 @@ graph TD
   3. *Estratégias Imediatas*: Acomodações sensoriais, abafador de ruídos e abraço da borboleta.
 - **Testes e Integridade:** 24 testes no `@aprumo/web` (100% aprovados) e suíte completa dos 21 pacotes do monorepo verde com zero regressões.
 - **Pendente:** Waves 6 a 10.
+
+## 7. Registro de Entrega — Wave 6: Jogos Clínicos Fase 2 & Emoções (04/10/2026)
+
+- **Detetive das Emoções (`@aprumo/game-detetive-das-emocoes`):**
+  - Focado em cognição social e Teoria da Mente para faixas etárias de 6 a 15+ anos.
+  - Reconhecimento de pistas faciais, microexpressões, linguagem corporal e contexto situacional em cenários clínicos (parque, sala de aula, aniversário, consultório médico, recreio e biblioteca).
+  - Suporte a respostas primárias e aceitáveis (múltipla valência emocional plausível), justificativa social com feedback reflexivo e dicas progressivas (destaque de pistas faciais e pistas contextuais).
+  - Telemetria clínica de tempo de reação, latência de decisão e acurácia social integrada ao `@aprumo/game-sdk`.
+  - Suíte de testes unitários dedicada em `games/detetive-das-emocoes/src/logic.test.ts` (6/6 aprovados).
+
+- **Circuito Executivo (`@aprumo/game-circuito-executivo`):**
+  - Focado em funções executivas: controle inibitório (Go / No-Go), alternância de regras (Cognitive Flexibility / Task Switching) e memória operacional visuoespacial (Spatial Working Memory).
+  - 3 minijogos com parâmetros calibrados por idade e perfil sensorial:
+    1. *Sinal Verde, Sinal Vermelho*: Tarefa Go / No-Go com estímulos alvo/não-alvo, registro de comissões (toques em No-Go) e omissões (falha de resposta em Go).
+    2. *Troca de Regra*: Alternância dimensional por cor e por forma com pista de regra explícita e medição de custo de alternância (switch cost).
+    3. *Sequência Estelar*: Span de dígitos/posições visuais crescentes com reprodução para frente e reversa.
+  - Suíte de testes unitários dedicada em `games/circuito-executivo/src/logic.test.ts` (4/4 aprovados).
+
+- **MiniMundos (`@aprumo/game-minimundos`):**
+  - Focado em brincar funcional, simbólico e exploração lúdica não punitiva para 3 a 11 anos.
+  - 3 temas de diorama em perspectiva amigável: Casa da Família, Parque da Cidade e Consultório Amigo.
+  - Itens manipuláveis com categorias de uso funcional (alimentação, descanso, transporte, higiene, brincadeira e cuidados de saúde).
+  - Suporte a missões sugestivas opcionais ("Hora do lanche", "Hora do banho", "Passeio de carro", "Descanso do ursinho") sem cronômetro restritivo e sem contagem de erros, respeitando o ritmo e a agência da criança.
+  - Suíte de testes unitários dedicada em `games/minimundos/src/logic.test.ts` (3/3 aprovados).
+
+- **Integração no Web Host & Catálogo Geral:**
+  - Registro dos 3 novos jogos em `apps/web/src/game-host/registry.ts`, elevando o catálogo para 14 jogos clínicos integrados.
+  - Arte vetorial personalizada em SVG criada para os 3 jogos (`ArtDetective`, `ArtExecutive`, `ArtMiniWorlds`) integrada na Landing, na Biblioteca (`Library.tsx`), no Espaço da Criança (`ChildSpace.tsx`) e na página pública de catálogo (`GamesPage.tsx`).
+  - Adição dos 3 novos jogos no `SPACE_ITEMS` do `CaseProfile.tsx` para liberação controlada pelo profissional de referência.
+  - Teste automatizado de release gate adicionado em `apps/web/src/game-host/registry.test.ts` validando conformidade estrita com o esquema clínico `GameManifest` e carregamento dinâmico de todos os 14 jogos.
+  - Testes do monorepo: **100% dos 25 pacotes aprovados** (sem falhas, sem regressões). Build de produção e PWA concluídos com sucesso.
+- **Pendente:** Waves 7 a 10 (*Pequeno Chef*, *Missão Independência*, *Social City 3D*, *Co-op Escape Lab*, e E2E / A11y / Performance).
+
