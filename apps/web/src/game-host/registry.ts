@@ -14,6 +14,8 @@ import { manifest as historiaOrdem } from '@aprumo/game-historia-ordem/manifest'
 import { manifest as pequenoChef } from '@aprumo/game-pequeno-chef/manifest';
 import { manifest as missaoIndependencia } from '@aprumo/game-missao-independencia/manifest';
 import { manifest as causaEfeito } from '@aprumo/game-causa-efeito/manifest';
+import { manifest as espelhoMagico } from '@aprumo/game-espelho-magico/manifest';
+import { manifest as olhaComigo } from '@aprumo/game-olha-comigo/manifest';
 import { manifest as quadroDeFichas } from '@aprumo/resource-quadro-de-fichas/manifest';
 import { manifest as agendaVisual } from '@aprumo/resource-agenda-visual/manifest';
 
@@ -32,6 +34,8 @@ export const GAMES: Record<string, GameEntry> = {
   'pequeno-chef': { manifest: pequenoChef, load: () => import('@aprumo/game-pequeno-chef').then((m) => m.Game) },
   'missao-independencia': { manifest: missaoIndependencia, load: () => import('@aprumo/game-missao-independencia').then((m) => m.Game) },
   'causa-efeito': { manifest: causaEfeito, load: () => import('@aprumo/game-causa-efeito').then((m) => m.Game) },
+  'espelho-magico': { manifest: espelhoMagico, load: () => import('@aprumo/game-espelho-magico').then((m) => m.Game) },
+  'olha-comigo': { manifest: olhaComigo, load: () => import('@aprumo/game-olha-comigo').then((m) => m.Game) },
 };
 
 /** Recursos de apoio rodam na própria moldura infantil (não em iframe): são da plataforma. */

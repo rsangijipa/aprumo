@@ -139,3 +139,10 @@ graph TD
 - **Wave 4 (parcial):** Quadro de Fichas com 1/2/3/5/8/10 fichas e 8 temas SVG (`TokenBoardStudio`); Studio de Rotina Visual com Primeiro→Depois, sequências horizontais/verticais, timer circular e modo criança.
 - **Deploy:** `vercel.json` aponta `outputDirectory` para `apps/web/dist` com fallback SPA.
 - **Pendente:** Task Analysis, Choice Board, Social Story e Árvore das Emoções (Wave 4); Waves 5–10.
+
+## 5. Registro de Entrega — Refinamentos gerais e Wave 5 (04/10/2026)
+
+- **Refinamentos:** landing enxuta com cartões para as páginas dedicadas; top bar com menus "Para quem" e "Recursos"; login em duas colunas (desktop) / coluna única (celular) só com Profissional e Família; entrada da criança movida para o portal da família, sem PIN (saída por toque longo de 1,2 s); sidebar profissional com rolagem própria, grupos recolhíveis e "Voltar ao site".
+- **Wave 5:** *Espelho Mágico* (`espelho-magico`, imitação motora, pontuação pelo terapeuta, sem câmera); *Olha Comigo* (`olha-comigo`, atenção compartilhada com esvanecimento de pistas, sem biometria); *Missão Instrução* (appId `escolha-pela-instrucao`, níveis 1–5 com atributos, relações espaciais e 2–3 etapas); *Minha Vez / Sua Vez* com indicador de turno, `waitMs` e `offTurnTouches`.
+- **Correção:** `game.html` agora dá altura total ao iframe (jogos com `height: 100%` colapsavam).
+- **Pendente:** Wave 4 restante (Task Analysis, Choice Board, Social Story, Árvore das Emoções); Waves 6–10.

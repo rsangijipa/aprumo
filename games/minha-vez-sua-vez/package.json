@@ -1,7 +1,7 @@
 {
   "name": "@aprumo/game-minha-vez-sua-vez",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "exports": { ".": "./src/index.ts", "./manifest": "./src/manifest.ts" },
   "scripts": { "typecheck": "tsc -p .", "test": "vitest run" },

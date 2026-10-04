@@ -30,7 +30,7 @@ import { AVATARS, Avatar, FEELINGS, Feeling, NEEDS, Need } from './art';
 import './space.css';
 
 const GAME_ART: Record<string, ReactNode> = { 'encontre-o-igual': <ArtMatch />, 'escolha-pela-instrucao': <ArtListener />, 'minha-vez-sua-vez': <ArtTurns /> };
-const GAME_KID_NAME: Record<string, string> = { 'encontre-o-igual': 'Encontre o igual', 'escolha-pela-instrucao': 'Escute e toque', 'minha-vez-sua-vez': 'Minha vez, sua vez' };
+const GAME_KID_NAME: Record<string, string> = { 'encontre-o-igual': 'Encontre o igual', 'escolha-pela-instrucao': 'Escute e toque', 'minha-vez-sua-vez': 'Minha vez, sua vez', 'olha-comigo': 'Olha comigo' };
 const TOKEN_STICKERS: TokenTheme[] = ['trem', 'estrela', 'dinossauro', 'coracao', 'folha'];
 export const STICKERS = [...TOKEN_STICKERS, 'bola', 'carro', 'peixe', 'flor', 'aviao', 'casa', 'uva', 'gato', 'cachorro', 'livro', 'maca'];
 

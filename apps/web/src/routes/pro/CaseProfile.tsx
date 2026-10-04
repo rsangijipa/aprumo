@@ -190,8 +190,9 @@ function AddMember({ caseId, onDone }: { caseId: string; onDone: (m: string) => 
 }
 
 const SPACE_ITEMS: Array<{ id: string; label: string; hint: string }> = [
-  { id: 'encontre-o-igual', label: 'Encontre o Igual', hint: 'jogo de pareamento' },
-  { id: 'escolha-pela-instrucao', label: 'Escolha pela Instrução', hint: 'jogo de ouvinte' },
+  { id: 'encontre-o-igual', label: 'Match Lab', hint: 'jogo de pareamento' },
+  { id: 'escolha-pela-instrucao', label: 'Missão Instrução', hint: 'jogo de ouvinte' },
+  { id: 'olha-comigo', label: 'Olha Comigo', hint: 'jogo de atenção compartilhada' },
   { id: 'minha-vez-sua-vez', label: 'Minha Vez, Sua Vez', hint: 'jogo de turnos' },
   { id: 'prancha', label: 'Prancha de comunicação', hint: 'sempre disponível, mesmo sem tempo de tela' },
   { id: 'calma', label: 'Cantinho da calma', hint: 'respiração e estratégias de regulação' },

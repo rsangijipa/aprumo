@@ -1,6 +1,6 @@
 /*
- * Escolha pela Instrução — mundo "palco ao entardecer".
- * Tokens próprios (--epi-*).
+ * Missão Instrução — mundo "palco ao entardecer" (Soft Clay: formas redondas, luz difusa).
+ * Tokens próprios (--epi-*). Alvos de toque nunca menores que 48px × touchScale.
  */
 .epi {
   --epi-sky-top: #2c2540;
@@ -16,6 +16,11 @@
   --epi-ink: #fff7e6;
   --epi-item-size: clamp(72px, min(24vh, 22vw), 210px);
   --epi-ease: cubic-bezier(0.25, 0.85, 0.3, 1);
+  --epi-box: #c98f55;
+  --epi-box-dark: #8a5a2b;
+  --epi-zone: rgb(255 247 230 / 0.07);
+  --epi-zone-ready: rgb(255 236 190 / 0.18);
+  --epi-min-touch: calc(48px * var(--epi-scale, 1));
 
   position: fixed; inset: 0; overflow: hidden; user-select: none; -webkit-user-select: none; touch-action: manipulation;
   font-family: 'Fredoka', ui-rounded, system-ui, sans-serif; color: var(--epi-ink);
@@ -24,7 +29,7 @@
   padding: clamp(12px, 3vh, 28px) clamp(26px, 9vw, 120px);
 }
 .epi[data-palette='vivid'] { --epi-sky-top: #24305e; --epi-sky-bottom: #3f4c8a; --epi-brass: #ffc43d; }
-.epi[data-palette='high-contrast'] { --epi-sky-top: #000; --epi-sky-bottom: #111; --epi-niche: #fff; --epi-shelf: #ffd166; --epi-shelf-dark: #000; --epi-curtain: #222; --epi-curtain-dark: #000; }
+.epi[data-palette='high-contrast'] { --epi-box: #ffd166; --epi-box-dark: #fff; --epi-zone: rgb(255 255 255 / 0.12); --epi-zone-ready: rgb(255 255 255 / 0.3); --epi-sky-top: #000; --epi-sky-bottom: #111; --epi-niche: #fff; --epi-shelf: #ffd166; --epi-shelf-dark: #000; --epi-curtain: #222; --epi-curtain-dark: #000; }
 
 /* cortinas laterais com dobras */
 .epi::before, .epi::after {
@@ -43,6 +48,16 @@
   box-shadow: 0 8px 22px rgb(0 0 0 / 0.4), inset 0 -4px 8px rgb(0 0 0 / 0.2);
   display: grid; place-items: center;
 }
+.epi-top { position: relative; z-index: 2; display: flex; align-items: center; gap: clamp(12px, 3vw, 28px); }
+.epi-speaker__label {
+  position: absolute; top: 100%; left: 50%; translate: -50% 6px; white-space: nowrap;
+  font-size: clamp(13px, 2vh, 16px); font-weight: 500; color: var(--epi-ink); opacity: 0.8;
+}
+.epi-steps { list-style: none; margin: 0; padding: 0; display: flex; gap: 10px; }
+.epi-steps li { width: 22px; height: 22px; border-radius: 50%; border: 3px solid var(--epi-brass); transition: background 300ms; }
+.epi-steps li[data-state='now'] { background: rgb(var(--epi-light) / 0.35); }
+.epi-steps li[data-state='done'] { background: var(--epi-brass); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .epi-speaker:focus-visible { outline: 5px solid #fff; outline-offset: 5px; }
 .epi-speaker svg { width: 58%; height: auto; overflow: visible; }
 .epi-speaker .wave { opacity: 0.25; transition: opacity 200ms; }
@@ -51,7 +66,8 @@
 @keyframes epi-wave { 50% { opacity: 1; } }
 
 /* holofotes */
-.epi-stage { position: relative; z-index: 1; width: 100%; display: grid; place-items: center; align-self: stretch; }
+.epi-stage { position: relative; z-index: 1; width: 100%; display: flex; justify-content: center; align-items: end; gap: clamp(20px, 4vw, 56px); align-self: stretch; padding-top: 28px; }
+.epi-stage[data-dest='true'] { --epi-item-size: clamp(64px, min(18vh, 15vw), 150px); }
 .epi-beams { position: absolute; inset: -30vh 0 0; pointer-events: none; display: flex; justify-content: center; gap: clamp(18px, 3vw, 40px); }
 .epi-beam {
   width: calc(var(--epi-item-size) * var(--epi-scale, 1) + 24px);
@@ -80,7 +96,13 @@
   box-shadow: inset 0 10px 18px rgb(80 50 20 / 0.35), inset 0 -2px 0 rgb(255 255 255 / 0.6);
   display: grid; grid-template: 100% / 100%; place-items: center; padding: calc(var(--epi-item-size) * var(--epi-scale, 1) * 0.1);
 }
+.epi-niche { min-width: var(--epi-min-touch); }
 .epi-niche:focus-visible { outline: 5px solid #fff; outline-offset: 4px; }
+.epi-niche[data-state='picked'] { box-shadow: 0 0 0 5px var(--epi-brass), inset 0 10px 18px rgb(80 50 20 / 0.35); }
+.epi-niche[data-state='picked'] .epi-item { translate: 0 -10%; }
+.epi-niche[data-state='gone'] { cursor: default; }
+.epi-niche[data-state='gone'] .epi-item { opacity: 0; scale: 0.6; transition: opacity 300ms, scale 300ms; }
+.epi-niche[data-touched='true']:not([data-state='gone']) .epi-lantern { opacity: 0.55; }
 .epi-niche .epi-item { display: block; width: 100%; height: 100%; transition: translate 380ms var(--epi-ease), rotate 380ms var(--epi-ease); }
 .epi-niche[data-state='hop'] .epi-item { animation: epi-hop 700ms var(--epi-ease); }
 @keyframes epi-hop { 40% { translate: 0 -18%; } 70% { translate: 0 2%; } }
@@ -90,6 +112,43 @@
 /* lanterna acesa sobre o nicho certo */
 .epi-lantern { position: absolute; top: -26px; left: 50%; translate: -50% 0; width: 22px; height: 22px; border-radius: 50%; background: #ffe7a8; box-shadow: 0 0 22px 8px rgb(255 220 140 / 0.65); opacity: 0; transition: opacity 300ms; }
 .epi-niche[data-state='hop'] .epi-lantern { opacity: 1; }
+
+/* caixa de destino: quatro lugares tocáveis (dentro, em cima, embaixo, ao lado) */
+.epi-dest {
+  --epi-dest-w: calc(clamp(120px, 17vw, 200px) * var(--epi-scale, 1));
+  position: relative; display: grid; gap: 6px; align-self: end;
+  grid-template-columns: var(--epi-dest-w) calc(var(--epi-dest-w) * 0.55);
+  grid-template-rows: calc(var(--epi-dest-w) * 0.45) calc(var(--epi-dest-w) * 0.7) calc(var(--epi-dest-w) * 0.45);
+  grid-template-areas: 'top .' 'in side' 'under side';
+}
+.epi-zone {
+  all: unset; box-sizing: border-box; cursor: pointer; -webkit-tap-highlight-color: transparent; position: relative;
+  min-width: var(--epi-min-touch); min-height: var(--epi-min-touch); border-radius: 18px;
+  background: var(--epi-zone); border: 3px dashed rgb(var(--epi-light) / 0.18);
+  display: grid; place-items: center; transition: background 300ms, border-color 300ms, opacity 400ms;
+}
+.epi-zone:focus-visible { outline: 5px solid #fff; outline-offset: 3px; }
+.epi-zone--em-cima { grid-area: top; }
+.epi-zone--dentro { grid-area: in; border: none; background: none; }
+.epi-zone--embaixo { grid-area: under; }
+.epi-zone--ao-lado { grid-area: side; }
+.epi-box { position: absolute; inset: 0; width: 100%; height: 100%; }
+.epi-dest[data-ready='true'] .epi-zone:not(.epi-zone--dentro) { background: var(--epi-zone-ready); border-color: rgb(var(--epi-light) / 0.45); }
+.epi-dest[data-ready='true'] .epi-zone--dentro .epi-box { filter: drop-shadow(0 0 10px rgb(var(--epi-light) / 0.6)); }
+.epi-zone[data-focus='true'] { background: rgb(var(--epi-light) / 0.42); border-color: rgb(var(--epi-light) / 0.9); }
+.epi-zone--dentro[data-focus='true'] .epi-box { filter: drop-shadow(0 0 18px rgb(var(--epi-light) / 0.95)); }
+.epi-zone[data-dim='true'] { opacity: 0.45; }
+.epi-zone[data-state='tilt'] { animation: epi-tilt 520ms var(--epi-ease); }
+.epi-zone__items { position: relative; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; padding: 6px; }
+.epi-zone__toy { width: calc(var(--epi-dest-w) * 0.3); aspect-ratio: 1; animation: epi-land 420ms var(--epi-ease); }
+.epi-zone--dentro .epi-zone__items { padding-top: 20%; }
+@keyframes epi-land { from { translate: 0 -30%; opacity: 0; } }
+/* pés da mesinha que sustenta a caixa (dá sentido ao "embaixo") */
+.epi-dest__stand {
+  grid-area: under; pointer-events: none; align-self: stretch; justify-self: stretch; margin: 0 10%;
+  border-top: 8px solid var(--epi-box-dark); border-left: 8px solid var(--epi-box-dark); border-right: 8px solid var(--epi-box-dark);
+  border-radius: 6px 6px 0 0; opacity: 0.8;
+}
 
 .epi-caption { position: relative; z-index: 2; font-size: clamp(18px, 3vh, 26px); font-weight: 500; letter-spacing: 0.01em; opacity: 0.85; padding-top: 14px; }
 
@@ -106,6 +165,7 @@
 @media (prefers-reduced-motion: reduce) { .epi * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
 
 @media (orientation: portrait) {
+  .epi-stage { flex-direction: column; align-items: center; }
   .epi-shelf { flex-wrap: wrap; gap: 14px; }
   .epi-beams { display: none; }
   .epi-niche[data-state='dim'] { filter: brightness(0.55) saturate(0.6); }

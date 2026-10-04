@@ -56,6 +56,9 @@ importers:
       '@aprumo/game-escolha-pela-instrucao':
         specifier: workspace:*
         version: link:../../games/escolha-pela-instrucao
+      '@aprumo/game-espelho-magico':
+        specifier: workspace:*
+        version: link:../../games/espelho-magico
       '@aprumo/game-historia-ordem':
         specifier: workspace:*
         version: link:../../games/historia-ordem
@@ -68,6 +71,9 @@ importers:
       '@aprumo/game-missao-independencia':
         specifier: workspace:*
         version: link:../../games/missao-independencia
+      '@aprumo/game-olha-comigo':
+        specifier: workspace:*
+        version: link:../../games/olha-comigo
       '@aprumo/game-organize-categoria':
         specifier: workspace:*
         version: link:../../games/organize-categoria
@@ -235,6 +241,25 @@ importers:
         specifier: ^19.3.0
         version: 19.3.0
 
+  games/espelho-magico:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@aprumo/stimuli':
+        specifier: workspace:*
+        version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
   games/historia-ordem:
     dependencies:
       '@aprumo/game-sdk':
@@ -293,6 +318,25 @@ importers:
         version: 19.3.0
 
   games/missao-independencia:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@aprumo/stimuli':
+        specifier: workspace:*
+        version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
+  games/olha-comigo:
     dependencies:
       '@aprumo/game-sdk':
         specifier: workspace:*
