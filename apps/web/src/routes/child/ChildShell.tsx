@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router';
 import '@fontsource/fredoka/400.css';
 import '@fontsource/fredoka/500.css';
 import '@fontsource/fredoka/600.css';
-import { attachGameHost, type GameHost } from '@aprumo/game-sdk';
+import { attachGameHost, playTones, type GameHost } from '@aprumo/game-sdk';
 import type { EventEnvelope, TrialCompletedPayload } from '@aprumo/protocol';
 import { TokenBoard, type TokenTheme } from '@aprumo/resource-quadro-de-fichas';
 import { VisualSchedule, type PictoKey } from '@aprumo/resource-agenda-visual';
@@ -92,6 +92,11 @@ export default function ChildShell() {
         if (ev.type === 'SESSION_COMPLETED') {
           setActivityDone(true);
           setStepIndex((i) => Math.max(i, 1));
+          playTones([
+            { freq: 440, dur: 0.12, type: 'sine' },
+            { freq: 554.37, dur: 0.12, delay: 0.08, type: 'sine' },
+            { freq: 659.25, dur: 0.25, delay: 0.16, type: 'sine' },
+          ], run?.config.adaptation.sound === 'off' ? 'off' : 'normal');
         }
       },
     });
@@ -122,6 +127,10 @@ export default function ChildShell() {
     earnedRef.current += 1;
     setEarned(earnedRef.current);
     void actions.recordToken(sessionId);
+    playTones([
+      { freq: 587.33, dur: 0.08, type: 'sine' },
+      { freq: 880, dur: 0.15, delay: 0.06, type: 'sine' },
+    ], run?.config.adaptation.sound === 'off' ? 'off' : 'normal');
   }, [run, sessionId]);
 
   if (!run) {

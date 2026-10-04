@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
 import { summarizeTargetSession } from '@aprumo/clinical-core';
 import { DEFAULT_ADAPTATION, PROTOCOL_VERSION, type SessionConfig, type TargetConfig } from '@aprumo/protocol';
 import { STIMULUS_ART, STIMULUS_KEYS, StimulusArt, instructionFor } from '@aprumo/stimuli';
+import { playTones } from '@aprumo/game-sdk';
 import {
   Button,
   Dialog,
@@ -160,6 +161,17 @@ function AbaRunner({ session }: { session: SessionRecord }) {
 
     setTrialStartedAt(Date.now());
 
+    if (response === 'correct') {
+      playTones([
+        { freq: 523.25, dur: 0.08, type: 'sine' },
+        { freq: 659.25, dur: 0.12, delay: 0.06, type: 'sine' },
+      ], 'normal');
+    } else if (response === 'incorrect') {
+      playTones([{ freq: 330, dur: 0.1, type: 'sine' }], 'normal');
+    } else {
+      playTones([{ freq: 261.63, dur: 0.12, type: 'sine' }], 'normal');
+    }
+
     const respMap = { correct: 'Correta', incorrect: 'Incorreta', no_response: 'Sem resposta' };
     setLastRecorded({
       factId: fact.id,
@@ -176,6 +188,7 @@ function AbaRunner({ session }: { session: SessionRecord }) {
 
   const handleUndo = async () => {
     if (!lastRecorded) return;
+    playTones([{ freq: 392, dur: 0.08, type: 'sine' }], 'normal');
     await actions.retractTrial(session.id, lastRecorded.factId);
     setLastRecorded(null);
   };
@@ -204,7 +217,7 @@ function AbaRunner({ session }: { session: SessionRecord }) {
   return (
     <div className="runner">
       <RunnerBar session={session} onEnd={() => setEnding(true)}>
-        {session.status === 'active' && program && program.compatibleApps.length > 0 && db.screenPolicy(child.birthDate).childPortalAllowed && (
+        {session.status === 'active' && program && db.screenPolicy(child.birthDate).childPortalAllowed && (
           <Button icon={<IconTablet />} onClick={() => setLaunching(true)}><span className="hide-sm">Atividade no tablet</span><span className="show-sm">Tablet</span></Button>
         )}
       </RunnerBar>
@@ -383,7 +396,8 @@ function LaunchDialog({ session, target, onClose, onLaunch }: { session: Session
   const child = db.childOf(c);
   const program = db.programOf(target);
   const policy = db.screenPolicy(child.birthDate);
-  const games = program.compatibleApps.filter((a) => GAMES[a]);
+  const compatible = program.compatibleApps.filter((a) => GAMES[a]);
+  const games = compatible.length > 0 ? compatible : Object.keys(GAMES);
   const [appId, setAppId] = useState(games[0] ?? '');
   const [trials, setTrials] = useState(program.repertoire === 'social' ? 5 : 5);
   const [withSiblings, setWithSiblings] = useState(true);
@@ -408,7 +422,7 @@ function LaunchDialog({ session, target, onClose, onLaunch }: { session: Session
         targetId: t.id, name: t.name, phase: t.phase, repertoire: program.repertoire,
         fieldSize: Math.min(3, c.adaptation.maxChoices),
         stimulus: { stimulusId: `stm-${t.art}`, label: STIMULUS_ART[t.art]?.label ?? t.name, art: t.art },
-        distractors: distractors.map((k) => ({ stimulusId: `stm-${k}`, label: STIMULUS_ART[k]!.label, art: k })),
+        distractors: distractors.map((k) => ({ stimulusId: `stm-${k}`, label: STIMULUS_ART[k]?.label ?? k, art: k })),
         promptHierarchy: h.levels,
         scoring: manifest.clinical.autoScoring.includes(program.repertoire) ? 'auto' : 'therapist',
       };
@@ -599,6 +613,16 @@ function DenverRunner({ session }: { session: SessionRecord }) {
 
   const score = async (stepId: string, value: 'pass' | 'partial' | 'fail') => {
     setScores((sc) => ({ ...sc, [stepId]: { ...sc[stepId], [interval]: value } }));
+    if (value === 'pass') {
+      playTones([
+        { freq: 523.25, dur: 0.08, type: 'sine' },
+        { freq: 659.25, dur: 0.1, delay: 0.05, type: 'sine' },
+      ], 'normal');
+    } else if (value === 'partial') {
+      playTones([{ freq: 440, dur: 0.08, type: 'sine' }], 'normal');
+    } else {
+      playTones([{ freq: 330, dur: 0.08, type: 'sine' }], 'normal');
+    }
     await actions.recordDenverStepScore(session.id, stepId, interval, value, routine?.type ?? null);
   };
 

@@ -84,6 +84,10 @@ export default function CausaEEfeito() {
     if (shouldTriggerMilestone(nextCount, 5)) {
       playTones(MILESTONE_FANFARE, sound);
       client.emit('REWARD_TRIGGERED', { kind: 'visual', contingentOn: 'toques-completos' });
+      const targetTrials = config?.clinical.trialsPerTarget ?? 10;
+      if (nextCount >= targetTrials) {
+        client.emit('SESSION_COMPLETED', { trialsCompleted: nextCount });
+      }
     }
 
     trialStartRef.current = Date.now();

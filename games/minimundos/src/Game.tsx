@@ -78,6 +78,7 @@ export default function MiniMundos() {
         playTones(SOUNDS.chime, 'normal');
         client.reinforcerPresented({ kind: 'animation', contingentOn: currentWorld.mission.id, intensity: 'festive' });
         void speak(currentWorld.mission.successMessage, 'normal');
+        client.gameCompleted(1);
       }
     }
   };

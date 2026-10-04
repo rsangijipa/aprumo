@@ -10,7 +10,7 @@ import { useLocation, useNavigate, useParams } from 'react-router';
 import '@fontsource/fredoka/400.css';
 import '@fontsource/fredoka/500.css';
 import '@fontsource/fredoka/600.css';
-import { speak } from '@aprumo/game-sdk';
+import { playTones, speak } from '@aprumo/game-sdk';
 import { TokenArt, type TokenTheme } from '@aprumo/resource-quadro-de-fichas';
 import { STIMULUS_ART, StimulusArt } from '@aprumo/stimuli';
 import {
@@ -80,7 +80,22 @@ const GAME_KID_NAME: Record<string, string> = {
   'social-city': 'Social City 3D',
 };
 const TOKEN_STICKERS: TokenTheme[] = ['trem', 'estrela', 'dinossauro', 'coracao', 'folha'];
-export const STICKERS = [...TOKEN_STICKERS, 'bola', 'carro', 'peixe', 'flor', 'aviao', 'casa', 'uva', 'gato', 'cachorro', 'livro', 'maca'];
+export const STICKERS = [
+  ...TOKEN_STICKERS,
+  'bola',
+  'carro',
+  'carro_softclay',
+  'peixe',
+  'flor',
+  'aviao',
+  'casa',
+  'uva',
+  'gato',
+  'cachorro',
+  'livro',
+  'maca',
+  'maca_softclay',
+];
 
 export function Sticker({ id }: { id: string }) {
   return (TOKEN_STICKERS as string[]).includes(id) ? <TokenArt theme={id as TokenTheme} /> : <StimulusArt art={id} label={STIMULUS_ART[id]?.label} />;
@@ -116,7 +131,13 @@ export default function ChildSpace() {
   const c = st.cases.find((x) => x.childId === childId && x.status === 'active');
   const space = st.childSpaces.find((x) => x.childId === childId) ?? childSpaceOf(childId);
   const [tab, setTabState] = useState<Tab>('inicio');
-  const setTab = (t: Tab) => { setTabState(t); window.scrollTo({ top: 0 }); };
+  const setTab = (t: Tab) => {
+    if (t !== tab) {
+      playTones([{ freq: 523.25, dur: 0.04, type: 'sine' }], space.sound ? 'normal' : 'off');
+    }
+    setTabState(t);
+    window.scrollTo({ top: 0 });
+  };
   const [settingsOpen, setSettingsOpen] = useState(false);
   const months = child ? db.ageMonths(child.birthDate) : 72;
   const defaultMode: AgeMode = months < 48 ? 'sensory' : months < 108 ? 'kid' : months < 156 ? 'goals' : 'teen';
@@ -145,6 +166,11 @@ export default function ChildSpace() {
   const stars = totalStars(space);
   const T = TEXT[ageMode];
 
+  const handlePlayGame = (gameId: string) => {
+    playTones([{ freq: 440, dur: 0.06, type: 'sine' }], space.sound ? 'normal' : 'off');
+    nav(`/espaco/${childId}/jogar/${gameId}`);
+  };
+
   return (
     <div className="cs" data-theme={space.theme} data-age={ageMode}>
       <header className="cs-top">
@@ -161,9 +187,9 @@ export default function ChildSpace() {
 
       <main className="cs-main">
         {tab === 'inicio' && (
-          <Home childId={childId} caseId={c.id} teen={teen} used={used} limit={policy.dailyLimitMinutes} games={games} limitReached={limitReached} go={setTab} onPlay={(a) => nav(`/espaco/${childId}/jogar/${a}`)} />
+          <Home childId={childId} caseId={c.id} teen={teen} used={used} limit={policy.dailyLimitMinutes} games={games} limitReached={limitReached} go={setTab} onPlay={handlePlayGame} />
         )}
-        {tab === 'jogar' && <Games childId={childId} games={games} teen={teen} limitReached={limitReached} onPlay={(a) => nav(`/espaco/${childId}/jogar/${a}`)} />}
+        {tab === 'jogar' && <Games childId={childId} games={games} teen={teen} limitReached={limitReached} onPlay={handlePlayGame} />}
         {tab === 'album' && <Album childId={childId} teen={teen} />}
         {tab === 'prancha' && <Board sound={space.sound} teen={teen} />}
         {tab === 'calma' && <Calm sound={space.sound} teen={teen} />}
@@ -358,7 +384,20 @@ function Album({ childId, teen }: { childId: string; teen: boolean }) {
             <h2>{T.choose}</h2>
             <div className="cs-album">
               {STICKERS.filter((s) => !space.stickers.includes(s)).map((s) => (
-                <button key={s} className="cs-sticker cs-sticker--pick" onClick={() => { actions.unlockSticker(childId, s); setChoosing(false); }} aria-label={`Escolher ${s}`}>
+                <button
+                  key={s}
+                  className="cs-sticker cs-sticker--pick"
+                  onClick={() => {
+                    actions.unlockSticker(childId, s);
+                    playTones([
+                      { freq: 523.25, dur: 0.08, type: 'sine' },
+                      { freq: 659.25, dur: 0.1, delay: 0.06, type: 'sine' },
+                      { freq: 783.99, dur: 0.18, delay: 0.14, type: 'sine' },
+                    ], space.sound ? 'normal' : 'off');
+                    setChoosing(false);
+                  }}
+                  aria-label={`Escolher ${s}`}
+                >
                   <Sticker id={s} />
                 </button>
               ))}

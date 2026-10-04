@@ -6,7 +6,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import '@fontsource/fredoka/500.css';
 import '@fontsource/fredoka/600.css';
-import { attachGameHost } from '@aprumo/game-sdk';
+import { attachGameHost, playTones } from '@aprumo/game-sdk';
 import { actions, childSpaceOf, db, screenMinutesToday, useStore } from '../../data/store';
 import { buildPracticeConfig } from '../../game-host/config';
 import { GAMES } from '../../game-host/registry';
@@ -45,6 +45,11 @@ export default function PlayShell() {
         if (ev.type === 'SESSION_COMPLETED') {
           const secs = Math.round((Date.now() - started.current) / 1000);
           setResult({ stars: actions.recordPractice(childId, appId, secs, true), completed: true });
+          playTones([
+            { freq: 440, dur: 0.12, type: 'sine' },
+            { freq: 554.37, dur: 0.12, delay: 0.08, type: 'sine' },
+            { freq: 659.25, dur: 0.25, delay: 0.16, type: 'sine' },
+          ], 'normal');
         }
       },
     });
@@ -88,8 +93,25 @@ export default function PlayShell() {
             <div className="cs-celebrate" aria-hidden="true">{Array.from({ length: result.stars }, (_, i) => <span key={i} style={{ animationDelay: `${i * 160}ms` }}><StarIcon /></span>)}</div>
             <p className="cs-title">{result.stars > 0 ? `Você terminou! +${result.stars} estrelas` : 'Muito bem!'}</p>
             <div className="cs-row">
-              <button className="cs-btn" onClick={() => { setResult(null); setRound((r) => r + 1); }}>Jogar de novo</button>
-              <button className="cs-btn cs-btn--primary" onClick={() => nav(`/espaco/${childId}`)}>Voltar</button>
+              <button
+                className="cs-btn"
+                onClick={() => {
+                  playTones([{ freq: 440, dur: 0.08, type: 'sine' }], space.sound ? 'normal' : 'off');
+                  setResult(null);
+                  setRound((r) => r + 1);
+                }}
+              >
+                Jogar de novo
+              </button>
+              <button
+                className="cs-btn cs-btn--primary"
+                onClick={() => {
+                  playTones([{ freq: 392, dur: 0.06, type: 'sine' }], space.sound ? 'normal' : 'off');
+                  nav(`/espaco/${childId}`);
+                }}
+              >
+                Voltar
+              </button>
             </div>
           </div>
         )}
