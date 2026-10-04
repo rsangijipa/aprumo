@@ -224,7 +224,15 @@ export default function EspelhoMagico() {
 
       {stage !== 'done' && (
         <section className="em-adult" aria-label="Registro do adulto">
-          <h2 className="em-adult__title">Para o adulto: como a criança imitou?</h2>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.25rem' }}>
+            <h2 className="em-adult__title" style={{ margin: 0 }}>Para o adulto: como a criança imitou?</h2>
+            <img
+              src="/assets/avatar_imitation_child.svg"
+              alt="Guia postural de imitação"
+              title="Guia postural de imitação motora"
+              style={{ width: '26px', height: '39px', objectFit: 'contain', opacity: 0.9 }}
+            />
+          </div>
           <div className="em-adult__grid">
             {OUTCOMES.map((o) => (
               <button key={o.id} type="button" className="em-out" data-outcome={o.id} onClick={() => record(o.id)} disabled={busy}>

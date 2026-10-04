@@ -35,6 +35,7 @@ export interface TaskPreset {
   category: 'autonomia' | 'higiene' | 'escolar';
   description: string;
   defaultMode: ChainingMode;
+  assetUrl?: string;
   steps: TaskStep[];
 }
 
@@ -45,6 +46,7 @@ export const TASK_PRESETS: TaskPreset[] = [
     category: 'higiene',
     description: 'Protocolo de higiene das mãos com 7 etapas estruturadas.',
     defaultMode: 'forward',
+    assetUrl: '/assets/routine_wash_hands.svg',
     steps: [
       { id: 'lm-1', instruction: 'Abrir a torneira', visualHint: '🚰' },
       { id: 'lm-2', instruction: 'Molhar as mãos com água corrente', visualHint: '💧' },
@@ -61,6 +63,7 @@ export const TASK_PRESETS: TaskPreset[] = [
     category: 'higiene',
     description: 'Rotina de higiene bucal com preparação e escovação completa.',
     defaultMode: 'forward',
+    assetUrl: '/assets/routine_brush_teeth.svg',
     steps: [
       { id: 'ed-1', instruction: 'Pegar a escova e abrir o tubo de pasta', visualHint: '🪥' },
       { id: 'ed-2', instruction: 'Colocar uma quantidade pequena de pasta na escova', visualHint: '🧴' },

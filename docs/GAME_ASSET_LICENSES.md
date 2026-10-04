@@ -1,6 +1,6 @@
 # APRUMO — GAME & PLATFORM ASSET LICENSES
 
-**Versão:** 2.0.0  
+**Versão:** 2.1.0  
 **Data:** Outubro de 2026  
 **Finalidade:** Inventário Legal, Direitos Autorais e Políticas de Licenciamento de Assets (Áudio, Tipografia e Imagens).
 
@@ -41,5 +41,7 @@
 | Conjunto de Estímulos | Licença | Origem | Uso Autorizado |
 |---|---|---|---|
 | **`@aprumo/stimuli`** | MIT (Aprumo Core) | Ilustrações vetoriais SVG desenhadas internamente | Conjunto canônico de cartões, objetos de teste e pareamento |
+| **Soft-Clay 3D Stimuli & Scene Assets** | MIT (Aprumo Core) | Código procedural vetorial SVG nativo (`apps/web/public/assets/` & `@aprumo/stimuli`) | Estímulos táteis (maçã, carrinho), rotinas (escovar dentes, lavar mãos), avatar de imitação, folha de modelo Léo e cenários urbanos |
 | **Open Board Format (OBF)** | Creative Commons Attribution 4.0 | Open-AAC Initiative | Formato interoperável de pranchas de comunicação alternativa |
 | **Mulberry Symbols** | Creative Commons Attribution-ShareAlike 2.0 UK | Straight-Street | Biblioteca internacional de símbolos para comunicação alternativa e PECS |
+

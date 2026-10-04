@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <!-- Sombra suave no chão -->
+    <radialGradient id="brush-shadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.18" />
+      <stop offset="60%" stop-color="#000000" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Cabo azul e amarelo macio (Soft clay handle) -->
+    <linearGradient id="brush-handle-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#93c5fd" />
+      <stop offset="35%" stop-color="#3b82f6" />
+      <stop offset="85%" stop-color="#1d4ed8" />
+      <stop offset="100%" stop-color="#1e3a8a" />
+    </linearGradient>
+
+    <linearGradient id="brush-grip-yellow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="40%" stop-color="#facc15" />
+      <stop offset="85%" stop-color="#ca8a04" />
+      <stop offset="100%" stop-color="#854d0e" />
+    </linearGradient>
+
+    <!-- Cerdas da escova em bloco tátil macio -->
+    <linearGradient id="brush-bristles" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="60%" stop-color="#e0f2fe" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+
+    <!-- Pasta de dentes cremosa (Toothpaste dollop) -->
+    <radialGradient id="brush-paste" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#a7f3d0" />
+      <stop offset="40%" stop-color="#34d399" />
+      <stop offset="80%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#047857" />
+    </radialGradient>
+  </defs>
+
+  <!-- Fundo branco puro de estúdio -->
+  <rect width="1024" height="1024" fill="#ffffff" />
+
+  <!-- Sombra no solo -->
+  <ellipse cx="512" cy="800" rx="360" ry="50" fill="url(#brush-shadow)" transform="rotate(-18 512 800)" />
+
+  <g transform="rotate(-32 512 512)">
+    <!-- Cabo longo da escova em perspectiva 3D tátil -->
+    <path d="M 280 480
+             C 280 460, 310 450, 380 460
+             L 760 485
+             C 830 490, 870 520, 870 545
+             C 870 570, 830 600, 760 600
+             L 380 570
+             C 310 570, 280 550, 280 520 Z"
+          fill="url(#brush-handle-blue)" />
+
+    <!-- Empunhadura emborrachada amarela (grip) -->
+    <path d="M 520 480
+             C 550 480, 680 490, 710 495
+             C 715 530, 715 565, 710 595
+             C 680 595, 550 585, 520 580 Z"
+          fill="url(#brush-grip-yellow)" />
+
+    <!-- Textura do grip com ranhuras táteis suaves -->
+    <ellipse cx="570" cy="535" rx="6" ry="25" fill="#ca8a04" opacity="0.6" />
+    <ellipse cx="610" cy="540" rx="6" ry="25" fill="#ca8a04" opacity="0.6" />
+    <ellipse cx="650" cy="545" rx="6" ry="25" fill="#ca8a04" opacity="0.6" />
+
+    <!-- Cabeça da escova de dentes -->
+    <rect x="180" y="475" width="130" height="60" rx="28" fill="url(#brush-handle-blue)" />
+
+    <!-- Cerdas da escova em blocos arredondados de argila -->
+    <path d="M 190 475
+             C 190 420, 205 380, 220 380
+             L 280 380
+             C 295 380, 310 420, 310 475 Z"
+          fill="url(#brush-bristles)" />
+
+    <!-- Divisões suaves das cerdas -->
+    <line x1="230" y1="385" x2="230" y2="470" stroke="#bae6fd" strokeWidth="3" />
+    <line x1="260" y1="385" x2="260" y2="470" stroke="#bae6fd" strokeWidth="3" />
+
+    <!-- Porção generosa de pasta de dentes com brilho de argila (dollop) -->
+    <path d="M 185 390
+             C 185 350, 210 330, 240 330
+             C 270 330, 315 340, 335 370
+             C 320 400, 290 405, 230 400
+             C 205 400, 185 410, 185 390 Z"
+          fill="url(#brush-paste)" />
+
+    <!-- Espirais de brilho e curva da pasta -->
+    <path d="M 210 360 C 240 345, 280 350, 310 375" fill="none" stroke="#ffffff" strokeWidth="6" strokeLinecap="round" opacity="0.75" />
+    <circle cx="210" cy="355" r="4" fill="#ffffff" />
+  </g>
+</svg>

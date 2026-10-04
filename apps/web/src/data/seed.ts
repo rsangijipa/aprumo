@@ -81,6 +81,26 @@ export const children: Child[] = [
   { id: 'ch-nina', preferredName: 'Nina', fullName: 'Nina (fictícia)', birthDate: yearsAgo(1, 8), hue: 336, accessCode: 'NINA-2260' },
 ];
 
+const ALL_MOCK_APPS = [
+  'encontre-o-igual',
+  'escolha-pela-instrucao',
+  'minha-vez-sua-vez',
+  'organize-categoria',
+  'memoria-bichos',
+  'historia-ordem',
+  'pequeno-chef',
+  'missao-independencia',
+  'causa-efeito',
+  'espelho-magico',
+  'olha-comigo',
+  'detetive-das-emocoes',
+  'circuito-executivo',
+  'minimundos',
+  'social-city',
+  'prancha',
+  'calma',
+];
+
 export const cases: CaseRecord[] = [
   {
     id: 'case-bento', childId: 'ch-bento', model: 'ABA', status: 'active', openedAt: daysAgo(160),
@@ -90,7 +110,7 @@ export const cases: CaseRecord[] = [
     interests: ['futebol', 'música eletrônica', 'mapas'],
     restrictions: [],
     tokenTheme: 'bola',
-    releasedApps: ['encontre-o-igual', 'escolha-pela-instrucao', 'minha-vez-sua-vez', 'prancha', 'calma'],
+    releasedApps: [...ALL_MOCK_APPS],
   },
   {
     id: 'case-teo', childId: 'ch-teo', model: 'ABA', status: 'active', openedAt: daysAgo(120),
@@ -104,7 +124,7 @@ export const cases: CaseRecord[] = [
     interests: ['trens', 'bolhas de sabão', 'música'],
     restrictions: ['Sem comestíveis com glúten'],
     tokenTheme: 'trem',
-    releasedApps: ['encontre-o-igual', 'escolha-pela-instrucao', 'minha-vez-sua-vez', 'prancha', 'calma'],
+    releasedApps: [...ALL_MOCK_APPS],
   },
   {
     id: 'case-lia', childId: 'ch-lia', model: 'DENVER', status: 'active', openedAt: daysAgo(90),
@@ -117,7 +137,7 @@ export const cases: CaseRecord[] = [
     interests: ['bolhas', 'músicas com gestos', 'blocos'],
     restrictions: ['Sensível a sons altos'],
     tokenTheme: 'estrela',
-    releasedApps: ['minha-vez-sua-vez', 'prancha', 'calma'],
+    releasedApps: [...ALL_MOCK_APPS],
   },
   {
     id: 'case-davi', childId: 'ch-davi', model: 'ABA', status: 'active', openedAt: daysAgo(200),
@@ -130,7 +150,7 @@ export const cases: CaseRecord[] = [
     interests: ['dinossauros', 'quebra-cabeças'],
     restrictions: [],
     tokenTheme: 'dinossauro',
-    releasedApps: ['encontre-o-igual', 'escolha-pela-instrucao', 'minha-vez-sua-vez', 'prancha', 'calma'],
+    releasedApps: [...ALL_MOCK_APPS],
   },
   {
     id: 'case-nina', childId: 'ch-nina', model: 'DENVER', status: 'active', openedAt: daysAgo(30),
@@ -140,7 +160,7 @@ export const cases: CaseRecord[] = [
     interests: ['cantigas', 'água'],
     restrictions: [],
     tokenTheme: 'folha',
-    releasedApps: [],
+    releasedApps: [...ALL_MOCK_APPS],
   },
 ];
 

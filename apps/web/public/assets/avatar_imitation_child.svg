@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1536" width="1024" height="1536">
+  <defs>
+    <!-- Fundo de estúdio fotográfico / cinza neutro suave -->
+    <radialGradient id="studio-bg" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="60%" stop-color="#f0f4f3" />
+      <stop offset="100%" stop-color="#e2e8e6" />
+    </radialGradient>
+
+    <!-- Sombra no solo -->
+    <radialGradient id="avatar-shadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.18" />
+      <stop offset="60%" stop-color="#000000" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Pele amigável com iluminação difusa (Soft 3D skin) -->
+    <radialGradient id="avatar-skin" cx="40%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#fde68a" />
+      <stop offset="30%" stop-color="#fed7aa" />
+      <stop offset="75%" stop-color="#fba868" />
+      <stop offset="100%" stop-color="#ea7a28" />
+    </radialGradient>
+
+    <!-- Camiseta verde sálvia (Sage green) -->
+    <linearGradient id="avatar-shirt" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#84a98c" />
+      <stop offset="40%" stop-color="#52796f" />
+      <stop offset="90%" stop-color="#354f52" />
+      <stop offset="100%" stop-color="#2f3e46" />
+    </linearGradient>
+
+    <!-- Calças confortáveis (Casual soft blue-gray trousers) -->
+    <linearGradient id="avatar-pants" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#64748b" />
+      <stop offset="50%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+
+    <!-- Cabelo castanho macio -->
+    <radialGradient id="avatar-hair" cx="40%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#854d0e" />
+      <stop offset="60%" stop-color="#58310c" />
+      <stop offset="100%" stop-color="#371d06" />
+    </radialGradient>
+
+    <!-- Tênis confortáveis -->
+    <linearGradient id="avatar-shoes" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="65%" stop-color="#cbd5e1" />
+      <stop offset="100%" stop-color="#94a3b8" />
+    </linearGradient>
+  </defs>
+
+  <!-- Fundo cinza neutro suave de estúdio (#F0F2F2) -->
+  <rect width="1024" height="1536" fill="url(#studio-bg)" />
+
+  <!-- Sombra no solo -->
+  <ellipse cx="512" cy="1440" rx="280" ry="45" fill="url(#avatar-shadow)" />
+
+  <!-- Pernas e Calças -->
+  <g>
+    <!-- Perna esquerda -->
+    <path d="M 410 890 L 400 1320 C 400 1340, 460 1340, 460 1320 L 485 890 Z" fill="url(#avatar-pants)" />
+    <!-- Perna direita -->
+    <path d="M 539 890 L 564 1320 C 564 1340, 624 1340, 624 1320 L 614 890 Z" fill="url(#avatar-pants)" />
+  </g>
+
+  <!-- Tênis de argila branca macia -->
+  <g>
+    <!-- Sapato esquerdo -->
+    <ellipse cx="420" cy="1360" rx="65" ry="32" fill="url(#avatar-shoes)" />
+    <rect x="365" y="1360" width="110" height="24" rx="10" fill="#f8fafc" />
+    <!-- Sapato direito -->
+    <ellipse cx="604" cy="1360" rx="65" ry="32" fill="url(#avatar-shoes)" />
+    <rect x="549" y="1360" width="110" height="24" rx="10" fill="#f8fafc" />
+  </g>
+
+  <!-- Tronco / Camiseta Sálvia -->
+  <path d="M 370 540
+           C 370 500, 430 480, 512 480
+           C 594 480, 654 500, 654 540
+           L 634 910
+           C 634 930, 390 930, 390 910 Z"
+        fill="url(#avatar-shirt)" />
+
+  <!-- Mangas da camiseta -->
+  <path d="M 390 510 L 260 620 C 240 640, 270 680, 300 660 L 390 590 Z" fill="url(#avatar-shirt)" />
+  <path d="M 634 510 L 764 620 C 784 640, 754 680, 724 660 L 634 590 Z" fill="url(#avatar-shirt)" />
+
+  <!-- Braços e Mãos Abertas para Imitação Motora (Hands clearly visible & open) -->
+  <!-- Braço Esquerdo -->
+  <path d="M 270 640 L 190 770 C 175 795, 215 820, 230 795 L 300 660 Z" fill="url(#avatar-skin)" />
+  <!-- Mão esquerda espalmada aberta (gesto motor claro) -->
+  <circle cx="180" cy="830" r="48" fill="url(#avatar-skin)" />
+  <rect x="120" y="810" width="45" height="22" rx="11" transform="rotate(-30 120 810)" fill="url(#avatar-skin)" /> <!-- Polegar -->
+  <rect x="145" y="855" width="48" height="20" rx="10" fill="url(#avatar-skin)" />
+  <rect x="150" y="880" width="50" height="20" rx="10" fill="url(#avatar-skin)" />
+  <rect x="160" y="905" width="45" height="20" rx="10" fill="url(#avatar-skin)" />
+  <rect x="175" y="925" width="40" height="18" rx="9" fill="url(#avatar-skin)" />
+
+  <!-- Braço Direito -->
+  <path d="M 754 640 L 834 770 C 849 795, 809 820, 794 795 L 724 660 Z" fill="url(#avatar-skin)" />
+  <!-- Mão direita espalmada aberta (gesto motor claro) -->
+  <circle cx="844" cy="830" r="48" fill="url(#avatar-skin)" />
+  <rect x="860" y="810" width="45" height="22" rx="11" transform="rotate(30 860 810)" fill="url(#avatar-skin)" /> <!-- Polegar -->
+  <rect x="830" y="855" width="48" height="20" rx="10" fill="url(#avatar-skin)" />
+  <rect x="825" y="880" width="50" height="20" rx="10" fill="url(#avatar-skin)" />
+  <rect x="815" y="905" width="45" height="20" rx="10" fill="url(#avatar-skin)" />
+  <rect x="800" y="925" width="40" height="18" rx="9" fill="url(#avatar-skin)" />
+
+  <!-- Pescoço -->
+  <rect x="475" y="440" width="74" height="65" rx="20" fill="url(#avatar-skin)" />
+
+  <!-- Cabeça amigável com proporções equilibradas -->
+  <ellipse cx="512" cy="340" rx="135" ry="155" fill="url(#avatar-skin)" />
+
+  <!-- Cabelo volumoso e acolhedor -->
+  <path d="M 370 320
+           C 350 180, 420 120, 512 120
+           C 604 120, 674 180, 654 320
+           C 620 280, 580 270, 512 280
+           C 440 270, 400 280, 370 320 Z"
+        fill="url(#avatar-hair)" />
+  <!-- Franja suave -->
+  <ellipse cx="440" cy="270" rx="60" ry="35" fill="url(#avatar-hair)" />
+  <ellipse cx="560" cy="275" rx="55" ry="32" fill="url(#avatar-hair)" />
+
+  <!-- Orelhas suaves -->
+  <circle cx="375" cy="355" r="28" fill="url(#avatar-skin)" />
+  <circle cx="649" cy="355" r="28" fill="url(#avatar-skin)" />
+
+  <!-- Olhos expressivos e calmos -->
+  <circle cx="455" cy="345" r="16" fill="#1e293b" />
+  <circle cx="460" cy="340" r="5" fill="#ffffff" />
+  <circle cx="569" cy="345" r="16" fill="#1e293b" />
+  <circle cx="574" cy="340" r="5" fill="#ffffff" />
+
+  <!-- Sobrancelhas suaves -->
+  <path d="M 430 315 Q 455 310 475 320" fill="none" stroke="#58310c" strokeWidth="5" strokeLinecap="round" />
+  <path d="M 550 320 Q 570 310 595 315" fill="none" stroke="#58310c" strokeWidth="5" strokeLinecap="round" />
+
+  <!-- Nariz amigável -->
+  <ellipse cx="512" cy="375" rx="10" ry="7" fill="#f97316" opacity="0.45" />
+
+  <!-- Sorriso acolhedor sutil (Gentle smiling subtle expression) -->
+  <path d="M 465 410 Q 512 445 559 410" fill="none" stroke="#c2410c" strokeWidth="6" strokeLinecap="round" />
+  <!-- Bochechas rosadas suaves -->
+  <ellipse cx="425" cy="385" rx="25" ry="16" fill="#f87171" opacity="0.3" />
+  <ellipse cx="599" cy="385" rx="25" ry="16" fill="#f87171" opacity="0.3" />
+</svg>

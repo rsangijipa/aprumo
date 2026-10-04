@@ -3,7 +3,25 @@ import type { GameManifest } from '@aprumo/protocol';
 import { Badge, Card, Button, BackButton, CloseButton, IconCheck, IconPrinter } from '@aprumo/ui';
 import { speak, playTones } from '@aprumo/game-sdk';
 import { GAMES } from '../../game-host/registry';
-import { ArtListener, ArtMatch, ArtSchedule, ArtTokens, ArtTurns, ArtDetective, ArtExecutive, ArtMiniWorlds, ArtChef, ArtIndependence, ArtSocialCity } from '../public/Landing';
+import {
+  ArtListener,
+  ArtMatch,
+  ArtSchedule,
+  ArtTokens,
+  ArtTurns,
+  ArtDetective,
+  ArtExecutive,
+  ArtMiniWorlds,
+  ArtChef,
+  ArtIndependence,
+  ArtSocialCity,
+  ArtCategory,
+  ArtAnimalMemory,
+  ArtStoryOrder,
+  ArtCauseEffect,
+  ArtMagicMirror,
+  ArtSharedAttention,
+} from '../public/Landing';
 import { TaskAnalysisStudio } from './resources/TaskAnalysisStudio';
 import { ChoiceBoardStudio } from './resources/ChoiceBoardStudio';
 import { CommunicationBoardStudio } from './resources/CommunicationBoardStudio';
@@ -23,6 +41,12 @@ const ART: Record<string, ReactNode> = {
   'pequeno-chef': <ArtChef />,
   'missao-independencia': <ArtIndependence />,
   'social-city': <ArtSocialCity />,
+  'organize-categoria': <ArtCategory />,
+  'memoria-bichos': <ArtAnimalMemory />,
+  'historia-ordem': <ArtStoryOrder />,
+  'causa-efeito': <ArtCauseEffect />,
+  'espelho-magico': <ArtMagicMirror />,
+  'olha-comigo': <ArtSharedAttention />,
 };
 
 const DefaultGameArt = ({ name }: { name: string }) => (
@@ -904,10 +928,17 @@ function TaskAnalysisTool() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <strong style={{ fontSize: 'var(--ap-text-md)' }}>Habilidade: Lavar as Mãos Autonomamente</strong>
-          <p className="ap-small ap-muted" style={{ margin: 0 }}>Encadeamento para Frente · Registro de Sondagem</p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+          <img
+            src="/assets/routine_wash_hands.svg"
+            alt="Lavar as mãos"
+            style={{ width: '48px', height: '48px', borderRadius: '10px', background: 'var(--ap-surface)', border: '1px solid var(--ap-border)', padding: '3px', flexShrink: 0 }}
+          />
+          <div>
+            <strong style={{ fontSize: 'var(--ap-text-md)' }}>Habilidade: Lavar as Mãos Autonomamente</strong>
+            <p className="ap-small ap-muted" style={{ margin: 0 }}>Encadeamento para Frente · Registro de Sondagem</p>
+          </div>
         </div>
         <div style={{ textAlign: 'right' }}>
           <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--ap-primary)' }}>{pct}%</div>
@@ -952,6 +983,7 @@ function TaskAnalysisTool() {
  * 6. História Social Interativa
  * ------------------------------------------------------------ */
 function SocialStoryTool() {
+  const [showModelSheet, setShowModelSheet] = useState(false);
   const pages = [
     {
       page: 1,
@@ -988,6 +1020,19 @@ function SocialStoryTool() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', alignItems: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: '580px', flexWrap: 'wrap', gap: '0.5rem' }}>
+        <span className="ap-small ap-muted">Personagem Protagonista: <strong>Léo (7 anos)</strong></span>
+        <Button variant="ghost" size="sm" onClick={() => setShowModelSheet((s) => !s)}>
+          {showModelSheet ? 'Ocultar Folha de Modelo' : '👤 Ver Folha do Personagem (Léo)'}
+        </Button>
+      </div>
+
+      {showModelSheet && (
+        <div style={{ width: '100%', maxWidth: '580px', borderRadius: '16px', overflow: 'hidden', border: '1px solid var(--ap-border)', background: 'var(--ap-surface)' }}>
+          <img src="/assets/character_sheet_leo.svg" alt="Folha de Personagem: Léo" style={{ width: '100%', height: 'auto', display: 'block' }} />
+        </div>
+      )}
+
       <div style={{ background: 'var(--ap-surface-sunken)', border: '2px solid var(--ap-border)', borderRadius: '20px', padding: '2rem', width: '100%', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
         <div style={{ fontSize: '64px' }}>{current.emoji}</div>
         <h3 style={{ margin: 0, fontSize: '1.35rem' }}>{current.title}</h3>
@@ -1021,9 +1066,9 @@ function ChoiceBoardTool() {
 
   const choices = [
     { id: 'bola', label: 'Bola', emoji: '⚽' },
-    { id: 'carro', label: 'Carrinho', emoji: '🚗' },
+    { id: 'carro', label: 'Carrinho', emoji: '🚗', asset: '/assets/stimulus_car_softclay.svg' },
+    { id: 'maca', label: 'Maçã', emoji: '🍎', asset: '/assets/stimulus_apple_softclay.svg' },
     { id: 'blocos', label: 'Blocos de Montar', emoji: '🧱' },
-    { id: 'massinha', label: 'Massinha', emoji: '🧁' },
   ];
 
   const handlePick = (item: { id: string; label: string }) => {
@@ -1059,7 +1104,11 @@ function ChoiceBoardTool() {
               }}
               aria-pressed={is}
             >
-              <span style={{ fontSize: '48px' }}>{c.emoji}</span>
+              {c.asset ? (
+                <img src={c.asset} alt={c.label} style={{ width: '56px', height: '56px', objectFit: 'contain' }} />
+              ) : (
+                <span style={{ fontSize: '48px' }}>{c.emoji}</span>
+              )}
               <strong style={{ fontSize: 'var(--ap-text-md)', color: is ? 'var(--ap-primary)' : 'var(--ap-text)' }}>{c.label}</strong>
             </button>
           );

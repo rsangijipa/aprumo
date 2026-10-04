@@ -39,6 +39,33 @@ export const STIMULUS_ART: Record<string, { label: string; category: string; art
       </g>,
     ),
   },
+  maca_softclay: {
+    article: 'a',
+    label: 'maçã (soft clay)',
+    category: 'alimentos',
+    draw: () => S(
+      <g transform="scale(0.117) translate(-50, -40)">
+        <ellipse cx="512" cy="880" rx="320" ry="55" fill="#000000" opacity="0.18" />
+        <path d="M 512 290 C 510 220, 545 160, 580 130 C 590 120, 605 130, 595 145 C 565 180, 538 230, 532 295 Z" fill="#543719" />
+        <path d="M 512 300 C 420 230, 240 250, 180 390 C 110 550, 190 780, 370 850 C 440 878, 485 860, 512 840 C 539 860, 584 878, 654 850 C 834 780, 914 550, 844 390 C 784 250, 604 230, 512 300 Z" fill="#c91a1a" />
+        <ellipse cx="360" cy="420" rx="140" ry="110" transform="rotate(-30 360 420)" fill="#ffffff" opacity="0.35" />
+      </g>,
+    ),
+  },
+  carro_softclay: {
+    article: 'o',
+    label: 'carro (soft clay)',
+    category: 'veículos',
+    draw: () => S(
+      <g transform="scale(0.117) translate(-50, -50)">
+        <ellipse cx="512" cy="790" rx="390" ry="70" fill="#000000" opacity="0.18" />
+        <path d="M 170 650 C 160 580, 200 520, 260 520 C 310 520, 360 480, 410 380 C 450 300, 520 280, 620 290 C 720 300, 770 380, 810 490 C 870 510, 910 560, 900 640 C 890 710, 840 730, 780 730 C 740 730, 700 700, 670 700 C 620 700, 580 730, 480 730 C 420 730, 380 700, 340 700 C 280 700, 220 730, 180 720 C 165 710, 165 670, 170 650 Z" fill="#2563eb" />
+        <path d="M 430 380 C 460 320, 510 310, 580 320 L 580 470 C 510 470, 450 460, 400 450 C 410 420, 420 400, 430 380 Z" fill="#e0f2fe" />
+        <ellipse cx="320" cy="740" rx="75" ry="105" fill="#1e293b" />
+        <ellipse cx="780" cy="725" rx="75" ry="105" fill="#1e293b" />
+      </g>,
+    ),
+  },
   maca: {
     article: 'a',
     label: 'maçã',

@@ -423,6 +423,15 @@ export default function SocialCityGame() {
       {isDialogueOpen && currentTrial && (
         <div className="sc-dialog-overlay" role="dialog" aria-modal="true" aria-labelledby="sc-dialog-title">
           <div className="sc-dialog-card">
+            {currentTrial.scenario.locationId === 'cafeteria' && (
+              <div style={{ borderRadius: '16px 16px 0 0', overflow: 'hidden', maxHeight: '100px', borderBottom: '1px solid #334155' }}>
+                <img
+                  src="/assets/environment_teen_cafe.svg"
+                  alt="Ambiente: Cafeteria da Praça"
+                  style={{ width: '100%', height: '100px', objectFit: 'cover', display: 'block' }}
+                />
+              </div>
+            )}
             <div className="sc-dialog-head">
               <CharacterPortrait id={currentTrial.scenario.npc.avatarId} size={52} />
               <div className="sc-npc-meta">

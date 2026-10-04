@@ -1,0 +1,161 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080">
+  <defs>
+    <!-- Gradiente de luz do dia suave entrando pelas janelas -->
+    <linearGradient id="daylight-sky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#bae6fd" />
+      <stop offset="60%" stop-color="#e0f2fe" />
+      <stop offset="100%" stop-color="#f0f9ff" />
+    </linearGradient>
+
+    <!-- Piso de madeira contemporânea e porcelanato claro -->
+    <linearGradient id="cafe-floor" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d6ceb2" />
+      <stop offset="50%" stop-color="#c4b898" />
+      <stop offset="100%" stop-color="#a89b78" />
+    </linearGradient>
+
+    <!-- Parede interior minimalista -->
+    <linearGradient id="cafe-wall" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e2e8e4" />
+      <stop offset="50%" stop-color="#f1f5f3" />
+      <stop offset="100%" stop-color="#cbd5ce" />
+    </linearGradient>
+
+    <!-- Balcão de barista em madeira teca e mármore -->
+    <linearGradient id="counter-top" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f8fafc" />
+      <stop offset="70%" stop-color="#e2e8f0" />
+      <stop offset="100%" stop-color="#cbd5e1" />
+    </linearGradient>
+
+    <linearGradient id="counter-wood" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#92400e" />
+      <stop offset="50%" stop-color="#78350f" />
+      <stop offset="100%" stop-color="#451a03" />
+    </linearGradient>
+
+    <!-- Luz volumétrica suave que penetra pelas janelas -->
+    <linearGradient id="sunbeam" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35" />
+      <stop offset="50%" stop-color="#fffbeb" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Folhagem da planta interior (Monstera / Ficus) -->
+    <radialGradient id="plant-leaf" cx="40%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#4ade80" />
+      <stop offset="60%" stop-color="#16a34a" />
+      <stop offset="100%" stop-color="#14532d" />
+    </radialGradient>
+  </defs>
+
+  <!-- Fundo / Paredes e Teto -->
+  <rect width="1920" height="1080" fill="#f8fafc" />
+
+  <!-- Parede dos fundos com textura suave -->
+  <rect x="0" y="0" width="1920" height="720" fill="url(#cafe-wall)" />
+
+  <!-- Grandes janelas de vidro do teto ao chão com vista urbana contemporânea -->
+  <g>
+    <!-- Vidro com céu exterior -->
+    <rect x="180" y="100" width="750" height="520" fill="url(#daylight-sky)" />
+    <!-- Silhueta urbana exterior (árvores e praça ao fundo) -->
+    <circle cx="300" cy="580" r="140" fill="#86efac" opacity="0.6" />
+    <circle cx="480" cy="560" r="180" fill="#4ade80" opacity="0.5" />
+    <circle cx="700" cy="590" r="130" fill="#86efac" opacity="0.6" />
+    <rect x="220" y="440" width="120" height="180" fill="#cbd5e1" opacity="0.5" />
+    <rect x="580" y="400" width="160" height="220" fill="#94a3b8" opacity="0.4" />
+
+    <!-- Moldura de alumínio escuro das janelas -->
+    <rect x="180" y="100" width="750" height="520" fill="none" stroke="#334155" strokeWidth="16" />
+    <line x1="430" y1="100" x2="430" y2="620" stroke="#334155" strokeWidth="12" />
+    <line x1="680" y1="100" x2="680" y2="620" stroke="#334155" strokeWidth="12" />
+    <line x1="180" y1="360" x2="930" y2="360" stroke="#334155" strokeWidth="10" />
+  </g>
+
+  <!-- Piso do café em perspectiva -->
+  <polygon points="0,680 1920,680 1920,1080 0,1080" fill="url(#cafe-floor)" />
+  <!-- Linhas de perspectiva das tábuas/placas do piso -->
+  <line x1="200" y1="680" x2="0" y2="1080" stroke="#968969" strokeWidth="2" opacity="0.4" />
+  <line x1="600" y1="680" x2="350" y2="1080" stroke="#968969" strokeWidth="2" opacity="0.4" />
+  <line x1="1000" y1="680" x2="900" y2="1080" stroke="#968969" strokeWidth="2" opacity="0.4" />
+  <line x1="1400" y1="680" x2="1500" y2="1080" stroke="#968969" strokeWidth="2" opacity="0.4" />
+
+  <!-- Feixes de luz natural suave entrando pela janela -->
+  <polygon points="180,100 480,100 950,1080 400,1080" fill="url(#sunbeam)" />
+  <polygon points="480,100 780,100 1350,1080 750,1080" fill="url(#sunbeam)" />
+
+  <!-- Prateleiras suspensas minimalistas na parede direita -->
+  <g>
+    <rect x="1080" y="220" width="700" height="24" rx="4" fill="#582a0b" />
+    <!-- Xícaras e potes decorativos de cerâmica -->
+    <rect x="1140" y="165" width="45" height="55" rx="6" fill="#e2e8f0" />
+    <rect x="1210" y="150" width="55" height="70" rx="6" fill="#cbd5e1" />
+    <rect x="1310" y="175" width="60" height="45" rx="6" fill="#fcd34d" />
+    <circle cx="1450" cy="185" r="28" fill="#5eead4" />
+
+    <rect x="1080" y="340" width="700" height="24" rx="4" fill="#582a0b" />
+    <rect x="1120" y="280" width="80" height="60" rx="8" fill="#f87171" />
+    <rect x="1230" y="270" width="50" height="70" rx="6" fill="#f1f5f9" />
+    <rect x="1380" y="295" width="90" height="45" rx="6" fill="#e2e8f0" />
+  </g>
+
+  <!-- Balcão do Barista (Counter) à direita -->
+  <g>
+    <!-- Corpo de madeira ripada escura -->
+    <polygon points="1060,560 1920,530 1920,950 1060,980" fill="url(#counter-wood)" />
+    <!-- Tampo de mármore branco bisotado -->
+    <polygon points="1030,550 1920,520 1920,560 1030,590" fill="url(#counter-top)" />
+    <!-- Máquina de café expresso estilizada -->
+    <rect x="1260" y="440" width="180" height="120" rx="14" fill="#475569" stroke="#1e293b" strokeWidth="4" />
+    <rect x="1300" y="480" width="100" height="50" rx="6" fill="#0f172a" />
+    <circle cx="1320" cy="505" r="8" fill="#f59e0b" />
+    <circle cx="1350" cy="505" r="8" fill="#10b981" />
+    <rect x="1290" y="550" width="120" height="15" fill="#334155" />
+    <!-- Porta-filtro -->
+    <rect x="1335" y="530" width="30" height="35" rx="4" fill="#94a3b8" />
+
+    <!-- Cúpula de doces / vitrine transparente -->
+    <ellipse cx="1600" cy="545" rx="70" ry="25" fill="#ffffff" stroke="#94a3b8" strokeWidth="2" opacity="0.6" />
+    <path d="M 1530 545 C 1530 460, 1670 460, 1670 545 Z" fill="#e0f2fe" opacity="0.45" stroke="#bae6fd" strokeWidth="2" />
+    <ellipse cx="1600" cy="535" rx="40" ry="14" fill="#d97706" />
+  </g>
+
+  <!-- Mesa contemporânea de madeira no primeiro plano à esquerda -->
+  <g>
+    <!-- Sombra da mesa -->
+    <ellipse cx="440" cy="980" rx="240" ry="60" fill="#000000" opacity="0.16" />
+    <!-- Pernas da mesa pretas industriais -->
+    <line x1="280" y1="840" x2="260" y2="990" stroke="#1e293b" strokeWidth="12" strokeLinecap="round" />
+    <line x1="580" y1="840" x2="600" y2="990" stroke="#1e293b" strokeWidth="12" strokeLinecap="round" />
+    <line x1="430" y1="830" x2="430" y2="960" stroke="#1e293b" strokeWidth="12" strokeLinecap="round" />
+    <!-- Tampo redondo de madeira clara -->
+    <ellipse cx="430" cy="830" rx="230" ry="85" fill="#d97706" stroke="#b45309" strokeWidth="4" />
+    <ellipse cx="430" cy="820" rx="226" ry="80" fill="#fde68a" />
+    <!-- Xícara de café com pires sobre a mesa -->
+    <ellipse cx="420" cy="800" rx="35" ry="14" fill="#ffffff" stroke="#cbd5e1" strokeWidth="2" />
+    <ellipse cx="420" cy="792" rx="24" ry="10" fill="#f8fafc" />
+    <ellipse cx="420" cy="792" rx="18" ry="7" fill="#78350f" />
+    <!-- Mini vaso com suculenta -->
+    <rect x="490" y="750" width="30" height="35" rx="6" fill="#cbd5e1" />
+    <circle cx="505" cy="742" r="16" fill="#10b981" />
+  </g>
+
+  <!-- Luminária pendente moderna de teto sobre a mesa -->
+  <g>
+    <line x1="430" y1="0" x2="430" y2="280" stroke="#0f172a" strokeWidth="4" />
+    <path d="M 370 330 C 370 280, 490 280, 490 330 Z" fill="#1e293b" />
+    <ellipse cx="430" cy="330" rx="60" ry="16" fill="#fef08a" />
+    <ellipse cx="430" cy="330" rx="45" ry="10" fill="#ffffff" />
+  </g>
+
+  <!-- Vaso de planta alta no canto da janela (Biofilia moderna) -->
+  <g>
+    <rect x="70" y="680" width="90" height="150" rx="12" fill="#ffffff" stroke="#cbd5e1" strokeWidth="3" />
+    <!-- Folhas verdes da planta -->
+    <ellipse cx="115" cy="620" rx="55" ry="75" fill="url(#plant-leaf)" transform="rotate(-20 115 620)" />
+    <ellipse cx="150" cy="560" rx="60" ry="85" fill="url(#plant-leaf)" transform="rotate(25 150 560)" />
+    <ellipse cx="90" cy="520" rx="50" ry="70" fill="url(#plant-leaf)" transform="rotate(-15 90 520)" />
+    <ellipse cx="130" cy="460" rx="55" ry="80" fill="url(#plant-leaf)" transform="rotate(10 130 460)" />
+  </g>
+</svg>

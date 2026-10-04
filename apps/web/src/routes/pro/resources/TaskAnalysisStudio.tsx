@@ -116,18 +116,36 @@ export function TaskAnalysisStudio() {
           border: '1px solid var(--ap-border)',
         }}
       >
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <strong style={{ fontSize: 'var(--ap-text-md)' }}>{activePreset.title}</strong>
-            <Badge tone={isComplete ? 'success' : 'info'}>
-              {isComplete ? '🎉 100% Independente' : `${indepPct}% Autonomia`}
-            </Badge>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          {activePreset.assetUrl && (
+            <img
+              src={activePreset.assetUrl}
+              alt={activePreset.title}
+              style={{
+                width: '56px',
+                height: '56px',
+                borderRadius: '12px',
+                objectFit: 'contain',
+                background: 'var(--ap-surface)',
+                border: '1px solid var(--ap-border)',
+                padding: '4px',
+                flexShrink: 0,
+              }}
+            />
+          )}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+              <strong style={{ fontSize: 'var(--ap-text-md)' }}>{activePreset.title}</strong>
+              <Badge tone={isComplete ? 'success' : 'info'}>
+                {isComplete ? '🎉 100% Independente' : `${indepPct}% Autonomia`}
+              </Badge>
+            </div>
+            <p className="ap-xs ap-muted" style={{ margin: '0.2rem 0 0' }}>
+              {mode === 'forward' && 'Ensino sequencial do primeiro ao último passo. Passo atual é o foco da dica.'}
+              {mode === 'backward' && 'Terapeuta apoia etapas iniciais; a criança realiza o último passo com reforço terminal.'}
+              {mode === 'total-task' && 'Oportunidade em todos os passos com níveis de dica adaptativos por etapa.'}
+            </p>
           </div>
-          <p className="ap-xs ap-muted" style={{ margin: '0.2rem 0 0' }}>
-            {mode === 'forward' && 'Ensino sequencial do primeiro ao último passo. Passo atual é o foco da dica.'}
-            {mode === 'backward' && 'Terapeuta apoia etapas iniciais; a criança realiza o último passo com reforço terminal.'}
-            {mode === 'total-task' && 'Oportunidade em todos os passos com níveis de dica adaptativos por etapa.'}
-          </p>
         </div>
 
         <div style={{ textAlign: 'right' }}>

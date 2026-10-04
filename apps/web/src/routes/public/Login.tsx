@@ -53,62 +53,70 @@ export default function Login() {
 
   return (
     <div className="login">
-      <header className="login__bar">
-        <Logo href="/" />
-        <Link to="/" className="login__back">
-          <span aria-hidden="true">←</span> Voltar para a página principal
-        </Link>
-      </header>
-
-      <main className="login__main" id="conteudo">
-        <div className="login__card">
-          <div className="login__head">
-            <h1>Entrar no Aprumo</h1>
-            <p className="ap-muted">Escolha como você usa a plataforma.</p>
-          </div>
-
-          <div className="login__roles" role="tablist" aria-label="Perfil de acesso">
-            {ROLES.map((r, i) => (
-              <button
-                key={r.id}
-                ref={(el) => { tabRefs.current[i] = el; }}
-                type="button"
-                role="tab"
-                id={`${panelId}-tab-${r.id}`}
-                aria-selected={role === r.id}
-                aria-controls={panelId}
-                tabIndex={role === r.id ? 0 : -1}
-                className="login__role"
-                onClick={() => setRole(r.id)}
-                onKeyDown={(e) => onTabKey(e, i)}
-              >
-                {r.icon}
-                <span className="login__role-text">
-                  <strong>{r.label}</strong>
-                  <small>{r.hint}</small>
-                </span>
-              </button>
-            ))}
-          </div>
-
-          <div role="tabpanel" id={panelId} aria-labelledby={`${panelId}-tab-${role}`}>
-            {/* key reinicia o formulário ao trocar de perfil: nenhum dado digitado vaza entre abas. */}
-            <CredentialsLogin key={role} role={role} />
-          </div>
-        </div>
-      </main>
-
+      {/* Painel de Marca e Confiança (Esquerda no Desktop / Rodapé de Garantia no Mobile) */}
       <aside className="login__brand" aria-label="Sobre a segurança do Aprumo">
-        <div className="login__quote">
-          <p className="ap-display">“Só se chama de domínio o que atende ao critério definido para aquele alvo.”</p>
-          <span>Princípio P4 · honestidade do dado</span>
+        <div className="login__brand-main">
+          <div className="login__brand-badge">
+            <IconShield /> Plataforma Clínica Certificada
+          </div>
+          <div className="login__quote">
+            <p className="ap-display">“Só se chama de domínio o que atende ao critério definido para aquele alvo.”</p>
+            <span>Princípio P4 · honestidade do dado</span>
+          </div>
+          <ul className="login__points">
+            <li><IconLock /> Segundo fator obrigatório para quem acessa prontuário</li>
+            <li><IconShield /> Cada profissional vê só os casos em que atua</li>
+            <li><IconHeart /> A família vê o que a equipe compartilha, nunca o prontuário</li>
+          </ul>
         </div>
-        <ul className="login__points">
-          <li><IconLock /> Segundo fator obrigatório para quem acessa prontuário</li>
-          <li><IconShield /> Cada profissional vê só os casos em que atua</li>
-          <li><IconHeart /> A família vê o que a equipe compartilha, nunca o prontuário</li>
-        </ul>
       </aside>
+
+      <div className="login__content">
+        <header className="login__bar">
+          <Logo href="/" />
+          <Link to="/" className="login__back">
+            <span aria-hidden="true">←</span> Voltar para a página principal
+          </Link>
+        </header>
+
+        <main className="login__main" id="conteudo">
+          <div className="login__card">
+            <div className="login__head">
+              <h1>Entrar no Aprumo</h1>
+              <p className="ap-muted">Escolha como você usa a plataforma.</p>
+            </div>
+
+            <div className="login__roles" role="tablist" aria-label="Perfil de acesso">
+              {ROLES.map((r, i) => (
+                <button
+                  key={r.id}
+                  ref={(el) => { tabRefs.current[i] = el; }}
+                  type="button"
+                  role="tab"
+                  id={`${panelId}-tab-${r.id}`}
+                  aria-selected={role === r.id}
+                  aria-controls={panelId}
+                  tabIndex={role === r.id ? 0 : -1}
+                  className="login__role"
+                  onClick={() => setRole(r.id)}
+                  onKeyDown={(e) => onTabKey(e, i)}
+                >
+                  {r.icon}
+                  <span className="login__role-text">
+                    <strong>{r.label}</strong>
+                    <small>{r.hint}</small>
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            <div role="tabpanel" id={panelId} aria-labelledby={`${panelId}-tab-${role}`}>
+              {/* key reinicia o formulário ao trocar de perfil: nenhum dado digitado vaza entre abas. */}
+              <CredentialsLogin key={role} role={role} />
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
@@ -142,6 +150,17 @@ function CredentialsLogin({ role }: { role: Role }) {
   const emailError = !email.trim() ? 'Digite seu e-mail.' : !EMAIL_RE.test(email.trim()) ? 'Confira o e-mail: falta algo como nome@dominio.com.' : null;
   const passwordError = !password ? 'Digite sua senha.' : null;
 
+  const fillDemoCredentials = () => {
+    if (pro) {
+      setEmail('dra.helena@aprumo.com.br');
+      setPassword('Clinica@2026!');
+    } else {
+      setEmail('familia.bento@aprumo.com.br');
+      setPassword('Familia@2026!');
+    }
+    setError(null);
+  };
+
   const go = async (s: AuthStep) => {
     if (s.kind === 'ready') return nav(cfg.demoTo);
     if (s.kind === 'needs_mfa_verify') return setStep({ kind: 'verify', factorId: s.factorId });
@@ -160,7 +179,14 @@ function CredentialsLogin({ role }: { role: Role }) {
       document.getElementById(emailError ? 'email' : 'password')?.focus();
       return;
     }
-    if (!isSupabaseConfigured) return setError('O login real ainda não está ativo neste ambiente. Use o acesso de demonstração acima.');
+    if (!isSupabaseConfigured) {
+      // Modo demonstração: login direto simulado
+      setBusy(true);
+      setTimeout(() => {
+        nav(cfg.demoTo);
+      }, 350);
+      return;
+    }
     void run(async () => go(await signIn(email.trim(), password)));
   };
   const submitCode = (e: FormEvent) => {
@@ -182,7 +208,14 @@ function CredentialsLogin({ role }: { role: Role }) {
             <IconInfo aria-hidden="true" />
             <p><strong>Ambiente de demonstração.</strong> Todos os dados são fictícios. {cfg.demoNote}</p>
           </div>
-          <Button size="lg" variant="primary" onClick={() => nav(cfg.demoTo)} icon={<IconArrowRight />}>{cfg.demoLabel}</Button>
+          <div className="login__demo-actions">
+            <Button size="lg" variant="primary" onClick={() => nav(cfg.demoTo)} icon={<IconArrowRight />}>
+              {cfg.demoLabel}
+            </Button>
+            <button type="button" className="login__demo-fill" onClick={fillDemoCredentials}>
+              {pro ? '⚡ Preencher credenciais de teste (Profissional)' : '⚡ Preencher credenciais de teste (Família)'}
+            </button>
+          </div>
         </div>
       )}
 

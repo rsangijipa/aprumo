@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <!-- Sombra suave no chão -->
+    <radialGradient id="car-shadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.22" />
+      <stop offset="50%" stop-color="#000000" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Gradiente 3D da lataria de argila azul (Soft-clay blue) -->
+    <radialGradient id="car-body" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#60a5fa" />
+      <stop offset="35%" stop-color="#3b82f6" />
+      <stop offset="70%" stop-color="#2563eb" />
+      <stop offset="90%" stop-color="#1d4ed8" />
+      <stop offset="100%" stop-color="#1e40af" />
+    </radialGradient>
+
+    <!-- Vidro do para-brisa estilizado -->
+    <linearGradient id="car-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e0f2fe" />
+      <stop offset="50%" stop-color="#bae6fd" />
+      <stop offset="100%" stop-color="#7dd3fc" />
+    </linearGradient>
+
+    <!-- Rodas de borracha tátil -->
+    <radialGradient id="car-tire" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="60%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </radialGradient>
+
+    <radialGradient id="car-rim" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="60%" stop-color="#cbd5e1" />
+      <stop offset="100%" stop-color="#94a3b8" />
+    </radialGradient>
+
+    <!-- Farol de argila amarela suave -->
+    <radialGradient id="car-headlight" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="70%" stop-color="#facc15" />
+      <stop offset="100%" stop-color="#eab308" />
+    </radialGradient>
+  </defs>
+
+  <!-- Fundo branco estúdio -->
+  <rect width="1024" height="1024" fill="#ffffff" />
+
+  <!-- Sombra de contato -->
+  <ellipse cx="512" cy="790" rx="390" ry="70" fill="url(#car-shadow)" />
+  <ellipse cx="512" cy="780" rx="280" ry="40" fill="url(#car-shadow)" />
+
+  <!-- Roda traseira esquerda (fundo) -->
+  <g>
+    <ellipse cx="260" cy="700" rx="65" ry="90" fill="url(#car-tire)" />
+    <ellipse cx="260" cy="700" rx="35" ry="50" fill="url(#car-rim)" />
+  </g>
+
+  <!-- Roda dianteira direita (fundo) -->
+  <g>
+    <ellipse cx="740" cy="690" rx="60" ry="85" fill="url(#car-tire)" />
+    <ellipse cx="740" cy="690" rx="32" ry="48" fill="url(#car-rim)" />
+  </g>
+
+  <!-- Chassi e Carroceria Principal de Argila Azul (Soft-clay car body) -->
+  <path d="M 170 650
+           C 160 580, 200 520, 260 520
+           C 310 520, 360 480, 410 380
+           C 450 300, 520 280, 620 290
+           C 720 300, 770 380, 810 490
+           C 870 510, 910 560, 900 640
+           C 890 710, 840 730, 780 730
+           C 740 730, 700 700, 670 700
+           C 620 700, 580 730, 480 730
+           C 420 730, 380 700, 340 700
+           C 280 700, 220 730, 180 720
+           C 165 710, 165 670, 170 650 Z"
+        fill="url(#car-body)" />
+
+  <!-- Cabine / Vidros arredondados -->
+  <path d="M 430 380
+           C 460 320, 510 310, 580 320
+           L 580 470
+           C 510 470, 450 460, 400 450
+           C 410 420, 420 400, 430 380 Z"
+        fill="url(#car-glass)" />
+
+  <path d="M 610 320
+           C 680 330, 720 390, 750 470
+           C 700 480, 650 480, 610 470 Z"
+        fill="url(#car-glass)" />
+
+  <!-- Brilho especular no teto e capô -->
+  <ellipse cx="560" cy="330" rx="90" ry="25" fill="#ffffff" opacity="0.35" />
+  <ellipse cx="780" cy="530" rx="60" ry="20" transform="rotate(-15 780 530)" fill="#ffffff" opacity="0.3" />
+
+  <!-- Farol dianteiro tátil -->
+  <ellipse cx="880" cy="580" rx="22" ry="32" transform="rotate(10 880 580)" fill="url(#car-headlight)" />
+
+  <!-- Roda dianteira esquerda (primeiro plano) -->
+  <g>
+    <ellipse cx="320" cy="740" rx="75" ry="105" fill="url(#car-tire)" />
+    <ellipse cx="320" cy="740" rx="40" ry="60" fill="url(#car-rim)" />
+    <circle cx="320" cy="740" r="12" fill="#475569" />
+  </g>
+
+  <!-- Roda traseira direita (primeiro plano) -->
+  <g>
+    <ellipse cx="780" cy="725" rx="75" ry="105" fill="url(#car-tire)" />
+    <ellipse cx="780" cy="725" rx="40" ry="60" fill="url(#car-rim)" />
+    <circle cx="780" cy="725" r="12" fill="#475569" />
+  </g>
+
+  <!-- Pára-choque amigável -->
+  <rect x="850" y="650" width="40" height="28" rx="10" fill="#94a3b8" />
+  <rect x="155" y="665" width="35" height="28" rx="10" fill="#94a3b8" />
+</svg>

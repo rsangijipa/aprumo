@@ -26,7 +26,8 @@ export default function PlayShell() {
   const [round, setRound] = useState(0);
   const config = useMemo(() => (c && GAMES[appId] ? buildPracticeConfig(c, appId) : null), [c, appId, round]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const allowed = !!c && c.releasedApps.includes(appId) && !!GAMES[appId];
+  // Para um primeiro momento, todos os games registrados estão disponíveis no modo mock/treino
+  const allowed = !!c && !!GAMES[appId];
   const policy = child ? db.screenPolicy(child.birthDate) : null;
   const overLimit = !!c && !!policy && screenMinutesToday(st, c.id) >= policy.dailyLimitMinutes;
 

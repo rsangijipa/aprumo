@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <!-- Sombra suave no chão -->
+    <radialGradient id="hands-shadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.16" />
+      <stop offset="60%" stop-color="#000000" stop-opacity="0.04" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Tom de pele quente e amigável (Friendly soft-clay skin) -->
+    <radialGradient id="hand-skin-left" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#fed7aa" />
+      <stop offset="50%" stop-color="#fdba74" />
+      <stop offset="85%" stop-color="#fb923c" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </radialGradient>
+
+    <radialGradient id="hand-skin-right" cx="65%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#fed7aa" />
+      <stop offset="50%" stop-color="#fdba74" />
+      <stop offset="85%" stop-color="#fb923c" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </radialGradient>
+
+    <!-- Bolhas de sabão translúcidas e fofas (Fluffy bubbles) -->
+    <radialGradient id="bubble-soap" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+      <stop offset="45%" stop-color="#e0f2fe" stop-opacity="0.8" />
+      <stop offset="80%" stop-color="#bae6fd" stop-opacity="0.65" />
+      <stop offset="100%" stop-color="#7dd3fc" stop-opacity="0.5" />
+    </radialGradient>
+
+    <!-- Gotas de água cristalinas -->
+    <radialGradient id="water-drop" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="50%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </radialGradient>
+  </defs>
+
+  <!-- Fundo branco estúdio isolado -->
+  <rect width="1024" height="1024" fill="#ffffff" />
+
+  <!-- Sombra inferior -->
+  <ellipse cx="512" cy="850" rx="320" ry="50" fill="url(#hands-shadow)" />
+
+  <!-- Espuma e bolhas de fundo -->
+  <circle cx="512" cy="460" r="130" fill="url(#bubble-soap)" />
+  <circle cx="430" cy="400" r="75" fill="url(#bubble-soap)" />
+  <circle cx="590" cy="410" r="85" fill="url(#bubble-soap)" />
+  <circle cx="512" cy="330" r="60" fill="url(#bubble-soap)" />
+
+  <!-- Mão Esquerda (Soft clay stylized palm and fingers) -->
+  <path d="M 230 760
+           C 240 680, 270 560, 360 490
+           C 400 460, 470 480, 480 530
+           C 490 570, 460 620, 420 670
+           C 380 720, 310 770, 230 760 Z"
+        fill="url(#hand-skin-left)" />
+
+  <!-- Dedos da mão esquerda esfregando -->
+  <rect x="360" y="440" width="130" height="48" rx="24" transform="rotate(-25 360 440)" fill="url(#hand-skin-left)" />
+  <rect x="375" y="495" width="140" height="48" rx="24" transform="rotate(-15 375 495)" fill="url(#hand-skin-left)" />
+  <rect x="370" y="555" width="135" height="48" rx="24" transform="rotate(-5 370 555)" fill="url(#hand-skin-left)" />
+
+  <!-- Mão Direita cruzando e ensaboando -->
+  <path d="M 790 760
+           C 780 680, 750 560, 660 490
+           C 620 460, 550 480, 540 530
+           C 530 570, 560 620, 600 670
+           C 640 720, 710 770, 790 760 Z"
+        fill="url(#hand-skin-right)" />
+
+  <!-- Dedos da mão direita em ação -->
+  <rect x="530" y="440" width="130" height="48" rx="24" transform="rotate(25 530 440)" fill="url(#hand-skin-right)" />
+  <rect x="510" y="495" width="140" height="48" rx="24" transform="rotate(15 510 495)" fill="url(#hand-skin-right)" />
+  <rect x="520" y="555" width="135" height="48" rx="24" transform="rotate(5 520 555)" fill="url(#hand-skin-right)" />
+
+  <!-- Bolhas e espuma de primeiro plano (Fluffy soap bubbles) -->
+  <circle cx="512" cy="500" r="95" fill="url(#bubble-soap)" />
+  <circle cx="450" cy="560" r="55" fill="url(#bubble-soap)" />
+  <circle cx="570" cy="550" r="65" fill="url(#bubble-soap)" />
+  <circle cx="512" cy="620" r="45" fill="url(#bubble-soap)" />
+  <circle cx="390" cy="460" r="35" fill="url(#bubble-soap)" />
+  <circle cx="630" cy="470" r="40" fill="url(#bubble-soap)" />
+
+  <!-- Brilhos especulares nas bolhas -->
+  <ellipse cx="485" cy="470" rx="24" ry="12" transform="rotate(-30 485 470)" fill="#ffffff" opacity="0.8" />
+  <ellipse cx="550" cy="520" rx="16" ry="8" transform="rotate(-30 550 520)" fill="#ffffff" opacity="0.8" />
+  <ellipse cx="435" cy="545" rx="12" ry="6" transform="rotate(-30 435 545)" fill="#ffffff" opacity="0.8" />
+
+  <!-- Gotinhas de água voando alegres -->
+  <ellipse cx="360" cy="360" rx="14" ry="22" transform="rotate(-20 360 360)" fill="url(#water-drop)" />
+  <ellipse cx="660" cy="350" rx="14" ry="22" transform="rotate(20 660 350)" fill="url(#water-drop)" />
+  <circle cx="380" cy="300" r="10" fill="url(#water-drop)" />
+  <circle cx="640" cy="290" r="10" fill="url(#water-drop)" />
+  <circle cx="512" cy="240" r="12" fill="url(#water-drop)" />
+</svg>

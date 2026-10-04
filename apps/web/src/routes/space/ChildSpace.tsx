@@ -25,7 +25,23 @@ import {
 } from '../../data/store';
 import type { ChildTheme } from '../../data/types';
 import { GAMES } from '../../game-host/registry';
-import { ArtListener, ArtMatch, ArtTurns, ArtDetective, ArtExecutive, ArtMiniWorlds, ArtChef, ArtIndependence, ArtSocialCity } from '../public/Landing';
+import {
+  ArtListener,
+  ArtMatch,
+  ArtTurns,
+  ArtDetective,
+  ArtExecutive,
+  ArtMiniWorlds,
+  ArtChef,
+  ArtIndependence,
+  ArtSocialCity,
+  ArtCategory,
+  ArtAnimalMemory,
+  ArtStoryOrder,
+  ArtCauseEffect,
+  ArtMagicMirror,
+  ArtSharedAttention,
+} from '../public/Landing';
 import { AVATARS, Avatar, FEELINGS, Feeling, NEEDS, Need } from './art';
 import './space.css';
 
@@ -33,23 +49,34 @@ const GAME_ART: Record<string, ReactNode> = {
   'encontre-o-igual': <ArtMatch />,
   'escolha-pela-instrucao': <ArtListener />,
   'minha-vez-sua-vez': <ArtTurns />,
+  'organize-categoria': <ArtCategory />,
+  'memoria-bichos': <ArtAnimalMemory />,
+  'historia-ordem': <ArtStoryOrder />,
+  'pequeno-chef': <ArtChef />,
+  'missao-independencia': <ArtIndependence />,
+  'causa-efeito': <ArtCauseEffect />,
+  'espelho-magico': <ArtMagicMirror />,
+  'olha-comigo': <ArtSharedAttention />,
   'detetive-das-emocoes': <ArtDetective />,
   'circuito-executivo': <ArtExecutive />,
   'minimundos': <ArtMiniWorlds />,
-  'pequeno-chef': <ArtChef />,
-  'missao-independencia': <ArtIndependence />,
   'social-city': <ArtSocialCity />,
 };
 const GAME_KID_NAME: Record<string, string> = {
   'encontre-o-igual': 'Encontre o igual',
   'escolha-pela-instrucao': 'Escute e toque',
   'minha-vez-sua-vez': 'Minha vez, sua vez',
+  'organize-categoria': 'Organize as Coisas',
+  'memoria-bichos': 'Memória dos Bichos',
+  'historia-ordem': 'História em Ordem',
+  'pequeno-chef': 'Pequeno Chef',
+  'missao-independencia': 'Missão Independência',
+  'causa-efeito': 'Botão Mágico',
+  'espelho-magico': 'Espelho Mágico',
   'olha-comigo': 'Olha comigo',
   'detetive-das-emocoes': 'Detetive das Emoções',
   'circuito-executivo': 'Circuito Divertido',
   'minimundos': 'MiniMundos',
-  'pequeno-chef': 'Pequeno Chef',
-  'missao-independencia': 'Missão Independência',
   'social-city': 'Social City 3D',
 };
 const TOKEN_STICKERS: TokenTheme[] = ['trem', 'estrela', 'dinossauro', 'coracao', 'folha'];
@@ -112,7 +139,9 @@ export default function ChildSpace() {
   const used = screenMinutesToday(st, c.id);
   const limitReached = used >= policy.dailyLimitMinutes;
   const released = c.releasedApps;
-  const games = released.filter((a) => GAMES[a]);
+  // Para um primeiro momento, todos os games do catálogo ficam disponíveis para a criança e adolescentes nos dados mock
+  const allGameKeys = Object.keys(GAMES);
+  const games = Array.from(new Set([...allGameKeys, ...released.filter((a) => GAMES[a])]));
   const stars = totalStars(space);
   const T = TEXT[ageMode];
 

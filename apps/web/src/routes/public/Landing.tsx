@@ -417,4 +417,113 @@ export const ArtSocialCity = () => (
   </svg>
 );
 
+export const ArtCategory = () => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="#2c5282" />
+    {/* Caixas de classificação */}
+    <rect x="20" y="55" width="55" height="48" rx="8" fill="#319795" stroke="#234e52" strokeWidth="2" />
+    <rect x="85" y="55" width="55" height="48" rx="8" fill="#dd6b20" stroke="#9c4221" strokeWidth="2" />
+    {/* Rótulo das caixas */}
+    <circle cx="47" cy="80" r="14" fill="#ebf8ff" />
+    <polygon points="47,70 57,88 37,88" fill="#319795" />
+    <circle cx="112" cy="80" r="14" fill="#fffaf0" />
+    <rect x="104" y="72" width="16" height="16" rx="3" fill="#dd6b20" />
+    {/* Formas flutuantes prontas para organizar */}
+    <circle cx="47" cy="30" r="12" fill="#ecc94b" stroke="#b7791f" strokeWidth="2" />
+    <polygon points="112,18 124,38 100,38" fill="#e53e3e" stroke="#9b2c2c" strokeWidth="2" />
+  </svg>
+);
+
+export const ArtAnimalMemory = () => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="#285e61" />
+    {/* Duas cartas do jogo da memória */}
+    <rect x="25" y="25" width="50" height="70" rx="10" fill="#ffffff" stroke="#319795" strokeWidth="3" />
+    <rect x="85" y="25" width="50" height="70" rx="10" fill="#ffffff" stroke="#319795" strokeWidth="3" />
+    {/* Bichinho na carta 1 */}
+    <circle cx="50" cy="55" r="16" fill="#fbd38d" />
+    <circle cx="42" cy="42" r="5" fill="#fbd38d" />
+    <circle cx="58" cy="42" r="5" fill="#fbd38d" />
+    <circle cx="45" cy="52" r="2" fill="#1a202c" />
+    <circle cx="55" cy="52" r="2" fill="#1a202c" />
+    <ellipse cx="50" cy="59" rx="3" ry="2" fill="#c05621" />
+    {/* Patinha na carta 2 */}
+    <ellipse cx="110" cy="62" rx="9" ry="7" fill="#319795" />
+    <circle cx="103" cy="50" r="3.5" fill="#319795" />
+    <circle cx="110" cy="47" r="3.5" fill="#319795" />
+    <circle cx="117" cy="50" r="3.5" fill="#319795" />
+  </svg>
+);
+
+export const ArtStoryOrder = () => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="#4a5568" />
+    {/* 3 cards de sequência temporal */}
+    <rect x="15" y="35" width="38" height="55" rx="6" fill="#edf2f7" stroke="#cbd5e0" strokeWidth="2" />
+    <text x="34" y="52" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#2b6cb0">1</text>
+    <circle cx="34" cy="72" r="5" fill="#744210" />
+
+    <rect x="61" y="30" width="38" height="60" rx="6" fill="#edf2f7" stroke="#3182ce" strokeWidth="2.5" />
+    <text x="80" y="48" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3182ce">2</text>
+    <line x1="80" y1="76" x2="80" y2="65" stroke="#38a169" strokeWidth="3" />
+    <circle cx="80" cy="62" r="4" fill="#48bb78" />
+
+    <rect x="107" y="35" width="38" height="55" rx="6" fill="#edf2f7" stroke="#cbd5e0" strokeWidth="2" />
+    <text x="126" y="52" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#2b6cb0">3</text>
+    <line x1="126" y1="78" x2="126" y2="62" stroke="#38a169" strokeWidth="3" />
+    <circle cx="126" cy="58" r="6" fill="#e53e3e" />
+  </svg>
+);
+
+export const ArtCauseEffect = () => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="#322659" />
+    {/* Botão mágico iluminado */}
+    <circle cx="80" cy="65" r="32" fill="#553c9a" stroke="#805ad5" strokeWidth="3" />
+    <circle cx="80" cy="63" r="24" fill="#b794f4" />
+    <circle cx="80" cy="60" r="16" fill="#faf5ff" />
+    {/* Efeito de brilho estelar ao tocar */}
+    <polygon points="40,25 43,35 53,38 43,41 40,51 37,41 27,38 37,35" fill="#ecc94b" />
+    <polygon points="120,30 122,37 129,39 122,41 120,48 118,41 111,39 118,37" fill="#f6ad55" />
+    <polygon points="135,75 137,80 142,82 137,84 135,89 133,84 128,82 133,80" fill="#68d391" />
+  </svg>
+);
+
+export const ArtMagicMirror = () => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="#1d4044" />
+    {/* Moldura do espelho mágico */}
+    <ellipse cx="80" cy="60" rx="46" ry="52" fill="#d69e2e" />
+    <ellipse cx="80" cy="60" rx="40" ry="46" fill="#ebf8ff" stroke="#b7791f" strokeWidth="2" />
+    {/* Avatar demonstrando gesto motor */}
+    <circle cx="80" cy="45" r="14" fill="#fed7aa" stroke="#c05621" strokeWidth="1.5" />
+    <circle cx="75" cy="44" r="2" fill="#1a202c" />
+    <circle cx="85" cy="44" r="2" fill="#1a202c" />
+    <path d="M 76 50 Q 80 54 84 50" fill="none" stroke="#c05621" strokeWidth="1.5" strokeLinecap="round" />
+    {/* Mão acenando */}
+    <rect x="68" y="60" width="24" height="26" rx="6" fill="#38a169" />
+    <circle cx="55" cy="50" r="5" fill="#fed7aa" />
+    <circle cx="105" cy="50" r="5" fill="#fed7aa" />
+  </svg>
+);
+
+export const ArtSharedAttention = () => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="#1a365d" />
+    {/* Olhos amigáveis */}
+    <ellipse cx="50" cy="65" rx="14" ry="10" fill="#ffffff" />
+    <circle cx="54" cy="63" r="5" fill="#2b6cb0" />
+    <circle cx="56" cy="61" r="1.8" fill="#ffffff" />
+
+    <ellipse cx="85" cy="65" rx="14" ry="10" fill="#ffffff" />
+    <circle cx="89" cy="63" r="5" fill="#2b6cb0" />
+    <circle cx="91" cy="61" r="1.8" fill="#ffffff" />
+
+    {/* Trajetória do olhar / apontar */}
+    <path d="M 95 55 Q 115 45 130 30" fill="none" stroke="#63b3ed" strokeWidth="2" strokeDasharray="3 3" />
+    {/* Estrela alvo compartilhada */}
+    <polygon points="135,20 138,28 146,30 138,32 135,40 132,32 124,30 132,28" fill="#f6e05e" />
+  </svg>
+);
+
 export default Landing;

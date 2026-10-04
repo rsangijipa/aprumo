@@ -1,0 +1,263 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1024" width="1536" height="1024" role="img" aria-label="Social Story Character Sheet: Leo">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ECEFF1"/>
+      <stop offset="70%" stop-color="#E2E7EA"/>
+      <stop offset="100%" stop-color="#D5DDE1"/>
+    </linearGradient>
+
+    <!-- Floor Shadow Gradient -->
+    <radialGradient id="leoFloorShadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(33,52,50,0.22)"/>
+      <stop offset="60%" stop-color="rgba(33,52,50,0.08)"/>
+      <stop offset="100%" stop-color="rgba(33,52,50,0)"/>
+    </radialGradient>
+
+    <!-- Skin Gradient -->
+    <linearGradient id="skinGrad" x1="0.3" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="#FFDFBA"/>
+      <stop offset="50%" stop-color="#F5CBA7"/>
+      <stop offset="100%" stop-color="#E59866"/>
+    </linearGradient>
+
+    <!-- Hair Gradient -->
+    <linearGradient id="hairGrad" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0%" stop-color="#6E473B"/>
+      <stop offset="60%" stop-color="#4E3127"/>
+      <stop offset="100%" stop-color="#2D1C16"/>
+    </linearGradient>
+
+    <!-- T-Shirt Teal Gradient -->
+    <linearGradient id="shirtGrad" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0%" stop-color="#6BB5AD"/>
+      <stop offset="45%" stop-color="#3F857D"/>
+      <stop offset="100%" stop-color="#245550"/>
+    </linearGradient>
+
+    <!-- Khaki Trousers Gradient -->
+    <linearGradient id="pantsGrad" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0%" stop-color="#D7CCC8"/>
+      <stop offset="50%" stop-color="#BCAAA4"/>
+      <stop offset="100%" stop-color="#8D6E63"/>
+    </linearGradient>
+
+    <!-- Sneaker Navy Gradient -->
+    <linearGradient id="shoesGrad" x1="0.3" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="#546E7A"/>
+      <stop offset="60%" stop-color="#37474F"/>
+      <stop offset="100%" stop-color="#263238"/>
+    </linearGradient>
+
+    <!-- Subtle Rim Light -->
+    <linearGradient id="rimLight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.45)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Studio Background -->
+  <rect width="1536" height="1024" fill="url(#bgGrad)"/>
+  <line x1="0" y1="780" x2="1536" y2="780" stroke="rgba(200,210,216,0.6)" stroke-width="2"/>
+
+  <!-- Studio Header -->
+  <g transform="translate(80, 70)">
+    <text font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="28" font-weight="800" fill="#263238" letter-spacing="1">
+      HISTÓRIAS SOCIAIS — FOLHA DE MODELO DE PERSONAGEM
+    </text>
+    <text y="32" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="16" font-weight="600" fill="#607D8B">
+      Personagem Consistente: Léo (7 anos) • Proporções Naturais • Expressão Neutro-Amigável
+    </text>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- 1. VISTA LATERAL (PERFIL ESQUERDO) - X: 280 -->
+  <!-- ========================================== -->
+  <g transform="translate(280, 0)">
+    <!-- Shadow -->
+    <ellipse cx="0" cy="790" rx="110" ry="24" fill="url(#leoFloorShadow)"/>
+
+    <!-- Left Leg (Background) -->
+    <rect x="-18" y="550" width="36" height="200" rx="14" fill="url(#pantsGrad)"/>
+    <!-- Left Shoe -->
+    <path d="M-22 730 L-22 765 C-22 775, -5 778, 22 778 L38 778 C44 778, 48 772, 45 765 L36 745 L2 730 Z" fill="url(#shoesGrad)"/>
+    <rect x="-24" y="764" width="72" height="15" rx="7" fill="#ECEFF1"/>
+
+    <!-- Right Leg (Foreground) -->
+    <rect x="-10" y="555" width="40" height="195" rx="15" fill="url(#pantsGrad)"/>
+    <path d="M-15 735 L-15 770 C-15 780, 4 782, 32 782 L50 782 C56 782, 60 776, 56 770 L46 750 L10 735 Z" fill="url(#shoesGrad)"/>
+    <rect x="-16" y="768" width="74" height="15" rx="7" fill="#FFFFFF"/>
+
+    <!-- Torso (Profile) -->
+    <path d="M-35 340 C-30 320, 25 320, 30 340 L35 560 C35 575, -35 575, -35 560 Z" fill="url(#shirtGrad)"/>
+    <ellipse cx="-2" cy="340" rx="30" ry="12" fill="#245550"/>
+
+    <!-- Arm (Side View Resting) -->
+    <rect x="-15" y="345" width="32" height="190" rx="16" fill="url(#shirtGrad)"/>
+    <circle cx="1" cy="548" r="17" fill="url(#skinGrad)"/>
+
+    <!-- Neck -->
+    <rect x="-14" y="295" width="28" height="40" rx="10" fill="url(#skinGrad)"/>
+
+    <!-- Head Profile -->
+    <path d="M-35 240 C-35 180, 15 170, 35 210 C45 230, 48 245, 38 255 C32 260, 28 275, 15 285 C-5 295, -30 285, -35 240 Z" fill="url(#skinGrad)"/>
+    <!-- Nose profile -->
+    <path d="M34 235 Q44 242 36 248" stroke="#E59866" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <!-- Eye Side -->
+    <ellipse cx="22" cy="228" rx="4" ry="6" fill="#263238"/>
+    <!-- Eyebrow -->
+    <path d="M16 218 Q23 214 28 218" stroke="#4E3127" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <!-- Smile profile -->
+    <path d="M22 264 Q28 266 32 260" stroke="#B03A2E" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+    <!-- Hair Profile -->
+    <path d="M-42 225 C-44 165, 10 145, 32 175 C38 183, 30 195, 20 190 C0 180, -25 190, -32 225 Z" fill="url(#hairGrad)"/>
+
+    <text y="830" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="15" font-weight="700" fill="#455A64">
+      VISTA LATERAL (PERFIL)
+    </text>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- 2. VISTA FRONTAL (CENTRO) - X: 768         -->
+  <!-- ========================================== -->
+  <g transform="translate(768, 0)">
+    <!-- Floor Shadow -->
+    <ellipse cx="0" cy="792" rx="135" ry="26" fill="url(#leoFloorShadow)"/>
+
+    <!-- Legs -->
+    <rect x="-48" y="550" width="38" height="200" rx="14" fill="url(#pantsGrad)"/>
+    <rect x="10" y="550" width="38" height="200" rx="14" fill="url(#pantsGrad)"/>
+
+    <!-- Shoes Front -->
+    <rect x="-56" y="736" width="48" height="38" rx="14" fill="url(#shoesGrad)"/>
+    <rect x="-56" y="764" width="48" height="15" rx="7" fill="#FFFFFF"/>
+    <rect x="8" y="736" width="48" height="38" rx="14" fill="url(#shoesGrad)"/>
+    <rect x="8" y="764" width="48" height="15" rx="7" fill="#FFFFFF"/>
+
+    <!-- Torso Front -->
+    <rect x="-58" y="335" width="116" height="230" rx="28" fill="url(#shirtGrad)"/>
+    <!-- Collar -->
+    <ellipse cx="0" cy="336" rx="26" ry="14" fill="#E2E7EA"/>
+    <ellipse cx="0" cy="335" rx="22" ry="11" fill="url(#skinGrad)"/>
+
+    <!-- Arms Resting at Sides -->
+    <rect x="-85" y="345" width="30" height="195" rx="15" fill="url(#shirtGrad)"/>
+    <circle cx="-70" cy="552" r="16" fill="url(#skinGrad)"/>
+
+    <rect x="55" y="345" width="30" height="195" rx="15" fill="url(#shirtGrad)"/>
+    <circle cx="70" cy="552" r="16" fill="url(#skinGrad)"/>
+
+    <!-- Neck -->
+    <rect x="-15" y="290" width="30" height="46" rx="10" fill="url(#skinGrad)"/>
+
+    <!-- Head Front -->
+    <ellipse cx="0" cy="235" rx="52" ry="58" fill="url(#skinGrad)"/>
+
+    <!-- Ears -->
+    <circle cx="-52" cy="236" r="12" fill="url(#skinGrad)"/>
+    <circle cx="52" cy="236" r="12" fill="url(#skinGrad)"/>
+
+    <!-- Hair Front -->
+    <path d="M-54 220 C-56 160, 56 160, 54 220 C42 185, 10 178, -12 188 C-25 195, -45 198, -54 220 Z" fill="url(#hairGrad)"/>
+    <!-- Forehead hair tuft -->
+    <path d="M-15 178 Q0 162 18 178 Q5 172 -15 178 Z" fill="#6E473B"/>
+
+    <!-- Cheeks Soft Rosy -->
+    <circle cx="-28" cy="250" r="11" fill="#E74C3C" opacity="0.16"/>
+    <circle cx="28" cy="250" r="11" fill="#E74C3C" opacity="0.16"/>
+
+    <!-- Eyes Front -->
+    <ellipse cx="-20" cy="232" rx="5.5" ry="7.5" fill="#263238"/>
+    <circle cx="-18" cy="229" r="2.2" fill="#FFFFFF"/>
+    <ellipse cx="20" cy="232" rx="5.5" ry="7.5" fill="#263238"/>
+    <circle cx="22" cy="229" r="2.2" fill="#FFFFFF"/>
+
+    <!-- Eyebrows -->
+    <path d="M-28 220 Q-20 216 -12 220" stroke="#4E3127" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="M12 220 Q20 216 28 220" stroke="#4E3127" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+    <!-- Nose -->
+    <path d="M-3 246 Q0 250 3 246" stroke="#E59866" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+    <!-- Friendly Subtle Smile -->
+    <path d="M-12 264 Q0 274 12 264" stroke="#B03A2E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+    <text y="830" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="15" font-weight="700" fill="#263238">
+      VISTA FRONTAL (CANÔNICA)
+    </text>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- 3. VISTA 3/4 (PERSPECTIVA) - X: 1250       -->
+  <!-- ========================================== -->
+  <g transform="translate(1250, 0)">
+    <!-- Floor Shadow -->
+    <ellipse cx="0" cy="792" rx="125" ry="25" fill="url(#leoFloorShadow)"/>
+
+    <!-- Legs 3/4 -->
+    <rect x="-38" y="550" width="36" height="200" rx="14" fill="url(#pantsGrad)"/>
+    <rect x="8" y="552" width="38" height="198" rx="14" fill="url(#pantsGrad)"/>
+
+    <!-- Shoes 3/4 -->
+    <path d="M-44 736 L-44 768 C-44 776, -26 779, 0 779 L12 779 C18 779, 20 773, 16 767 L10 748 L-14 736 Z" fill="url(#shoesGrad)"/>
+    <rect x="-44" y="765" width="58" height="15" rx="7" fill="#ECEFF1"/>
+
+    <path d="M4 738 L4 770 C4 778, 24 781, 48 781 L60 781 C66 781, 68 775, 64 769 L56 750 L32 738 Z" fill="url(#shoesGrad)"/>
+    <rect x="4" y="767" width="60" height="15" rx="7" fill="#FFFFFF"/>
+
+    <!-- Torso 3/4 -->
+    <path d="M-52 335 C-42 325, 48 328, 54 340 L45 565 C45 575, -50 575, -52 565 Z" fill="url(#shirtGrad)"/>
+    <ellipse cx="-4" cy="336" rx="24" ry="12" fill="#E2E7EA"/>
+
+    <!-- Left Arm 3/4 -->
+    <rect x="-74" y="345" width="28" height="190" rx="14" fill="url(#shirtGrad)"/>
+    <circle cx="-60" cy="548" r="15" fill="url(#skinGrad)"/>
+
+    <!-- Right Arm 3/4 -->
+    <rect x="42" y="348" width="28" height="190" rx="14" fill="url(#shirtGrad)"/>
+    <circle cx="56" cy="550" r="15" fill="url(#skinGrad)"/>
+
+    <!-- Neck -->
+    <rect x="-14" y="292" width="28" height="44" rx="10" fill="url(#skinGrad)"/>
+
+    <!-- Head 3/4 -->
+    <ellipse cx="-3" cy="235" rx="50" ry="56" fill="url(#skinGrad)"/>
+    <circle cx="48" cy="236" r="11" fill="url(#skinGrad)"/>
+
+    <!-- Hair 3/4 -->
+    <path d="M-50 216 C-52 155, 52 158, 50 216 C38 185, 4 175, -16 186 C-30 193, -44 196, -50 216 Z" fill="url(#hairGrad)"/>
+
+    <!-- Cheeks -->
+    <circle cx="-18" cy="250" r="10" fill="#E74C3C" opacity="0.16"/>
+    <circle cx="28" cy="250" r="10" fill="#E74C3C" opacity="0.16"/>
+
+    <!-- Eyes 3/4 -->
+    <ellipse cx="-12" cy="232" rx="5" ry="7" fill="#263238"/>
+    <circle cx="-10" cy="229" r="2" fill="#FFFFFF"/>
+    <ellipse cx="24" cy="232" rx="5.5" ry="7.5" fill="#263238"/>
+    <circle cx="26" cy="229" r="2.2" fill="#FFFFFF"/>
+
+    <!-- Eyebrows -->
+    <path d="M-18 220 Q-12 216 -4 220" stroke="#4E3127" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="M16 220 Q24 216 32 220" stroke="#4E3127" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+    <!-- Nose 3/4 -->
+    <path d="M4 242 Q9 248 3 250" stroke="#E59866" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+    <!-- Smile 3/4 -->
+    <path d="M-4 265 Q8 273 20 263" stroke="#B03A2E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+    <text y="830" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="15" font-weight="700" fill="#455A64">
+      VISTA 3/4 (PERSPECTIVA)
+    </text>
+  </g>
+
+  <!-- Technical Spec Footer -->
+  <g transform="translate(80, 940)">
+    <rect width="1376" height="50" rx="10" fill="#FFFFFF" stroke="#CFD8DC"/>
+    <text x="24" y="31" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="600" fill="#455A64">
+      📐 Especificação Técnica: Paleta HSL Suave • Altura Proporcional 7a (120cm canônico) • Vetor Escalável SVG • 1536×1024 • Licença MIT (Aprumo Core)
+    </text>
+  </g>
+</svg>
