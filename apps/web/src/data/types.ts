@@ -42,6 +42,8 @@ export interface CaseRecord {
   tokenTheme: string;
   /** Jogos e recursos liberados no espaço da criança (o resto não aparece para ela). */
   releasedApps: string[];
+  /** Indica caso de demonstração/treinamento (isolado de dados reais). */
+  isDemo?: boolean;
 }
 
 export interface PromptHierarchy {
@@ -94,9 +96,10 @@ export interface SessionRecord {
   implementerId: string;
   startedAt: string;
   endedAt: string | null;
-  status: 'active' | 'completed';
+  status: 'active' | 'paused' | 'completed';
   clinicalNote: string | null;
   screenSeconds: number;
+  pauseReason?: string;
 }
 
 export interface Fact extends TrialFact {
@@ -152,6 +155,16 @@ export interface DenverObjective {
   level: number;
   description: string;
   steps: Array<{ id: string; description: string; status: 'not_started' | 'acquisition' | 'mastered'; proportions: number[] }>;
+}
+
+export interface DenverStepScoreRecord {
+  id: string;
+  sessionId: string;
+  stepId: string;
+  intervalIndex: number;
+  value: 'pass' | 'partial' | 'fail';
+  routine: string | null;
+  recordedAt: string;
 }
 
 export interface DenverCycle {
@@ -215,6 +228,11 @@ export interface Guidance {
   authorId: string;
   publishedAt: string;
   readBy: string[];
+  objective?: string;
+  strategy?: string;
+  avoid?: string;
+  practiceTip?: string;
+  frequency?: string;
 }
 
 export interface SocialValidity {

@@ -47,15 +47,33 @@ importers:
       '@aprumo/clinical-core':
         specifier: workspace:*
         version: link:../../packages/clinical-core
+      '@aprumo/game-causa-efeito':
+        specifier: workspace:*
+        version: link:../../games/causa-efeito
       '@aprumo/game-encontre-o-igual':
         specifier: workspace:*
         version: link:../../games/encontre-o-igual
       '@aprumo/game-escolha-pela-instrucao':
         specifier: workspace:*
         version: link:../../games/escolha-pela-instrucao
+      '@aprumo/game-historia-ordem':
+        specifier: workspace:*
+        version: link:../../games/historia-ordem
+      '@aprumo/game-memoria-bichos':
+        specifier: workspace:*
+        version: link:../../games/memoria-bichos
       '@aprumo/game-minha-vez-sua-vez':
         specifier: workspace:*
         version: link:../../games/minha-vez-sua-vez
+      '@aprumo/game-missao-independencia':
+        specifier: workspace:*
+        version: link:../../games/missao-independencia
+      '@aprumo/game-organize-categoria':
+        specifier: workspace:*
+        version: link:../../games/organize-categoria
+      '@aprumo/game-pequeno-chef':
+        specifier: workspace:*
+        version: link:../../games/pequeno-chef
       '@aprumo/game-sdk':
         specifier: workspace:*
         version: link:../../packages/game-sdk
@@ -160,6 +178,25 @@ importers:
         specifier: ^7.4.1
         version: 7.4.1
 
+  games/causa-efeito:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@aprumo/stimuli':
+        specifier: workspace:*
+        version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
   games/encontre-o-igual:
     dependencies:
       '@aprumo/game-sdk':
@@ -198,7 +235,102 @@ importers:
         specifier: ^19.3.0
         version: 19.3.0
 
+  games/historia-ordem:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@aprumo/stimuli':
+        specifier: workspace:*
+        version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
+  games/memoria-bichos:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@aprumo/stimuli':
+        specifier: workspace:*
+        version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
   games/minha-vez-sua-vez:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@aprumo/stimuli':
+        specifier: workspace:*
+        version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
+  games/missao-independencia:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@aprumo/stimuli':
+        specifier: workspace:*
+        version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
+  games/organize-categoria:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@aprumo/stimuli':
+        specifier: workspace:*
+        version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
+  games/pequeno-chef:
     dependencies:
       '@aprumo/game-sdk':
         specifier: workspace:*

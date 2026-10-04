@@ -43,11 +43,32 @@
   --ap-accent-text: var(--ap-terra-700);
   --ap-focus: #2f6fb0;
 
+  /* UI/UX Pro Max Design System Aliases */
+  --color-primary: var(--ap-primary);
+  --color-primary-hover: var(--ap-primary-hover);
+  --color-secondary: var(--ap-sage-500);
+  --color-accent: var(--ap-accent);
+  --color-background: var(--ap-bg);
+  --color-foreground: var(--ap-text);
+  --color-card: var(--ap-surface);
+  --color-card-foreground: var(--ap-text);
+  --color-muted: var(--ap-surface-sunken);
+  --color-muted-foreground: var(--ap-text-muted);
+  --color-border: var(--ap-border);
+  --color-ring: var(--ap-focus);
+  --touch-target-min: 44px;
+
   /* Modelo do caso — SEMPRE acompanhado de rótulo */
   --ap-model-aba: var(--ap-sage-700);
   --ap-model-aba-soft: var(--ap-sage-50);
   --ap-model-denver: #6a5a98;
   --ap-model-denver-soft: #efecf6;
+  --ap-clinical-aba: var(--ap-model-aba);
+  --ap-clinical-denver: var(--ap-model-denver);
+  --ap-family: #2b7a78;
+  --ap-family-soft: #eaf5f4;
+  --ap-child: #ff9f43;
+  --ap-child-soft: #fff4ea;
 
   /* Fases do alvo — sempre com rótulo */
   --ap-phase-baseline: #6b6f6c;
@@ -99,11 +120,13 @@
   --ap-space-8: 4.5rem;
   --ap-space-9: 7rem;
 
+  --ap-radius-xs: 4px;
   --ap-radius-sm: 6px;
   --ap-radius-md: 10px;
   --ap-radius-lg: 16px;
   --ap-radius-xl: 24px;
   --ap-radius-pill: 999px;
+  --ap-radius-full: 9999px;
 
   --ap-shadow-1: 0 1px 2px rgb(43 43 43 / 0.06);
   --ap-shadow-2: 0 2px 6px rgb(43 43 43 / 0.06), 0 8px 24px rgb(43 43 43 / 0.05);

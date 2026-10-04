@@ -121,8 +121,57 @@ const TABLE_BY_KIND: Record<string, string> = {
   reinforcer_delivery: 'reinforcer_deliveries',
   denver_step_score: 'denver_step_scores',
   home_task_record: 'home_task_records',
+  retraction: 'trial_retractions',
+  opportunity: 'opportunity_records',
+  chain_step: 'chain_step_records',
 };
 
 async function quarantine(batch: OutboxRecord[], reason: string) {
   await supabase?.from('event_quarantine').insert(batch.map((r) => ({ raw: r.payload as object, reason })));
+}
+
+/* ------------------------------------------------ RPCs clínicas e segurança */
+
+export async function openChildSession(
+  sessionId: string,
+  adaptation: Record<string, unknown>,
+  allowedApps: string[],
+  minutes = 45,
+): Promise<string | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase.rpc('open_child_session', {
+    p_session: sessionId,
+    p_adaptation: adaptation,
+    p_apps: allowedApps,
+    p_minutes: minutes,
+  });
+  if (error || !data) return null;
+  return data as string;
+}
+
+export async function resolveChildSession(token: string): Promise<Record<string, unknown> | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase.rpc('resolve_child_session', { p_token: token });
+  if (error || !data || !(data as { valid?: boolean }).valid) return null;
+  return data as Record<string, unknown>;
+}
+
+export async function revokeChildSession(token: string): Promise<boolean> {
+  if (!supabase) return false;
+  const { data } = await supabase.rpc('revoke_child_session', { p_token: token });
+  return !!data;
+}
+
+export async function createPlanRevision(planId: string): Promise<string | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase.rpc('create_plan_revision', { p_plan_id: planId });
+  if (error || !data) throw new Error(error?.message ?? 'Falha ao criar revisão do plano');
+  return data as string;
+}
+
+export async function approvePlanRevision(draftPlanId: string): Promise<boolean> {
+  if (!supabase) return false;
+  const { data, error } = await supabase.rpc('approve_plan_revision', { p_draft_plan_id: draftPlanId });
+  if (error) throw new Error(error.message);
+  return !!data;
 }

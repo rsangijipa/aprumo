@@ -15,26 +15,60 @@ export default function CasePlan() {
   const [toast, setToast] = useState<string | null>(null);
   const [approveError, setApproveError] = useState<string | null>(null);
 
+  const handleApprove = () => {
+    try {
+      if (c.planVersion > 1) {
+        actions.approvePlanRevision(caseId);
+      } else {
+        actions.approvePlan(caseId);
+      }
+      setApproveError(null);
+      setToast(`Plano v${c.planVersion} aprovado. As sessões estão liberadas.`);
+    } catch (e) {
+      setApproveError((e as Error).message);
+    }
+  };
+
+  const handleRevise = () => {
+    try {
+      actions.revisePlan(caseId);
+      setToast(`Rascunho de revisão v${c.planVersion + 1} criado. Alterações não alteram o histórico anterior.`);
+    } catch (e) {
+      setApproveError((e as Error).message);
+    }
+  };
+
   return (
     <div className="ap-stack" style={{ gap: '1.25rem' }}>
       {c.planStatus === 'draft' ? (
-        <div className="plan-draft">
+        <div className="plan-draft" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--ap-primary-soft)', border: '1px solid var(--ap-primary)', padding: '1rem', borderRadius: 'var(--ap-radius-md)' }}>
           <div>
-            <strong>Plano em rascunho</strong>
-            <p className="ap-small ap-muted">Inclua {c.model === 'ABA' ? 'objetivos, programas e alvos' : 'objetivos trimestrais e passos'} e aprove para liberar as sessões. Todo alvo novo começa em linha de base.</p>
-            {approveError && <p role="alert" className="ap-error">{approveError}</p>}
+            <strong>Plano v{c.planVersion} (em rascunho{c.planVersion > 1 ? ' de alteração' : ''})</strong>
+            <p className="ap-small ap-muted" style={{ margin: '0.25rem 0 0 0' }}>
+              Inclua {c.model === 'ABA' ? 'objetivos, programas e alvos' : 'objetivos trimestrais e passos'} e aprove para liberar as sessões. Todo alvo novo começa em linha de base.
+            </p>
+            {approveError && <p role="alert" className="ap-error" style={{ color: 'var(--ap-danger)', margin: '0.25rem 0 0 0' }}>{approveError}</p>}
           </div>
-          <Button variant="primary" icon={<IconCheck />} onClick={() => {
-            try { actions.approvePlan(caseId); setApproveError(null); setToast('Plano aprovado. As sessões estão liberadas.'); } catch (e) { setApproveError((e as Error).message); }
-          }}>Aprovar plano</Button>
+          <Button variant="primary" icon={<IconCheck />} onClick={handleApprove}>
+            Aprovar versão v{c.planVersion}
+          </Button>
         </div>
       ) : (
-        <div className="ap-callout">
-          <IconLock />
-          <p>
-            Modelo do caso: <strong>{c.model === 'ABA' ? 'ABA' : 'Modelo Denver'}</strong>, fixo enquanto este plano vigorar. Para mudar, é preciso encerrar o plano
-            com justificativa e abrir outro com nova linha de base.
-          </p>
+        <div className="ap-callout" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="ap-row" style={{ gap: '0.75rem', alignItems: 'center' }}>
+            <IconLock />
+            <div>
+              <p style={{ margin: 0 }}>
+                Modelo do caso: <strong>{c.model === 'ABA' ? 'ABA' : 'Modelo Denver'}</strong> · <strong>Plano v{c.planVersion} (vigente)</strong>.
+              </p>
+              <p className="ap-xs ap-muted" style={{ margin: 0 }}>
+                Para alterar critérios ou alvos sem violar a interpretação histórica, crie uma nova versão do plano.
+              </p>
+            </div>
+          </div>
+          <Button variant="default" size="sm" onClick={handleRevise}>
+            Criar revisão (v{c.planVersion + 1})
+          </Button>
         </div>
       )}
 
@@ -51,6 +85,7 @@ function AbaPlan({ caseId, onDone }: { caseId: string; onDone: (m: string) => vo
   const [goalOpen, setGoalOpen] = useState(false);
   const [programFor, setProgramFor] = useState<string | null>(null);
   const [targetFor, setTargetFor] = useState<Program | null>(null);
+  const [phaseTarget, setPhaseTarget] = useState<Target | null>(null);
 
   return (
     <>
@@ -88,7 +123,9 @@ function AbaPlan({ caseId, onDone }: { caseId: string; onDone: (m: string) => vo
                     {p.compatibleApps.length > 0 && (<><dt>Jogos compatíveis</dt><dd>{p.compatibleApps.map((a) => GAMES[a]?.manifest.name ?? a).join(', ')}</dd></>)}
                   </dl>
                   <div className="plan-targets">
-                    {targets.map((t) => <TargetChip key={t.id} t={t} />)}
+                    {targets.map((t) => (
+                      <TargetChip key={t.id} t={t} onClick={() => setPhaseTarget(t)} />
+                    ))}
                     <button type="button" className="plan-add-target" onClick={() => setTargetFor(p)}><IconPlus /> Alvo</button>
                   </div>
                 </article>
@@ -101,17 +138,108 @@ function AbaPlan({ caseId, onDone }: { caseId: string; onDone: (m: string) => vo
       <GoalDialog open={goalOpen} caseId={caseId} onClose={() => setGoalOpen(false)} onDone={() => onDone('Objetivo incluído.')} />
       <ProgramDialog goalId={programFor} caseId={caseId} onClose={() => setProgramFor(null)} onDone={() => onDone('Programa incluído. Agora inclua os alvos.')} />
       <TargetDialog program={targetFor} onClose={() => setTargetFor(null)} onDone={(n) => onDone(`Alvo “${n}” incluído em linha de base.`)} />
+      {phaseTarget && (
+        <PhaseChangeDialog
+          target={phaseTarget}
+          onClose={() => setPhaseTarget(null)}
+          onDone={(msg) => onDone(msg)}
+        />
+      )}
     </>
   );
 }
 
-function TargetChip({ t }: { t: Target }) {
+function TargetChip({ t, onClick }: { t: Target; onClick?: () => void }) {
   return (
-    <div className="plan-target">
+    <button
+      type="button"
+      className="plan-target"
+      onClick={onClick}
+      style={{ cursor: onClick ? 'pointer' : 'default', border: '1px solid var(--ap-border)', background: 'var(--ap-surface)', borderRadius: 'var(--ap-radius-md)', padding: '0.35rem 0.6rem' }}
+      title="Toque para alterar a fase deste alvo com justificativa"
+    >
       <span style={{ width: 34, height: 34 }}><StimulusArt art={t.art} label={t.name} /></span>
       <span className="ap-small" style={{ fontWeight: 650 }}>{t.name}</span>
       <PhaseBadge phase={t.phase} />
-    </div>
+    </button>
+  );
+}
+
+function PhaseChangeDialog({ target, onClose, onDone }: { target: Target; onClose: () => void; onDone: (msg: string) => void }) {
+  const [phase, setPhase] = useState<Target['phase']>(target.phase);
+  const [reason, setReason] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
+  const phases: Array<{ value: Target['phase']; label: string }> = [
+    { value: 'baseline', label: 'Linha de base' },
+    { value: 'acquisition', label: 'Aquisição' },
+    { value: 'maintenance', label: 'Manutenção' },
+    { value: 'generalization', label: 'Generalização' },
+    { value: 'mastered', label: 'Conquistado' },
+    { value: 'review', label: 'Revisão' },
+    { value: 'suspended', label: 'Suspenso' },
+  ];
+
+  const submit = () => {
+    if (phase === target.phase) {
+      onClose();
+      return;
+    }
+    if (reason.trim().length < 5) {
+      setError('A justificativa clínica é obrigatória (mínimo de 5 caracteres).');
+      return;
+    }
+    try {
+      actions.changePhase(target.id, phase, reason);
+      onDone(`Fase do alvo “${target.name}” alterada para ${phases.find((p) => p.value === phase)?.label}.`);
+      onClose();
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  };
+
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      title={`Mudar fase: ${target.name}`}
+      description="A alteração manual de fase requer justificativa clínica e é registrada de forma imutável na linha do tempo do caso."
+      footer={
+        <>
+          <Button onClick={onClose}>Cancelar</Button>
+          <Button variant="primary" onClick={submit}>Salvar alteração</Button>
+        </>
+      }
+    >
+      <div className="ap-stack" style={{ gap: '1rem' }}>
+        <Field label="Nova fase">
+          {(a) => (
+            <select
+              id={a.id}
+              className="ap-select"
+              value={phase}
+              onChange={(e) => setPhase(e.target.value as Target['phase'])}
+            >
+              {phases.map((p) => (
+                <option key={p.value} value={p.value}>{p.label}</option>
+              ))}
+            </select>
+          )}
+        </Field>
+        <Field label="Justificativa clínica" error={error}>
+          {(a) => (
+            <textarea
+              id={a.id}
+              className="ap-textarea"
+              placeholder="Descreva a razão clínica para a mudança de fase (ex: atingiu critério em sessões não informatizadas, estabilidade de linha de base demonstrada)..."
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              rows={3}
+            />
+          )}
+        </Field>
+      </div>
+    </Dialog>
   );
 }
 
@@ -189,39 +317,258 @@ function ProgramDialog({ goalId, caseId, onClose, onDone }: { goalId: string | n
   );
 }
 
+/* Editor de alvo em 6 etapas estruturadas (Doc B §10.3 / Plano V2 F2) */
 function TargetDialog({ program, onClose, onDone }: { program: Program | null; onClose: () => void; onDone: (name: string) => void }) {
+  const [step, setStep] = useState<1 | 2 | 3 | 4 | 5 | 6>(1);
   const [art, setArt] = useState('');
   const [name, setName] = useState('');
   const [channel, setChannel] = useState<Target['teachingChannel']>('table');
+  const [errorCorrectionType, setErrorCorrectionType] = useState('re-present');
+  const [criterionSessions, setCriterionSessions] = useState(2);
+  const [criterionPct, setCriterionPct] = useState(90);
+  const [generalizationNotes, setGeneralizationNotes] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const close = () => { setArt(''); setName(''); setError(null); onClose(); };
+
+  const close = () => {
+    setStep(1);
+    setArt('');
+    setName('');
+    setError(null);
+    onClose();
+  };
+
+  const isStepComplete = (s: number) => {
+    if (s === 1) return true; // Nome é opcional ou preenchido
+    if (s === 2) return Boolean(art); // Estímulo é obrigatório
+    if (s === 3) return Boolean(channel);
+    if (s === 4) return Boolean(errorCorrectionType);
+    if (s === 5) return criterionPct >= 50 && criterionSessions >= 1;
+    if (s === 6) return true;
+    return false;
+  };
+
+  const canSave = Boolean(art) && criterionPct >= 50 && criterionSessions >= 1;
+
   const submit = () => {
     if (!program) return;
     if (!art) return setError('Escolha o estímulo.');
-    try { actions.addTarget(program.id, name || STIMULUS_ART[art]!.label, art, channel); onDone(name || STIMULUS_ART[art]!.label); close(); } catch (e) { setError((e as Error).message); }
+    try {
+      const finalName = name || STIMULUS_ART[art]!.label;
+      actions.addTarget(program.id, finalName, art, channel);
+      onDone(finalName);
+      close();
+    } catch (e) {
+      setError((e as Error).message);
+    }
   };
+
   return (
-    <Dialog open={!!program} onClose={close} title="Novo alvo" description={program ? `Programa: ${program.name}. O alvo começa em linha de base (3 sondas sem dica).` : undefined}
-      footer={<><Button onClick={close}>Cancelar</Button><Button variant="primary" onClick={submit}>Incluir alvo</Button></>}>
-      <div className="ap-field">
-        <span className="ap-label">Estímulo</span>
-        <div className="stim-grid" role="group" aria-label="Estímulos">
-          {STIMULUS_KEYS.map((k) => (
-            <button key={k} type="button" aria-pressed={art === k} onClick={() => { setArt(k); setError(null); }}>
-              <StimulusArt art={k} label={STIMULUS_ART[k]!.label} />
-              {STIMULUS_ART[k]!.label}
-            </button>
-          ))}
+    <Dialog
+      open={!!program}
+      onClose={close}
+      size="lg"
+      title={`Alvo em etapas: ${program?.name}`}
+      description="Definição em 6 passos clínicos obrigatórios para garantir alinhamento metodológico (Doc B §10.3)."
+      footer={
+        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+          <div>
+            {step > 1 && (
+              <Button onClick={() => setStep((s) => (s - 1) as any)}>
+                ← Voltar
+              </Button>
+            )}
+          </div>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <Button onClick={close}>Cancelar</Button>
+            {step < 6 ? (
+              <Button
+                variant="primary"
+                disabled={!isStepComplete(step)}
+                onClick={() => setStep((s) => (s + 1) as any)}
+              >
+                Próximo passo →
+              </Button>
+            ) : (
+              <Button variant="primary" disabled={!canSave} onClick={submit}>
+                Salvar alvo
+              </Button>
+            )}
+          </div>
         </div>
-        <span className="ap-hint">O mesmo estímulo é usado na mesa e nos jogos, para comparar canais. Fotos próprias entram com consentimento de imagem.</span>
+      }
+    >
+      {/* Indicador de etapas */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.25rem', borderBottom: '1px solid var(--ap-border)', paddingBottom: '0.75rem' }}>
+        {[
+          { num: 1, label: 'Definição' },
+          { num: 2, label: 'Estímulos' },
+          { num: 3, label: 'Dicas' },
+          { num: 4, label: 'Correção' },
+          { num: 5, label: 'Critério' },
+          { num: 6, label: 'Generalização' },
+        ].map((s) => (
+          <button
+            key={s.num}
+            type="button"
+            onClick={() => setStep(s.num as any)}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              fontWeight: step === s.num ? 700 : 500,
+              color: step === s.num ? 'var(--ap-primary)' : 'var(--ap-text-muted)',
+              fontSize: 'var(--ap-text-xs)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.2rem',
+            }}
+          >
+            <span
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: step === s.num ? 'var(--ap-primary)' : 'var(--ap-surface-raised, #e9ecef)',
+                color: step === s.num ? '#fff' : 'inherit',
+              }}
+            >
+              {s.num}
+            </span>
+            <span>{s.label}</span>
+          </button>
+        ))}
       </div>
-      <Field label="Nome do alvo (opcional)" hint="Se vazio, usa o nome do estímulo.">{(a) => <input id={a.id} aria-describedby={a.describedBy} className="ap-input" value={name} onChange={(e) => setName(e.target.value)} />}</Field>
-      <div className="ap-field">
-        <span className="ap-label">Canal de ensino</span>
-        <Segmented label="Canal de ensino" value={channel} onChange={setChannel} options={[{ value: 'table', label: 'Mesa' }, { value: 'digital', label: 'Jogo' }, { value: 'natural', label: 'Natural' }]} />
-        {channel === 'digital' && <span className="ap-hint">Alvos ensinados no jogo exigem sondas fora da tela antes da conclusão (regra R6).</span>}
-      </div>
-      {error && <p role="alert" className="form-error">{error}</p>}
+
+      {step === 1 && (
+        <div className="ap-stack" style={{ gap: '1rem' }}>
+          <Field label="Nome do alvo (opcional)" hint="Se vazio, usará o nome do estímulo selecionado.">
+            {(a) => <input id={a.id} className="ap-input" value={name} onChange={(e) => setName(e.target.value)} placeholder="ex: bola" />}
+          </Field>
+          <p className="ap-small ap-muted">
+            O alvo começará automaticamente em <strong>Linha de Base</strong>, conforme protocolo clínico. Nenhuma dica é permitida nas 3 sondas iniciais.
+          </p>
+        </div>
+      )}
+
+      {step === 2 && (
+        <div className="ap-field">
+          <span className="ap-label">Selecione o estímulo no acervo</span>
+          <div className="stim-grid" role="group" aria-label="Estímulos">
+            {STIMULUS_KEYS.map((k) => (
+              <button key={k} type="button" aria-pressed={art === k} onClick={() => { setArt(k); setError(null); }}>
+                <StimulusArt art={k} label={STIMULUS_ART[k]!.label} />
+                {STIMULUS_ART[k]!.label}
+              </button>
+            ))}
+          </div>
+          <span className="ap-hint">O mesmo estímulo é utilizado nas fichas da mesa e nos jogos digitais.</span>
+        </div>
+      )}
+
+      {step === 3 && (
+        <div className="ap-stack" style={{ gap: '1rem' }}>
+          <div className="ap-field">
+            <span className="ap-label">Canal de ensino primário</span>
+            <Segmented
+              label="Canal de ensino"
+              value={channel}
+              onChange={setChannel}
+              options={[
+                { value: 'table', label: 'Mesa (DTT)' },
+                { value: 'digital', label: 'Jogo digital' },
+                { value: 'natural', label: 'Natural (NET)' },
+              ]}
+            />
+          </div>
+          <p className="ap-small ap-muted">
+            Hierarquia de dicas do programa: Menos para mais intrusiva (IND → GES → MOD → FP → FT).
+          </p>
+        </div>
+      )}
+
+      {step === 4 && (
+        <div className="ap-stack" style={{ gap: '1rem' }}>
+          <Field label="Procedimento de correção de erro">
+            {(a) => (
+              <select
+                id={a.id}
+                className="ap-select"
+                value={errorCorrectionType}
+                onChange={(e) => setErrorCorrectionType(e.target.value)}
+              >
+                <option value="re-present">Reapresentação com dica imediata (0s de atraso)</option>
+                <option value="model-lead-test">Modelo → Imitação guiada → Teste independente</option>
+                <option value="extinction-redirect">Extinção de erro com redirecionamento de alta probabilidade</option>
+              </select>
+            )}
+          </Field>
+          <p className="ap-small ap-muted">
+            Garante que tentativas incorretas não sejam reforçadas e recebam auxílio na intrusividade correta.
+          </p>
+        </div>
+      )}
+
+      {step === 5 && (
+        <div className="ap-stack" style={{ gap: '1rem' }}>
+          <div className="form-row">
+            <Field label="Percentual de acertos independentes (%)">
+              {(a) => (
+                <input
+                  id={a.id}
+                  type="number"
+                  className="ap-input"
+                  min={50}
+                  max={100}
+                  value={criterionPct}
+                  onChange={(e) => setCriterionPct(Number(e.target.value))}
+                />
+              )}
+            </Field>
+            <Field label="Sessões consecutivas obrigatórias">
+              {(a) => (
+                <input
+                  id={a.id}
+                  type="number"
+                  className="ap-input"
+                  min={1}
+                  max={5}
+                  value={criterionSessions}
+                  onChange={(e) => setCriterionSessions(Number(e.target.value))}
+                />
+              )}
+            </Field>
+          </div>
+          <p className="ap-small ap-muted">
+            Critério padrão: ≥ {criterionPct}% em {criterionSessions} sessões seguidas com pelo menos 10 oportunidades.
+          </p>
+        </div>
+      )}
+
+      {step === 6 && (
+        <div className="ap-stack" style={{ gap: '1rem' }}>
+          <Field label="Plano de generalização (ambientes, pessoas e materiais)">
+            {(a) => (
+              <textarea
+                id={a.id}
+                className="ap-textarea"
+                placeholder="Ex: generalizar para casa com os pais; testar com 2 novos materiais na escola..."
+                value={generalizationNotes}
+                onChange={(e) => setGeneralizationNotes(e.target.value)}
+                rows={3}
+              />
+            )}
+          </Field>
+          <p className="ap-small ap-muted">
+            Jogos compatíveis vinculados: {program?.compatibleApps.map((a) => GAMES[a]?.manifest.name ?? a).join(', ') || 'Nenhum jogo digital (apenas natural/mesa).'}.
+          </p>
+        </div>
+      )}
+
+      {error && <p role="alert" className="form-error" style={{ color: 'var(--ap-danger)', marginTop: '0.5rem' }}>{error}</p>}
     </Dialog>
   );
 }

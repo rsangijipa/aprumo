@@ -44,6 +44,19 @@ export default function CaseLayout() {
           <div className="ap-row" style={{ gap: '0.6rem' }}>
             <h1>{child.preferredName}</h1>
             <ModelBadge model={c.model} />
+            {c.isDemo && (
+              <span
+                className="ap-badge"
+                style={{
+                  background: '#fff3cd',
+                  color: '#856404',
+                  border: '1px solid #ffeeba',
+                  fontWeight: 600,
+                }}
+              >
+                Demonstração
+              </span>
+            )}
             {draft && <span className="ap-badge ap-badge--warning">plano em rascunho</span>}
           </div>
           <p className="ap-small ap-muted">

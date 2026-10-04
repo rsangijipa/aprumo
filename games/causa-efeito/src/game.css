@@ -1,0 +1,102 @@
+.cee {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #eef5f3 0%, #f6f1e9 100%);
+  user-select: none;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.cee-surface {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.cee-hint {
+  position: absolute;
+  top: 1.5rem;
+  width: 100%;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ap-sage-900, #213a38);
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.cee-bubble {
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), inset 0 2px 6px rgba(255, 255, 255, 0.8);
+  animation: cee-pulse 2s ease-in-out infinite;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+@keyframes cee-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.08); }
+}
+
+.cee-bubble[data-popping='true'] {
+  transform: translate(-50%, -50%) scale(1.6);
+  opacity: 0;
+}
+
+.cee-star-icon {
+  color: #ffffff;
+  font-size: 1.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+.cee-counter {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ap-sage-700, #3f6b67);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.cee-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.cee-overlay__badge {
+  background: #ffffff;
+  padding: 1.5rem 2.5rem;
+  border-radius: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--ap-sage-900, #213a38);
+}

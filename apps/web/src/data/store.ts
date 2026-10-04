@@ -26,6 +26,7 @@ import type {
   Competency,
   DenverCycle,
   DenverObjective,
+  DenverStepScoreRecord,
   FidelityObservation,
   Goal,
   Guardian,
@@ -80,6 +81,7 @@ export interface State {
   behaviorDefinitions: BehaviorDefinition[];
   denverObjectives: DenverObjective[];
   denverCycles: DenverCycle[];
+  denverStepScores: DenverStepScoreRecord[];
   prerequisiteProbes: PrerequisiteProbe[];
   preferenceAssessments: PreferenceAssessment[];
   fidelity: FidelityObservation[];
@@ -129,6 +131,7 @@ let state: State = {
   behaviorDefinitions: seed.behaviorDefinitions,
   denverObjectives: seed.denverObjectives,
   denverCycles: seed.denverCycles,
+  denverStepScores: [],
   prerequisiteProbes: seed.prerequisiteProbes,
   preferenceAssessments: seed.preferenceAssessments,
   fidelity: seed.fidelityObservations,
@@ -256,6 +259,137 @@ export const actions = {
 
   addScreenTime(sessionId: string, seconds: number) {
     set((st) => ({ sessions: st.sessions.map((s) => (s.id === sessionId ? { ...s, screenSeconds: s.screenSeconds + seconds } : s)) }));
+  },
+
+  async retractTrial(sessionId: string, trialId: string, reason = 'desfazer pelo aplicador (erro de toque)') {
+    set((st) => ({ facts: st.facts.filter((f) => f.id !== trialId) }));
+    await outbox?.enqueue({
+      clientEventId: uid('ret'),
+      stream: sessionId,
+      kind: 'retraction',
+      createdAt: new Date().toISOString(),
+      payload: { session_id: sessionId, trial_client_event_id: trialId, reason },
+    });
+    void syncNow();
+  },
+
+  pauseSession(sessionId: string, reason?: string) {
+    set((st) => ({
+      sessions: st.sessions.map((s) => (s.id === sessionId ? { ...s, status: 'paused', pauseReason: reason } : s)),
+    }));
+  },
+
+  resumeSession(sessionId: string) {
+    set((st) => ({
+      sessions: st.sessions.map((s) => (s.id === sessionId ? { ...s, status: 'active', pauseReason: undefined } : s)),
+    }));
+  },
+
+  async recordDenverStepScore(
+    sessionId: string,
+    stepId: string,
+    intervalIndex: number,
+    value: 'pass' | 'partial' | 'fail',
+    routine?: string | null,
+  ) {
+    const s = state.sessions.find((x) => x.id === sessionId);
+    if (!s) throw new Error('Sessão não encontrada');
+    const rec: DenverStepScoreRecord = {
+      id: uid('dss'),
+      sessionId,
+      stepId,
+      intervalIndex,
+      value,
+      routine: routine ?? null,
+      recordedAt: new Date().toISOString(),
+    };
+
+    set((st) => {
+      const nextScores = [...st.denverStepScores, rec];
+      // Recalcula proporção da sessão
+      const sessionScores = nextScores.filter((x) => x.sessionId === sessionId && x.stepId === stepId);
+      const totalIntervals = sessionScores.length;
+      const passCount = sessionScores.filter((x) => x.value === 'pass').length;
+      const partialCount = sessionScores.filter((x) => x.value === 'partial').length;
+      const sessionProportion = totalIntervals > 0 ? (passCount + partialCount * 0.5) / totalIntervals : 0;
+
+      const updatedObjectives = st.denverObjectives.map((obj) => ({
+        ...obj,
+        steps: obj.steps.map((stItem) => {
+          if (stItem.id !== stepId) return stItem;
+          const newProportions = [...stItem.proportions];
+          if (newProportions.length === 0) {
+            newProportions.push(sessionProportion);
+          } else {
+            newProportions[newProportions.length - 1] = sessionProportion;
+          }
+          return {
+            ...stItem,
+            proportions: newProportions,
+          };
+        }),
+      }));
+
+      return {
+        denverStepScores: nextScores,
+        denverObjectives: updatedObjectives,
+      };
+    });
+
+    await outbox?.enqueue({
+      clientEventId: rec.id,
+      stream: sessionId,
+      kind: 'denver_step_score',
+      createdAt: rec.recordedAt,
+      payload: rec,
+    });
+    void syncNow();
+  },
+
+  revisePlan(caseId: string): string {
+    const c = state.cases.find((x) => x.id === caseId);
+    if (!c) throw new Error('Caso não encontrado');
+    const newVersion = (c.planVersion ?? 1) + 1;
+    set((st) => ({
+      cases: st.cases.map((x) => (x.id === caseId ? { ...x, planVersion: newVersion, planStatus: 'draft' } : x)),
+      timeline: [
+        ...st.timeline,
+        {
+          id: uid('tl'),
+          caseId,
+          at: new Date().toISOString(),
+          kind: 'context',
+          title: `Nova versão do plano (v${newVersion}) em rascunho`,
+        },
+      ],
+    }));
+    return `plan-v${newVersion}`;
+  },
+
+  approvePlanRevision(caseId: string) {
+    const c = state.cases.find((x) => x.id === caseId);
+    if (!c) throw new Error('Caso não encontrado');
+    set((st) => ({
+      cases: st.cases.map((x) =>
+        x.id === caseId
+          ? {
+              ...x,
+              planStatus: 'active',
+              planApprovedAt: new Date().toISOString(),
+            }
+          : x,
+      ),
+      timeline: [
+        ...st.timeline,
+        {
+          id: uid('tl'),
+          caseId,
+          at: new Date().toISOString(),
+          kind: 'plan_approved',
+          title: `Plano v${c.planVersion} aprovado pela supervisão`,
+        },
+      ],
+    }));
   },
 
   completeSession(sessionId: string, note: string) {

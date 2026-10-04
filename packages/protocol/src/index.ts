@@ -293,3 +293,98 @@ export const GameManifest = z.object({
   }),
 });
 export type GameManifest = z.infer<typeof GameManifest>;
+
+/* ------------------------------------------------ sessão infantil segura */
+
+export const ChildSessionResolved = z.object({
+  valid: z.boolean(),
+  child_session_id: z.string().optional(),
+  session_id: z.string().optional(),
+  child_id: z.string().optional(),
+  preferred_name: z.string().optional(),
+  age_months: z.number().optional(),
+  adaptation: Adaptation.optional(),
+  allowed_apps: z.array(z.string()).optional(),
+  expires_at: z.string().optional(),
+  reason: z.string().optional(),
+});
+export type ChildSessionResolved = z.infer<typeof ChildSessionResolved>;
+
+/* ------------------------------------------------ retratação (desfazer) */
+
+export const TrialRetractionRecord = z.object({
+  session_id: z.string(),
+  trial_client_event_id: z.string(),
+  reason: z.string(),
+});
+export type TrialRetractionRecord = z.infer<typeof TrialRetractionRecord>;
+
+/* ------------------------------------------------ ingestão em lote (outbox) */
+
+export const IngestBatchRequest = z.object({
+  sessionId: z.string().uuid(),
+  caseId: z.string().uuid(),
+  trials: z.array(z.record(z.string(), z.unknown())).default([]),
+  opportunities: z.array(z.record(z.string(), z.unknown())).default([]),
+  chainSteps: z.array(z.record(z.string(), z.unknown())).default([]),
+  denverStepScores: z.array(z.record(z.string(), z.unknown())).default([]),
+  behaviors: z.array(z.record(z.string(), z.unknown())).default([]),
+  retractions: z.array(TrialRetractionRecord).default([]),
+  pauses: z.array(z.record(z.string(), z.unknown())).default([]),
+  notes: z.array(z.record(z.string(), z.unknown())).default([]),
+});
+export type IngestBatchRequest = z.infer<typeof IngestBatchRequest>;
+
+export const IngestBatchResponse = z.object({
+  success: z.boolean(),
+  persistedCount: z.number().int(),
+  quarantinedCount: z.number().int(),
+  quarantinedErrors: z.array(z.object({ id: z.string(), reason: z.string() })).default([]),
+  alertsTriggered: z.number().int().default(0),
+});
+export type IngestBatchResponse = z.infer<typeof IngestBatchResponse>;
+
+/* ------------------------------------------------ motor de regras no servidor */
+
+export const RulesEvaluateRequest = z.object({
+  caseId: z.string().uuid(),
+  sessionId: z.string().uuid().optional(),
+});
+export type RulesEvaluateRequest = z.infer<typeof RulesEvaluateRequest>;
+
+export const RulesEvaluateResponse = z.object({
+  generatedAlerts: z.number().int(),
+  rulesEvaluated: z.array(z.string()),
+  evaluatedAt: z.string(),
+});
+export type RulesEvaluateResponse = z.infer<typeof RulesEvaluateResponse>;
+
+/* ------------------------------------------------ adiar alertas */
+
+export const SnoozeAlertRequest = z.object({
+  alertId: z.string().uuid(),
+  until: z.string(),
+  reason: z.string().min(5),
+});
+export type SnoozeAlertRequest = z.infer<typeof SnoozeAlertRequest>;
+
+/* ------------------------------------------------ telemetria e estado lúdico */
+
+export const ChildSpaceState = z.object({
+  starsEarned: z.number().int().nonnegative(),
+  tokensBalance: z.number().int().nonnegative(),
+  dailyScreenTimeUsedSeconds: z.number().int().nonnegative(),
+  screenTimeLimitMinutes: z.number().int().positive(),
+  preferences: z.record(z.string(), z.unknown()).default({}),
+});
+export type ChildSpaceState = z.infer<typeof ChildSpaceState>;
+
+export const PracticeRunPayload = z.object({
+  token: z.string().min(8),
+  appId: z.string(),
+  durationSeconds: z.number().int().nonnegative(),
+  starsAwarded: z.number().int().nonnegative(),
+  telemetry: z.record(z.string(), z.unknown()).default({}),
+});
+export type PracticeRunPayload = z.infer<typeof PracticeRunPayload>;
+

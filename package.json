@@ -8,7 +8,9 @@
     "build": "pnpm --filter @aprumo/web build",
     "test": "pnpm -r --workspace-concurrency=1 test",
     "typecheck": "pnpm -r typecheck",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "uupm": "python tools/ui-ux-pro-max/scripts/search.py",
+    "uupm:ds": "python tools/ui-ux-pro-max/scripts/search.py \"clinical psychology healthcare SaaS\" --stack react --design-system --project-name \"Aprumo\""
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.8",

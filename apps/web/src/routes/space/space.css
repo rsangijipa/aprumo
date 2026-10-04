@@ -31,6 +31,13 @@
   --cs-bg: #1c2135; --cs-bg-2: #262e4d; --cs-surface: #2c3558; --cs-ink: #eef1ff; --cs-muted: #b4bddb; --cs-primary: #8fb3ff; --cs-primary-ink: #141a2e;
   --cs-accent: #ffc670; --cs-soft: #343e66;
 }
+/* Modos por Faixa Etária (Sensorial 2-4, Lúdico 5-8, Metas 9-12, Adolescente 13+) */
+.cs[data-age='sensory'] { --cs-radius: 32px; font-size: 1.15rem; }
+.cs[data-age='sensory'] .cs-game { min-height: 120px; }
+.cs[data-age='sensory'] .cs-board__cell { min-height: 100px; font-size: 1.2rem; }
+
+.cs[data-age='goals'] { --cs-font: 'Plus Jakarta Sans Variable', system-ui, sans-serif; --cs-radius: 20px; }
+
 /* Adolescente: fonte da plataforma, cantos menos arredondados, sem traço infantil. */
 .cs[data-age='teen'] { --cs-font: 'Plus Jakarta Sans Variable', system-ui, sans-serif; --cs-radius: 18px; font-size: 1rem; }
 

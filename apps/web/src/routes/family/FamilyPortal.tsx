@@ -6,21 +6,21 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { StimulusArt } from '@aprumo/stimuli';
-import { Button, IconCheck, IconFile, IconHeart, IconLogout, Logo } from '@aprumo/ui';
+import { Button, IconCheck, IconFile, IconHeart, IconLogout, Logo, IconSmile } from '@aprumo/ui';
 import { actions, db, formatAge, summariesFor, useStore } from '../../data/store';
-import type { HomeTask } from '../../data/types';
+import type { Guidance, HomeTask } from '../../data/types';
 import './family.css';
 
 const GUARDIAN_ID = 'gd-teo-mae';
 
-const PLAIN_PHASE: Record<string, { label: string; tone: string }> = {
-  baseline: { label: 'Começando a observar', tone: 'neutral' },
-  acquisition: { label: 'Aprendendo', tone: 'learning' },
-  maintenance: { label: 'Aprendido — mantendo', tone: 'done' },
-  generalization: { label: 'Usando em outros lugares', tone: 'done' },
-  mastered: { label: 'Conquistado', tone: 'done' },
-  review: { label: 'A equipe está ajustando', tone: 'neutral' },
-  suspended: { label: 'Pausado pela equipe', tone: 'neutral' },
+const PLAIN_PHASE: Record<string, { label: string; tone: string; desc: string }> = {
+  baseline: { label: 'Começando a observar', tone: 'neutral', desc: 'Verificando o que já sabe antes de iniciar' },
+  acquisition: { label: 'Aprendendo', tone: 'learning', desc: 'Praticando novas habilidades com apoio da equipe' },
+  maintenance: { label: 'Praticando para fixar', tone: 'done', desc: 'Habilidade aprendida, mantendo ativa e firme' },
+  generalization: { label: 'Usando em outros lugares', tone: 'done', desc: 'Usando em casa, na escola e com outros' },
+  mastered: { label: 'Conquistado com autonomia', tone: 'done', desc: 'Faz sozinho em qualquer momento do dia a dia' },
+  review: { label: 'Equipe ajustando estratégias', tone: 'neutral', desc: 'Revisando a forma de ensinar para facilitar' },
+  suspended: { label: 'Pausa temporária', tone: 'neutral', desc: 'Objetivo temporariamente em pausa pela equipe' },
 };
 
 export default function FamilyPortal() {
@@ -34,6 +34,14 @@ export default function FamilyPortal() {
   const docs = st.documents.filter((d) => d.caseId === c.id && d.sharedWithFamily && d.versions.some((v) => v.status === 'final'));
   const answered = st.socialValidity.some((v) => v.caseId === c.id && v.guardianId === guardian.id);
   const nextSessions = st.sessions.filter((s) => s.caseId === c.id).length;
+
+  const [activeTab, setActiveTab] = useState<'inicio' | 'aprendendo' | 'casa' | 'orient' | 'docs'>('inicio');
+
+  const scrollTo = (id: string, tab: 'inicio' | 'aprendendo' | 'casa' | 'orient' | 'docs') => {
+    setActiveTab(tab);
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <div className="fam">
@@ -52,20 +60,20 @@ export default function FamilyPortal() {
           </div>
         </section>
 
-        <section className="fam-section" aria-labelledby="aprendendo">
-          <h2 id="aprendendo">O que {child.preferredName} está aprendendo</h2>
+        <section className="fam-section" id="aprendendo" aria-labelledby="aprendendo-title">
+          <h2 id="aprendendo-title">O que {child.preferredName} está aprendendo ({targets.length})</h2>
           <div className="fam-grid">
             {targets.map((t) => {
               const p = db.programOf(t);
-              // O dado mais recente, inclusive sondas de manutenção: nunca esconder uma queda.
               const last = summariesFor(st.facts, t.id).at(-1);
-              const phase = PLAIN_PHASE[t.phase]!;
+              const phase = PLAIN_PHASE[t.phase] ?? { label: t.phase, tone: 'neutral', desc: '' };
               return (
                 <article key={t.id} className="fam-card">
                   <div className="fam-card__art"><StimulusArt art={t.art} label={t.name} /></div>
                   <div className="fam-card__body">
                     <span className={`fam-chip fam-chip--${phase.tone}`}>{phase.label}</span>
                     <strong>{plainProgram(p.repertoire, t.name)}</strong>
+                    <p className="fam-hint">{phase.desc}</p>
                     {last && last.opportunities > 0 && (
                       <p>{last.probe ? 'Na última verificação' : 'Na última sessão'}, fez <b>sozinho {last.correctIndependent} de {last.opportunities}</b> vezes.</p>
                     )}
@@ -77,38 +85,38 @@ export default function FamilyPortal() {
           <p className="fam-hint">“Sozinho” quer dizer sem nenhuma ajuda. Quando há ajuda, a equipe registra separado: é assim que sabemos o que já foi aprendido.</p>
         </section>
 
-        <section className="fam-section" aria-labelledby="casa">
-          <h2 id="casa">Para fazer em casa</h2>
+        <section className="fam-section" id="casa" aria-labelledby="casa-title">
+          <h2 id="casa-title">Para fazer em casa</h2>
           <div className="ap-stack" style={{ gap: '1rem' }}>
-            {tasks.map((t) => <HomeTaskCard key={t.id} task={t} guardianId={guardian.id} />)}
+            {tasks.length === 0 ? (
+              <p className="fam-hint">Nenhuma tarefa ativa no momento.</p>
+            ) : (
+              tasks.map((t) => <HomeTaskCard key={t.id} task={t} guardianId={guardian.id} />)
+            )}
           </div>
         </section>
 
         <div className="fam-two">
-          <section className="fam-section" aria-labelledby="orient">
-            <h2 id="orient">Orientações da equipe</h2>
-            {guidance.map((g) => {
-              const read = g.readBy.includes(guardian.id);
-              return (
-                <details key={g.id} className="fam-guidance" onToggle={(e) => { if ((e.target as HTMLDetailsElement).open) actions.markGuidanceRead(g.id, guardian.id); }}>
-                  <summary>
-                    <span>{g.title}</span>
-                    {read ? <span className="fam-chip fam-chip--done"><IconCheck /> lida</span> : <span className="fam-chip fam-chip--new">nova</span>}
-                  </summary>
-                  <p>{g.body}</p>
-                </details>
-              );
-            })}
+          <section className="fam-section" id="orient" aria-labelledby="orient-title">
+            <h2 id="orient-title">Orientações da equipe ({guidance.length})</h2>
+            <div className="ap-stack" style={{ gap: '1rem' }}>
+              {guidance.map((g) => (
+                <GuidanceCard key={g.id} g={g} guardianId={guardian.id} />
+              ))}
+            </div>
           </section>
 
-          <section className="fam-section" aria-labelledby="docs">
-            <h2 id="docs">Documentos</h2>
+          <section className="fam-section" id="docs" aria-labelledby="docs-title">
+            <h2 id="docs-title">Documentos Compartilhados</h2>
             {docs.length === 0 && <p className="fam-hint">Nenhum documento compartilhado ainda.</p>}
             {docs.map((d) => {
               const v = [...d.versions].reverse().find((x) => x.status === 'final')!;
               return (
                 <details key={d.id} className="fam-guidance">
-                  <summary><span><IconFile style={{ width: 18, verticalAlign: '-3px' }} /> {d.title}</span><span className="fam-hint">{new Date(v.createdAt).toLocaleDateString('pt-BR')}</span></summary>
+                  <summary>
+                    <span><IconFile style={{ width: 18, verticalAlign: '-3px' }} /> {d.title}</span>
+                    <span className="fam-hint">{new Date(v.createdAt).toLocaleDateString('pt-BR')}</span>
+                  </summary>
                   <p style={{ whiteSpace: 'pre-wrap' }}>{v.analysis}</p>
                   <p className="fam-hint">Assinado por {db.professional(v.authorId)?.name} · {v.council}</p>
                 </details>
@@ -130,7 +138,124 @@ export default function FamilyPortal() {
           <p>{nextSessions} sessões registradas neste plano. Mensagens pelo portal não são lidas em tempo real: em caso de urgência, ligue para a clínica.</p>
         </footer>
       </main>
+
+      {/* Navegação Inferior Móvel (Thumb Ergonomics) */}
+      <nav className="fam-tabbar" aria-label="Navegação móvel da família">
+        <button
+          type="button"
+          className="fam-tabbar-item"
+          aria-current={activeTab === 'inicio' ? 'page' : undefined}
+          onClick={() => scrollTo('conteudo', 'inicio')}
+        >
+          <IconSmile />
+          <span>Início</span>
+        </button>
+        <button
+          type="button"
+          className="fam-tabbar-item"
+          aria-current={activeTab === 'aprendendo' ? 'page' : undefined}
+          onClick={() => scrollTo('aprendendo', 'aprendendo')}
+        >
+          <IconCheck />
+          <span>Progresso</span>
+        </button>
+        <button
+          type="button"
+          className="fam-tabbar-item"
+          aria-current={activeTab === 'casa' ? 'page' : undefined}
+          onClick={() => scrollTo('casa', 'casa')}
+        >
+          <IconHeart />
+          <span>Em Casa</span>
+        </button>
+        <button
+          type="button"
+          className="fam-tabbar-item"
+          aria-current={activeTab === 'orient' ? 'page' : undefined}
+          onClick={() => scrollTo('orient', 'orient')}
+        >
+          <IconFile />
+          <span>Orientações</span>
+        </button>
+        <button
+          type="button"
+          className="fam-tabbar-item"
+          aria-current={activeTab === 'docs' ? 'page' : undefined}
+          onClick={() => scrollTo('docs', 'docs')}
+        >
+          <IconFile />
+          <span>Documentos</span>
+        </button>
+      </nav>
     </div>
+  );
+}
+
+function GuidanceCard({ g, guardianId }: { g: Guidance; guardianId: string }) {
+  const read = g.readBy.includes(guardianId);
+  const author = db.professional(g.authorId)?.name ?? 'Equipe Aprumo';
+
+  return (
+    <article className={`fam-guidance-card ${!read ? 'unread' : ''}`}>
+      <div className="fam-guidance-card__head">
+        <div>
+          <h3>{g.title}</h3>
+          <span className="fam-hint">Por {author} · {new Date(g.publishedAt).toLocaleDateString('pt-BR')}</span>
+        </div>
+        {read ? (
+          <span className="fam-chip fam-chip--done"><IconCheck /> Lida por você</span>
+        ) : (
+          <span className="fam-chip fam-chip--new">Nova orientação</span>
+        )}
+      </div>
+
+      <p style={{ margin: 0, color: 'var(--ap-text)' }}>{g.body}</p>
+
+      {(g.objective || g.strategy || g.avoid || g.practiceTip || g.frequency) && (
+        <div className="fam-guidance-grid">
+          {g.objective && (
+            <div className="fam-guidance-item">
+              <strong>Objetivo:</strong>
+              <span>{g.objective}</span>
+            </div>
+          )}
+          {g.strategy && (
+            <div className="fam-guidance-item">
+              <strong>Estratégia Recomendada:</strong>
+              <span>{g.strategy}</span>
+            </div>
+          )}
+          {g.avoid && (
+            <div className="fam-guidance-item">
+              <strong>O que evitar:</strong>
+              <span>{g.avoid}</span>
+            </div>
+          )}
+          {g.practiceTip && (
+            <div className="fam-guidance-item">
+              <strong>Como praticar no dia a dia:</strong>
+              <span>{g.practiceTip}</span>
+            </div>
+          )}
+          {g.frequency && (
+            <div className="fam-guidance-item">
+              <strong>Frequência sugerida:</strong>
+              <span>{g.frequency}</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="fam-guidance-foot">
+        {!read ? (
+          <Button variant="primary" size="sm" onClick={() => actions.markGuidanceRead(g.id, guardianId)}>
+            <IconCheck /> Confirmar que li e compreendi
+          </Button>
+        ) : (
+          <span className="fam-hint">Confirmação registrada no prontuário da clínica.</span>
+        )}
+      </div>
+    </article>
   );
 }
 

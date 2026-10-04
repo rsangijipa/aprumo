@@ -10,6 +10,8 @@ import {
   IconChevronLeft,
   IconMinus,
   IconNote,
+  IconPause,
+  IconPlay,
   IconSpark,
   IconStop,
   IconTablet,
@@ -17,6 +19,8 @@ import {
   ModelBadge,
   PhaseBadge,
   Segmented,
+  Stopwatch,
+  UndoBar,
 } from '@aprumo/ui';
 import { actions, db, getState, outbox, useStore } from '../../data/store';
 import type { Fact, SessionRecord, Target } from '../../data/types';
@@ -54,11 +58,26 @@ function RunnerBar({ session, onEnd, children }: { session: SessionRecord; onEnd
       <strong style={{ fontSize: 'var(--ap-text-lg)' }}>{child.preferredName}</strong>
       <ModelBadge model={c.model} />
       <span className="runner__timer" aria-label={`Tempo de sessão ${elapsed}`}>{elapsed}</span>
+      {session.status === 'paused' && <span className="ap-badge ap-badge--warning">Pausada</span>}
       {session.status === 'completed' && <span className="ap-badge ap-badge--success">Sessão encerrada</span>}
       <div className="ap-row" style={{ marginLeft: 'auto' }}>
         {children}
         <SyncPill />
-        {session.status === 'active' && <Button variant="danger" icon={<IconStop />} onClick={onEnd}><span className="hide-sm">Encerrar sessão</span><span className="show-sm">Encerrar</span></Button>}
+        {session.status === 'active' && (
+          <Button variant="ghost" icon={<IconPause />} onClick={() => actions.pauseSession(session.id)}>
+            <span className="hide-sm">Pausar</span>
+          </Button>
+        )}
+        {session.status === 'paused' && (
+          <Button variant="primary" icon={<IconPlay />} onClick={() => actions.resumeSession(session.id)}>
+            <span className="hide-sm">Retomar</span>
+          </Button>
+        )}
+        {session.status !== 'completed' && (
+          <Button variant="danger" icon={<IconStop />} onClick={onEnd}>
+            <span className="hide-sm">Encerrar sessão</span><span className="show-sm">Encerrar</span>
+          </Button>
+        )}
       </div>
     </header>
   );
@@ -92,9 +111,14 @@ function AbaRunner({ session }: { session: SessionRecord }) {
   const [quickNote, setQuickNote] = useState('');
   const [planFor, setPlanFor] = useState<string | null>(null);
   const [reinforcerUse, setReinforcerUse] = useState<Record<string, number>>({});
+  const [trialStartedAt, setTrialStartedAt] = useState<number>(() => Date.now());
+  const [lastRecorded, setLastRecorded] = useState<{ factId: string; label: string } | null>(null);
 
   useEffect(() => {
-    if (current) setPrompt(current.phase === 'acquisition' ? current.defaultPrompt : 'IND');
+    if (current) {
+      setPrompt(current.phase === 'acquisition' ? current.defaultPrompt : 'IND');
+      setTrialStartedAt(Date.now());
+    }
   }, [current]);
 
   const sessionFacts = st.facts.filter((f) => f.sessionId === session.id);
@@ -105,12 +129,30 @@ function AbaRunner({ session }: { session: SessionRecord }) {
   const record = async (response: Fact['response']) => {
     if (!current || !hierarchy || session.status !== 'active') return;
     const level = hierarchy.levels.find((l) => l.code === prompt) ?? hierarchy.levels[0]!;
-    await actions.recordTrial({
-      targetId: current.id, sessionId: session.id, phase: current.phase, response,
+    const now = Date.now();
+    const latencyMs = Math.max(0, now - trialStartedAt);
+
+    const fact = await actions.recordTrial({
+      targetId: current.id,
+      sessionId: session.id,
+      phase: current.phase,
+      response,
       promptIntrusiveness: level.intrusiveness,
-      promptCode: level.code, latencyMs: null, channel: 'table', probe: current.phase === 'maintenance' || current.phase === 'generalization',
+      promptCode: level.code,
+      latencyMs,
+      channel: 'table',
+      probe: current.phase === 'maintenance' || current.phase === 'generalization',
       art: current.art,
     });
+
+    setTrialStartedAt(Date.now());
+
+    const respMap = { correct: 'Correta', incorrect: 'Incorreta', no_response: 'Sem resposta' };
+    setLastRecorded({
+      factId: fact.id,
+      label: `${current.name} · ${respMap[response]} (${level.code} · ${(latencyMs / 1000).toFixed(1)}s)`,
+    });
+
     // Avança para o próximo alvo com tentativas pendentes quando o planejado é atingido (estado mais recente).
     const count = (id: string) => getState().facts.filter((f) => f.sessionId === session.id && f.targetId === id).length;
     if (count(current.id) >= planned) {
@@ -119,10 +161,16 @@ function AbaRunner({ session }: { session: SessionRecord }) {
     }
   };
 
+  const handleUndo = async () => {
+    if (!lastRecorded) return;
+    await actions.retractTrial(session.id, lastRecorded.factId);
+    setLastRecorded(null);
+  };
+
   // Atalhos: 1 correta · 2 incorreta · 3 sem resposta · ← → nível de dica.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (ending || launching || abcFor || (e.target as HTMLElement).closest('input, textarea, dialog')) return;
+      if (ending || launching || abcFor || session.status !== 'active' || (e.target as HTMLElement).closest('input, textarea, dialog')) return;
       if (e.key === '1') void record('correct');
       if (e.key === '2') void record('incorrect');
       if (e.key === '3') void record('no_response');
@@ -171,14 +219,20 @@ function AbaRunner({ session }: { session: SessionRecord }) {
 
         {/* Centro: tentativa atual */}
         <main className="runner__center" id="main">
+          {session.status === 'paused' && (
+            <div className="ap-badge ap-badge--warning" style={{ alignSelf: 'flex-start', padding: '0.5rem 0.85rem', marginBottom: '1rem', width: '100%', boxSizing: 'border-box' }}>
+              Sessão pausada. Clique em "Retomar" na barra superior para registrar novas tentativas.
+            </div>
+          )}
           {current && program && hierarchy ? (
             <section className="trial-card" aria-labelledby="trial-title">
               <div className="ap-row" style={{ gap: '1.25rem', flexWrap: 'nowrap' }}>
                 <div className="trial-stim"><StimulusArt art={current.art} label={current.name} /></div>
                 <div className="ap-stack" style={{ gap: '0.35rem', minWidth: 0 }}>
-                  <div className="ap-row" style={{ gap: '0.5rem' }}>
+                  <div className="ap-row" style={{ gap: '0.65rem', alignItems: 'center', flexWrap: 'wrap' }}>
                     <PhaseBadge phase={current.phase} />
                     <span className="ap-xs ap-muted">{program.name}</span>
+                    <Stopwatch startedAt={trialStartedAt} active={session.status === 'active'} />
                   </div>
                   <h1 id="trial-title" className="trial-sd">“{sd}”</h1>
                   <p className="ap-small ap-muted">{program.operationalDefinition}</p>
@@ -296,6 +350,14 @@ function AbaRunner({ session }: { session: SessionRecord }) {
       )}
       <AbcDialog sessionId={session.id} definitionId={abcFor} onClose={() => setAbcFor(null)} />
       <EndDialog open={ending} session={session} initialNote={quickNote} onClose={() => setEnding(false)} onDone={() => nav(`/app/casos/${c.id}/sessoes`)} />
+      {lastRecorded && (
+        <UndoBar
+          label={`Registrado: ${lastRecorded.label}`}
+          durationMs={5000}
+          onUndo={handleUndo}
+          onExpire={() => setLastRecorded(null)}
+        />
+      )}
     </div>
   );
 }
@@ -509,10 +571,20 @@ function DenverRunner({ session }: { session: SessionRecord }) {
   const interval = Math.floor(elapsedMin / INTERVAL_MIN);
   const intervalProgress = (elapsedMin % INTERVAL_MIN) / INTERVAL_MIN;
   const pendingInInterval = steps.filter((s) => scores[s.id]?.[interval] == null).length;
+  const [lastNotifiedInterval, setLastNotifiedInterval] = useState(0);
+
+  useEffect(() => {
+    if (interval > lastNotifiedInterval) {
+      setLastNotifiedInterval(interval);
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+        try { navigator.vibrate([150, 80, 150]); } catch { /* ignore if not supported/allowed */ }
+      }
+    }
+  }, [interval, lastNotifiedInterval]);
 
   const score = async (stepId: string, value: 'pass' | 'partial' | 'fail') => {
     setScores((sc) => ({ ...sc, [stepId]: { ...sc[stepId], [interval]: value } }));
-    await outbox?.enqueue({ clientEventId: `dss-${session.id}-${stepId}-${interval}-${Date.now()}`, stream: session.id, kind: 'denver_step_score', createdAt: new Date().toISOString(), payload: { stepId, interval, value, routine: routine?.type ?? null } });
+    await actions.recordDenverStepScore(session.id, stepId, interval, value, routine?.type ?? null);
   };
 
   return (

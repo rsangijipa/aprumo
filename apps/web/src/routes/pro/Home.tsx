@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router';
-import { Card, IconArrowRight, ModelBadge } from '@aprumo/ui';
+import { Card, IconArrowRight, IconBell, IconCases, IconLibrary, IconRoute, ModelBadge } from '@aprumo/ui';
 import { CURRENT_USER_ID } from '../../data/seed';
 import { alertsForCase, db, formatAge, useStore } from '../../data/store';
 import { AlertList, Avatar, phaseCounts } from './shared';
@@ -30,26 +30,47 @@ export default function Home() {
           <h1>{greet}, {me.shortName}</h1>
           <p>{new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })} · o que precisa de você hoje</p>
         </div>
+        <div className="ap-row" style={{ gap: '0.5rem' }}>
+          <Link to="/app/casos/novo" className="ap-btn ap-btn--sm">Novo caso</Link>
+          <Link to="/app/ferramentas/plano-individual" className="ap-btn ap-btn--primary ap-btn--sm">Criar PEI / Plano</Link>
+        </div>
       </div>
 
+      {/* Atalhos Rápidos */}
+      <div className="ap-row" style={{ gap: '0.65rem', overflowX: 'auto', paddingBottom: '0.2rem' }}>
+        <Link to="/app/casos" className="ap-btn ap-btn--sm" style={{ background: 'var(--ap-surface)' }}>
+          <IconCases style={{ width: 16 }} /> Meus Casos ({myCases.length})
+        </Link>
+        <Link to="/app/ferramentas/plano-individual" className="ap-btn ap-btn--sm" style={{ background: 'var(--ap-surface)' }}>
+          <IconRoute style={{ width: 16 }} /> Construtor de Plano (PEI/Denver)
+        </Link>
+        <Link to="/app/recursos" className="ap-btn ap-btn--sm" style={{ background: 'var(--ap-surface)' }}>
+          <IconLibrary style={{ width: 16 }} /> Resource Studio
+        </Link>
+        <Link to="/app/alertas" className="ap-btn ap-btn--sm" style={{ background: 'var(--ap-surface)' }}>
+          <IconBell style={{ width: 16 }} /> Alertas Clínicos ({alerts.length})
+        </Link>
+      </div>
+
+      {/* Grid de Métricas Principais */}
       <div className="grid-3" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))' }}>
         <Card><div className="stat"><span className="stat__value">{myCases.length}</span><span className="stat__label">Casos ativos sob sua responsabilidade</span></div></Card>
-        <Card><div className="stat"><span className="stat__value">{priority}</span><span className="stat__label">Decisões prioritárias aguardando</span></div></Card>
+        <Card><div className="stat"><span className="stat__value" style={{ color: priority > 0 ? 'var(--ap-danger)' : undefined }}>{priority}</span><span className="stat__label">Decisões prioritárias aguardando</span></div></Card>
         <Card><div className="stat"><span className="stat__value">{alerts.length - priority}</span><span className="stat__label">Outros alertas do motor de regras</span></div></Card>
         <Card><div className="stat"><span className="stat__value">{weekSessions}</span><span className="stat__label">Sessões nos últimos 7 dias</span></div></Card>
       </div>
 
       <div className="grid-main">
-        <Card title="Precisa de você" actions={<Link className="ap-small" to="/app/alertas">Ver todos os alertas</Link>} bodyClassName="" >
+        <Card title="Precisa da sua atenção" actions={<Link className="ap-small" to="/app/alertas">Ver todos os alertas</Link>} bodyClassName="" >
           <div style={{ margin: '-1.25rem' }}>
             <AlertList alerts={alerts} showCase limit={5} />
           </div>
         </Card>
 
         <div className="ap-stack">
-          <Card title="Revisões de plano próximas">
+          <Card title="Hoje & Próximas revisões">
             {reviews.length === 0 ? (
-              <p className="ap-muted ap-small">Nenhuma revisão nas próximas 3 semanas.</p>
+              <p className="ap-muted ap-small">Nenhuma revisão de plano nas próximas 3 semanas.</p>
             ) : (
               <ul className="ap-stack" style={{ listStyle: 'none', margin: 0, padding: 0, gap: '0.75rem' }}>
                 {reviews.map(({ c, days }) => (
@@ -64,7 +85,7 @@ export default function Home() {
               </ul>
             )}
           </Card>
-          <Card title="Atividade recente">
+          <Card title="Atividade recente da equipe">
             <ul className="timeline">
               {recent.map((t) => (
                 <li key={t.id}>

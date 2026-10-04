@@ -1,6 +1,6 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { Button, IconArrowRight, IconHeart, IconInfo, IconLock, IconShield, IconUser, Logo } from '@aprumo/ui';
+import { Button, IconArrowRight, IconHeart, IconInfo, IconLock, IconShield, IconUser, Logo, PinPad } from '@aprumo/ui';
 import { db, findChildByCode } from '../../data/store';
 import { currentStep, enrollTotp, isSupabaseConfigured, signIn, verifyTotp, type AuthStep } from '../../data/supabase';
 import './login.css';
@@ -36,6 +36,13 @@ export default function Login() {
             <RoleTab id="child" role={role} setRole={setRole} icon={<IconUser />} label="Criança" />
           </div>
 
+          <div style={{ margin: '0.75rem 0' }}>
+            <div className="ap-banner ap-banner--info" role="status">
+              <span className="ap-banner__icon"><IconInfo style={{ width: 18 }} /></span>
+              <div className="ap-banner__content"><strong>Ambiente de demonstração local.</strong> Acesso livre para validação clínica e UX.</div>
+            </div>
+          </div>
+
           <div role="tabpanel">
             {role === 'pro' && <CredentialsLogin demoLabel="Entrar como profissional" demoTo="/app" emailLabel="E-mail profissional" />}
             {role === 'family' && <CredentialsLogin demoLabel="Ver o portal da família" demoTo="/familia" emailLabel="E-mail" family />}
@@ -62,6 +69,8 @@ function CredentialsLogin({ demoLabel, demoTo, emailLabel, family }: { demoLabel
   const [step, setStep] = useState<Step>({ kind: 'credentials' });
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isClinicalDevice, setIsClinicalDevice] = useState(false);
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -97,9 +106,35 @@ function CredentialsLogin({ demoLabel, demoTo, emailLabel, family }: { demoLabel
             <input id="email" className="ap-input" type="email" inputMode="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div className="ap-field">
-            <label className="ap-label" htmlFor="password">Senha</label>
-            <input id="password" className="ap-input" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <div className="ap-row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+              <label className="ap-label" htmlFor="password">Senha</label>
+              <button
+                type="button"
+                className="ap-small ap-link"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? 'Ocultar' : 'Mostrar'}
+              </button>
+            </div>
+            <input
+              id="password"
+              className="ap-input"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
+          <label className="login__adult" style={{ marginTop: '0.2rem' }}>
+            <input
+              type="checkbox"
+              checked={isClinicalDevice}
+              onChange={(e) => setIsClinicalDevice(e.target.checked)}
+            />
+            <span>Aparelho da clínica (sessão curta, sem salvar credenciais, bloqueio por inatividade em 15 min).</span>
+          </label>
           {error && <p role="alert" className="login__error">{error}</p>}
           <Button type="submit" variant="primary" size="lg" disabled={busy}>{busy ? 'Entrando…' : 'Continuar'}</Button>
           {family && <p className="ap-xs ap-muted">O acesso da família é criado pelo convite da equipe. Você vê o que a equipe compartilha, nunca o prontuário.</p>}
@@ -145,14 +180,16 @@ function OtpInput({ value, onChange }: { value: string; onChange: (v: string) =>
 
 /* ---------------------------------------------------------------- criança */
 /**
- * O código identifica a criança; não é senha. Em produção, só abre num aparelho com profissional ou
- * responsável autenticado, que gera uma sessão infantil temporária (child_sessions, token com hash).
+ * A criança não faz login e não possui senha.
+ * Apenas um adulto autenticado abre a sessão supervisionada (Doc B §10.7, M13).
  */
 function ChildLogin() {
   const nav = useNavigate();
   const [code, setCode] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [adult, setAdult] = useState(false);
+  const [showPinPad, setShowPinPad] = useState(false);
+  const [pendingChildId, setPendingChildId] = useState<string | null>(null);
 
   const enter = (e?: FormEvent) => {
     e?.preventDefault();
@@ -160,40 +197,63 @@ function ChildLogin() {
     if (!hit) return setError('Código não encontrado. Confira com a equipe: ele está na ficha da criança.');
     if (!db.screenPolicy(hit.child.birthDate).childPortalAllowed) return setError('Abaixo de 2 anos não há espaço da criança. A plataforma é usada pelo adulto (SBP, 2024).');
     if (!adult) return setError('Confirme que um adulto está junto.');
-    nav(`/espaco/${hit.child.id}`);
+    
+    // Exige verificação do PIN do adulto antes de abrir o espaço supervisionado
+    setPendingChildId(hit.child.id);
+    setShowPinPad(true);
+  };
+
+  const handlePinSuccess = () => {
+    setShowPinPad(false);
+    if (pendingChildId) {
+      nav(`/espaco/${pendingChildId}`);
+    }
   };
 
   return (
-    <form className="ap-stack login__child" onSubmit={enter} noValidate>
-      <p className="ap-small ap-muted">O adulto digita o código de identificação do cadastro da criança. Ele está na aba Perfil do caso.</p>
-      <label className="ap-label" htmlFor="child-code">Código da criança</label>
-      <input
-        id="child-code"
-        className="ap-input login__code"
-        value={code}
-        onChange={(e) => { setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 12)); setError(null); }}
-        placeholder="NOME-0000"
-        autoComplete="off"
-        autoCapitalize="characters"
-        spellCheck={false}
-        inputMode="text"
-      />
-      <label className="login__adult">
-        <input type="checkbox" checked={adult} onChange={(e) => setAdult(e.target.checked)} />
-        <span>Sou o adulto responsável e vou acompanhar a criança.</span>
-      </label>
-      {error && <p role="alert" className="login__error">{error}</p>}
-      <Button type="submit" variant="primary" size="lg" disabled={code.length < 4} icon={<IconArrowRight />}>Abrir o espaço da criança</Button>
-      {!isSupabaseConfigured && (
-        <div className="login__demo">
-          <p className="ap-small"><strong>Códigos de demonstração</strong> (toque para preencher):</p>
-          <div className="login__codes">
-            {[['TEO-4821', 'Teo, 4 anos'], ['DAVI-7094', 'Davi, 7 anos'], ['BENTO-5530', 'Bento, 13 anos · modo adolescente'], ['NINA-2260', 'Nina, 1 ano · sem espaço infantil']].map(([c, label]) => (
-              <button key={c} type="button" onClick={() => { setCode(c!); setError(null); }}><strong>{c}</strong><span>{label}</span></button>
-            ))}
+    <>
+      <form className="ap-stack login__child" onSubmit={enter} noValidate>
+        <p className="ap-small ap-muted">O adulto digita o código da criança e confirma sua presença via PIN seguro antes de liberar o ambiente supervisionado.</p>
+        <label className="ap-label" htmlFor="child-code">Código da criança</label>
+        <input
+          id="child-code"
+          className="ap-input login__code"
+          value={code}
+          onChange={(e) => { setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 12)); setError(null); }}
+          placeholder="NOME-0000"
+          autoComplete="off"
+          autoCapitalize="characters"
+          spellCheck={false}
+          inputMode="text"
+        />
+        <label className="login__adult">
+          <input type="checkbox" checked={adult} onChange={(e) => setAdult(e.target.checked)} />
+          <span>Sou o adulto responsável e confirmo acompanhamento presencial.</span>
+        </label>
+        {error && <p role="alert" className="login__error">{error}</p>}
+        <Button type="submit" variant="primary" size="lg" disabled={code.length < 4 || !adult} icon={<IconArrowRight />}>
+          Verificar adulto e abrir sessão
+        </Button>
+        {!isSupabaseConfigured && (
+          <div className="login__demo">
+            <p className="ap-small"><strong>Códigos de demonstração</strong> (toque para preencher):</p>
+            <div className="login__codes">
+              {[['TEO-4821', 'Teo, 4 anos'], ['DAVI-7094', 'Davi, 7 anos'], ['BENTO-5530', 'Bento, 13 anos · modo adolescente'], ['NINA-2260', 'Nina, 1 ano · sem espaço infantil']].map(([c, label]) => (
+                <button key={c} type="button" onClick={() => { setCode(c!); setError(null); }}><strong>{c}</strong><span>{label}</span></button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
+      </form>
+
+      {showPinPad && (
+        <PinPad
+          title="Confirmação do Adulto"
+          expectedPin="1234"
+          onSuccess={handlePinSuccess}
+          onCancel={() => setShowPinPad(false)}
+        />
       )}
-    </form>
+    </>
   );
 }

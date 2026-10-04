@@ -11,6 +11,7 @@ import '@fontsource/fredoka/600.css';
 import { speak } from '@aprumo/game-sdk';
 import { TokenArt, type TokenTheme } from '@aprumo/resource-quadro-de-fichas';
 import { STIMULUS_ART, StimulusArt } from '@aprumo/stimuli';
+import { PinPad } from '@aprumo/ui';
 import {
   STARS_PER_STICKER,
   actions,
@@ -49,6 +50,9 @@ export default function ChildSpace() {
   const [tab, setTabState] = useState<Tab>('inicio');
   const setTab = (t: Tab) => { setTabState(t); window.scrollTo({ top: 0 }); };
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const months = child ? db.ageMonths(child.birthDate) : 72;
+  const defaultMode: AgeMode = months < 48 ? 'sensory' : months < 108 ? 'kid' : months < 156 ? 'goals' : 'teen';
+  const [ageMode, setAgeMode] = useState<AgeMode>(defaultMode);
 
   // Todo uso do espaço é tempo de tela: soma no medidor diário (SBP).
   useEffect(() => {
@@ -61,18 +65,17 @@ export default function ChildSpace() {
 
   if (!child || !c) return <main className="cs-missing"><p>Espaço não encontrado.</p><button className="cs-btn" onClick={() => nav('/entrar')}>Voltar</button></main>;
 
-  const months = db.ageMonths(child.birthDate);
-  const teen = months >= 144;
+  const teen = ageMode === 'teen' || ageMode === 'goals';
   const policy = db.screenPolicy(child.birthDate);
   const used = screenMinutesToday(st, c.id);
   const limitReached = used >= policy.dailyLimitMinutes;
   const released = c.releasedApps;
   const games = released.filter((a) => GAMES[a]);
   const stars = totalStars(space);
-  const T = teen ? TEXT.teen : TEXT.kid;
+  const T = TEXT[ageMode];
 
   return (
-    <div className="cs" data-theme={space.theme} data-age={teen ? 'teen' : 'kid'}>
+    <div className="cs" data-theme={space.theme} data-age={ageMode}>
       <header className="cs-top">
         <button className="cs-avatar-btn" onClick={() => setSettingsOpen(true)} aria-label="Mudar meu avatar e cores">
           <Avatar id={space.avatar} size={56} />
@@ -112,17 +115,44 @@ export default function ChildSpace() {
         ))}
       </nav>
 
-      {settingsOpen && <SpaceSettings childId={childId} teen={teen} onClose={() => setSettingsOpen(false)} />}
+      {settingsOpen && (
+        <SpaceSettings
+          childId={childId}
+          teen={teen}
+          ageMode={ageMode}
+          onSelectAgeMode={setAgeMode}
+          onClose={() => setSettingsOpen(false)}
+        />
+      )}
     </div>
   );
 }
 
-const TEXT = {
+export type AgeMode = 'sensory' | 'kid' | 'goals' | 'teen';
+
+const TEXT: Record<AgeMode, {
+  hello: string; exit: string; tabHome: string; tabPlay: string; tabAlbum: string; tabBoard: string; tabCalm: string;
+  today: string; screen: string; rest: string;
+  know: string; learning: string; album: string; next: (n: number) => string;
+  choose: string; play: string;
+}> = {
+  sensory: {
+    hello: 'Olá,', exit: 'Segurar para sair', tabHome: 'Início', tabPlay: 'Jogar', tabAlbum: 'Figuras', tabBoard: 'Voz', tabCalm: 'Calma',
+    today: 'Vamos brincar?', screen: 'Tempo de tela', rest: 'Hora de descansar os olhinhos! Que tal um abraço ou água?',
+    know: 'Já sei fazer', learning: 'Estou aprendendo', album: 'Minhas Figuras', next: (n: number) => `Mais ${n} para outra figura!`,
+    choose: 'Escolher figura', play: 'Tocar',
+  },
   kid: {
     hello: 'Oi,', exit: 'Segure para sair', tabHome: 'Início', tabPlay: 'Jogar', tabAlbum: 'Álbum', tabBoard: 'Falar', tabCalm: 'Calma',
     today: 'O que vamos fazer hoje?', screen: 'Tempo de tela de hoje', rest: 'Hora de descansar a tela! Que tal brincar com alguém?',
     know: 'Coisas que eu já sei', learning: 'Estou aprendendo', album: 'Meu álbum', next: (n: number) => `Faltam ${n} estrelas para a próxima figurinha`,
     choose: 'Escolha sua figurinha!', play: 'Jogar',
+  },
+  goals: {
+    hello: 'Olá,', exit: 'Segure para sair', tabHome: 'Metas', tabPlay: 'Desafios', tabAlbum: 'Insígnias', tabBoard: 'Comunicar', tabCalm: 'Pausa',
+    today: 'Suas Metas de Hoje', screen: 'Tempo de tela de hoje', rest: 'Tempo de tela atingido. Ótimo momento para uma atividade física ou livro.',
+    know: 'Habilidades dominadas', learning: 'Desafios em treino', album: 'Coleção de Insígnias', next: (n: number) => `${n} estrelas para a próxima conquista`,
+    choose: 'Escolher nova insígnia', play: 'Iniciar desafio',
   },
   teen: {
     hello: 'E aí,', exit: 'Segure para sair', tabHome: 'Painel', tabPlay: 'Atividades', tabAlbum: 'Coleção', tabBoard: 'Comunicar', tabCalm: 'Pausa',
@@ -353,7 +383,19 @@ function Calm({ sound, teen }: { sound: boolean; teen: boolean }) {
 }
 
 /* ================================================================ configurações da criança */
-function SpaceSettings({ childId, teen, onClose }: { childId: string; teen: boolean; onClose: () => void }) {
+function SpaceSettings({
+  childId,
+  teen,
+  ageMode,
+  onSelectAgeMode,
+  onClose,
+}: {
+  childId: string;
+  teen: boolean;
+  ageMode: AgeMode;
+  onSelectAgeMode: (m: AgeMode) => void;
+  onClose: () => void;
+}) {
   const space = useStore((s) => s.childSpaces.find((x) => x.childId === childId)) ?? childSpaceOf(childId);
   const avatars = Object.entries(AVATARS).filter(([, a]) => !!a.teen === teen);
   const themes: Array<[ChildTheme, string]> = [['sol', 'Sol'], ['mar', 'Mar'], ['floresta', 'Floresta'], ['noite', 'Noite']];
@@ -361,6 +403,18 @@ function SpaceSettings({ childId, teen, onClose }: { childId: string; teen: bool
     <div className="cs-sheet" role="dialog" aria-modal="true" aria-label="Meu jeito">
       <div className="cs-sheet__panel">
         <h2>{teen ? 'Personalizar' : 'Do meu jeito'}</h2>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', width: '100%' }}>
+          <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--cs-muted)' }}>Faixa Etária Adaptativa:</span>
+          <div className="cs-pick-row" style={{ flexWrap: 'wrap' }}>
+            {([['sensory', '2–4 Sensorial'], ['kid', '5–8 Lúdico'], ['goals', '9–12 Metas'], ['teen', '13+ Adolescente']] as const).map(([m, label]) => (
+              <button key={m} className="cs-btn" aria-pressed={ageMode === m} onClick={() => onSelectAgeMode(m)}>
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="cs-pick-row">
           {avatars.map(([id]) => (
             <button key={id} aria-pressed={space.avatar === id} onClick={() => actions.updateChildSpace(childId, { avatar: id })}><Avatar id={id} size={60} /></button>
@@ -380,18 +434,57 @@ function SpaceSettings({ childId, teen, onClose }: { childId: string; teen: bool
   );
 }
 
-/* ================================================================ sair com toque longo */
+/* ================================================================ sair com toque longo + PIN */
 export function HoldToExit({ onExit, label }: { onExit: () => void; label: string }) {
   const [holding, setHolding] = useState(false);
+  const [pinOpen, setPinOpen] = useState(false);
   const t = useRef<number | null>(null);
-  const start = () => { setHolding(true); t.current = window.setTimeout(onExit, HOLD_MS); };
-  const stop = () => { setHolding(false); if (t.current) window.clearTimeout(t.current); };
+
+  const start = () => {
+    setHolding(true);
+    t.current = window.setTimeout(() => {
+      setHolding(false);
+      setPinOpen(true);
+    }, HOLD_MS);
+  };
+
+  const stop = () => {
+    setHolding(false);
+    if (t.current) window.clearTimeout(t.current);
+  };
+
   return (
-    <button className="cs-exit" data-holding={holding} onPointerDown={start} onPointerUp={stop} onPointerLeave={stop} onContextMenu={(e) => e.preventDefault()}
-      onKeyDown={(e) => { if (e.key === 'Enter') onExit(); }} aria-label={`${label} (adulto)`}>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4.5H6.5v15H14M10.5 12H20M16.5 8.5 20 12l-3.5 3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-      <span>{label}</span>
-    </button>
+    <>
+      <button
+        className="cs-exit"
+        data-holding={holding}
+        onPointerDown={start}
+        onPointerUp={stop}
+        onPointerLeave={stop}
+        onContextMenu={(e) => e.preventDefault()}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') setPinOpen(true);
+        }}
+        aria-label={`${label} (toque longo + PIN do adulto)`}
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M14 4.5H6.5v15H14M10.5 12H20M16.5 8.5 20 12l-3.5 3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        <span>{label}</span>
+      </button>
+
+      {pinOpen && (
+        <PinPad
+          title="Saída do adulto"
+          expectedPin="1234"
+          onSuccess={() => {
+            setPinOpen(false);
+            onExit();
+          }}
+          onCancel={() => setPinOpen(false)}
+        />
+      )}
+    </>
   );
 }
 

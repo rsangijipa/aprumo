@@ -1,0 +1,130 @@
+.mdb {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--ap-bg-calm, #f3efe6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  user-select: none;
+  overflow: hidden;
+}
+
+.mdb-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ap-sage-900, #213a38);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.mdb-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  max-width: 440px;
+  width: 100%;
+  margin: auto;
+  perspective: 1000px;
+}
+
+.mdb-grid[data-cols='3'] {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 580px;
+}
+
+.mdb-card-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  height: calc(120px * var(--mdb-scale, 1));
+  perspective: 600px;
+}
+
+.mdb-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 1.25rem;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+}
+
+.mdb-card-btn[data-flipped='true'] .mdb-card-inner {
+  transform: rotateY(180deg);
+}
+
+.mdb-card-front,
+.mdb-card-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.25rem;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+}
+
+.mdb-card-front {
+  background: linear-gradient(135deg, #3f6b67 0%, #294744 100%);
+  border: 3px solid #ffffff;
+  color: #f7f3ea;
+  font-size: 2.25rem;
+}
+
+.mdb-card-back {
+  background: #ffffff;
+  border: 3px solid #3f6b67;
+  transform: rotateY(180deg);
+  padding: 0.5rem;
+}
+
+.mdb-card-btn[data-matched='true'] .mdb-card-back {
+  border-color: #2e7d32;
+  background: #e8f5e9;
+  box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.2);
+}
+
+.mdb-card-icon {
+  width: 75%;
+  height: 75%;
+}
+
+.mdb-score {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ap-sage-700, #3f6b67);
+  display: flex;
+  gap: 1rem;
+}
+
+.mdb-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.mdb-overlay__badge {
+  background: #ffffff;
+  padding: 1.5rem 2.5rem;
+  border-radius: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--ap-sage-900, #213a38);
+}

@@ -19,6 +19,7 @@ import {
   IconX,
   Logo,
 } from '@aprumo/ui';
+import { INSTITUTION_CONFIG } from '../../config/institution';
 import './landing.css';
 
 export function Landing() {
@@ -43,17 +44,20 @@ export function Landing() {
       <header className="lp-header" data-scrolled={scrolled}>
         <div className="lp-wrap lp-header__in">
           <Logo />
-          <nav id="lp-nav" className="lp-nav" data-open={menu} aria-label="Principal">
-            <a href="#como-funciona">Como funciona</a>
-            <a href="#modelos">ABA e Denver</a>
-            <a href="#recursos">Recursos</a>
-            <a href="#seguranca">Segurança</a>
-            <a href="#ciencia">Fundamentação</a>
-            <Link className="lp-nav__enter" to="/entrar">Entrar</Link>
+          <nav id="lp-nav" className="lp-nav" data-open={menu} aria-label="Navegação principal">
+            <a href="#como-funciona" onClick={() => setMenu(false)}>Produto</a>
+            <a href="#recursos" onClick={() => setMenu(false)}>Recursos</a>
+            <a href="#espacos" onClick={() => setMenu(false)}>Profissionais</a>
+            <a href="#familias" onClick={() => setMenu(false)}>Famílias</a>
+            <a href="#ciencia" onClick={() => setMenu(false)}>Fundamentação</a>
+            <Link className="lp-nav__enter hide-desktop" to="/entrar">Entrar</Link>
           </nav>
           <div className="ap-row lp-header__cta">
             <Link className="ap-btn ap-btn--ghost hide-sm" to="/entrar">Entrar</Link>
-            <a className="ap-btn ap-btn--primary" href="#contato"><span className="hide-sm">Solicitar demonstração</span><span className="show-sm">Demonstração</span></a>
+            <Link className="ap-btn ap-btn--primary" to="/entrar">
+              <span className="hide-sm">Explorar demonstração</span>
+              <span className="show-sm">Demonstração</span>
+            </Link>
             <button type="button" className="lp-menu-btn" aria-expanded={menu} aria-controls="lp-nav" aria-label={menu ? 'Fechar menu' : 'Abrir menu'} onClick={() => setMenu((m) => !m)}>
               {menu ? <IconX /> : <IconMenu />}
             </button>
@@ -66,24 +70,23 @@ export function Landing() {
         <section className="lp-hero">
           <div className="lp-wrap lp-hero__grid">
             <div>
-              <span className="ap-eyebrow">Plataforma clínica para ABA e Modelo Denver</span>
+              <span className="ap-eyebrow">ABA + Denver • planejamento, aplicação e análise</span>
               <h1 className="ap-display">
-                Cada tentativa registrada. <em>Cada decisão fundamentada.</em>
+                Tudo o que acompanha uma intervenção, <em>no mesmo lugar.</em>
               </h1>
               <p className="lp-hero__lead">
-                Plano individual, aplicação de sessão, jogos terapêuticos e análise de dados num só lugar, com o alvo do plano
-                como unidade de tudo.
+                Plano individualizado, aplicação de sessão em tablet ou celular, jogos terapêuticos e análise visual de dados com o alvo clínico no centro de tudo.
               </p>
               <div className="lp-hero__cta">
                 <Link className="ap-btn ap-btn--primary ap-btn--lg" to="/entrar">
-                  Conhecer a plataforma <IconArrowRight />
+                  Explorar demonstração <IconArrowRight />
                 </Link>
-                <a className="ap-btn ap-btn--lg" href="#como-funciona">Ver como funciona</a>
+                <a className="ap-btn ap-btn--lg" href="#como-funciona">Conhecer o Aprumo</a>
               </div>
               <div className="lp-trust" aria-label="Compromissos de projeto">
                 <span><IconShield /> Projetado para a LGPD e o ECA Digital</span>
                 <span><IconLock /> Registro clínico imutável e auditável</span>
-                <span><IconCloudOff /> Funciona sem internet</span>
+                <span><IconCloudOff /> Funciona 100% sem internet</span>
                 <span><IconEye /> Acessibilidade WCAG 2.2 AA</span>
               </div>
             </div>
@@ -345,6 +348,12 @@ export function Landing() {
               O Aprumo é uma ferramenta de apoio ao trabalho clínico. Não substitui avaliação, supervisão ou a
               decisão do profissional responsável pelo caso.
             </p>
+            <div style={{ fontSize: '0.8rem', color: 'var(--ap-muted)', marginTop: '0.75rem', lineHeight: '1.6' }}>
+              <div><strong>{INSTITUTION_CONFIG.companyName}</strong> · CNPJ {INSTITUTION_CONFIG.cnpj}</div>
+              <div>Responsável Técnico: {INSTITUTION_CONFIG.technicalLead} ({INSTITUTION_CONFIG.councilRegistration})</div>
+              <div>Canal do Encarregado (DPO · LGPD art. 41): <a href={`mailto:${INSTITUTION_CONFIG.dpoEmail}`}>{INSTITUTION_CONFIG.dpoEmail}</a></div>
+              <div>Hospedagem de dados de saúde: {INSTITUTION_CONFIG.dataRegion}</div>
+            </div>
           </div>
           <nav className="ap-stack" aria-label="Rodapé" style={{ gap: '0.4rem' }}>
             <a href="#seguranca">Privacidade e segurança</a>

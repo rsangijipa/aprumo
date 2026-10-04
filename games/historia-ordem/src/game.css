@@ -1,0 +1,140 @@
+.heo {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--ap-bg-calm, #f3efe6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  user-select: none;
+  overflow: hidden;
+}
+
+.heo-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ap-sage-900, #213a38);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.heo-timeline {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  max-width: 580px;
+  justify-content: center;
+}
+
+.heo-slot {
+  flex: 1;
+  min-height: calc(110px * var(--heo-scale, 1));
+  border: 2px dashed #b7c7c3;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.heo-slot__number {
+  position: absolute;
+  top: 6px;
+  left: 10px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #7b8f8b;
+}
+
+.heo-cards-pool {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  max-width: 580px;
+  justify-content: center;
+}
+
+.heo-card-btn {
+  flex: 1;
+  min-height: calc(110px * var(--heo-scale, 1));
+  background: #ffffff;
+  border: 2px solid var(--ap-sage-700, #3f6b67);
+  border-radius: 1.25rem;
+  padding: 0.75rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(63, 107, 103, 0.12);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.heo-card-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(63, 107, 103, 0.18);
+}
+
+.heo-card-btn[data-selected='true'] {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.heo-card-icon {
+  font-size: 2.25rem;
+}
+
+.heo-card-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ap-sage-900, #213a38);
+  text-align: center;
+}
+
+.heo-reset-btn {
+  background: none;
+  border: 1px solid #c7d2d0;
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ap-sage-900, #213a38);
+  cursor: pointer;
+}
+
+.heo-reset-btn:hover {
+  background: #ffffff;
+}
+
+.heo-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.heo-overlay__badge {
+  background: #ffffff;
+  padding: 1.5rem 2.5rem;
+  border-radius: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--ap-sage-900, #213a38);
+}

@@ -425,12 +425,32 @@ export const homeTaskRecords: HomeTaskRecord[] = [5, 4, 3, 2, 1].flatMap((d, i) 
 
 export const guidance: Guidance[] = [
   {
-    id: 'gu-1', caseId: 'case-teo', title: 'Como ajudar sem dar a resposta', authorId: 'pro-helena', publishedAt: daysAgo(12), readBy: ['gd-teo-mae'],
+    id: 'gu-1',
+    caseId: 'case-teo',
+    title: 'Como ajudar sem dar a resposta (Espera e Dicas Leves)',
+    authorId: 'pro-helena',
+    publishedAt: daysAgo(12),
+    readBy: ['gd-teo-mae'],
     body: 'Quando o Teo demorar para responder, espere alguns segundos antes de ajudar. Se for preciso, comece pela ajuda mais leve (apontar) e só depois pegue na mão dele. Assim ele aprende a fazer sozinho.',
+    objective: 'Promover iniciativa e autonomia na comunicação funcional em casa.',
+    strategy: 'Dar tempo de latência de 3 a 5 segundos após a instrução antes de fornecer qualquer dica física.',
+    avoid: 'Dar a resposta imediatamente ou pegar na mão antes que ele tente por conta própria.',
+    practiceTip: 'Experimente na hora das refeições e ao escolher brinquedos favoritos.',
+    frequency: 'Praticar diariamente durante atividades naturais.',
   },
   {
-    id: 'gu-2', caseId: 'case-teo', title: 'Transições mais tranquilas', authorId: 'pro-helena', publishedAt: daysAgo(3), readBy: [],
+    id: 'gu-2',
+    caseId: 'case-teo',
+    title: 'Transições mais tranquilas com Suporte Visual',
+    authorId: 'pro-helena',
+    publishedAt: daysAgo(3),
+    readBy: [],
     body: 'Antes de terminar uma brincadeira de que ele gosta, avise: “mais um pouquinho e depois vamos lanchar”. Mostrar a figura da próxima atividade ajuda. Evite tirar o brinquedo de surpresa.',
+    objective: 'Reduzir comportamentos de frustração nas mudanças de atividade.',
+    strategy: 'Avisar 2 minutos antes e usar o Primeiro → Depois (Primeiro guardar, Depois lanchar).',
+    avoid: 'Interromper a brincadeira abruptamente sem aviso prévio ou suporte visual.',
+    practiceTip: 'Deixe o relógio/timer ou a figura da próxima atividade ao alcance visual dele.',
+    frequency: 'Em todas as transições de atividade de alta para baixa preferência.',
   },
 ];
 

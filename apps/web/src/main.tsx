@@ -1,6 +1,7 @@
 import { StrictMode, lazy, Suspense, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import '@fontsource-variable/plus-jakarta-sans';
 import '@fontsource-variable/fraunces';
 import '@fontsource/atkinson-hyperlegible/400.css';
@@ -38,6 +39,7 @@ const ChildShell = lazy(() => import('./routes/child/ChildShell'));
 const FamilyPortal = lazy(() => import('./routes/family/FamilyPortal'));
 const ChildSpace = lazy(() => import('./routes/space/ChildSpace'));
 const PlayShell = lazy(() => import('./routes/space/PlayShell'));
+const PlanBuilder = lazy(() => import('./routes/pro/PlanBuilder'));
 
 const Loading = () => (
   <div className="ap-loading" role="status" aria-live="polite">
@@ -76,6 +78,7 @@ const router = createBrowserRouter([
       },
       { path: 'alertas', element: s(<Alerts />) },
       { path: 'recursos', element: s(<Library />) },
+      { path: 'ferramentas/plano-individual', element: s(<PlanBuilder />) },
       { path: 'supervisao', element: s(<Supervision />) },
       { path: 'equipe', element: s(<Team />) },
       { path: 'configuracoes', element: s(<Settings />) },
@@ -91,8 +94,19 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 min
+      retry: 1,
+    },
+  },
+});
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </StrictMode>,
 );
