@@ -394,4 +394,27 @@ export const ArtIndependence = () => (
   </svg>
 );
 
+export const ArtSocialCity = () => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="#1a202c" />
+    <polygon points="20,80 50,45 80,80" fill="#2d3748" />
+    <rect x="25" y="45" width="28" height="55" rx="3" fill="#2b6cb0" />
+    <rect x="65" y="30" width="35" height="70" rx="3" fill="#319795" />
+    <rect x="110" y="50" width="30" height="50" rx="3" fill="#dd6b20" />
+    {[0, 1, 2, 3].map((row) => (
+      <g key={row}>
+        <circle cx="34" cy={55 + row * 10} r="2" fill="#fefcbf" />
+        <circle cx="44" cy={55 + row * 10} r="2" fill="#fefcbf" />
+        <circle cx="75" cy={40 + row * 12} r="2.5" fill="#fefcbf" />
+        <circle cx="88" cy={40 + row * 12} r="2.5" fill="#fefcbf" />
+      </g>
+    ))}
+    <rect x="0" y="95" width="160" height="25" fill="#4a5568" />
+    <line x1="0" y1="95" x2="160" y2="95" stroke="#e2e8f0" strokeWidth="2" />
+    <line x1="60" y1="108" x2="100" y2="108" stroke="#ffffff" strokeWidth="4" strokeDasharray="6 6" />
+    <path d="M 65 15 L 115 15 C 120 15, 120 28, 115 28 L 85 28 L 78 35 L 80 28 L 65 28 C 60 28, 60 15, 65 15 Z" fill="#ecc94b" />
+    <text x="90" y="24" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#744210">💬 Olá!</text>
+  </svg>
+);
+
 export default Landing;

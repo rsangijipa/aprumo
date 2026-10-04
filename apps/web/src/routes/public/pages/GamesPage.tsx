@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { FeatureCard, PublicPageLayout, Section } from '../PublicNav';
-import { ArtListener, ArtMatch, ArtTurns, ArtDetective, ArtExecutive, ArtMiniWorlds, ArtChef, ArtIndependence } from '../Landing';
+import { ArtListener, ArtMatch, ArtTurns, ArtDetective, ArtExecutive, ArtMiniWorlds, ArtChef, ArtIndependence, ArtSocialCity } from '../Landing';
 
 interface GameItem {
   id: string;
@@ -32,7 +32,7 @@ const GAMES: GameItem[] = [
     summary: 'Desafios da vida real em 2D isométrico: arrumar a mochila, fazer a lista do mercado, conferir o troco e o itinerário.' },
   { id: 'pequeno-chef', name: 'Pequeno Chef', repertoire: 'Sequenciação', age: '4 a 14 anos', art: <ArtChef />,
     summary: 'Cozinha tátil para preparar receitas passo a passo, trabalhando sequência, coordenação e tolerância alimentar.' },
-  { id: 'social-city', name: 'Social City 3D', repertoire: 'Competência social', age: '12 a 17 anos',
+  { id: 'social-city', name: 'Social City 3D', repertoire: 'Competência social', age: '12 a 17 anos', art: <ArtSocialCity />,
     summary: 'Cidade 3D para adolescentes com missões de conversa, atendimento na cafeteria, transporte e recusa de convites.' },
   { id: 'coop-escape-lab', name: 'Co-op Escape Lab', repertoire: 'Cooperação', age: '10 a 17 anos',
     summary: 'Laboratório para dois jogadores, com quebra-cabeças de alavancas e engrenagens e pistas que só um dos dois vê.' },

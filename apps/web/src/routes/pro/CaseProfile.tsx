@@ -199,6 +199,7 @@ const SPACE_ITEMS: Array<{ id: string; label: string; hint: string }> = [
   { id: 'minimundos', label: 'MiniMundos', hint: 'brincar funcional e simbólico exploratório' },
   { id: 'pequeno-chef', label: 'Pequeno Chef', hint: 'culinária, sequenciação e tolerância alimentar' },
   { id: 'missao-independencia', label: 'Missão Independência', hint: 'autonomia urbana, mochila, compras e troco' },
+  { id: 'social-city', label: 'Social City 3D', hint: 'simulação urbana 3D, conversação e limites assertivos' },
   { id: 'prancha', label: 'Prancha de comunicação', hint: 'sempre disponível, mesmo sem tempo de tela' },
   { id: 'calma', label: 'Cantinho da calma', hint: 'respiração e estratégias de regulação' },
 ];

@@ -3,7 +3,7 @@ import type { GameManifest } from '@aprumo/protocol';
 import { Badge, Card, Button, BackButton, CloseButton, IconCheck, IconPrinter } from '@aprumo/ui';
 import { speak, playTones } from '@aprumo/game-sdk';
 import { GAMES } from '../../game-host/registry';
-import { ArtListener, ArtMatch, ArtSchedule, ArtTokens, ArtTurns, ArtDetective, ArtExecutive, ArtMiniWorlds, ArtChef, ArtIndependence } from '../public/Landing';
+import { ArtListener, ArtMatch, ArtSchedule, ArtTokens, ArtTurns, ArtDetective, ArtExecutive, ArtMiniWorlds, ArtChef, ArtIndependence, ArtSocialCity } from '../public/Landing';
 import { TaskAnalysisStudio } from './resources/TaskAnalysisStudio';
 import { ChoiceBoardStudio } from './resources/ChoiceBoardStudio';
 import { CommunicationBoardStudio } from './resources/CommunicationBoardStudio';
@@ -22,6 +22,7 @@ const ART: Record<string, ReactNode> = {
   'minimundos': <ArtMiniWorlds />,
   'pequeno-chef': <ArtChef />,
   'missao-independencia': <ArtIndependence />,
+  'social-city': <ArtSocialCity />,
 };
 
 const DefaultGameArt = ({ name }: { name: string }) => (

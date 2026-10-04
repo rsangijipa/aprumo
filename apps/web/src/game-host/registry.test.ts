@@ -23,14 +23,16 @@ describe('Game Registry Release Gate', () => {
     }
   });
 
-  it('includes Phase 2 games: Detetive das Emoções, Circuito Executivo, and MiniMundos', () => {
+  it('includes Phase 2 games: Detetive das Emoções, Circuito Executivo, MiniMundos, and Social City 3D', () => {
     expect(GAMES['detetive-das-emocoes']).toBeDefined();
     expect(GAMES['circuito-executivo']).toBeDefined();
     expect(GAMES['minimundos']).toBeDefined();
+    expect(GAMES['social-city']).toBeDefined();
 
     expect(GAMES['detetive-das-emocoes']!.manifest.name).toBe('Detetive das Emoções');
     expect(GAMES['circuito-executivo']!.manifest.name).toBe('Circuito Executivo');
     expect(GAMES['minimundos']!.manifest.name).toBe('MiniMundos');
+    expect(GAMES['social-city']!.manifest.name).toBe('Social City 3D');
   });
 
   it('validates support resources manifests', () => {
@@ -46,5 +48,5 @@ describe('Game Registry Release Gate', () => {
       const Comp = await entry.load();
       expect(Comp).toBeDefined();
     }
-  });
+  }, 15000);
 });

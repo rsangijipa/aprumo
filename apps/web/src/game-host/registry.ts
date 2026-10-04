@@ -19,6 +19,7 @@ import { manifest as olhaComigo } from '@aprumo/game-olha-comigo/manifest';
 import { manifest as detetiveDasEmocoes } from '@aprumo/game-detetive-das-emocoes/manifest';
 import { manifest as circuitoExecutivo } from '@aprumo/game-circuito-executivo/manifest';
 import { manifest as miniMundos } from '@aprumo/game-minimundos/manifest';
+import { manifest as socialCity } from '@aprumo/game-social-city/manifest';
 import { manifest as quadroDeFichas } from '@aprumo/resource-quadro-de-fichas/manifest';
 import { manifest as agendaVisual } from '@aprumo/resource-agenda-visual/manifest';
 
@@ -42,6 +43,7 @@ export const GAMES: Record<string, GameEntry> = {
   'detetive-das-emocoes': { manifest: detetiveDasEmocoes, load: () => import('@aprumo/game-detetive-das-emocoes').then((m) => m.Game) },
   'circuito-executivo': { manifest: circuitoExecutivo, load: () => import('@aprumo/game-circuito-executivo').then((m) => m.Game) },
   'minimundos': { manifest: miniMundos, load: () => import('@aprumo/game-minimundos').then((m) => m.Game) },
+  'social-city': { manifest: socialCity, load: () => import('@aprumo/game-social-city').then((m) => m.Game) },
 };
 
 /** Recursos de apoio rodam na própria moldura infantil (não em iframe): são da plataforma. */

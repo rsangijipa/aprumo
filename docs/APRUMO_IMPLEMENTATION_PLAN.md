@@ -221,6 +221,37 @@ graph TD
   - Ilustrações SVG em alta definição criadas na Landing (`ArtChef` e `ArtIndependence`), integradas na Biblioteca (`Library.tsx`), no Espaço da Criança (`ChildSpace.tsx`), na Página Pública de Games (`GamesPage.tsx`) e na Ficha do Caso (`CaseProfile.tsx`).
   - Release gate e testes monorepo: **100% dos 25 pacotes aprovados** (código de saída 0).
   - Build de produção e PWA concluídos com sucesso sem erros de compilação.
-- **Pendente:** Waves 8 a 10 (*Social City 3D*, *Co-op Escape Lab*, e E2E / A11y / Performance).
+
+## 9. Registro de Entrega — Wave 8: Social City 3D (Simulação Urbana e Pragmática Social para Adolescentes) (04/10/2026)
+
+- **Social City 3D (`@aprumo/game-social-city` v1.0.0):**
+  - Focado em comunicação assertiva, pragmática, proxêmica, leitura de pistas sociais e limites interpessoais para adolescentes de 12 a 18 anos (`ageRangeMonths: [144, 216]`).
+  - **Motor 3D Procedural Zero-Bloat (`renderer3d.ts`):** Projeção em perspectiva matemática personalizada no Canvas com Painter's Algorithm (ordenação de profundidade), iluminação direcional, edifícios tridimensionais (Cafeteria, Biblioteca, Estação de Ônibus, Residências), calçadas, faixas de pedestre, árvores, luminárias, bancos, ônibus e avatares animados. 100% livre de dependências pesadas, ultra-rápido, compatível nativamente com React 19 e renderização 100% offline.
+  - **Navegação Urbana e Acessibilidade:**
+    - Controle por teclado (`WASD` e setas direcionais), atalhos numéricos (`1-4`) e barra de espaço para interações sociais.
+    - D-pad virtual sensível ao toque na tela para tablets e smartphones.
+    - Atalho de aproximação/teletransporte adaptativo para acessibilidade motora reduzida.
+  - **4 Cenários Sociais Ecológicos Estruturados:**
+    1. *Cafeteria da Praça — Pedido de Bebida:* Interação assertiva no balcão com Sofia, praticando clareza, cumprimento cordial e civilidade.
+    2. *Cafeteria da Praça — Correção de Pedido com Engano:* Expressão assertiva de insatisfação educada para substituição de item sem agressividade ou passividade.
+    3. *Transporte Público — Desembarque no Ônibus Lotado:* Pedido educado de passagem com Marcos em situação de proxêmica e espaço pessoal reduzido.
+    4. *Biblioteca Municipal — Apoio e Tom de Estudo:* Regulação de tom de voz e solicitação direcionada de orientação a Lúcia em ambiente compartilhado.
+  - **Estilos Comunicativos com Feedback Clínico Imediato:**
+    - Respostas categorizadas em *assertiva*, *passiva*, *agressiva* e *inapropriada*, pontuadas de 0 a 100 com justificativa pedagógica e reflexão social imediata.
+  - **Síntese de Áudio Procedural:**
+    - Web Audio API com acordes harmônicos para comunicação assertiva, sinos reflexivos para pontos de coaching e celebração final de conclusão da cidade.
+  - **Telemetria Clínica e Conformidade SDK:**
+    - Emissão de `SESSION_STARTED`, `TRIAL_STARTED`, `STIMULUS_PRESENTED`, `PROMPT_USED`, `TRIAL_COMPLETED`, e `SESSION_COMPLETED` via `@aprumo/game-sdk`.
+  - **Suíte de Testes Unitários:**
+    - `games/social-city/src/logic.test.ts` (3/3 aprovados) validando cenários, balanceamento de opções e seleção ótima.
+
+- **Integração no Web Host & Plataforma:**
+  - Registro em `apps/web/src/game-host/registry.ts`, elevando o catálogo para **15 jogos clínicos ativos**.
+  - Arte vetorial personalizada `ArtSocialCity` criada em `Landing.tsx` e conectada na Biblioteca (`Library.tsx`), no Espaço da Criança (`ChildSpace.tsx`), na Página de Jogos (`GamesPage.tsx`) e na Ficha do Caso (`CaseProfile.tsx`).
+  - Suíte de release gate em `apps/web/src/game-host/registry.test.ts` atualizada com timeout estendido de 15s para suportar carregamento assíncrono dos 15 jogos (4/4 aprovados).
+  - Testes do monorepo: **100% dos 26 pacotes aprovados** (sem falhas, sem regressões).
+  - Build de produção e PWA concluídos com sucesso.
+- **Pendente:** Waves 9 a 10 (*Co-op Escape Lab* e E2E / A11y / Performance).
+
 
 

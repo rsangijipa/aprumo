@@ -26,6 +26,7 @@
     "@aprumo/game-olha-comigo": "workspace:*",
     "@aprumo/game-organize-categoria": "workspace:*",
     "@aprumo/game-pequeno-chef": "workspace:*",
+    "@aprumo/game-social-city": "workspace:*",
     "@aprumo/game-sdk": "workspace:*",
     "@aprumo/offline": "workspace:*",
     "@aprumo/protocol": "workspace:*",
