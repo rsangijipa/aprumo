@@ -4,6 +4,11 @@ import { Badge, Card, Button, BackButton, CloseButton, IconCheck, IconPrinter } 
 import { speak, playTones } from '@aprumo/game-sdk';
 import { GAMES } from '../../game-host/registry';
 import { ArtListener, ArtMatch, ArtSchedule, ArtTokens, ArtTurns } from '../public/Landing';
+import { TaskAnalysisStudio } from './resources/TaskAnalysisStudio';
+import { ChoiceBoardStudio } from './resources/ChoiceBoardStudio';
+import { CommunicationBoardStudio } from './resources/CommunicationBoardStudio';
+import { SocialStoryStudio } from './resources/SocialStoryStudio';
+import { EmotionTreeStudio } from './resources/EmotionTreeStudio';
 import './library.css';
 
 const ART: Record<string, ReactNode> = {
@@ -110,6 +115,16 @@ const INTERACTIVE_RESOURCES: InteractiveResourceMeta[] = [
     summary: 'Tira de sentença visual com botão de voz para formação de pedidos e relatos.',
     purposes: ['Comunicação Alternativa e Aumentativa', 'Mando Funcional', 'Voz Ativa'],
     evidenceBase: 'Picture Exchange Communication System (Frost & Bondy, 2002)',
+    printable: true,
+    interactive: true,
+  },
+  {
+    id: 'arvore-emocoes',
+    name: 'Árvore das Emoções & Regulação Somática',
+    category: 'regulacao',
+    summary: 'Mapeamento visual e somático de 5 zonas emocionais com respiração guiada 4-2-4 e grounding nos modos Soft Clay e Graphic Novel.',
+    purposes: ['Autorregulação Emocional', 'Respiração Guiada 4-2-4', 'Aterramento Somático', 'Prevenção de Crise'],
+    evidenceBase: 'The Zones of Regulation & Somatic Grounding (Kuypers, 2011; Levine, 2010)',
     printable: true,
     interactive: true,
   },
@@ -317,6 +332,51 @@ function ToolThumbnail({ id }: { id: string }) {
           </div>
         </div>
       );
+    case 'arvore-emocoes':
+      return (
+        <svg viewBox="0 0 100 100" width="80" height="80">
+          <path d="M 46 90 L 46 60 Q 50 50 54 60 L 54 90 Z" fill="#78350f" />
+          <circle cx="50" cy="40" r="26" fill="#2e7d32" opacity="0.85" />
+          <circle cx="34" cy="42" r="14" fill="#f57f17" opacity="0.9" />
+          <circle cx="66" cy="42" r="14" fill="#0277bd" opacity="0.9" />
+          <circle cx="50" cy="22" r="14" fill="#c62828" opacity="0.9" />
+        </svg>
+      );
+    case 'analise-tarefa':
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: '80px' }}>
+          <div style={{ background: 'var(--ap-success)', height: '7px', borderRadius: '4px', width: '100%' }} />
+          <div style={{ background: 'var(--ap-success)', height: '7px', borderRadius: '4px', width: '85%' }} />
+          <div style={{ background: '#1976d2', height: '7px', borderRadius: '4px', width: '60%' }} />
+          <div style={{ background: '#ed6c02', height: '7px', borderRadius: '4px', width: '40%' }} />
+        </div>
+      );
+    case 'historia-social':
+      return (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#fff', padding: '8px 12px', borderRadius: '12px', border: '1px solid var(--ap-border)' }}>
+          <span style={{ fontSize: '24px' }}>📖</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+            <div style={{ width: '36px', height: '5px', background: 'var(--ap-sage-800)', borderRadius: '2px' }} />
+            <div style={{ width: '24px', height: '4px', background: 'var(--ap-sage-400)', borderRadius: '2px' }} />
+          </div>
+        </div>
+      );
+    case 'prancha-escolha':
+      return (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+          <div style={{ width: '28px', height: '28px', background: 'var(--ap-primary-soft)', border: '2px solid var(--ap-primary)', borderRadius: '8px', display: 'grid', placeItems: 'center', fontSize: '14px' }}>⚽</div>
+          <div style={{ width: '28px', height: '28px', background: 'var(--ap-surface)', border: '1px solid var(--ap-border)', borderRadius: '8px', display: 'grid', placeItems: 'center', fontSize: '14px' }}>🚗</div>
+        </div>
+      );
+    case 'prancha-comunicacao':
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', background: 'var(--ap-surface)', padding: '6px 8px', borderRadius: '8px', border: '1px solid var(--ap-border-strong)' }}>
+          <div style={{ display: 'flex', gap: '4px' }}>
+            <span style={{ background: 'var(--ap-primary)', color: '#fff', fontSize: '9px', fontWeight: 800, padding: '2px 4px', borderRadius: '4px' }}>EU QUERO</span>
+            <span style={{ background: 'var(--ap-surface-sunken)', fontSize: '11px', padding: '1px 3px', borderRadius: '4px' }}>💧</span>
+          </div>
+        </div>
+      );
     case 'semaforo-regulacao':
       return (
         <div style={{ display: 'flex', gap: '6px' }}>
@@ -432,12 +492,13 @@ function ToolModal({ toolId, onClose }: { toolId: string; onClose: () => void })
           {toolId === 'primeiro-depois' && <FirstThenTool />}
           {toolId === 'agenda-visual' && <VisualScheduleTool />}
           {toolId === 'quadro-de-fichas' && <TokenBoardTool />}
-          {toolId === 'analise-tarefa' && <TaskAnalysisTool />}
-          {toolId === 'historia-social' && <SocialStoryTool />}
-          {toolId === 'prancha-escolha' && <ChoiceBoardTool />}
-          {toolId === 'prancha-comunicacao' && <CommunicationBoardTool />}
-          {toolId === 'semaforo-regulacao' && <ZonesTool />}
-          {toolId === 'termometro-emocional' && <FeelingsThermometerTool />}
+          {toolId === 'analise-tarefa' && <TaskAnalysisStudio />}
+          {toolId === 'historia-social' && <SocialStoryStudio />}
+          {toolId === 'prancha-escolha' && <ChoiceBoardStudio />}
+          {toolId === 'prancha-comunicacao' && <CommunicationBoardStudio />}
+          {toolId === 'arvore-emocoes' && <EmotionTreeStudio />}
+          {toolId === 'semaforo-regulacao' && <EmotionTreeStudio />}
+          {toolId === 'termometro-emocional' && <EmotionTreeStudio />}
           {toolId === 'rotina-checklist' && <VisualRoutineTool />}
           {toolId === 'contador-abc' && <BehaviorCounterTool />}
         </div>

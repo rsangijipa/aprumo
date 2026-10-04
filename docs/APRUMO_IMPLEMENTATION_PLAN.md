@@ -145,4 +145,15 @@ graph TD
 - **Refinamentos:** landing enxuta com cartões para as páginas dedicadas; top bar com menus "Para quem" e "Recursos"; login em duas colunas (desktop) / coluna única (celular) só com Profissional e Família; entrada da criança movida para o portal da família, sem PIN (saída por toque longo de 1,2 s); sidebar profissional com rolagem própria, grupos recolhíveis e "Voltar ao site".
 - **Wave 5:** *Espelho Mágico* (`espelho-magico`, imitação motora, pontuação pelo terapeuta, sem câmera); *Olha Comigo* (`olha-comigo`, atenção compartilhada com esvanecimento de pistas, sem biometria); *Missão Instrução* (appId `escolha-pela-instrucao`, níveis 1–5 com atributos, relações espaciais e 2–3 etapas); *Minha Vez / Sua Vez* com indicador de turno, `waitMs` e `offTurnTouches`.
 - **Correção:** `game.html` agora dá altura total ao iframe (jogos com `height: 100%` colapsavam).
-- **Pendente:** Wave 4 restante (Task Analysis, Choice Board, Social Story, Árvore das Emoções); Waves 6–10.
+
+## 6. Registro de Entrega — Conclusão Integral da Wave 4 (04/10/2026)
+
+- **Task Analysis Studio (Chaining Avançado):** Encadeamento para frente (`forward`), para trás (`backward`) e tarefa inteira (`total-task`); 4 tarefas AVD clínicas estruturadas (Lavar as Mãos, Escovar os Dentes, Calçar o Tênis, Arrumar a Mochila); hierarquia completa de dicas (`I`, `DV`, `DG`, `DFP`, `DFT`); destaque dinâmico do passo-alvo de ensino; instrução com áudio TTS (`speak`) e cálculo automático do percentual de independência com testes unitários dedicados.
+- **Choice Board Studio (Prancha de Escolha Direta):** Seleção configurável de 2, 3 ou 4 opções; categorias temáticas (brinquedos, alimentos, pausas sensoriais); feedback auditivo com síntese de voz e acordes pentatônicos.
+- **Communication Board Studio (PECS / CAA com Tira de Sentença):** Tira de sentença visual dinâmica com iniciadores configuráveis ("Eu quero", "Preciso de", "Eu sinto", "Eu vejo", "Vamos"); vocabulário organizado em 5 categorias temáticas; síntese de voz para leitura completa da frase montada; ações de apagar último termo e limpar tira; modo de impressão acessível.
+- **Árvore das Emoções & Regulação Somática:** Dois perfis visuais dedicados (Soft Clay para 2–8 anos com árvore e ramos interativos; Graphic Novel contemporâneo para 9+ anos); 5 zonas de ativação autonômica (Verde, Amarela, Vermelha, Azul e Púrpura); 3 ferramentas de regulação somática guiada:
+  1. *Respiração Compassada 4-2-4*: Círculo pulsante animado em CSS com contagem de segundos e 3 ciclos de respiração diafragmática.
+  2. *Aterramento Somático 3-2-1*: Reconexão sensorial no presente (3 estímulos visuais, 2 texturas táteis, 1 som auditivo).
+  3. *Estratégias Imediatas*: Acomodações sensoriais, abafador de ruídos e abraço da borboleta.
+- **Testes e Integridade:** 24 testes no `@aprumo/web` (100% aprovados) e suíte completa dos 21 pacotes do monorepo verde com zero regressões.
+- **Pendente:** Waves 6 a 10.
