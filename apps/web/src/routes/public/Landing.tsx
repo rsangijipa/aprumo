@@ -353,4 +353,45 @@ export const ArtMiniWorlds = () => (
   </svg>
 );
 
+export const ArtChef = () => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="#7b341e" />
+    {/* Bancada da cozinha */}
+    <rect x="0" y="75" width="160" height="45" fill="#c05621" />
+    {/* Chapéu de chef */}
+    <path d="M 65 35 C 55 20, 105 20, 95 35 Z" fill="#ffffff" />
+    <circle cx="65" cy="28" r="10" fill="#ffffff" />
+    <circle cx="80" cy="22" r="12" fill="#ffffff" />
+    <circle cx="95" cy="28" r="10" fill="#ffffff" />
+    <rect x="65" y="34" width="30" height="8" rx="2" fill="#edf2f7" />
+    {/* Tigela colorida */}
+    <path d="M 50 65 L 110 65 C 105 85, 55 85, 50 65 Z" fill="#38a169" stroke="#22543d" strokeWidth="2" />
+    {/* Ingredientes na bancada */}
+    <circle cx="35" cy="80" r="8" fill="#e53e3e" />
+    <path d="M 125 74 C 130 84, 140 82, 142 76" fill="none" stroke="#ecc94b" strokeWidth="6" strokeLinecap="round" />
+    {/* Colher de pau */}
+    <line x1="88" y1="50" x2="105" y2="72" stroke="#d69e2e" strokeWidth="4" strokeLinecap="round" />
+  </svg>
+);
+
+export const ArtIndependence = () => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="#1a365d" />
+    {/* Cenário urbano com calçada */}
+    <rect x="0" y="78" width="160" height="42" fill="#4a5568" />
+    <line x1="0" y1="78" x2="160" y2="78" stroke="#cbd5e0" strokeWidth="3" />
+    {/* Mochila escolar */}
+    <rect x="25" y="44" width="34" height="42" rx="8" fill="#319795" stroke="#234e52" strokeWidth="2" />
+    <rect x="30" y="56" width="24" height="22" rx="4" fill="#285e61" />
+    <line x1="42" y1="50" x2="42" y2="76" stroke="#ecc94b" strokeWidth="2.5" strokeDasharray="2 2" />
+    {/* Ônibus ao fundo */}
+    <rect x="75" y="38" width="65" height="38" rx="6" fill="#3182ce" stroke="#2b6cb0" strokeWidth="2" />
+    <rect x="82" y="44" width="14" height="12" rx="2" fill="#ebf8ff" />
+    <rect x="102" y="44" width="28" height="12" rx="2" fill="#ebf8ff" />
+    <circle cx="90" cy="76" r="6" fill="#1a202c" />
+    <circle cx="125" cy="76" r="6" fill="#1a202c" />
+    <circle cx="140" cy="52" r="3" fill="#ecc94b" />
+  </svg>
+);
+
 export default Landing;

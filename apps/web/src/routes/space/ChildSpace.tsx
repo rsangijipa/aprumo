@@ -25,7 +25,7 @@ import {
 } from '../../data/store';
 import type { ChildTheme } from '../../data/types';
 import { GAMES } from '../../game-host/registry';
-import { ArtListener, ArtMatch, ArtTurns, ArtDetective, ArtExecutive, ArtMiniWorlds } from '../public/Landing';
+import { ArtListener, ArtMatch, ArtTurns, ArtDetective, ArtExecutive, ArtMiniWorlds, ArtChef, ArtIndependence } from '../public/Landing';
 import { AVATARS, Avatar, FEELINGS, Feeling, NEEDS, Need } from './art';
 import './space.css';
 
@@ -36,6 +36,8 @@ const GAME_ART: Record<string, ReactNode> = {
   'detetive-das-emocoes': <ArtDetective />,
   'circuito-executivo': <ArtExecutive />,
   'minimundos': <ArtMiniWorlds />,
+  'pequeno-chef': <ArtChef />,
+  'missao-independencia': <ArtIndependence />,
 };
 const GAME_KID_NAME: Record<string, string> = {
   'encontre-o-igual': 'Encontre o igual',
@@ -45,6 +47,8 @@ const GAME_KID_NAME: Record<string, string> = {
   'detetive-das-emocoes': 'Detetive das Emoções',
   'circuito-executivo': 'Circuito Divertido',
   'minimundos': 'MiniMundos',
+  'pequeno-chef': 'Pequeno Chef',
+  'missao-independencia': 'Missão Independência',
 };
 const TOKEN_STICKERS: TokenTheme[] = ['trem', 'estrela', 'dinossauro', 'coracao', 'folha'];
 export const STICKERS = [...TOKEN_STICKERS, 'bola', 'carro', 'peixe', 'flor', 'aviao', 'casa', 'uva', 'gato', 'cachorro', 'livro', 'maca'];

@@ -1,43 +1,76 @@
-import { describe, expect, it } from 'vitest';
-import { DEFAULT_ADAPTATION, PROTOCOL_VERSION, type SessionConfig } from '@aprumo/protocol';
-import { planChefTrials, RECIPE_STEPS } from './logic';
+import { describe, it, expect } from 'vitest';
+import { PROTOCOL_VERSION, type SessionConfig } from '@aprumo/protocol';
+import { CHEF_RECIPES, planChefTrials } from './logic';
 
-const config: SessionConfig = {
-  protocolVersion: PROTOCOL_VERSION,
-  runId: 'chef-test',
-  appId: 'pequeno-chef',
-  appVersion: '1.0.0',
-  childDisplayName: 'Davi',
-  clinical: {
-    model: 'ABA',
-    trialsPerTarget: 1,
-    interleave: false,
-    seed: 77,
-    targets: [],
-  },
-  adaptation: { ...DEFAULT_ADAPTATION, maxChoices: 3 },
-  params: {},
-};
+function mockConfig(choices = 3): SessionConfig {
+  return {
+    protocolVersion: PROTOCOL_VERSION,
+    runId: 'test-run',
+    appId: 'pequeno-chef',
+    appVersion: '2.0.0',
+    childDisplayName: 'Bia',
+    clinical: {
+      model: 'ABA',
+      targets: [],
+      trialsPerTarget: 5,
+      interleave: true,
+      seed: 42,
+    },
+    adaptation: {
+      motion: 'full',
+      sound: 'normal',
+      feedback: 'subtle',
+      palette: 'calm',
+      maxChoices: choices,
+      touchScale: 1,
+      builtInPromptAfterMs: 8000,
+      screenBudgetSec: 600,
+    },
+    params: {},
+  };
+}
 
-describe('Pequeno Chef', () => {
-  it('planeja 4 passos encadeados da receita', () => {
-    const trials = planChefTrials(config);
-    expect(trials).toHaveLength(RECIPE_STEPS.length);
-    for (let i = 0; i < trials.length; i++) {
-      const t = trials[i]!;
-      expect(t.stepIndex).toBe(i);
-      expect(t.options[t.positionOfTarget]!.stimulusId).toBe(RECIPE_STEPS[i]!.item.stimulusId);
-      expect(t.options).toHaveLength(3);
+describe('Pequeno Chef Logic', () => {
+  it('defines 4 structured clinical recipes', () => {
+    expect(CHEF_RECIPES.length).toBe(4);
+    const ids = CHEF_RECIPES.map((r) => r.id);
+    expect(ids).toContain('salada-frutas');
+    expect(ids).toContain('sanduiche');
+    expect(ids).toContain('mini-pizza');
+    expect(ids).toContain('vitamina-suco');
+
+    for (const r of CHEF_RECIPES) {
+      expect(r.steps.length).toBe(5);
+      expect(r.title).toBeTruthy();
+      expect(r.vessel).toBeTruthy();
     }
   });
 
-  it('respeita maxChoices da adaptação sensorial', () => {
-    const trials = planChefTrials({
-      ...config,
-      adaptation: { ...config.adaptation, maxChoices: 2 },
-    });
+  it('plans trials respecting field size and target counterbalancing', () => {
+    const config = mockConfig(3);
+    const trials = planChefTrials(config, 0);
+
+    expect(trials.length).toBe(5);
     for (const t of trials) {
-      expect(t.options).toHaveLength(2);
+      expect(t.options.length).toBe(3);
+      expect(t.options[t.positionOfTarget]).toEqual(t.targetItem);
+      expect(t.positionOfTarget).toBeGreaterThanOrEqual(0);
+      expect(t.positionOfTarget).toBeLessThan(3);
+      expect(t.instruction).toBeTruthy();
+    }
+  });
+
+  it('plans trials for all recipes without target collisions in distractors', () => {
+    const config = mockConfig(4);
+    for (let rIdx = 0; rIdx < CHEF_RECIPES.length; rIdx++) {
+      const trials = planChefTrials(config, rIdx);
+      expect(trials.length).toBe(5);
+      for (const t of trials) {
+        expect(t.options.length).toBe(4);
+        // Distractors do not contain target stimulusId
+        const otherOptions = t.options.filter((_, idx) => idx !== t.positionOfTarget);
+        expect(otherOptions.some((o) => o.stimulusId === t.targetItem.stimulusId)).toBe(false);
+      }
     }
   });
 });

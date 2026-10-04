@@ -197,6 +197,8 @@ const SPACE_ITEMS: Array<{ id: string; label: string; hint: string }> = [
   { id: 'detetive-das-emocoes', label: 'Detetive das Emoções', hint: 'reconhecimento de pistas emocionais e contexto' },
   { id: 'circuito-executivo', label: 'Circuito Executivo', hint: 'controle inibitório e flexibilidade cognitiva' },
   { id: 'minimundos', label: 'MiniMundos', hint: 'brincar funcional e simbólico exploratório' },
+  { id: 'pequeno-chef', label: 'Pequeno Chef', hint: 'culinária, sequenciação e tolerância alimentar' },
+  { id: 'missao-independencia', label: 'Missão Independência', hint: 'autonomia urbana, mochila, compras e troco' },
   { id: 'prancha', label: 'Prancha de comunicação', hint: 'sempre disponível, mesmo sem tempo de tela' },
   { id: 'calma', label: 'Cantinho da calma', hint: 'respiração e estratégias de regulação' },
 ];

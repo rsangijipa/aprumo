@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { FeatureCard, PublicPageLayout, Section } from '../PublicNav';
-import { ArtListener, ArtMatch, ArtTurns, ArtDetective, ArtExecutive, ArtMiniWorlds } from '../Landing';
+import { ArtListener, ArtMatch, ArtTurns, ArtDetective, ArtExecutive, ArtMiniWorlds, ArtChef, ArtIndependence } from '../Landing';
 
 interface GameItem {
   id: string;
@@ -28,9 +28,9 @@ const GAMES: GameItem[] = [
     summary: 'Identificar pistas de contexto, expressões faciais e entonação em situações sociais, aceitando mais de uma resposta válida.' },
   { id: 'circuito-executivo', name: 'Circuito Executivo', repertoire: 'Funções executivas', age: '7 a 16 anos', art: <ArtExecutive />,
     summary: 'Minijogos de controle inibitório (go/no-go), flexibilidade para trocar de regra e memória operacional visuoespacial.' },
-  { id: 'missao-independencia', name: 'Missão Independência', repertoire: 'Autonomia e AVDs', age: '7 a 17 anos',
+  { id: 'missao-independencia', name: 'Missão Independência', repertoire: 'Autonomia e AVDs', age: '7 a 17 anos', art: <ArtIndependence />,
     summary: 'Desafios da vida real em 2D isométrico: arrumar a mochila, fazer a lista do mercado, conferir o troco e o itinerário.' },
-  { id: 'pequeno-chef', name: 'Pequeno Chef', repertoire: 'Sequenciação', age: '4 a 14 anos',
+  { id: 'pequeno-chef', name: 'Pequeno Chef', repertoire: 'Sequenciação', age: '4 a 14 anos', art: <ArtChef />,
     summary: 'Cozinha tátil para preparar receitas passo a passo, trabalhando sequência, coordenação e tolerância alimentar.' },
   { id: 'social-city', name: 'Social City 3D', repertoire: 'Competência social', age: '12 a 17 anos',
     summary: 'Cidade 3D para adolescentes com missões de conversa, atendimento na cafeteria, transporte e recusa de convites.' },

@@ -190,3 +190,37 @@ graph TD
   - Testes do monorepo: **100% dos 25 pacotes aprovados** (sem falhas, sem regressões). Build de produção e PWA concluídos com sucesso.
 - **Pendente:** Waves 7 a 10 (*Pequeno Chef*, *Missão Independência*, *Social City 3D*, *Co-op Escape Lab*, e E2E / A11y / Performance).
 
+## 8. Registro de Entrega — Wave 7: Culinária Terapêutica, AVDs e Autonomia Urbana (04/10/2026)
+
+- **Pequeno Chef (`@aprumo/game-pequeno-chef` v2.0.0):**
+  - Focado em análise de tarefas, seguimento de passos sequenciais, coordenação motora e dessensibilização alimentar gradual (SOS Approach to Feeding).
+  - 4 receitas estruturadas com recipientes temáticos dinâmicos:
+    1. *Salada de Frutas Colorida* (Banana, Maçã, Morango, Uva, Colher de Misturar na Tigela).
+    2. *Super Sanduíche Saudável* (Pão, Queijo, Folha de Alface, Rodela de Tomate, Pão de Cobertura no Prato em camadas táteis).
+    3. *Mini Pizza do Chef* (Massa redonda, Molho de Tomate, Queijo Ralado, Folhas de Orégano, Forninho para Assar na Assadeira).
+    4. *Vitamina Cremosa* (Leite fresco, Banana madura, Morangos, Cubo de Gelo refrescante, Liquidificador com animação de nível de líquido).
+  - Arte vetorial personalizada em `Art.tsx` com 24 ilustrações culinárias exclusivas.
+  - Efeitos sonoros procedurais para cada ação culinária (`plop`, `slice`, `stir`, `pour`, `sizzle`, `blender`) e narração falada (`speak`).
+  - Dica embutida com pulso luminoso caso a criança hesite (`builtInPromptAfterMs`).
+  - Total conformidade com o ciclo do `@aprumo/game-sdk` (`gameStarted`, `trialStarted`, `stimulusPresented`, `promptPresented`, `responseRecorded`, `gameCompleted`).
+  - Testes unitários dedicados em `games/pequeno-chef/src/logic.test.ts` (3/3 aprovados).
+
+- **Missão Independência (`@aprumo/game-missao-independencia` v2.0.0):**
+  - Focado em autonomia da vida real, funções executivas, resolução de problemas cotidianos e mobilidade urbana para 4 a 16 anos.
+  - 4 missões ecológicas completas com vinhetas visuais contextuais:
+    1. *Missão Mochila da Escola*: Estojo com lápis, caderno de aula, garrafinha de água sem vazamento, lancheira saudável e fechamento de zíper.
+    2. *Missão Mercadinho do Bairro*: Cesto de compras, maçãs da lista, leite refrigerado, esteira do caixa e conferência de troco em moedas.
+    3. *Missão Ônibus e Itinerário*: Ponto de ônibus seguro, conferência do letreiro da linha (104 - Escola), validação do bilhete eletrônico, barra de apoio e acionamento da campainha de parada.
+    4. *Missão Começar o Dia*: Despertar com abertura de janela, vestir roupa do dia, higiene facial e dental, café da manhã e chave na saída.
+  - Arte vetorial personalizada em `Art.tsx` com 26 itens de autonomia e vinhetas contextuais em SVG para quarto, mercadinho, ponto de ônibus e saída.
+  - Sons contextuais táteis (zíper, registradora de moedas, bipe de catraca, água fresca e porta).
+  - Dica embutida progressiva e telemetria completa via `@aprumo/game-sdk`.
+  - Testes unitários dedicados em `games/missao-independencia/src/logic.test.ts` (3/3 aprovados).
+
+- **Integração na Plataforma & Catálogo:**
+  - Ilustrações SVG em alta definição criadas na Landing (`ArtChef` e `ArtIndependence`), integradas na Biblioteca (`Library.tsx`), no Espaço da Criança (`ChildSpace.tsx`), na Página Pública de Games (`GamesPage.tsx`) e na Ficha do Caso (`CaseProfile.tsx`).
+  - Release gate e testes monorepo: **100% dos 25 pacotes aprovados** (código de saída 0).
+  - Build de produção e PWA concluídos com sucesso sem erros de compilação.
+- **Pendente:** Waves 8 a 10 (*Social City 3D*, *Co-op Escape Lab*, e E2E / A11y / Performance).
+
+
