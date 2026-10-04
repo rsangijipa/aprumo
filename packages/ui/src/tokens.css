@@ -1,0 +1,154 @@
+/*
+ * Aprumo — tokens da PLATAFORMA (página pública, painel profissional, família).
+ * Jogos e recursos NÃO usam estes tokens: cada um tem o seu próprio mundo visual.
+ * Contrastes verificados (WCAG 2.2 AA): texto ≥ 4,5:1; componentes ≥ 3:1.
+ */
+:root {
+  color-scheme: light;
+
+  /* Neutros quentes */
+  --ap-bg: #faf9f6;
+  --ap-surface: #ffffff;
+  --ap-surface-sunken: #f3f1ec;
+  --ap-surface-raised: #ffffff;
+  --ap-border: #e4e0d7;
+  --ap-border-strong: #cfc9bc;
+  --ap-text: #2b2b2b;
+  --ap-text-muted: #5f6360;
+  --ap-text-subtle: #6b6f6c;
+  --ap-text-inverse: #ffffff;
+
+  /* Marca: sálvia (decorativa) e sálvia profunda (texto/ação) */
+  --ap-sage-50: #eef4f3;
+  --ap-sage-100: #dce9e7;
+  --ap-sage-200: #b9d2cf;
+  --ap-sage-300: #9fc3bf;
+  --ap-sage-500: #5c8d89;
+  --ap-sage-600: #4a7773;
+  --ap-sage-700: #3f6b67;
+  --ap-sage-800: #2f524f;
+  --ap-sage-900: #213a38;
+
+  --ap-terra-100: #f7e6df;
+  --ap-terra-300: #e7b7a5;
+  --ap-terra-500: #d68c71;
+  --ap-terra-700: #a4573c;
+
+  --ap-sand-200: #eae7df;
+
+  --ap-primary: var(--ap-sage-700);
+  --ap-primary-hover: var(--ap-sage-800);
+  --ap-primary-soft: var(--ap-sage-50);
+  --ap-accent: var(--ap-terra-500);
+  --ap-accent-text: var(--ap-terra-700);
+  --ap-focus: #2f6fb0;
+
+  /* Modelo do caso — SEMPRE acompanhado de rótulo */
+  --ap-model-aba: var(--ap-sage-700);
+  --ap-model-aba-soft: var(--ap-sage-50);
+  --ap-model-denver: #6a5a98;
+  --ap-model-denver-soft: #efecf6;
+
+  /* Fases do alvo — sempre com rótulo */
+  --ap-phase-baseline: #6b6f6c;
+  --ap-phase-acquisition: #9a6512;
+  --ap-phase-maintenance: #3f6b67;
+  --ap-phase-generalization: #6a5a98;
+  --ap-phase-mastered: #2f7d5a;
+  --ap-phase-review: #a4573c;
+  --ap-phase-suspended: #8a8d8b;
+
+  /* Estados (com ícone e texto) */
+  --ap-success: #2f7d5a;
+  --ap-success-soft: #e6f2ec;
+  --ap-warning: #9a6512;
+  --ap-warning-soft: #f8eedc;
+  --ap-danger: #b03f33;
+  --ap-danger-soft: #f8e5e2;
+  --ap-info: #3e6688;
+  --ap-info-soft: #e5edf4;
+
+  /* Gráficos */
+  --ap-chart-independent: #3f6b67;
+  --ap-chart-prompted: #d68c71;
+  --ap-chart-criterion: #2f7d5a;
+  --ap-chart-grid: #ebe8e1;
+
+  /* Tipografia */
+  --ap-font-ui: 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --ap-font-display: 'Fraunces Variable', 'Fraunces', Georgia, serif;
+  --ap-font-legible: 'Atkinson Hyperlegible', var(--ap-font-ui);
+
+  --ap-text-xs: 0.75rem;
+  --ap-text-sm: 0.875rem;
+  --ap-text-md: 1rem;
+  --ap-text-lg: 1.125rem;
+  --ap-text-xl: 1.375rem;
+  --ap-text-2xl: 1.75rem;
+  --ap-text-3xl: clamp(2rem, 1.4rem + 2.2vw, 2.75rem);
+  --ap-text-hero: clamp(2.1rem, 1.5rem + 2.4vw, 3.4rem);
+
+  /* Espaço, raio, sombra */
+  --ap-space-1: 0.25rem;
+  --ap-space-2: 0.5rem;
+  --ap-space-3: 0.75rem;
+  --ap-space-4: 1rem;
+  --ap-space-5: 1.5rem;
+  --ap-space-6: 2rem;
+  --ap-space-7: 3rem;
+  --ap-space-8: 4.5rem;
+  --ap-space-9: 7rem;
+
+  --ap-radius-sm: 6px;
+  --ap-radius-md: 10px;
+  --ap-radius-lg: 16px;
+  --ap-radius-xl: 24px;
+  --ap-radius-pill: 999px;
+
+  --ap-shadow-1: 0 1px 2px rgb(43 43 43 / 0.06);
+  --ap-shadow-2: 0 2px 6px rgb(43 43 43 / 0.06), 0 8px 24px rgb(43 43 43 / 0.05);
+  --ap-shadow-3: 0 12px 40px rgb(33 58 56 / 0.14);
+
+  --ap-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ap-dur-1: 120ms;
+  --ap-dur-2: 220ms;
+
+  --ap-sidebar-w: 248px;
+  --ap-content-max: 1360px;
+}
+
+/* Modo escuro (superfície profissional) */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --ap-bg: #121615;
+  --ap-surface: #1a1f1e;
+  --ap-surface-sunken: #151918;
+  --ap-surface-raised: #212726;
+  --ap-border: #2c3432;
+  --ap-border-strong: #3c4644;
+  --ap-text: #e8e6e1;
+  --ap-text-muted: #b3b7b4;
+  --ap-text-subtle: #a3a8a4;
+  --ap-primary: #9fc3bf;
+  --ap-primary-hover: #b9d2cf;
+  --ap-primary-soft: #1f2d2b;
+  --ap-text-inverse: #121615;
+  --ap-model-aba: #9fc3bf;
+  --ap-model-aba-soft: #1f2d2b;
+  --ap-model-denver: #bcb0e0;
+  --ap-model-denver-soft: #27233a;
+  --ap-chart-independent: #9fc3bf;
+  --ap-chart-grid: #2c3432;
+  --ap-success-soft: #1b2d24;
+  --ap-warning-soft: #2e2617;
+  --ap-danger-soft: #331d1a;
+  --ap-info-soft: #1b2733;
+  --ap-shadow-2: 0 2px 6px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ap-dur-1: 0ms;
+    --ap-dur-2: 0ms;
+  }
+}

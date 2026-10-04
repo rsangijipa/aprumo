@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "aprumo-web", "runtimeExecutable": "pnpm", "runtimeArgs": ["--filter", "@aprumo/web", "dev"], "port": 5173 }
+  ]
+}

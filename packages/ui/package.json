@@ -1,0 +1,15 @@
+{
+  "name": "@aprumo/ui",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens.css": "./src/tokens.css",
+    "./base.css": "./src/base.css",
+    "./components.css": "./src/components.css"
+  },
+  "scripts": { "typecheck": "tsc -p ." },
+  "peerDependencies": { "react": "^19" },
+  "devDependencies": { "@types/react": "^19.3.0", "react": "^19.3.0" }
+}

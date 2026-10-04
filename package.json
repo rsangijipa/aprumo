@@ -1,0 +1,27 @@
+{
+  "name": "aprumo",
+  "private": true,
+  "version": "0.0.0",
+  "packageManager": "pnpm@10.0.0",
+  "scripts": {
+    "dev": "pnpm --filter @aprumo/web dev",
+    "build": "pnpm --filter @aprumo/web build",
+    "test": "pnpm -r --workspace-concurrency=1 test",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "eslint-plugin-jsx-a11y": "^6",
+    "eslint-plugin-react-hooks": "^7",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.9",
+    "turbo": "^2.11.7",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.0",
+    "vitest": "^5.0.3"
+  },
+  "type": "module"
+}

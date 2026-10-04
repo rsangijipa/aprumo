@@ -1,0 +1,54 @@
+/* Portal da família: mesma identidade da plataforma, tom mais acolhedor, letra maior, frases curtas. */
+.fam { min-height: 100dvh; background: linear-gradient(180deg, var(--ap-sage-50), var(--ap-bg) 420px); font-size: 1.06rem; }
+.fam-top { display: flex; align-items: center; gap: 1rem; padding: 0.9rem clamp(1rem, 4vw, 2.5rem); }
+.fam-demo { margin-left: auto; font-size: var(--ap-text-xs); color: var(--ap-terra-700); background: var(--ap-terra-100); padding: 0.25rem 0.6rem; border-radius: 99px; font-weight: 600; }
+.fam-main { max-width: 1040px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2rem) 3rem; display: grid; gap: 2.5rem; }
+.fam-hello { display: flex; align-items: center; gap: 1.1rem; padding-top: 1.5rem; }
+.fam-hello h1 { font-size: clamp(2rem, 1.4rem + 2vw, 2.8rem); color: var(--ap-sage-900); }
+.fam-hello p { color: var(--ap-text-muted); margin-top: 0.3rem; }
+.fam-avatar { width: 72px; height: 72px; border-radius: 22px; color: #fff; font-weight: 750; font-size: 1.8rem; display: grid; place-items: center; flex: none; }
+
+.fam-section { display: grid; gap: 1rem; align-content: start; }
+.fam-section h2 { font-size: 1.35rem; color: var(--ap-sage-900); }
+.fam-hint { font-size: 0.88rem; color: var(--ap-text-muted); }
+
+.fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 1rem; }
+.fam-card { display: grid; grid-template-columns: 84px 1fr; gap: 1rem; align-items: center; background: var(--ap-surface); border: 1px solid var(--ap-border); border-radius: 20px; padding: 1rem; }
+.fam-card__art { width: 84px; height: 84px; border-radius: 18px; background: var(--ap-surface-sunken); padding: 10px; }
+.fam-card__body { display: grid; gap: 0.35rem; }
+.fam-card__body p { font-size: 0.95rem; color: var(--ap-text-muted); }
+
+.fam-chip { display: inline-flex; align-items: center; gap: 0.3rem; justify-self: start; font-size: 0.8rem; font-weight: 650; padding: 0.15rem 0.6rem; border-radius: 99px; background: var(--ap-surface-sunken); color: var(--ap-text-muted); }
+.fam-chip svg { width: 14px; height: 14px; }
+.fam-chip--learning { background: var(--ap-warning-soft); color: var(--ap-warning); }
+.fam-chip--done { background: var(--ap-success-soft); color: var(--ap-success); }
+.fam-chip--new { background: var(--ap-terra-100); color: var(--ap-terra-700); }
+
+.fam-task { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.5rem; background: var(--ap-surface); border: 1px solid var(--ap-border); border-radius: 22px; padding: clamp(1rem, 3vw, 1.75rem); }
+.fam-task h3 { font-size: 1.2rem; margin: 0.2rem 0 0.5rem; }
+.fam-task p { color: var(--ap-text-muted); }
+.fam-task__log { display: grid; gap: 0.8rem; align-content: start; background: var(--ap-sage-50); border-radius: 16px; padding: 1rem; }
+.fam-task__log h4 { font-size: 1rem; }
+@media (max-width: 760px) { .fam-task { grid-template-columns: 1fr; } }
+
+.fam-stepper { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; font-size: 0.95rem; }
+.fam-stepper > div { display: flex; align-items: center; gap: 0.4rem; }
+.fam-stepper button { width: 48px; height: 48px; border-radius: 14px; border: 1px solid var(--ap-border-strong); background: var(--ap-surface); font-size: 1.4rem; cursor: pointer; }
+.fam-stepper output { min-width: 2ch; text-align: center; font-size: 1.3rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.fam-two { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+@media (max-width: 760px) { .fam-two { grid-template-columns: 1fr; } }
+.fam-guidance { background: var(--ap-surface); border: 1px solid var(--ap-border); border-radius: 16px; padding: 0 1.1rem; }
+.fam-guidance summary { cursor: pointer; padding: 1rem 0; display: flex; justify-content: space-between; gap: 1rem; align-items: center; font-weight: 650; list-style: none; }
+.fam-guidance summary::-webkit-details-marker { display: none; }
+.fam-guidance p { padding-bottom: 1rem; color: var(--ap-text-muted); }
+
+.fam-likert { border: 0; padding: 0; margin: 0; display: grid; gap: 0.4rem; }
+.fam-likert legend { font-weight: 600; margin-bottom: 0.4rem; }
+.fam-likert div { display: flex; gap: 0.5rem; }
+.fam-likert button { width: 52px; height: 52px; border-radius: 14px; border: 2px solid var(--ap-border); background: var(--ap-surface); font-weight: 700; font-size: 1.1rem; cursor: pointer; }
+.fam-likert button[aria-pressed='true'] { border-color: var(--ap-primary); background: var(--ap-primary-soft); color: var(--ap-primary); }
+
+.fam-thanks { display: flex; gap: 0.5rem; align-items: center; color: var(--ap-success); font-weight: 600; }
+.fam-thanks svg { width: 20px; height: 20px; }
+.fam-foot { border-top: 1px solid var(--ap-border); padding-top: 1rem; font-size: 0.85rem; color: var(--ap-text-muted); }
