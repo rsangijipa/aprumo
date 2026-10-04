@@ -27,7 +27,7 @@ export default function CaseDocuments() {
 
   return (
     <Card title="Documentos" actions={<Button size="sm" icon={<IconPlus />} onClick={() => setCreating(true)}>Novo documento</Button>}>
-      {docs.length === 0 && <p className="ap-muted ap-small">Nenhum documento.</p>}
+      {docs.length === 0 && <p className="pro-empty-line">Nenhum documento gerado ainda. Gere um relatório a partir dos dados do período.</p>}
       <div className="ap-stack" style={{ gap: 0, margin: '-0.5rem 0' }}>
         {docs.map((d) => {
           const last = d.versions.at(-1)!;

@@ -18,7 +18,7 @@ export default function CaseFamily() {
 
   return (
     <div className="grid-main">
-      <div className="ap-stack" style={{ gap: '1.25rem' }}>
+      <div className="pro-page">
         <Card title="Tarefas de generalização em casa" actions={<Button size="sm" icon={<IconPlus />} onClick={() => setNewTask(true)}>Nova tarefa</Button>}>
           {tasks.length === 0 && <p className="ap-muted ap-small">Nenhuma tarefa. Tarefas curtas ligadas a alvos levam o aprendizado para fora da clínica (P8).</p>}
           <div className="ap-stack">
@@ -68,7 +68,7 @@ export default function CaseFamily() {
         </Card>
       </div>
 
-      <div className="ap-stack" style={{ gap: '1.25rem' }}>
+      <div className="pro-page">
         <Card title="Responsáveis">
           <ul className="ap-stack" style={{ listStyle: 'none', margin: 0, padding: 0, gap: '0.5rem' }}>
             {guardians.map((g) => (

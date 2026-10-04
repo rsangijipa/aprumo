@@ -4,7 +4,7 @@
  */
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
-import { Badge, Button, Card, Dialog, Field, IconAlert, IconPlus, Segmented, Stepper, Toast } from '@aprumo/ui';
+import { Badge, Button, Card, Dialog, Field, IconAlert, IconPlus, Segmented, Stepper, Toast, PageHeader } from '@aprumo/ui';
 import { CURRENT_USER_ID } from '../../data/seed';
 import { actions, db, useStore } from '../../data/store';
 import type { Competency, IoaSession } from '../../data/types';
@@ -34,16 +34,13 @@ export default function Supervision() {
   const [tab, setTab] = useState<Tab>('overview');
   return (
     <>
-      <div className="page-head">
-        <div>
-          <h1>Supervisão</h1>
-          <p>Fidelidade de procedimento, concordância entre observadores, horas e competências da equipe.</p>
-        </div>
-      </div>
+      <PageHeader title="Supervisão" description="Fidelidade de procedimento, concordância entre observadores, horas e competências da equipe." />
+      <div className="pro-scroll-x">
       <Segmented label="Seções da supervisão" value={tab} onChange={setTab} options={[
         { value: 'overview', label: 'Visão geral' }, { value: 'fidelity', label: 'Fidelidade' }, { value: 'ioa', label: 'Concordância' },
         { value: 'hours', label: 'Horas' }, { value: 'competencies', label: 'Competências' },
       ]} />
+      </div>
       {tab === 'overview' && <Overview />}
       {tab === 'fidelity' && <Fidelity />}
       {tab === 'ioa' && <Ioa />}
@@ -78,7 +75,7 @@ function Overview() {
   }, [st]);
 
   return (
-    <div className="ap-stack" style={{ gap: '1.25rem' }}>
+    <div className="pro-page">
       <div className="grid-3">
         {implementers.map((p) => {
           const fo = st.fidelity.filter((f) => f.implementerId === p.id && Date.parse(f.at) > monthAgo);

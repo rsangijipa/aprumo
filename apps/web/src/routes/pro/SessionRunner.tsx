@@ -6,8 +6,10 @@ import { STIMULUS_ART, STIMULUS_KEYS, StimulusArt, instructionFor } from '@aprum
 import {
   Button,
   Dialog,
+  EmptyState,
   IconCheck,
   IconChevronLeft,
+  IconClock,
   IconMinus,
   IconNote,
   IconPause,
@@ -15,6 +17,7 @@ import {
   IconSpark,
   IconStop,
   IconTablet,
+  IconTarget,
   IconX,
   ModelBadge,
   PhaseBadge,
@@ -27,6 +30,7 @@ import type { Fact, SessionRecord, Target } from '../../data/types';
 import { GAMES } from '../../game-host/registry';
 import { SyncPill } from './shared';
 import './pro-a11y.css';
+import './pro-screens.css';
 
 const PLANNED: Record<string, number> = { baseline: 3, acquisition: 10, maintenance: 5, generalization: 5 };
 const DAY = 86_400_000;
@@ -44,7 +48,15 @@ function useElapsed(since: string) {
 export default function SessionRunner() {
   const { sessionId = '' } = useParams();
   const session = useStore((s) => s.sessions.find((x) => x.id === sessionId));
-  if (!session) return <p style={{ padding: '2rem' }}>Sessão não encontrada. <Link to="/app">Voltar</Link></p>;
+  if (!session)
+    return (
+      <main id="main" className="runner-missing">
+        <EmptyState icon={<IconClock />} title="Sessão não encontrada">
+          <p className="ap-small">O endereço pode estar incorreto ou a sessão foi removida deste aparelho.</p>
+          <Link to="/app" className="ap-btn ap-btn--primary">Voltar ao painel</Link>
+        </EmptyState>
+      </main>
+    );
   return session.model === 'ABA' ? <AbaRunner session={session} /> : <DenverRunner session={session} />;
 }
 
@@ -56,7 +68,7 @@ function RunnerBar({ session, onEnd, children }: { session: SessionRecord; onEnd
   return (
     <header className="runner__bar">
       <Link to={`/app/casos/${c.id}`} className="ap-btn ap-btn--ghost ap-btn--icon" aria-label="Voltar ao caso"><IconChevronLeft /></Link>
-      <strong style={{ fontSize: 'var(--ap-text-lg)' }}>{child.preferredName}</strong>
+      <strong className="runner__name">{child.preferredName}</strong>
       <ModelBadge model={c.model} />
       <span className="runner__timer" aria-label={`Tempo de sessão ${elapsed}`}>{elapsed}</span>
       {session.status === 'paused' && <span className="ap-badge ap-badge--warning">Pausada</span>}
@@ -200,16 +212,16 @@ function AbaRunner({ session }: { session: SessionRecord }) {
       <div className="runner__body">
         {/* Alvos */}
         <nav className="runner__col runner__targets" aria-label="Alvos da sessão">
-          <p className="ap-xs ap-muted ap-row" style={{ gap: '0.35rem', marginBottom: '0.5rem' }}>
-            <IconSpark style={{ width: 14, color: 'var(--ap-accent-text)' }} /> Ordem sugerida: menos oportunidades na semana primeiro
+          <p className="runner__hint">
+            <IconSpark className="runner__hint-icon" /> Ordem sugerida: menos oportunidades na semana primeiro
           </p>
           {targets.map((t) => {
             const n = factsOf(t).length;
             return (
               <button key={t.id} className="target-pick" aria-current={t.id === current?.id} onClick={() => setCurrentId(t.id)}>
                 <span className="target-pick__thumb"><StimulusArt art={t.art} label={t.name} /></span>
-                <span style={{ minWidth: 0 }}>
-                  <span className="ap-small" style={{ fontWeight: 700, display: 'block' }}>{t.name}</span>
+                <span className="target-pick__text">
+                  <span className="ap-small target-pick__name">{t.name}</span>
                   <span className="ap-xs ap-muted">{db.programOf(t).name}</span>
                 </span>
                 <span className="target-pick__count">{n}/{PLANNED[t.phase] ?? 10}</span>
@@ -221,16 +233,16 @@ function AbaRunner({ session }: { session: SessionRecord }) {
         {/* Centro: tentativa atual */}
         <main className="runner__center" id="main">
           {session.status === 'paused' && (
-            <div className="ap-badge ap-badge--warning" style={{ alignSelf: 'flex-start', padding: '0.5rem 0.85rem', marginBottom: '1rem', width: '100%', boxSizing: 'border-box' }}>
+            <div className="runner-paused" role="status">
               Sessão pausada. Clique em "Retomar" na barra superior para registrar novas tentativas.
             </div>
           )}
           {current && program && hierarchy ? (
             <section className="trial-card" aria-labelledby="trial-title">
-              <div className="ap-row" style={{ gap: '1.25rem', flexWrap: 'nowrap' }}>
+              <div className="trial-head">
                 <div className="trial-stim"><StimulusArt art={current.art} label={current.name} /></div>
-                <div className="ap-stack" style={{ gap: '0.35rem', minWidth: 0 }}>
-                  <div className="ap-row" style={{ gap: '0.65rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                <div className="trial-head__body">
+                  <div className="trial-head__meta">
                     <PhaseBadge phase={current.phase} />
                     <span className="ap-xs ap-muted">{program.name}</span>
                     <Stopwatch startedAt={trialStartedAt} active={session.status === 'active'} />
@@ -242,7 +254,7 @@ function AbaRunner({ session }: { session: SessionRecord }) {
 
               <div className="ap-stack" style={{ gap: '0.5rem' }}>
                 <div className="ap-row" style={{ justifyContent: 'space-between' }}>
-                  <span className="ap-label">Nível de dica {isProbe && <span className="ap-badge" style={{ marginLeft: 6 }}>sonda: sem dica</span>}</span>
+                  <span className="ap-label">Nível de dica {isProbe && <span className="ap-badge runner-probe">sonda: sem dica</span>}</span>
                   <span className="ap-xs ap-muted">{hierarchy.name}</span>
                 </div>
                 <div className="prompt-seg" role="group" aria-label="Nível de dica">
@@ -289,12 +301,14 @@ function AbaRunner({ session }: { session: SessionRecord }) {
               </div>
             </section>
           ) : (
-            <p className="ap-muted">Nenhum alvo ativo neste plano.</p>
+            <EmptyState icon={<IconTarget />} title="Nenhum alvo ativo neste plano">
+              <p className="ap-small">Inclua alvos em aquisição ou manutenção no plano do caso para registrar tentativas.</p>
+            </EmptyState>
           )}
         </main>
 
         {/* Painel lateral */}
-        <aside className="runner__col runner__side ap-stack" aria-label="Reforçadores, comportamento e notas" style={{ alignContent: 'start' }}>
+        <aside className="runner__col runner__side ap-stack runner__side--top" aria-label="Reforçadores, comportamento e notas">
           <section className="ap-stack" style={{ gap: '0.5rem' }}>
             <h2 className="ap-label">Reforçadores (preferência válida)</h2>
             {reinforcers.map((r) => (
@@ -314,8 +328,8 @@ function AbaRunner({ session }: { session: SessionRecord }) {
             {behaviors.map((d) => {
               const n = st.behaviorEvents.filter((e) => e.sessionId === session.id && e.definitionId === d.id).length;
               return (
-                <div key={d.id} className="ap-row" style={{ gap: '0.4rem', flexWrap: 'nowrap' }}>
-                  <button className="quick-btn" style={d.risk ? { borderColor: 'var(--ap-danger)' } : undefined} onClick={() => { void actions.recordBehavior(session.id, d.id); setPlanFor(d.id); }} title={d.topography}>
+                <div key={d.id} className="runner-behavior">
+                  <button className={`quick-btn${d.risk ? ' quick-btn--risk' : ''}`} onClick={() => { void actions.recordBehavior(session.id, d.id); setPlanFor(d.id); }} title={d.topography}>
                     <span>{d.name}{d.risk ? ' · risco' : ''}</span><b>{n}</b>
                   </button>
                   <Button size="sm" onClick={() => setAbcFor(d.id)}>ABC</Button>
@@ -327,7 +341,7 @@ function AbaRunner({ session }: { session: SessionRecord }) {
               if (!d?.plan) return null;
               return (
                 <div className="runner-plan" role="status">
-                  <div className="ap-row" style={{ justifyContent: 'space-between' }}>
+                  <div className="ap-row runner-split">
                     <strong className="ap-small">Plano de manejo · {d.name}</strong>
                     <button type="button" className="ap-dialog__close" aria-label="Fechar plano" onClick={() => setPlanFor(null)}><IconX /></button>
                   </div>
@@ -340,8 +354,8 @@ function AbaRunner({ session }: { session: SessionRecord }) {
           </section>
 
           <section className="ap-stack" style={{ gap: '0.5rem' }}>
-            <label className="ap-label ap-row" style={{ gap: '0.4rem' }} htmlFor="qn"><IconNote style={{ width: 16 }} /> Notas rápidas</label>
-            <textarea id="qn" className="ap-textarea" style={{ minHeight: 90 }} value={quickNote} onChange={(e) => setQuickNote(e.target.value)} placeholder="Observações para a nota clínica…" />
+            <label className="ap-label runner-label-icon" htmlFor="qn"><IconNote /> Notas rápidas</label>
+            <textarea id="qn" className="ap-textarea runner-note" value={quickNote} onChange={(e) => setQuickNote(e.target.value)} placeholder="Observações para a nota clínica…" />
           </section>
         </aside>
       </div>
@@ -591,39 +605,39 @@ function DenverRunner({ session }: { session: SessionRecord }) {
   return (
     <div className="runner">
       <RunnerBar session={session} onEnd={() => setEnding(true)} />
-      <div className="runner__body" style={{ gridTemplateColumns: '280px 1fr' }}>
+      <div className="runner__body runner__body--denver">
         <nav className="runner__col" aria-label="Rotinas de atividade conjunta">
-          <h2 className="ap-label" style={{ marginBottom: '0.5rem' }}>Rotinas de atividade conjunta</h2>
-          <div className="ap-stack" style={{ gap: '0.4rem' }}>
+          <h2 className="ap-label runner__col-title">Rotinas de atividade conjunta</h2>
+          <div className="runner-stack-sm">
             {ROUTINES.map((r) => (
               <button key={r.id} className="quick-btn" disabled={!!routine} onClick={() => setRoutine({ type: r.id, started: Date.now(), phases: new Set(['Abertura']), initiatedBy: 'child' })}>
                 <span>{r.label}</span><b className="ap-xs">{routinesDone.filter((x) => x === r.id).length || ''}</b>
               </button>
             ))}
           </div>
-          <p className="ap-xs ap-muted" style={{ marginTop: '0.75rem' }}>A sessão é flexível: siga a liderança da criança e insira a rotina que ela iniciar.</p>
+          <p className="runner__hint runner__hint--after">A sessão é flexível: siga a liderança da criança e insira a rotina que ela iniciar.</p>
         </nav>
 
         <main className="runner__center" id="main">
-          <section className="trial-card" style={{ borderColor: 'var(--ap-model-denver)' }}>
-            <div className="ap-row" style={{ justifyContent: 'space-between' }}>
+          <section className="trial-card trial-card--denver">
+            <div className="ap-row runner-split">
               <div>
                 <span className="ap-label">Intervalo {interval + 1} · registro a cada {INTERVAL_MIN} min</span>
-                <div className="progress" style={{ width: 240, marginTop: 6 }}><span style={{ width: `${intervalProgress * 100}%`, background: 'var(--ap-model-denver)' }} /></div>
+                <div className="progress runner-interval" role="progressbar" aria-label="Tempo do intervalo" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(intervalProgress * 100)}><span style={{ width: `${intervalProgress * 100}%` }} /></div>
               </div>
               <span className={`ap-badge ${pendingInInterval ? 'ap-badge--warning' : 'ap-badge--success'}`}>{pendingInInterval ? `${pendingInInterval} passo(s) a pontuar neste intervalo` : 'Intervalo pontuado'}</span>
             </div>
 
             {routine ? (
-              <div className="ap-stack" style={{ gap: '0.6rem' }}>
-                <div className="ap-row" style={{ justifyContent: 'space-between' }}>
+              <div className="runner-stack-md">
+                <div className="ap-row runner-split">
                   <h1 className="trial-sd">Rotina {ROUTINES.find((r) => r.id === routine.type)?.label.toLowerCase()}</h1>
                   <Segmented label="Quem iniciou" value={routine.initiatedBy} onChange={(v) => setRoutine({ ...routine, initiatedBy: v })} options={[{ value: 'child', label: 'Criança iniciou' }, { value: 'adult', label: 'Adulto iniciou' }]} />
                 </div>
                 <div className="prompt-seg" role="group" aria-label="Fases observadas da rotina">
                   {PHASES.map((p) => (
                     <button key={p} aria-pressed={routine.phases.has(p)} onClick={() => { const ph = new Set(routine.phases); if (ph.has(p)) ph.delete(p); else ph.add(p); setRoutine({ ...routine, phases: ph }); }}>
-                      <strong style={{ fontSize: 'var(--ap-text-sm)' }}>{p}</strong>
+                      <strong className="ap-small">{p}</strong>
                     </button>
                   ))}
                 </div>
@@ -639,14 +653,14 @@ function DenverRunner({ session }: { session: SessionRecord }) {
             {steps.map((s) => {
               const v = scores[s.id]?.[interval];
               return (
-                <div key={s.id} className="ap-row" style={{ justifyContent: 'space-between', borderBottom: '1px solid var(--ap-border)', paddingBottom: '0.6rem' }}>
-                  <div style={{ minWidth: 0, flex: 1 }}>
-                    <div style={{ fontWeight: 650 }}>{s.description}</div>
+                <div key={s.id} className="denver-step">
+                  <div className="denver-step__text">
+                    <div className="pro-strong">{s.description}</div>
                     <div className="ap-xs ap-muted">{s.domain}</div>
                   </div>
-                  <div className="ap-row" style={{ gap: '0.4rem' }}>
+                  <div className="denver-step__scores" role="group" aria-label={`Pontuação: ${s.description}`}>
                     {([['pass', '+', 'Realizou'], ['partial', '±', 'Parcial'], ['fail', '−', 'Não realizou']] as const).map(([val, sym, lbl]) => (
-                      <Button key={val} variant={v === val ? 'primary' : 'default'} onClick={() => void score(s.id, val)} aria-label={`${lbl}: ${s.description}`}>{sym} <span className="ap-xs">{lbl}</span></Button>
+                      <Button key={val} variant={v === val ? 'primary' : 'default'} aria-pressed={v === val} onClick={() => void score(s.id, val)} aria-label={`${lbl}: ${s.description}`}>{sym} <span className="ap-xs">{lbl}</span></Button>
                     ))}
                   </div>
                 </div>

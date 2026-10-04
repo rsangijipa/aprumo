@@ -461,7 +461,7 @@ export default function PlanBuilder() {
           {/* 9. Revisão & Impressão */}
           {step === 8 && (
             <>
-              <div className="ap-row" style={{ justifyContent: 'space-between' }}>
+              <div className="pro-section-head">
                 <h2 className="form-title" style={{ margin: 0 }}>9. Prévia do Documento Oficial</h2>
                 <Button variant="primary" icon={<IconPrinter />} onClick={() => window.print()}>
                   Imprimir Documento
@@ -495,16 +495,16 @@ export default function PlanBuilder() {
                   <dd>{formData.professionalName}</dd>
                 </div>
 
-                <h3 style={{ fontSize: '1.1rem', color: 'var(--ap-sage-800)', borderBottom: '1px solid var(--ap-border)', paddingBottom: '0.3rem' }}>1. Diagnóstico e Contexto</h3>
-                <p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>{formData.diagnosisContext}</p>
+                <h3 className="pb-doc-h3">1. Diagnóstico e Contexto</h3>
+                <p className="pb-doc-p">{formData.diagnosisContext}</p>
 
-                <h3 style={{ fontSize: '1.1rem', color: 'var(--ap-sage-800)', borderBottom: '1px solid var(--ap-border)', paddingBottom: '0.3rem' }}>2. Potencialidades</h3>
-                <p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>{formData.strengths}</p>
+                <h3 className="pb-doc-h3">2. Potencialidades</h3>
+                <p className="pb-doc-p">{formData.strengths}</p>
 
-                <h3 style={{ fontSize: '1.1rem', color: 'var(--ap-sage-800)', borderBottom: '1px solid var(--ap-border)', paddingBottom: '0.3rem' }}>3. Barreiras de Aprendizagem</h3>
-                <p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>{formData.barriers}</p>
+                <h3 className="pb-doc-h3">3. Barreiras de Aprendizagem</h3>
+                <p className="pb-doc-p">{formData.barriers}</p>
 
-                <h3 style={{ fontSize: '1.1rem', color: 'var(--ap-sage-800)', borderBottom: '1px solid var(--ap-border)', paddingBottom: '0.3rem' }}>4. Objetivos Individualizados</h3>
+                <h3 className="pb-doc-h3">4. Objetivos Individualizados</h3>
                 <ol style={{ paddingLeft: '1.2rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
                   {goals.map((g) => (
                     <li key={g.id} style={{ marginBottom: '0.5rem' }}>
@@ -513,20 +513,20 @@ export default function PlanBuilder() {
                   ))}
                 </ol>
 
-                <h3 style={{ fontSize: '1.1rem', color: 'var(--ap-sage-800)', borderBottom: '1px solid var(--ap-border)', paddingBottom: '0.3rem' }}>5. Estratégias & Acomodações</h3>
-                <p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>{formData.strategies}</p>
+                <h3 className="pb-doc-h3">5. Estratégias & Acomodações</h3>
+                <p className="pb-doc-p">{formData.strategies}</p>
 
-                <h3 style={{ fontSize: '1.1rem', color: 'var(--ap-sage-800)', borderBottom: '1px solid var(--ap-border)', paddingBottom: '0.3rem' }}>6. Diretrizes para a Escola</h3>
-                <p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>{formData.schoolGuidance}</p>
+                <h3 className="pb-doc-h3">6. Diretrizes para a Escola</h3>
+                <p className="pb-doc-p">{formData.schoolGuidance}</p>
 
-                <h3 style={{ fontSize: '1.1rem', color: 'var(--ap-sage-800)', borderBottom: '1px solid var(--ap-border)', paddingBottom: '0.3rem' }}>7. Orientações para a Família</h3>
-                <p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>{formData.familyGuidance}</p>
+                <h3 className="pb-doc-h3">7. Orientações para a Família</h3>
+                <p className="pb-doc-p">{formData.familyGuidance}</p>
               </div>
             </>
           )}
 
           {/* Navegação entre etapas */}
-          <div className="form-actions ap-row" style={{ justifyContent: 'space-between', marginTop: '1rem' }}>
+          <div className="form-actions form-actions--split form-actions--sticky pro-mt-md">
             {step > 0 ? (
               <Button onClick={() => setStep((s) => s - 1)}>Etapa Anterior</Button>
             ) : (

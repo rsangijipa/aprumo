@@ -4,7 +4,7 @@
  */
 import { useState } from 'react';
 import { Link } from 'react-router';
-import { Badge, Button, Card, Dialog, Field, IconPlus, Segmented, Toast } from '@aprumo/ui';
+import { Badge, Button, Card, Dialog, Field, IconPlus, Segmented, Toast, PageHeader } from '@aprumo/ui';
 import { actions, db, useStore } from '../../data/store';
 import type { CaseRole, Invite } from '../../data/types';
 import './forms.css';
@@ -18,23 +18,21 @@ export default function Team() {
 
   return (
     <>
-      <div className="page-head">
-        <div>
-          <h1>Equipe</h1>
-          <p>Quem trabalha na organização e em quais casos. O acesso a prontuário depende do vínculo com o caso, nunca do cargo.</p>
-        </div>
-        <Button variant="primary" icon={<IconPlus />} onClick={() => setInviting(true)}>Convidar profissional</Button>
-      </div>
+      <PageHeader
+        title="Equipe"
+        description="Quem trabalha na organização e em quais casos. O acesso a prontuário depende do vínculo com o caso, nunca do cargo."
+        actions={<Button variant="primary" icon={<IconPlus />} onClick={() => setInviting(true)}>Convidar profissional</Button>}
+      />
 
       <div className="grid-3">
         {st.professionals.map((p) => {
           const links = st.cases.flatMap((c) => c.team.filter((m) => m.professionalId === p.id).map((m) => ({ c, role: m.role })));
           return (
             <Card key={p.id} as="article">
-              <div className="ap-stack" style={{ gap: '0.75rem' }}>
-                <div className="ap-row" style={{ gap: '0.75rem', flexWrap: 'nowrap' }}>
+              <div className="ap-stack pro-gap-sm">
+                <div className="pro-person">
                   <span className="pro-user__avatar" aria-hidden="true">{p.shortName[0]}</span>
-                  <div style={{ minWidth: 0 }}>
+                  <div className="pro-person__info">
                     <strong>{p.name}</strong>
                     <div className="ap-xs ap-muted">{p.role}{p.council ? ` · ${p.council}` : ''}</div>
                   </div>
@@ -42,7 +40,7 @@ export default function Team() {
                 <div>
                   <span className="ap-label">Casos</span>
                   {links.length === 0 ? <p className="ap-xs ap-muted">Sem vínculo com casos.</p> : (
-                    <ul className="ap-stack" style={{ listStyle: 'none', margin: '0.35rem 0 0', padding: 0, gap: '0.3rem' }}>
+                    <ul className="pro-list pro-list--tight">
                       {links.map(({ c, role }) => (
                         <li key={c.id + role} className="ap-small"><Link to={`/app/casos/${c.id}/perfil`}>{db.childOf(c).preferredName}</Link> <span className="ap-xs ap-muted">· {ROLE_LABEL[role]}</span></li>
                       ))}
@@ -57,9 +55,9 @@ export default function Team() {
 
       {st.invites.length > 0 && (
         <Card title="Convites enviados">
-          <ul className="ap-stack" style={{ listStyle: 'none', margin: 0, padding: 0, gap: '0.5rem' }}>
+          <ul className="pro-list">
             {st.invites.map((i) => (
-              <li key={i.id} className="ap-row ap-small" style={{ justifyContent: 'space-between' }}>
+              <li key={i.id} className="pro-list__row ap-small">
                 <span><strong>{i.name}</strong> · {i.email}</span>
                 <Badge>{i.role === 'org_admin' ? 'gestão' : 'profissional'} · aguardando aceite</Badge>
               </li>

@@ -176,7 +176,7 @@ export default function Library() {
   return (
     <>
       <div className="rs-header">
-        <div className="page-head" style={{ marginBottom: 0 }}>
+        <div className="page-head pro-mb-0">
           <div>
             <h1>Aprumo Resource Studio</h1>
             <p>

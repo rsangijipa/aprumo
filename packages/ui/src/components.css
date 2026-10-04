@@ -438,3 +438,9 @@
 .ap-game-card--clickable:has(.ap-card-hit:focus-visible),
 .ap-resource-card--clickable:has(.ap-card-hit:focus-visible) { outline: 3px solid var(--ap-focus); outline-offset: 2px; }
 .ap-game-card__actions, .ap-resource-card__actions { position: relative; z-index: 1; }
+
+/* ------------------------------------------------------------ correção: célula sem rótulo na tabela empilhada */
+@media (max-width: 640px) {
+  .ap-table--stack td[data-label='']::before { content: none; }
+  .ap-table--stack td { min-width: 0; overflow-wrap: anywhere; }
+}

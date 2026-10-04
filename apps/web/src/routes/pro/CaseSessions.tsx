@@ -35,11 +35,11 @@ export default function CaseSessions() {
   }, [st.sessions, caseId, filterSetting]);
 
   return (
-    <div className="ap-stack" style={{ gap: '1.25rem' }}>
-      <div className="ap-row" style={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
+    <div className="pro-page">
+      <div className="pro-section-head">
         <div>
-          <h2 style={{ fontSize: 'var(--ap-text-xl)', margin: 0 }}>Histórico de Sessões</h2>
-          <p className="ap-small ap-muted" style={{ margin: '0.2rem 0 0 0' }}>
+          <h2 className="pro-h2">Histórico de Sessões</h2>
+          <p className="pro-section-head__desc">
             Registro cronológico das aplicações clínicas, tentativas, notas e tempo de tela.
           </p>
         </div>

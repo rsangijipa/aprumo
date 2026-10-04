@@ -25,16 +25,16 @@ export default function CaseBehavior() {
   const [toast, setToast] = useState<string | null>(null);
 
   return (
-    <div className="ap-stack" style={{ gap: '1.25rem' }}>
-      <div className="ap-row" style={{ justifyContent: 'space-between' }}>
+    <div className="pro-page">
+      <div className="pro-section-head">
         <div>
-          <h2 style={{ fontSize: 'var(--ap-text-xl)' }}>Comportamentos-alvo</h2>
+          <h2 className="pro-h2">Comportamentos-alvo</h2>
           <p className="ap-small ap-muted">Registro descritivo. A função do comportamento é hipótese da equipe, nunca inferida pelo sistema.</p>
         </div>
         <Button icon={<IconPlus />} onClick={() => setAdding(true)}>Nova definição</Button>
       </div>
 
-      {defs.length === 0 && <Card><p className="ap-small ap-muted">Nenhum comportamento definido. Defina antes de medir: topografia, exemplos, não exemplos, início e fim.</p></Card>}
+      {defs.length === 0 && <div className="pro-empty-card"><p>Nenhum comportamento definido. Defina antes de medir: topografia, exemplos, não exemplos, início e fim.</p></div>}
 
       <div className="grid-2">
         {defs.map((d) => {

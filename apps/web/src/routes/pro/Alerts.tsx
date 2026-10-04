@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Card } from '@aprumo/ui';
+import { Card, EmptyState, IconBell, PageHeader } from '@aprumo/ui';
 import { CURRENT_USER_ID } from '../../data/seed';
 import { alertsForCase, db, useStore } from '../../data/store';
 import { AlertList } from './shared';
@@ -18,17 +18,20 @@ export default function Alerts() {
 
   return (
     <>
-      <div className="page-head">
-        <div>
-          <h1>Alertas do motor de regras</h1>
-          <p>Cada alerta traz evidência, tamanho de amostra e fundamento. O motor sugere; a decisão é sempre sua e fica registrada.</p>
-        </div>
-      </div>
-      {groups.map((g) => {
+      <PageHeader
+        title="Alertas do motor de regras"
+        description="Cada alerta traz evidência, tamanho de amostra e fundamento. O motor sugere; a decisão é sempre sua e fica registrada."
+      />
+      {alerts.length === 0 && (
+        <EmptyState icon={<IconBell />} title="Tudo em dia">
+          <p className="ap-small">Nenhum alerta pendente nos seus casos. Novos alertas aparecem após cada sessão sincronizada.</p>
+        </EmptyState>
+      )}
+      {alerts.length > 0 && groups.map((g) => {
         const list = alerts.filter((a) => a.severity === g.key);
         return (
-          <Card key={g.key} title={`${g.title} (${list.length})`}>
-            <div style={{ margin: '-1.25rem' }}><AlertList alerts={list} showCase /></div>
+          <Card key={g.key} title={`${g.title} (${list.length})`} bodyClassName="pro-card-flush">
+            <AlertList alerts={list} showCase />
           </Card>
         );
       })}

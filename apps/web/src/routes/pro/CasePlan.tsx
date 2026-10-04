@@ -39,7 +39,7 @@ export default function CasePlan() {
   };
 
   return (
-    <div className="ap-stack" style={{ gap: '1.25rem' }}>
+    <div className="pro-page">
       {c.planStatus === 'draft' ? (
         <div className="plan-draft" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--ap-primary-soft)', border: '1px solid var(--ap-primary)', padding: '1rem', borderRadius: 'var(--ap-radius-md)' }}>
           <div>
@@ -89,12 +89,12 @@ function AbaPlan({ caseId, onDone }: { caseId: string; onDone: (m: string) => vo
 
   return (
     <>
-      <div className="ap-row" style={{ justifyContent: 'space-between' }}>
-        <h2 style={{ fontSize: 'var(--ap-text-xl)' }}>Objetivos e programas</h2>
+      <div className="pro-section-head">
+        <h2 className="pro-h2">Objetivos e programas</h2>
         <Button icon={<IconPlus />} onClick={() => setGoalOpen(true)}>Novo objetivo</Button>
       </div>
       {goals.length === 0 && (
-        <Card><p className="ap-muted ap-small">Comece pelos objetivos de longo prazo (por exemplo, “ampliar repertório de mandos”). Depois inclua os programas de ensino e os alvos de cada um.</p></Card>
+        <div className="pro-empty-card"><p>Comece pelos objetivos de longo prazo (por exemplo, “ampliar repertório de mandos”). Depois inclua os programas de ensino e os alvos de cada um.</p></div>
       )}
 
       {goals.map((g) => (
@@ -432,8 +432,8 @@ function TargetDialog({ program, onClose, onDone }: { program: Program | null; o
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backgroundColor: step === s.num ? 'var(--ap-primary)' : 'var(--ap-surface-raised, #e9ecef)',
-                color: step === s.num ? '#fff' : 'inherit',
+                backgroundColor: step === s.num ? 'var(--ap-primary)' : 'var(--ap-surface-sunken)',
+                color: step === s.num ? 'var(--ap-text-inverse)' : 'inherit',
               }}
             >
               {s.num}
@@ -591,11 +591,11 @@ function DenverPlan({ caseId, onDone }: { caseId: string; onDone: (m: string) =>
           <p>Ciclo trimestral de {new Date(cycle.startsOn).toLocaleDateString('pt-BR')} a {new Date(cycle.endsOn).toLocaleDateString('pt-BR')}. Registro por rotina de atividade conjunta, a cada 15 minutos.</p>
         </div>
       )}
-      <div className="ap-row" style={{ justifyContent: 'space-between' }}>
-        <h2 style={{ fontSize: 'var(--ap-text-xl)' }}>Objetivos trimestrais</h2>
+      <div className="pro-section-head">
+        <h2 className="pro-h2">Objetivos trimestrais</h2>
         <Button icon={<IconPlus />} onClick={() => setObjOpen(true)}>Novo objetivo</Button>
       </div>
-      {objectives.length === 0 && <Card><p className="ap-muted ap-small">Inclua os objetivos do ciclo, cada um dividido em passos de aprendizagem do mais simples ao objetivo final.</p></Card>}
+      {objectives.length === 0 && <div className="pro-empty-card"><p>Inclua os objetivos do ciclo, cada um dividido em passos de aprendizagem do mais simples ao objetivo final.</p></div>}
       {objectives.map((o) => (
         <Card key={o.id} title={<>{o.domain} <span className="ap-muted" style={{ fontWeight: 500 }}>· nível {o.level}</span></>}>
           <p className="ap-small" style={{ marginBottom: '0.9rem' }}>{o.description}</p>

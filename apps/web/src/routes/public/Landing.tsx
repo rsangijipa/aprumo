@@ -1,22 +1,65 @@
-import { type ReactNode } from 'react';
 import { Link } from 'react-router';
 import {
   IconArrowRight,
-  IconBook,
   IconCheck,
   IconCloudOff,
   IconEye,
-  IconHeart,
   IconLock,
-  IconRoute,
   IconShield,
   IconSpark,
-  IconTablet,
   IconTarget,
-  Logo,
 } from '@aprumo/ui';
-import { PublicHeader, PublicFooter } from './PublicNav';
+import { CtaBand, PublicFooter, PublicHeader } from './PublicNav';
 import './landing.css';
+
+interface ExploreItem {
+  href: string;
+  title: string;
+  text: string;
+}
+
+const EXPLORE: Array<{ title: string; items: ExploreItem[] }> = [
+  {
+    title: 'A plataforma',
+    items: [
+      { href: '/produto', title: 'Produto', text: 'Os módulos do plano à análise, em um único fluxo.' },
+      { href: '/como-funciona', title: 'Como funciona', text: 'Planejar, aplicar, analisar e decidir, sem retrabalho.' },
+      { href: '/supervisao-clinica', title: 'Supervisão clínica', text: 'Fidelidade procedural, IOA e treino da equipe.' },
+      { href: '/dados-metricas', title: 'Dados e métricas', text: 'Análise visual com critério conservador e regras explícitas.' },
+    ],
+  },
+  {
+    title: 'Para quem',
+    items: [
+      { href: '/profissionais', title: 'Profissionais', text: 'Supervisores, aplicadores e ATs, cada um com sua ferramenta.' },
+      { href: '/familias', title: 'Famílias', text: 'Progresso em linguagem simples e orientações para casa.' },
+      { href: '/criancas', title: 'Crianças', text: 'Ambiente lúdico, sem anúncios e sensorialmente calmo.' },
+      { href: '/adolescentes', title: 'Adolescentes', text: 'Habilidades para a vida real, com visual adequado à idade.' },
+    ],
+  },
+  {
+    title: 'Recursos e confiança',
+    items: [
+      { href: '/recursos-terapeuticos', title: 'Recursos terapêuticos', text: 'Suportes visuais e CAA para tela e impressão.' },
+      { href: '/games', title: 'Games', text: 'Jogos com propósito clínico e registro padronizado.' },
+      { href: '/seguranca-privacidade', title: 'Segurança e privacidade', text: 'LGPD, ECA Digital e prontuário imutável.' },
+      { href: '/sobre', title: 'Sobre o Aprumo', text: 'Origem, fundamentação científica e acessibilidade.' },
+    ],
+  },
+];
+
+const TRUST = [
+  { icon: <IconShield />, title: 'LGPD e ECA Digital', text: 'Dados de saúde de crianças tratados com consentimento e finalidade definida.' },
+  { icon: <IconLock />, title: 'Registro imutável', text: 'Correções viram adendos com autor, data e motivo.' },
+  { icon: <IconCloudOff />, title: 'Funciona sem internet', text: 'A sessão continua offline e sincroniza sem perder tentativas.' },
+  { icon: <IconEye />, title: 'Acessibilidade WCAG 2.2 AA', text: 'Contraste verificado, alvos de toque amplos e movimento reduzido.' },
+];
+
+const VALUE_POINTS = [
+  { title: 'Independente não é o mesmo que com dica', text: 'A separação aparece em toda contagem, gráfico e relatório.' },
+  { title: 'O sistema sugere, o profissional decide', text: 'Alertas com evidência numérica; nenhuma mudança de fase é automática.' },
+  { title: 'ABA ou Denver, nunca misturados', text: 'Cada caso segue a lógica de um único modelo, garantida no banco de dados.' },
+];
 
 export function Landing() {
   return (
@@ -24,301 +67,114 @@ export function Landing() {
       <a className="ap-skip-link" href="#conteudo">Pular para o conteúdo principal</a>
       <PublicHeader />
 
-      <main id="conteudo">
+      <main id="conteudo" tabIndex={-1}>
         {/* ------------------------------------------------------------ hero */}
-        <section className="lp-hero">
+        <section className="lp-hero" aria-labelledby="hero-title">
           <div className="lp-wrap lp-hero__grid">
             <div>
-              <span className="ap-eyebrow">ABA + Denver • planejamento, aplicação e análise</span>
-              <h1 className="ap-display">
+              <span className="ap-eyebrow">ABA e Modelo Denver · planejamento, aplicação e análise</span>
+              <h1 id="hero-title" className="ap-display">
                 Tudo o que acompanha uma intervenção, <em>no mesmo lugar.</em>
               </h1>
               <p className="lp-hero__lead">
-                Plano individualizado operacional, aplicação de sessão em tablet ou celular com medição de latência, biblioteca de jogos terapêuticos e análise visual de dados com o alvo clínico no centro de tudo.
+                Plano individualizado, registro de sessão no tablet ou celular, jogos terapêuticos e análise visual
+                de dados, com o alvo clínico no centro de cada decisão.
               </p>
               <div className="lp-hero__cta">
                 <Link className="ap-btn ap-btn--primary ap-btn--lg" to="/entrar">
                   Explorar demonstração <IconArrowRight />
                 </Link>
                 <Link className="ap-btn ap-btn--lg" to="/produto">
-                  Conhecer o Produto
+                  Conhecer o produto
                 </Link>
-              </div>
-              <div className="lp-trust" aria-label="Compromissos de projeto">
-                <span><IconShield /> Projetado para a LGPD e o ECA Digital</span>
-                <span><IconLock /> Registro clínico imutável e auditável</span>
-                <span><IconCloudOff /> Funciona 100% sem internet</span>
-                <span><IconEye /> Acessibilidade WCAG 2.2 AA</span>
               </div>
             </div>
             <HeroVisual />
           </div>
         </section>
 
-        {/* ------------------------------------------------------------ problema */}
-        <section className="lp-section lp-section--sunken" aria-labelledby="problema">
-          <div className="lp-wrap">
-            <div className="lp-head">
-              <span className="ap-eyebrow">Por que o Aprumo existe</span>
-              <h2 id="problema" className="lp-h2 ap-display">Dado clínico só tem valor quando sustenta uma decisão.</h2>
-              <p className="lp-sub">
-                Folhas de registro, planilhas e aplicativos avulsos produzem números, mas raramente dizem a qual
-                objetivo uma tentativa pertencia, com qual dica e sob qual critério.
-              </p>
-            </div>
-            <div className="lp-problem">
-              <div>
-                <span className="lp-problem__k">01</span>
-                <strong>Acerto com ajuda não é acerto independente</strong>
-                <p>O Aprumo separa resposta independente e resposta com dica em toda contagem, gráfico e relatório.</p>
-              </div>
-              <div>
-                <span className="lp-problem__k">02</span>
-                <strong>Uma sessão boa não demonstra domínio</strong>
-                <p>O critério tem nível e frequência, é configurável por alvo e fica sempre visível junto do resultado.</p>
-              </div>
-              <div>
-                <span className="lp-problem__k">03</span>
-                <strong>Aprender no tablet não é generalizar</strong>
-                <p>Alvos trabalhados em jogo pedem sondas fora da tela, com outro material, pessoa ou ambiente.</p>
-              </div>
-              <div>
-                <span className="lp-problem__k">04</span>
-                <strong>“80% em atenção” não diz nada</strong>
-                <p>O sistema nunca mistura alvos diferentes em um índice geral, nem compara crianças.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ------------------------------------------------------------ como funciona */}
-        <section className="lp-section" id="como-funciona" aria-labelledby="cf">
-          <div className="lp-wrap">
-            <div className="lp-head">
-              <span className="ap-eyebrow">Como funciona</span>
-              <h2 id="cf" className="lp-h2 ap-display">Um ciclo clínico completo, sem retrabalho.</h2>
-            </div>
-            <ol className="lp-steps" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              <li className="lp-step">
-                <div className="lp-step__art"><StepPlan /></div>
-                <span className="lp-step__n">01 · Planejar</span>
-                <h3>Plano individual operacional</h3>
-                <p>Objetivos, programas e alvos com definição operacional, hierarquia de dicas, correção de erro e critério de domínio versionado.</p>
-              </li>
-              <li className="lp-step">
-                <div className="lp-step__art"><StepApply /></div>
-                <span className="lp-step__n">02 · Aplicar</span>
-                <h3>Registro em dois toques</h3>
-                <p>Nível de dica e resposta, na mesa ou no jogo, no tablet ou no celular. Funciona offline e sincroniza sem perder tentativas.</p>
-              </li>
-              <li className="lp-step">
-                <div className="lp-step__art"><StepAnalyze /></div>
-                <span className="lp-step__n">03 · Analisar</span>
-                <h3>Gráficos que o supervisor usa</h3>
-                <p>Linhas de fase, independente versus com dica, sondas, eventos de contexto e análise visual assistida pelo critério duplo conservador.</p>
-              </li>
-              <li className="lp-step">
-                <div className="lp-step__art"><StepDecide /></div>
-                <span className="lp-step__n">04 · Decidir</span>
-                <h3>O motor sugere, você decide</h3>
-                <p>Alertas fundamentados (domínio, estagnação, dependência de dica, saciação). Toda mudança de fase exige justificativa e fica na trilha.</p>
-              </li>
-            </ol>
-          </div>
-        </section>
-
-        {/* ------------------------------------------------------------ modelos */}
-        <section className="lp-section lp-section--sunken" id="modelos" aria-labelledby="mod">
-          <div className="lp-wrap">
-            <div className="lp-head">
-              <span className="ap-eyebrow">Rigor metodológico</span>
-              <h2 id="mod" className="lp-h2 ap-display">ABA ou Denver. Cada um com sua lógica, nunca misturados.</h2>
-              <p className="lp-sub">
-                Os dois modelos têm unidades de análise, procedimentos de coleta e critérios de domínio diferentes.
-                Por isso cada caso é conduzido em um único modelo, e o próprio banco de dados garante isso.
-              </p>
-            </div>
-            <div className="lp-models">
-              <article className="lp-model lp-model--aba">
-                <span className="ap-badge ap-badge--aba" style={{ justifySelf: 'start' }}>ABA</span>
-                <h3>Análise do Comportamento Aplicada</h3>
-                <dl>
-                  <dt>Unidade</dt><dd>Tentativa, oportunidade, passo de cadeia ou episódio de comportamento</dd>
-                  <dt>Registro</dt><dd>DTT, NET, análise de tarefa, frequência, duração, intervalo, ABC</dd>
-                  <dt>Domínio</dt><dd>Critério por alvo (nível × frequência), manutenção e generalização</dd>
-                  <dt>Fidelidade</dt><dd>Checklist derivado dos componentes do procedimento</dd>
-                </dl>
-              </article>
-              <article className="lp-model lp-model--denver">
-                <span className="ap-badge ap-badge--denver" style={{ justifySelf: 'start' }}>Denver</span>
-                <h3>Modelo Denver de Intervenção Precoce</h3>
-                <dl>
-                  <dt>Unidade</dt><dd>Passo de aprendizagem do objetivo trimestral</dd>
-                  <dt>Registro</dt><dd>Rotinas de atividade conjunta, com amostragem por intervalo (padrão de 15 min)</dd>
-                  <dt>Domínio</dt><dd>Desempenho consistente por passo e revisão a cada ciclo</dd>
-                  <dt>Primeira infância</dt><dd>Abaixo de 2 anos não há portal infantil: a plataforma é ferramenta do adulto</dd>
-                </dl>
-              </article>
-            </div>
-            <div className="lp-rule">
-              <IconRoute />
-              <p>
-                A troca de modelo é uma decisão clínica formal: o plano vigente é encerrado com justificativa, os
-                gráficos são preservados e um novo plano começa com nova linha de base.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ------------------------------------------------------------ recursos */}
-        <section className="lp-section lp-section--deep" id="recursos" aria-labelledby="rec">
-          <div className="lp-wrap">
-            <div className="lp-head">
-              <span className="ap-eyebrow">Jogos e recursos terapêuticos</span>
-              <h2 id="rec" className="lp-h2 ap-display">Cada recurso tem o seu mundo. Os dados falam a mesma língua.</h2>
-              <p className="lp-sub">
-                Os jogos são recursos de ensino configurados pelo profissional, não terapeutas. Cada um tem visual,
-                ritmo e lógica próprios, pensados para o tablet e para o perfil sensorial da criança, e todos
-                devolvem o mesmo registro clínico.
-              </p>
-            </div>
-            <div className="lp-games">
-              <GameCard tag="Pareamento" name="Encontre o Igual" text="Mesa de feltro com cartões. Campo de 1 a 4 e posição contrabalanceada." art={<ArtMatch />} />
-              <GameCard tag="Resposta de ouvinte" name="Escolha pela Instrução" text="Estante iluminada e instrução falada. A luz vira dica e se esvanece." art={<ArtListener />} />
-              <GameCard tag="Troca de turnos" name="Minha Vez, Sua Vez" text="Torre construída a quatro mãos. O bastão mostra de quem é a vez." art={<ArtTurns />} />
-              <GameCard tag="Apoio" name="Quadro de Fichas" text="Fichas do tema preferido. O reforçador é escolhido antes e fica à vista." art={<ArtTokens />} />
-              <GameCard tag="Apoio" name="Agenda Visual" text="Varal de cartões e primeiro–depois. O aviso antecipa a transição." art={<ArtSchedule />} />
-            </div>
-
-            <div className="ap-row" style={{ marginTop: '2rem', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-              <Link className="ap-btn ap-btn--primary" to="/recursos-terapeuticos">
-                Explorar todos os suportes visuais <IconArrowRight />
-              </Link>
-              <Link className="ap-btn" to="/games">
-                Ver catálogo completo de games →
-              </Link>
-            </div>
-
-            <div className="lp-datacontract">
-              <div>
-                <h3 style={{ color: '#fff', fontSize: 'var(--ap-text-xl)' }}>Um único contrato de dados</h3>
-                <p className="lp-sub" style={{ fontSize: 'var(--ap-text-md)' }}>
-                  O jogo recebe só o necessário (apelido, alvos, estímulos e adaptação sensorial) e nunca nome
-                  completo ou diagnóstico. Cada tentativa volta com alvo, posição, latência e origem da dica. A
-                  pontuação clínica é calculada pela plataforma, não pelo jogo.
-                </p>
-              </div>
-              <pre className="lp-code" aria-label="Exemplo de evento de tentativa">
-{`{ `}<span className="k">"type"</span>: <span className="s">"TRIAL_COMPLETED"</span>,{`
-  `}<span className="k">"targetId"</span>: <span className="s">"tgt_bola"</span>,{`
-  `}<span className="k">"presented"</span>: [<span className="s">"bola"</span>, <span className="s">"copo"</span>, <span className="s">"livro"</span>],{`
-  `}<span className="k">"positionOfTarget"</span>: <span className="n">0</span>, <span className="k">"selectedPosition"</span>: <span className="n">0</span>,{`
-  `}<span className="k">"response"</span>: <span className="s">"correct"</span>, <span className="k">"latencyMs"</span>: <span className="n">2140</span>,{`
-  `}<span className="k">"promptLevel"</span>: <span className="s">"IND"</span>, <span className="k">"promptSource"</span>: <span className="s">"none"</span> {`}`}
-              </pre>
-            </div>
-          </div>
-        </section>
-
-        {/* ------------------------------------------------------------ inteligência */}
-        <section className="lp-section" aria-labelledby="int">
-          <div className="lp-wrap lp-intel">
+        {/* ------------------------------------------------------------ proposta de valor */}
+        <section className="lp-section lp-section--sunken" aria-labelledby="valor">
+          <div className="lp-wrap lp-value">
             <div>
-              <span className="ap-eyebrow">Inteligência clínica transparente</span>
-              <h2 id="int" className="lp-h2 ap-display">Regras com fundamento declarado. Decisão sempre humana.</h2>
-              <p className="lp-sub">
-                Após cada sessão sincronizada, quinze regras avaliam os dados de cada alvo e geram alertas com
-                evidência numérica e tamanho de amostra. Nenhuma regra altera o plano sozinha.
-              </p>
-              <div style={{ marginTop: '1.5rem' }}>
-                <Link className="ap-btn" to="/dados-metricas">
-                  Ver detalhes das métricas e regras →
-                </Link>
-              </div>
+              <span className="ap-eyebrow">Por que o Aprumo existe</span>
+              <h2 id="valor" className="lp-h2 ap-display">Dado clínico só tem valor quando sustenta uma decisão.</h2>
             </div>
-            <div className="lp-rules">
-              <ul>
-                <li><b>R1</b><span>Critério de domínio atingido<em>Nível × frequência, com regra e versão visíveis</em></span></li>
-                <li><b>R3</b><span>Possível dependência de dica<em>Acertos com dica persistentes sem redução do nível</em></span></li>
-                <li><b>R6</b><span>Generalização fora da tela não verificada<em>Alvo dominado no jogo sem sonda em outro contexto</em></span></li>
-                <li><b>R8</b><span>Escolhas concentradas em uma posição<em>Controle por posição em vez de pelo estímulo</em></span></li>
-                <li><b>R13</b><span>Limite diário de tela ultrapassado<em>Limites por faixa etária (SBP, 2024)</em></span></li>
+            <div>
+              <p className="lp-sub">
+                Planilhas e aplicativos avulsos produzem números, mas raramente dizem a qual objetivo uma tentativa
+                pertencia, com qual dica e sob qual critério. O Aprumo guarda esse contexto em cada registro.
+              </p>
+              <ul className="lp-value__points">
+                {VALUE_POINTS.map((p) => (
+                  <li key={p.title}>
+                    <IconCheck />
+                    <div>
+                      <strong>{p.title}</strong>
+                      <span>{p.text}</span>
+                    </div>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
         </section>
 
-        {/* ------------------------------------------------------------ segurança */}
-        <section className="lp-section lp-section--deep" id="seguranca" aria-labelledby="seg">
+        {/* ------------------------------------------------------------ explorar */}
+        <section className="lp-section" aria-labelledby="explorar">
           <div className="lp-wrap">
             <div className="lp-head">
-              <span className="ap-eyebrow">Segurança, ética e privacidade</span>
-              <h2 id="seg" className="lp-h2 ap-display">Dados de saúde de crianças exigem o máximo cuidado.</h2>
+              <span className="ap-eyebrow">Explore</span>
+              <h2 id="explorar" className="lp-h2 ap-display">Encontre o que importa para você.</h2>
             </div>
-            <div className="lp-sec-grid">
-              <div><IconLock /><strong>Acesso por vínculo com o caso</strong><p>Cada pessoa vê só os casos em que atua. A gestão da clínica não acessa conteúdo clínico por padrão.</p></div>
-              <div><IconBook /><strong>Prontuário imutável</strong><p>Registros não são apagados nem reescritos: correções são adendos com autor, data e motivo.</p></div>
-              <div><IconEye /><strong>Auditoria de leitura</strong><p>Saber quem consultou é tão importante quanto saber quem alterou.</p></div>
-              <div><IconHeart /><strong>Sem engajamento predatório</strong><p>Sem ranking entre crianças, caixa-surpresa, notificações para a criança ou compras.</p></div>
-              <div><IconTablet /><strong>Tela proporcional à idade</strong><p>Medidor diário por criança e nenhum acesso infantil autônomo abaixo dos 2 anos.</p></div>
-              <div><IconShield /><strong>Sem triagem pública</strong><p>Nenhum escore sobre uma criança fora de um vínculo profissional e de consentimento.</p></div>
-            </div>
-            <div className="ap-row" style={{ marginTop: '2.5rem', justifyContent: 'center' }}>
-              <Link className="ap-btn ap-btn--lg" to="/seguranca-privacidade">
-                Saiba como cumprimos a LGPD e o ECA Digital →
-              </Link>
+            <div className="lp-explore">
+              {EXPLORE.map((group) => (
+                <div key={group.title}>
+                  <h3 className="lp-explore__title">{group.title}</h3>
+                  <ul className="lp-grid lp-grid--4 lp-unlist">
+                    {group.items.map((item) => (
+                      <li key={item.href}>
+                        <Link to={item.href} className="lp-link-card">
+                          <strong>{item.title}</strong>
+                          <span>{item.text}</span>
+                          <IconArrowRight />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* ------------------------------------------------------------ ciência */}
-        <section className="lp-section" id="ciencia" aria-labelledby="cie">
+        {/* ------------------------------------------------------------ confiança */}
+        <section className="lp-section lp-section--sunken lp-section--tight" aria-labelledby="confianca">
           <div className="lp-wrap">
-            <div className="lp-head">
-              <span className="ap-eyebrow">Fundamentação</span>
-              <h2 id="cie" className="lp-h2 ap-display">Construído sobre a literatura, não sobre suposições.</h2>
-            </div>
-            <ul className="lp-refs">
-              <li><b>Baer, Wolf e Risley (1968).</b> As sete dimensões da ABA: base para definição operacional, análise e generalidade.</li>
-              <li><b>Fuller e Fienup (2018).</b> Critério de domínio tem nível e frequência; critérios mais altos favorecem a manutenção.</li>
-              <li><b>Fisher, Kelley e Lomas (2003).</b> Critério duplo conservador como apoio à análise visual.</li>
-              <li><b>Steinbrenner et al. (2020).</b> 28 práticas baseadas em evidência, incluindo intervenção mediada por tecnologia e CAA.</li>
-              <li><b>Schreibman et al. (2015).</b> Intervenções comportamentais desenvolvimentistas naturalistas (NDBI).</li>
-              <li><b>Wang et al. (2022).</b> Meta-análise de ensaios randomizados do Modelo Denver.</li>
-              <li><b>DeLeon e Iwata (1996).</b> Avaliação de preferência por estímulos múltiplos sem reposição (MSWO).</li>
-              <li><b>Sociedade Brasileira de Pediatria (2024).</b> Recomendações de tempo de tela por faixa etária.</li>
+            <h2 id="confianca" className="lp-explore__title">Compromissos de projeto</h2>
+            <ul className="lp-trustbar">
+              {TRUST.map((t) => (
+                <li key={t.title}>
+                  <span className="lp-card__icon" aria-hidden="true">{t.icon}</span>
+                  <div>
+                    <strong>{t.title}</strong>
+                    <span>{t.text}</span>
+                  </div>
+                </li>
+              ))}
             </ul>
+            <p className="lp-trustbar__more">
+              <Link className="lp-text-link" to="/seguranca-privacidade">Como protegemos os dados</Link>
+            </p>
           </div>
         </section>
 
-        {/* ------------------------------------------------------------ FAQ */}
-        <section className="lp-section lp-section--sunken" aria-labelledby="faq">
-          <div className="lp-wrap">
-            <div className="lp-head lp-head--center">
-              <span className="ap-eyebrow">Perguntas frequentes</span>
-              <h2 id="faq" className="lp-h2 ap-display">O que as equipes costumam perguntar</h2>
-            </div>
-            <div className="lp-faq">
-              <details><summary>A plataforma faz diagnóstico ou avaliação psicológica?</summary><p>Não. Desempenho em jogo é evidência contextual de uma tarefa, nunca teste psicológico, QI ou diagnóstico. Instrumentos protegidos só entram com licença, e testes psicológicos dependem de parecer favorável do SATEPSI.</p></details>
-              <details><summary>Funciona sem internet?</summary><p>Sim. A sessão inteira pode ser aplicada offline. Os registros ficam numa fila local cifrada e só saem do aparelho depois que o servidor confirma o recebimento de cada um.</p></details>
-              <details><summary>Posso usar o Modelo Denver com os itens oficiais do currículo?</summary><p>A plataforma armazena a estrutura (níveis, domínios, objetivos e passos) e os escores do profissional. Os textos dos itens da Lista de Verificação são protegidos e só entram mediante licença do detentor dos direitos.</p></details>
-              <details><summary>A família vê tudo o que a equipe registra?</summary><p>Não. A família vê relatórios em linguagem acessível, orientações e tarefas de generalização. Notas clínicas internas ficam restritas à equipe do caso.</p></details>
-              <details><summary>E a inteligência artificial?</summary><p>A inteligência atual é feita de regras clínicas transparentes. Recursos de IA generativa entrarão depois e somente como rascunho, sempre revisado e assinado por um profissional.</p></details>
-            </div>
-          </div>
-        </section>
-
-        {/* ------------------------------------------------------------ CTA */}
-        <section className="lp-section" id="contato" aria-labelledby="cta">
-          <div className="lp-wrap lp-final">
-            <Logo compact />
-            <h2 id="cta" className="ap-display">Traga o rigor da supervisão para cada sessão.</h2>
-            <p className="lp-sub" style={{ marginTop: 0 }}>Conheça o ambiente de demonstração com casos fictícios em ABA e no Modelo Denver.</p>
-            <div className="ap-row" style={{ justifyContent: 'center' }}>
-              <Link className="ap-btn ap-btn--primary ap-btn--lg" to="/entrar">Acessar a demonstração <IconArrowRight /></Link>
-            </div>
-          </div>
-        </section>
+        <CtaBand
+          title="Traga o rigor da supervisão para cada sessão."
+          text="Conheça o ambiente de demonstração com casos fictícios em ABA e no Modelo Denver."
+          primary={{ label: 'Explorar demonstração', href: '/entrar' }}
+          secondary={{ label: 'Falar com a equipe', href: '/contato' }}
+        />
       </main>
 
       <PublicFooter />
@@ -343,18 +199,18 @@ function HeroVisual() {
       <div className="lp-window">
         <div className="lp-window__bar">
           <div className="lp-window__dots"><i /><i /><i /></div>
-          <span className="ap-xs ap-muted" style={{ fontWeight: 600 }}>Dados do caso · Ouvinte — objetos comuns</span>
+          <span className="lp-window__title">Dados do caso · Ouvinte — objetos comuns</span>
         </div>
         <div className="lp-window__body">
           <div className="lp-case">
             <div className="lp-case__av">T</div>
             <div>
-              <div className="lp-case__name">Teo <span className="ap-badge ap-badge--aba" style={{ marginLeft: 6 }}>ABA</span></div>
+              <div className="lp-case__name">Teo <span className="ap-badge ap-badge--aba">ABA</span></div>
               <div className="lp-case__sub">4 a 2 m · Plano v2 · alvo “bola”</div>
             </div>
-            <span className="ap-badge ap-phase ap-phase--acquisition" style={{ marginLeft: 'auto' }}>Aquisição</span>
+            <span className="ap-badge ap-phase ap-phase--acquisition lp-case__phase">Aquisição</span>
           </div>
-          <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: 'auto' }}>
+          <svg className="lp-window__chart" viewBox={`0 0 ${W} ${H}`}>
             {[0, 50, 100].map((v) => (
               <g key={v}>
                 <line x1={l} x2={W - r} y1={y(v)} y2={y(v)} stroke="var(--ap-chart-grid)" />
@@ -376,19 +232,19 @@ function HeroVisual() {
       </div>
 
       <div className="lp-float lp-float--rec">
-        <div className="lp-float__title" style={{ color: 'var(--ap-text)' }}><IconTarget style={{ color: 'var(--ap-sage-700)' }} /> Tentativa 7 de 10</div>
+        <div className="lp-float__title"><IconTarget /> Tentativa 7 de 10</div>
         <div className="lp-mini-prompts"><span data-on>IND</span><span>GES</span><span>MOD</span><span>FP</span></div>
         <div className="lp-mini-btns">
-          <span style={{ color: 'var(--ap-success)' }}>✓</span>
-          <span style={{ color: 'var(--ap-danger)' }}>✕</span>
-          <span style={{ color: 'var(--ap-text-muted)' }}>–</span>
+          <span className="is-ok">✓</span>
+          <span className="is-err">✕</span>
+          <span className="is-none">–</span>
         </div>
       </div>
 
       <div className="lp-float lp-float--alert">
         <div className="lp-float__title"><IconSpark /> <span>R1 · Critério de domínio atingido</span></div>
         <p>2/2 sessões consecutivas com ≥ 90% independente e ≥ 10 oportunidades.</p>
-        <div className="ap-row" style={{ marginTop: '0.6rem', gap: '0.4rem' }}>
+        <div className="lp-float__actions">
           <span className="ap-btn ap-btn--primary ap-btn--sm"><IconCheck /> Confirmar domínio</span>
           <span className="ap-btn ap-btn--sm">Ver dados</span>
         </div>
@@ -397,41 +253,7 @@ function HeroVisual() {
   );
 }
 
-/* ---------------------------------------------------------------- ilustrações dos passos */
-const StepPlan = () => (
-  <svg viewBox="0 0 120 70"><rect x="20" y="8" width="80" height="54" rx="6" fill="#fff" stroke="var(--ap-sage-300)" />
-    {[20, 32, 44].map((yy, i) => (<g key={yy}><circle cx="32" cy={yy} r="4" fill={i === 0 ? 'var(--ap-sage-500)' : 'var(--ap-sage-200)'} /><rect x="42" y={yy - 3} width={i === 1 ? 36 : 46} height="6" rx="3" fill="var(--ap-sage-100)" /></g>))}
-  </svg>
-);
-const StepApply = () => (
-  <svg viewBox="0 0 120 70"><rect x="24" y="6" width="72" height="58" rx="8" fill="#fff" stroke="var(--ap-sage-300)" />
-    <rect x="32" y="40" width="16" height="16" rx="4" fill="#e6f2ec" stroke="#2f7d5a" /><rect x="52" y="40" width="16" height="16" rx="4" fill="#f8e5e2" stroke="#b03f33" /><rect x="72" y="40" width="16" height="16" rx="4" fill="#f3f1ec" stroke="#8a8d8b" />
-    <rect x="32" y="16" width="56" height="16" rx="4" fill="var(--ap-sage-50)" stroke="var(--ap-sage-500)" />
-  </svg>
-);
-const StepAnalyze = () => (
-  <svg viewBox="0 0 120 70"><path d="M14 60h94M14 8v52" stroke="var(--ap-sage-300)" />
-    <path d="M44 8v52" stroke="var(--ap-sage-300)" strokeDasharray="3 3" />
-    <path d="M18 50 28 52 38 48M50 44 62 36 74 30 86 20 98 14" fill="none" stroke="var(--ap-sage-700)" strokeWidth="2.2" />
-    <path d="M14 18h94" stroke="#2f7d5a" strokeDasharray="2 4" />
-  </svg>
-);
-const StepDecide = () => (
-  <svg viewBox="0 0 120 70"><rect x="16" y="14" width="88" height="42" rx="10" fill="#fff" stroke="var(--ap-terra-300)" />
-    <path d="m30 30 3.5-7 3.5 7 7 1.5-7 1.5-3.5 7-3.5-7-7-1.5z" fill="var(--ap-terra-500)" />
-    <rect x="48" y="25" width="44" height="6" rx="3" fill="var(--ap-terra-100)" /><rect x="48" y="36" width="30" height="8" rx="4" fill="var(--ap-sage-700)" />
-  </svg>
-);
-
-/* ---------------------------------------------------------------- miniaturas dos recursos */
-function GameCard({ tag, name, text, art }: { tag: string; name: string; text: string; art: ReactNode }) {
-  return (
-    <article className="lp-game">
-      <div className="lp-game__art" aria-hidden="true">{art}</div>
-      <div className="lp-game__body"><span className="lp-game__tag">{tag}</span><strong>{name}</strong><p>{text}</p></div>
-    </article>
-  );
-}
+/* ---------------------------------------------------------------- ilustrações (reutilizadas em /games, na biblioteca e no espaço da criança) */
 
 export const ArtMatch = () => (
   <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">

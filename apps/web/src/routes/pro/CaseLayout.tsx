@@ -87,7 +87,7 @@ export default function CaseLayout() {
 
   if (!c) {
     return (
-      <div className="ap-stack">
+      <div className="pro-page">
         <BackButton label="Voltar para casos" onClick={() => nav('/app/casos')} />
         <EmptyState title="Caso não encontrado">
           O endereço pode estar incorreto, o caso pode ter sido arquivado, ou você não tem vínculo com ele.
@@ -119,37 +119,30 @@ export default function CaseLayout() {
       <header className="case-header">
         <Avatar child={child} size="lg" />
         <div className="case-header__info">
-          <div className="ap-row" style={{ gap: '0.6rem' }}>
+          <div className="case-header__title">
             <h1>{child.preferredName}</h1>
             <ModelBadge model={c.model} />
             {c.isDemo && (
-              <span
-                className="ap-badge"
-                style={{
-                  background: '#fff3cd',
-                  color: '#856404',
-                  border: '1px solid #ffeeba',
-                  fontWeight: 600,
-                }}
-              >
-                Demonstração
-              </span>
+              <span className="ap-badge pro-badge-demo">Demonstração</span>
             )}
             {draft && <span className="ap-badge ap-badge--warning">plano em rascunho</span>}
           </div>
-          <p className="ap-small ap-muted">
+          <p className="case-header__meta">
             {formatAge(child.birthDate)} · Plano {c.model === 'ABA' ? 'ABA' : 'Denver'} v{c.planVersion}
             {!draft && <>, revisão em {new Date(c.planReviewOn).toLocaleDateString('pt-BR')}</>}
             {!policy.childPortalAllowed && ' · sem ambiente infantil (menos de 24 meses)'}
           </p>
         </div>
-        {activeSession ? (
-          <Button variant="primary" size="lg" icon={<IconPlay />} onClick={() => nav(`/app/sessao/${activeSession.id}`)}>Continuar sessão</Button>
-        ) : (
-          <Button variant="primary" size="lg" icon={<IconPlay />} disabled={draft} title={draft ? 'Aprove o plano para iniciar sessões' : undefined} onClick={() => setStarting(true)}>
-            Iniciar sessão
-          </Button>
-        )}
+        <div className="case-header__cta">
+          {activeSession ? (
+            <Button variant="primary" size="lg" icon={<IconPlay />} onClick={() => nav(`/app/sessao/${activeSession.id}`)}>Continuar sessão</Button>
+          ) : (
+            <Button variant="primary" size="lg" icon={<IconPlay />} disabled={draft} aria-describedby={draft ? 'case-draft-hint' : undefined} onClick={() => setStarting(true)}>
+              Iniciar sessão
+            </Button>
+          )}
+          {draft && !activeSession && <span id="case-draft-hint" className="ap-hint">Aprove o plano para iniciar sessões.</span>}
+        </div>
       </header>
 
       <CaseTabs />

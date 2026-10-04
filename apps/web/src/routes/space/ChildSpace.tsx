@@ -1,18 +1,18 @@
 /**
- * Espaço da criança ou do adolescente. Aberto por um adulto com o código do cadastro.
+ * Espaço da criança ou do adolescente. Aberto por um adulto já autenticado: pelo portal da família
+ * (cartão "Abrir o espaço de …") ou pela ficha do caso no painel profissional. Sem código nem PIN na entrada.
  * Gamificação saudável (P7, ECA Digital): estrelas de esforço, álbum com figurinhas visíveis e escolhidas,
  * conquistas pessoais. Sem ranking, sem sorteio, sem sequência de dias, sem notificações.
  */
 import { useEffect, useState, type ReactNode } from 'react';
 import { HoldRing, useHoldPress } from '../child/useHoldPress';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import '@fontsource/fredoka/400.css';
 import '@fontsource/fredoka/500.css';
 import '@fontsource/fredoka/600.css';
 import { speak } from '@aprumo/game-sdk';
 import { TokenArt, type TokenTheme } from '@aprumo/resource-quadro-de-fichas';
 import { STIMULUS_ART, StimulusArt } from '@aprumo/stimuli';
-import { PinPad } from '@aprumo/ui';
 import {
   STARS_PER_STICKER,
   actions,
@@ -40,6 +40,26 @@ export function Sticker({ id }: { id: string }) {
 
 type Tab = 'inicio' | 'jogar' | 'album' | 'prancha' | 'calma';
 
+/**
+ * Para onde a saída leva: a área do adulto que abriu o espaço. O portal da família envia
+ * `state.returnTo`; guardamos na sessão para sobreviver às idas e voltas dos jogos. Sem origem
+ * conhecida (entrada pela ficha do caso), volta ao perfil do caso no painel profissional, que exige login.
+ */
+const returnKey = (childId: string) => `aprumo:espaco-volta:${childId}`;
+function useReturnTo(childId: string, caseId: string | undefined): string {
+  const { state } = useLocation();
+  const fromState = (state as { returnTo?: unknown } | null)?.returnTo;
+  const safe = (v: unknown): v is string => typeof v === 'string' && v.startsWith('/') && !v.startsWith('//');
+  let stored: string | null = null;
+  try {
+    if (safe(fromState)) sessionStorage.setItem(returnKey(childId), fromState);
+    stored = sessionStorage.getItem(returnKey(childId));
+  } catch { /* armazenamento indisponível: segue com o fallback */ }
+  if (safe(fromState)) return fromState;
+  if (safe(stored)) return stored;
+  return caseId ? `/app/casos/${caseId}/perfil` : '/entrar';
+}
+
 export default function ChildSpace() {
   const { childId = '' } = useParams();
   const nav = useNavigate();
@@ -53,6 +73,7 @@ export default function ChildSpace() {
   const months = child ? db.ageMonths(child.birthDate) : 72;
   const defaultMode: AgeMode = months < 48 ? 'sensory' : months < 108 ? 'kid' : months < 156 ? 'goals' : 'teen';
   const [ageMode, setAgeMode] = useState<AgeMode>(defaultMode);
+  const returnTo = useReturnTo(childId, c?.id);
 
   // Todo uso do espaço é tempo de tela: soma no medidor diário (SBP).
   useEffect(() => {
@@ -63,7 +84,7 @@ export default function ChildSpace() {
     return () => window.clearInterval(id);
   }, [c]);
 
-  if (!child || !c) return <main className="cs-missing"><p>Espaço não encontrado.</p><button className="cs-btn" onClick={() => nav('/entrar')}>Voltar</button></main>;
+  if (!child || !c) return <main className="cs-missing"><p>Não encontramos este espaço. Ele pode ter sido desativado pela equipe.</p><button className="cs-btn" onClick={() => nav(returnTo)}>Voltar</button></main>;
 
   const teen = ageMode === 'teen' || ageMode === 'goals';
   const policy = db.screenPolicy(child.birthDate);
@@ -85,7 +106,7 @@ export default function ChildSpace() {
           <strong>{child.preferredName}</strong>
         </div>
         <span className="cs-stars" aria-label={`${stars} estrelas`}><StarIcon /> {stars}</span>
-        <HoldToExit onExit={() => nav('/entrar')} label={T.exit} />
+        <HoldToExit onExit={() => nav(returnTo)} label={T.exit} />
       </header>
 
       <main className="cs-main">
@@ -434,41 +455,36 @@ function SpaceSettings({
   );
 }
 
-/* ================================================================ sair com toque longo + PIN */
+/* ================================================================ sair com toque longo */
+/**
+ * Saída do espaço (ou do jogo de volta ao espaço): só a pressão prolongada de 1,2 s (useHoldPress).
+ *
+ * Decisão sobre PIN: removido. O PIN antigo era fixo ("1234") e aparecia na própria mensagem de erro,
+ * então não protegia nada e só somava etapas para o adulto. A pressão prolongada já impede a saída
+ * acidental pela criança (toque simples e leitor de tela não saem), e o destino da saída é a área do
+ * adulto que abriu o espaço (portal da família ou ficha do caso), que já exige login próprio.
+ * Quando houver PIN definido pelo responsável no back-end, ele deve entrar aqui, uma única vez, na saída
+ * para a área adulta (nunca na volta do jogo para o espaço).
+ */
 export function HoldToExit({ onExit, label }: { onExit: () => void; label: string }) {
-  const [pinOpen, setPinOpen] = useState(false);
-  const hold = useHoldPress(() => setPinOpen(true));
+  const hold = useHoldPress(onExit);
 
   return (
-    <>
-      <button
-        type="button"
-        className="cs-exit"
-        data-holding={hold.holding}
-        {...hold.bind}
-        aria-label={`${label}: mantenha pressionado por 1,2 segundo (ou segure Enter/Espaço) e depois digite o PIN do adulto`}
-      >
-        <span className="cs-exit__icon">
-          <HoldRing holding={hold.holding} ms={hold.ms} size={40} className="cs-exit__ring" />
+    <button
+      type="button"
+      className="cs-exit"
+      data-holding={hold.holding}
+      {...hold.bind}
+      aria-label={`${label}: mantenha pressionado por 1,2 segundo (ou segure Enter ou Espaço)`}
+    >
+      <span className="cs-exit__icon">
+        <HoldRing holding={hold.holding} ms={hold.ms} size={40} className="cs-exit__ring" />
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M14 4.5H6.5v15H14M10.5 12H20M16.5 8.5 20 12l-3.5 3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
-        </span>
-        <span className="cs-exit__label">{label}</span>
-      </button>
-
-      {pinOpen && (
-        <PinPad
-          title="Saída do adulto"
-          expectedPin="1234"
-          onSuccess={() => {
-            setPinOpen(false);
-            onExit();
-          }}
-          onCancel={() => setPinOpen(false)}
-        />
-      )}
-    </>
+      </span>
+      <span className="cs-exit__label">{label}</span>
+    </button>
   );
 }
 

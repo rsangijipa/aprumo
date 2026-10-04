@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router';
-import { Card, IconArrowRight, IconBell, IconCases, IconLibrary, IconRoute, ModelBadge } from '@aprumo/ui';
+import { Card, EmptyState, IconArrowRight, IconBell, IconCases, IconLibrary, IconRoute, ModelBadge, PageHeader, SectionHeader } from '@aprumo/ui';
 import { CURRENT_USER_ID } from '../../data/seed';
 import { alertsForCase, db, formatAge, useStore } from '../../data/store';
 import { AlertList, Avatar, phaseCounts } from './shared';
@@ -25,57 +25,53 @@ export default function Home() {
 
   return (
     <>
-      <div className="page-head">
-        <div>
-          <h1>{greet}, {me.shortName}</h1>
-          <p>{new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })} · o que precisa de você hoje</p>
-        </div>
-        <div className="ap-row" style={{ gap: '0.5rem' }}>
-          <Link to="/app/casos/novo" className="ap-btn ap-btn--sm">Novo caso</Link>
-          <Link to="/app/ferramentas/plano-individual" className="ap-btn ap-btn--primary ap-btn--sm">Criar PEI / Plano</Link>
-        </div>
-      </div>
+      <PageHeader
+        title={<>{greet}, {me.shortName}</>}
+        description={<><span className="pro-capitalize">{new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}</span> · o que precisa de você hoje</>}
+        actions={
+          <>
+            <Link to="/app/casos/novo" className="ap-btn">Novo caso</Link>
+            <Link to="/app/ferramentas/plano-individual" className="ap-btn ap-btn--primary">Criar PEI / Plano</Link>
+          </>
+        }
+      />
 
-      {/* Atalhos Rápidos */}
-      <div className="ap-row" style={{ gap: '0.65rem', overflowX: 'auto', paddingBottom: '0.2rem' }}>
-        <Link to="/app/casos" className="ap-btn ap-btn--sm" style={{ background: 'var(--ap-surface)' }}>
-          <IconCases style={{ width: 16 }} /> Meus Casos ({myCases.length})
+      <nav className="pro-shortcuts" aria-label="Atalhos rápidos">
+        <Link to="/app/casos" className="pro-shortcut">
+          <IconCases aria-hidden="true" /> Meus casos <span className="pro-shortcut__n">{myCases.length}</span>
         </Link>
-        <Link to="/app/ferramentas/plano-individual" className="ap-btn ap-btn--sm" style={{ background: 'var(--ap-surface)' }}>
-          <IconRoute style={{ width: 16 }} /> Construtor de Plano (PEI/Denver)
+        <Link to="/app/ferramentas/plano-individual" className="pro-shortcut">
+          <IconRoute aria-hidden="true" /> Construtor de Plano
         </Link>
-        <Link to="/app/recursos" className="ap-btn ap-btn--sm" style={{ background: 'var(--ap-surface)' }}>
-          <IconLibrary style={{ width: 16 }} /> Resource Studio
+        <Link to="/app/recursos" className="pro-shortcut">
+          <IconLibrary aria-hidden="true" /> Resource Studio
         </Link>
-        <Link to="/app/alertas" className="ap-btn ap-btn--sm" style={{ background: 'var(--ap-surface)' }}>
-          <IconBell style={{ width: 16 }} /> Alertas Clínicos ({alerts.length})
+        <Link to="/app/alertas" className="pro-shortcut">
+          <IconBell aria-hidden="true" /> Alertas clínicos <span className="pro-shortcut__n">{alerts.length}</span>
         </Link>
-      </div>
+      </nav>
 
-      {/* Grid de Métricas Principais */}
-      <div className="grid-3" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))' }}>
-        <Card><div className="stat"><span className="stat__value">{myCases.length}</span><span className="stat__label">Casos ativos sob sua responsabilidade</span></div></Card>
-        <Card><div className="stat"><span className="stat__value" style={{ color: priority > 0 ? 'var(--ap-danger)' : undefined }}>{priority}</span><span className="stat__label">Decisões prioritárias aguardando</span></div></Card>
-        <Card><div className="stat"><span className="stat__value">{alerts.length - priority}</span><span className="stat__label">Outros alertas do motor de regras</span></div></Card>
-        <Card><div className="stat"><span className="stat__value">{weekSessions}</span><span className="stat__label">Sessões nos últimos 7 dias</span></div></Card>
+      <div className="pro-stats">
+        <Card className="pro-stat" as="div"><div className="stat"><span className="stat__value">{myCases.length}</span><span className="stat__label">Casos ativos sob sua responsabilidade</span></div></Card>
+        <Card className={`pro-stat${priority > 0 ? ' pro-stat--alert' : ''}`} as="div"><div className="stat"><span className="stat__value">{priority}</span><span className="stat__label">Decisões prioritárias aguardando</span></div></Card>
+        <Card className="pro-stat" as="div"><div className="stat"><span className="stat__value">{alerts.length - priority}</span><span className="stat__label">Outros alertas do motor de regras</span></div></Card>
+        <Card className="pro-stat" as="div"><div className="stat"><span className="stat__value">{weekSessions}</span><span className="stat__label">Sessões nos últimos 7 dias</span></div></Card>
       </div>
 
       <div className="grid-main">
-        <Card title="Precisa da sua atenção" actions={<Link className="ap-small" to="/app/alertas">Ver todos os alertas</Link>} bodyClassName="" >
-          <div style={{ margin: '-1.25rem' }}>
-            <AlertList alerts={alerts} showCase limit={5} />
-          </div>
+        <Card title="Precisa da sua atenção" actions={<Link className="pro-card-link" to="/app/alertas">Ver todos</Link>} bodyClassName="pro-card-flush">
+          <AlertList alerts={alerts} showCase limit={5} />
         </Card>
 
         <div className="ap-stack">
           <Card title="Hoje & Próximas revisões">
             {reviews.length === 0 ? (
-              <p className="ap-muted ap-small">Nenhuma revisão de plano nas próximas 3 semanas.</p>
+              <p className="pro-empty-line">Nenhuma revisão de plano nas próximas 3 semanas.</p>
             ) : (
-              <ul className="ap-stack" style={{ listStyle: 'none', margin: 0, padding: 0, gap: '0.75rem' }}>
+              <ul className="pro-list">
                 {reviews.map(({ c, days }) => (
-                  <li key={c.id} className="ap-row" style={{ justifyContent: 'space-between' }}>
-                    <Link to={`/app/casos/${c.id}/plano`} className="ap-row" style={{ textDecoration: 'none', color: 'inherit', gap: '0.6rem' }}>
+                  <li key={c.id} className="pro-list__row">
+                    <Link to={`/app/casos/${c.id}/plano`} className="pro-list__link">
                       <Avatar child={db.childOf(c)} />
                       <span><strong>{db.childOf(c).preferredName}</strong><br /><span className="ap-xs ap-muted">Plano {c.model === 'ABA' ? 'ABA' : 'Denver'} v{c.planVersion}</span></span>
                     </Link>
@@ -86,11 +82,12 @@ export default function Home() {
             )}
           </Card>
           <Card title="Atividade recente da equipe">
+            {recent.length === 0 && <p className="pro-empty-line">Ainda não há atividade registrada nos seus casos.</p>}
             <ul className="timeline">
               {recent.map((t) => (
                 <li key={t.id}>
                   <div>
-                    <div className="ap-small" style={{ fontWeight: 650 }}>{t.title}</div>
+                    <div className="ap-small pro-strong">{t.title}</div>
                     <div className="ap-xs ap-muted">
                       {db.childOf(db.caseById(t.caseId)!).preferredName} · {new Date(t.at).toLocaleDateString('pt-BR')}
                     </div>
@@ -103,12 +100,21 @@ export default function Home() {
       </div>
 
       <section className="ap-stack">
-        <div className="page-head"><h2 style={{ fontSize: 'var(--ap-text-xl)' }}>Seus casos</h2><span className="ap-row"><Link className="ap-small" to="/app/casos">Todos os casos</Link><Link className="ap-btn ap-btn--sm" to="/app/casos/novo">Novo caso</Link></span></div>
-        <div className="grid-3">
-          {myCases.map((c) => (
-            <CaseCard key={c.id} caseId={c.id} alerts={alerts.filter((a) => a.caseId === c.id).length} />
-          ))}
-        </div>
+        <SectionHeader
+          title="Seus casos"
+          actions={<><Link className="pro-card-link" to="/app/casos">Todos os casos</Link><Link className="ap-btn ap-btn--sm" to="/app/casos/novo">Novo caso</Link></>}
+        />
+        {myCases.length === 0 ? (
+          <EmptyState icon={<IconCases />} title="Nenhum caso ativo">
+            <p>Crie um caso ou peça ao supervisor para incluir você na equipe.</p>
+          </EmptyState>
+        ) : (
+          <div className="grid-3">
+            {myCases.map((c) => (
+              <CaseCard key={c.id} caseId={c.id} alerts={alerts.filter((a) => a.caseId === c.id).length} />
+            ))}
+          </div>
+        )}
       </section>
     </>
   );
@@ -126,7 +132,7 @@ export function CaseCard({ caseId, alerts }: { caseId: string; alerts: number })
     <Link to={`/app/casos/${c.id}`} className="ap-card case-card" aria-label={`Abrir caso de ${child.preferredName}`}>
       <div className="case-card__top">
         <Avatar child={child} />
-        <div style={{ minWidth: 0, flex: 1 }}>
+        <div className="case-card__id">
           <div className="case-card__name">{child.preferredName}</div>
           <div className="ap-xs ap-muted">{formatAge(child.birthDate)} · Plano v{c.planVersion}</div>
         </div>
@@ -134,7 +140,7 @@ export function CaseCard({ caseId, alerts }: { caseId: string; alerts: number })
         {c.planStatus === 'draft' && <span className="ap-badge ap-badge--warning">rascunho</span>}
       </div>
       {c.model === 'ABA' ? (
-        <div className="ap-stack" style={{ gap: '0.4rem' }}>
+        <div className="case-card__phases">
           <div className="phase-bar" aria-hidden="true">
             {counts.map((x) => <span key={x.phase} style={{ width: `${(x.n / total) * 100}%`, background: `var(--ap-phase-${x.phase})` }} />)}
           </div>
@@ -145,11 +151,11 @@ export function CaseCard({ caseId, alerts }: { caseId: string; alerts: number })
           {denverSteps.filter((s) => s.status === 'acquisition').length} passos em aquisição · {denverSteps.filter((s) => s.status === 'mastered').length} dominados
         </span>
       )}
-      <div className="ap-row" style={{ justifyContent: 'space-between' }}>
+      <div className="case-card__foot">
         <span className="ap-xs ap-muted">
           {lastSession ? `Última sessão ${new Date(lastSession.startedAt).toLocaleDateString('pt-BR')}` : 'Sem sessões'}
         </span>
-        {alerts > 0 ? <span className="ap-badge ap-badge--warning">{alerts} alerta{alerts > 1 ? 's' : ''}</span> : <IconArrowRight style={{ width: 18, color: 'var(--ap-text-subtle)' }} />}
+        {alerts > 0 ? <span className="ap-badge ap-badge--warning">{alerts} alerta{alerts > 1 ? 's' : ''}</span> : <IconArrowRight className="case-card__arrow" />}
       </div>
     </Link>
   );

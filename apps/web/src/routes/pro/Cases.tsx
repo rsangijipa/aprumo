@@ -10,6 +10,7 @@ import {
   IconPlus,
   IconSearch,
   ModelBadge,
+  PageHeader,
   Segmented,
 } from '@aprumo/ui';
 import { alertsForCase, db, formatAge, useStore } from '../../data/store';
@@ -46,19 +47,19 @@ export default function Cases() {
   }, [st.cases, filter, q, alerts]);
 
   return (
-    <div className="ap-stack" style={{ gap: '1.25rem' }}>
-      <div className="page-head">
-        <div>
-          <h1>Casos</h1>
-          <p>Você vê apenas os casos em que tem vínculo ativo. Cada caso é conduzido em um único modelo clínico.</p>
-        </div>
-        <Link className="ap-btn ap-btn--primary" to="/app/casos/novo">
-          <IconPlus /> Novo caso
-        </Link>
-      </div>
+    <div className="pro-page">
+      <PageHeader
+        title="Casos"
+        description="Você vê apenas os casos em que tem vínculo ativo. Cada caso é conduzido em um único modelo clínico."
+        actions={
+          <Link className="ap-btn ap-btn--primary" to="/app/casos/novo">
+            <IconPlus /> Novo caso
+          </Link>
+        }
+      />
 
       {/* Barra de Filtros e Busca */}
-      <div className="ap-row" style={{ justifyContent: 'space-between', gap: '0.75rem', flexWrap: 'wrap' }}>
+      <div className="pro-toolbar" role="search" aria-label="Filtrar casos">
         <Segmented<FilterTab>
           label="Filtrar casos"
           value={filter}
@@ -72,8 +73,8 @@ export default function Cases() {
           ]}
         />
 
-        <div className="ap-row" style={{ gap: '0.5rem' }}>
-          <div style={{ position: 'relative', minWidth: 240 }}>
+        <div className="pro-toolbar__group">
+          <div className="pro-search-field">
             <input
               className="ap-input"
               type="search"
@@ -81,9 +82,8 @@ export default function Cases() {
               aria-label="Filtrar casos pelo nome"
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              style={{ paddingLeft: '2.2rem' }}
             />
-            <IconSearch style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', width: 16, color: 'var(--ap-text-muted)' }} />
+            <IconSearch className="pro-search-field__icon" />
           </div>
 
           <Segmented<ViewMode>
@@ -91,8 +91,8 @@ export default function Cases() {
             value={view}
             onChange={setView}
             options={[
-              { value: 'grid', label: <IconGrid style={{ width: 16 }} />, title: 'Grade' },
-              { value: 'list', label: <IconList style={{ width: 16 }} />, title: 'Lista compacta' },
+              { value: 'grid', label: <><IconGrid className="pro-icon-16" /><span className="ap-visually-hidden">Grade</span></>, title: 'Grade' },
+              { value: 'list', label: <><IconList className="pro-icon-16" /><span className="ap-visually-hidden">Lista compacta</span></>, title: 'Lista compacta' },
             ]}
           />
         </div>
@@ -108,10 +108,11 @@ export default function Cases() {
       )}
 
       {/* Visualização em Lista Compacta */}
-      {view === 'list' && (
-        <Card bodyClassName="ap-stack">
-          <div style={{ overflowX: 'auto' }}>
-            <table className="ap-table">
+      {view === 'list' && list.length > 0 && (
+        <Card bodyClassName="pro-card-flush">
+          <div className="ap-table-wrap">
+            <table className="ap-table ap-table--stack pro-cases-table">
+              <caption className="ap-visually-hidden">Lista de casos</caption>
               <thead>
                 <tr>
                   <th>Criança / Caso</th>
@@ -120,7 +121,7 @@ export default function Cases() {
                   <th>Plano</th>
                   <th>Alertas</th>
                   <th>Última Sessão</th>
-                  <th style={{ textAlign: 'right' }}>Ações</th>
+                  <th className="pro-th-end"><span className="ap-visually-hidden">Ações</span></th>
                 </tr>
               </thead>
               <tbody>
@@ -133,12 +134,8 @@ export default function Cases() {
 
                   return (
                     <tr key={c.id}>
-                      <td>
-                        <Link
-                          to={`/app/casos/${c.id}`}
-                          className="ap-row"
-                          style={{ textDecoration: 'none', color: 'inherit', gap: '0.65rem' }}
-                        >
+                      <td data-label="" className="pro-cases-table__who">
+                        <Link to={`/app/casos/${c.id}`} className="pro-list__link">
                           <Avatar child={child} />
                           <div>
                             <strong>{child.preferredName}</strong>
@@ -146,28 +143,28 @@ export default function Cases() {
                           </div>
                         </Link>
                       </td>
-                      <td>
+                      <td data-label="Modelo">
                         <ModelBadge model={c.model} />
                       </td>
-                      <td className="ap-tabular">{formatAge(child.birthDate)}</td>
-                      <td>
+                      <td data-label="Idade" className="ap-tabular">{formatAge(child.birthDate)}</td>
+                      <td data-label="Plano">
                         <span className="ap-small">
                           v{c.planVersion} {c.planStatus === 'draft' && <span className="ap-badge ap-badge--warning">rascunho</span>}
                         </span>
                       </td>
-                      <td>
+                      <td data-label="Alertas">
                         {caseAlerts > 0 ? (
                           <span className="ap-badge ap-badge--warning">{caseAlerts} alerta{caseAlerts > 1 ? 's' : ''}</span>
                         ) : (
                           <span className="ap-xs ap-muted">Regular</span>
                         )}
                       </td>
-                      <td className="ap-tabular ap-small ap-muted">
+                      <td data-label="Última sessão" className="ap-tabular ap-small ap-muted">
                         {lastSession ? new Date(lastSession.startedAt).toLocaleDateString('pt-BR') : '—'}
                       </td>
-                      <td style={{ textAlign: 'right' }}>
-                        <Link to={`/app/casos/${c.id}`} className="ap-btn ap-btn--ghost ap-btn--sm">
-                          Abrir <IconArrowRight style={{ width: 14 }} />
+                      <td data-label="" className="pro-td-end">
+                        <Link to={`/app/casos/${c.id}`} className="ap-btn ap-btn--ghost ap-btn--sm" aria-label={`Abrir caso de ${child.preferredName}`}>
+                          Abrir <IconArrowRight className="pro-icon-16" />
                         </Link>
                       </td>
                     </tr>
@@ -181,12 +178,17 @@ export default function Cases() {
 
       {list.length === 0 && (
         <EmptyState
-          icon={<IconCases style={{ width: 44, height: 44, color: 'var(--ap-sage-300)' }} />}
+          icon={<IconCases />}
           title="Nenhum caso encontrado"
         >
-          <p className="ap-muted ap-small">
+          <p className="ap-small">
             Tente alterar o filtro ou o termo de busca para localizar os registros de pacientes.
           </p>
+          {(q || filter !== 'all') && (
+            <button type="button" className="ap-btn ap-btn--sm" onClick={() => { setQ(''); setFilter('all'); }}>
+              Limpar filtros
+            </button>
+          )}
         </EmptyState>
       )}
     </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Badge, Button, Card, IconCheck, IconLock, IconShield, Segmented, Toast } from '@aprumo/ui';
+import { Badge, Button, Card, IconCheck, IconLock, IconShield, Segmented, Toast, PageHeader } from '@aprumo/ui';
 import { CURRENT_USER_ID } from '../../data/seed';
 import { isSupabaseConfigured } from '../../data/supabase';
 import { actions, db, outbox, syncNow, useStore } from '../../data/store';
@@ -18,7 +18,7 @@ export default function Settings() {
 
   return (
     <>
-      <div className="page-head"><div><h1>Configurações</h1><p>Seu perfil, aparência, segurança e dados guardados neste aparelho.</p></div></div>
+      <PageHeader title="Configurações" description="Seu perfil, aparência, segurança e dados guardados neste aparelho." />
       <div className="grid-2">
         <Card title="Perfil profissional">
           <dl className="review">
@@ -26,7 +26,7 @@ export default function Settings() {
             <dt>Função</dt><dd>{me.role}</dd>
             <dt>Registro no conselho</dt><dd>{me.council ?? 'Não informado'}</dd>
           </dl>
-          <p className="ap-xs ap-muted" style={{ marginTop: '0.75rem' }}>O registro no conselho é exigido para finalizar documentos (Res. CFP 06/2019).</p>
+          <p className="pro-footnote">O registro no conselho é exigido para finalizar documentos (Res. CFP 06/2019).</p>
         </Card>
 
         <Card title="Aparência e leitura">
@@ -43,15 +43,15 @@ export default function Settings() {
         </Card>
 
         <Card title="Segurança">
-          <ul className="ap-stack" style={{ listStyle: 'none', margin: 0, padding: 0, gap: '0.75rem' }}>
-            <li className="ap-row ap-small" style={{ justifyContent: 'space-between' }}><span className="ap-row" style={{ gap: '0.5rem' }}><IconLock style={{ width: 18 }} /> Verificação em duas etapas</span>{isSupabaseConfigured ? <Badge tone="success"><IconCheck /> obrigatória</Badge> : <Badge>demonstração</Badge>}</li>
-            <li className="ap-row ap-small" style={{ justifyContent: 'space-between' }}><span className="ap-row" style={{ gap: '0.5rem' }}><IconShield style={{ width: 18 }} /> Sessão neste aparelho</span><span className="ap-xs ap-muted">encerra ao fechar a aba</span></li>
+          <ul className="pro-list">
+            <li className="pro-list__row ap-small"><span className="pro-icon-label"><IconLock /> Verificação em duas etapas</span>{isSupabaseConfigured ? <Badge tone="success"><IconCheck /> obrigatória</Badge> : <Badge>demonstração</Badge>}</li>
+            <li className="pro-list__row ap-small"><span className="pro-icon-label"><IconShield /> Sessão neste aparelho</span><span className="ap-xs ap-muted">encerra ao fechar a aba</span></li>
           </ul>
-          <p className="ap-xs ap-muted" style={{ marginTop: '0.75rem' }}>Toda leitura de prontuário fica registrada na trilha de auditoria do caso.</p>
+          <p className="pro-footnote">Toda leitura de prontuário fica registrada na trilha de auditoria do caso.</p>
         </Card>
 
         <Card title="Dados neste aparelho">
-          <div className="ap-stack" style={{ gap: '0.75rem' }}>
+          <div className="ap-stack pro-gap-sm">
             <p className="ap-small">
               {pending === 0 ? 'Todos os registros foram enviados.' : `${pending} registro(s) aguardando envio, guardados com criptografia.`}
               {storage && <span className="ap-muted"> · uso local: {storage}</span>}

@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { NavLink, Outlet, useLocation, useNavigate } from 'react-router';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router';
 import {
   Button,
   CommandPalette,
@@ -7,6 +7,8 @@ import {
   Drawer,
   IconBell,
   IconCases,
+  IconChevronLeft,
+  IconChevronRight,
   IconClock,
   IconHeart,
   IconHome,
@@ -31,6 +33,35 @@ import { currentStep, isSupabaseConfigured, signOut } from '../../data/supabase'
 import { actions, alertsForCase, db, outbox, syncNow, useStore } from '../../data/store';
 import { SyncPill } from './shared';
 import './pro-a11y.css';
+import './pro-screens.css';
+
+type NavItem = { to: string; label: string; icon: ReactNode; end?: boolean };
+const NAV_GROUPS: { id: string; label: string; items: NavItem[] }[] = [
+  { id: 'trabalho', label: 'Trabalho', items: [
+    { to: '/app', label: 'Início', icon: <IconHome />, end: true },
+    { to: '/app/casos', label: 'Casos', icon: <IconCases /> },
+  ] },
+  { id: 'clinica', label: 'Decisão & Clínica', items: [
+    { to: '/app/alertas', label: 'Alertas', icon: <IconBell /> },
+    { to: '/app/supervisao', label: 'Supervisão', icon: <IconShield /> },
+  ] },
+  { id: 'recursos', label: 'Recursos & Ferramentas', items: [
+    { to: '/app/recursos', label: 'Resource Studio', icon: <IconLibrary /> },
+    { to: '/app/ferramentas/plano-individual', label: 'Construtor de Plano', icon: <IconRoute /> },
+  ] },
+  { id: 'org', label: 'Organização', items: [
+    { to: '/app/equipe', label: 'Equipe', icon: <IconTeam /> },
+    { to: '/app/configuracoes', label: 'Configurações', icon: <IconSettings /> },
+  ] },
+];
+const NAV_COLLAPSE_KEY = 'aprumo.pro.nav.collapsed';
+function readCollapsed(): Record<string, boolean> {
+  try {
+    return JSON.parse(localStorage.getItem(NAV_COLLAPSE_KEY) ?? '{}') as Record<string, boolean>;
+  } catch {
+    return {};
+  }
+}
 
 export default function ProLayout() {
   const [open, setOpen] = useState(false);
@@ -43,6 +74,31 @@ export default function ProLayout() {
   const me = db.professional(CURRENT_USER_ID)!;
   const st = useStore((s) => s);
   const settings = st.settings;
+  const navRef = useRef<HTMLElement>(null);
+  const [collapsed, setCollapsed] = useState<Record<string, boolean>>(readCollapsed);
+  const isActive = (to: string, end?: boolean) =>
+    end ? loc.pathname === to : loc.pathname === to || loc.pathname.startsWith(`${to}/`);
+  const toggleGroup = (id: string) =>
+    setCollapsed((c) => {
+      const next = { ...c, [id]: !c[id] };
+      try {
+        localStorage.setItem(NAV_COLLAPSE_KEY, JSON.stringify(next));
+      } catch {
+        /* armazenamento indisponível: preferência só nesta sessão */
+      }
+      return next;
+    });
+
+  // Ao navegar, o grupo da página atual se abre e o item ativo fica visível na lista rolável.
+  useEffect(() => {
+    const g = NAV_GROUPS.find((gr) => gr.items.some((it) => isActive(it.to, it.end)));
+    if (g) setCollapsed((c) => (c[g.id] ? { ...c, [g.id]: false } : c));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loc.pathname]);
+  useEffect(() => {
+    const el = navRef.current?.querySelector<HTMLElement>('a[aria-current="page"]');
+    el?.scrollIntoView?.({ block: 'nearest' });
+  }, [loc.pathname, collapsed]);
 
   const myCases = useMemo(
     () => st.cases.filter((c) => c.team.some((m) => m.professionalId === me.id) && c.status === 'active'),
@@ -138,38 +194,56 @@ export default function ProLayout() {
       {open && <button type="button" className="pro-scrim" aria-label="Fechar menu" onClick={() => setOpen(false)} />}
       
       <aside className="pro-sidebar" data-open={open} aria-label="Navegação do profissional">
-        <div className="ap-row" style={{ justifyContent: 'space-between', paddingBottom: '0.5rem' }}>
+        <div className="pro-sidebar__head">
           <Logo href="/app" />
           <Button className="pro-menu-close" variant="ghost" iconOnly icon={<IconX />} onClick={() => setOpen(false)}>Fechar menu</Button>
         </div>
 
-        <nav className="pro-nav">
-          <span className="pro-nav__label">Trabalho</span>
-          <NavLink to="/app" end><IconHome /> Início</NavLink>
-          <NavLink to="/app/casos"><IconCases /> Casos</NavLink>
-          
-          <span className="pro-nav__label">Decisão & Clínica</span>
-          <NavLink to="/app/alertas">
-            <IconBell /> Alertas {alertCount > 0 && <span className="pro-nav__count" aria-label={`${alertCount} alertas`}>{alertCount}</span>}
-          </NavLink>
-          <NavLink to="/app/supervisao"><IconShield /> Supervisão</NavLink>
-          
-          <span className="pro-nav__label">Recursos & Ferramentas</span>
-          <NavLink to="/app/recursos"><IconLibrary /> Resource Studio</NavLink>
-          <NavLink to="/app/ferramentas/plano-individual"><IconRoute /> Construtor de Plano</NavLink>
-
-          <span className="pro-nav__label">Organização</span>
-          <NavLink to="/app/equipe"><IconTeam /> Equipe</NavLink>
-          <NavLink to="/app/configuracoes"><IconSettings /> Configurações</NavLink>
+        <nav className="pro-nav" aria-label="Seções do painel" ref={navRef}>
+          {NAV_GROUPS.map((g) => {
+            const expanded = !collapsed[g.id];
+            const listId = `pro-nav-${g.id}`;
+            return (
+              <div className="pro-nav__group" key={g.id}>
+                <button
+                  type="button"
+                  className="pro-nav__label"
+                  aria-expanded={expanded}
+                  aria-controls={listId}
+                  onClick={() => toggleGroup(g.id)}
+                >
+                  <span>{g.label}</span>
+                  <IconChevronRight className="pro-nav__chev" aria-hidden="true" />
+                </button>
+                <div id={listId} className="pro-nav__items" hidden={!expanded}>
+                  {g.items.map((it) => (
+                    <NavLink key={it.to} to={it.to} end={it.end}>
+                      {it.icon}
+                      <span className="pro-nav__text">{it.label}</span>
+                      {it.to === '/app/alertas' && alertCount > 0 && (
+                        <span className="pro-nav__count" aria-label={`${alertCount} alertas`}>{alertCount}</span>
+                      )}
+                    </NavLink>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </nav>
 
-        <div className="pro-user">
-          <span className="pro-user__avatar" aria-hidden="true">{me.shortName[0]}</span>
-          <div style={{ minWidth: 0 }}>
-            <div className="pro-user__name">{me.name}</div>
-            <div className="pro-user__role">{me.role}</div>
+        <div className="pro-sidebar__foot">
+          <Link to="/" className="pro-site-link">
+            <IconChevronLeft aria-hidden="true" />
+            <span>Voltar ao site</span>
+          </Link>
+          <div className="pro-user">
+            <span className="pro-user__avatar" aria-hidden="true">{me.shortName[0]}</span>
+            <div className="pro-user__info">
+              <div className="pro-user__name">{me.name}</div>
+              <div className="pro-user__role">{me.role}</div>
+            </div>
+            <Button variant="ghost" iconOnly icon={<IconLogout />} onClick={() => void logout()}>Sair da conta</Button>
           </div>
-          <Button variant="ghost" iconOnly icon={<IconLogout />} onClick={() => void logout()}>Sair</Button>
         </div>
       </aside>
 
@@ -186,12 +260,13 @@ export default function ProLayout() {
             onClick={() => setCmdOpen(true)}
             aria-label="Abrir busca rápida (Ctrl+K)"
           >
-            <IconSearch style={{ width: 16 }} />
+            <IconSearch className="pro-cmd-trigger__icon" />
             <span>Buscar casos, ferramentas ou páginas…</span>
             <kbd className="ap-kbd">Ctrl K</kbd>
           </button>
 
           <div className="ap-row pro-topbar__actions">
+            <Button className="pro-search-btn" variant="ghost" iconOnly icon={<IconSearch />} onClick={() => setCmdOpen(true)}>Buscar</Button>
             <Button
               variant="ghost"
               iconOnly
@@ -250,7 +325,7 @@ export default function ProLayout() {
         title="Notificações e Avisos"
         position="right"
       >
-        <div className="ap-stack" style={{ gap: '1rem' }}>
+        <div className="ap-stack">
           <Tabs
             active={notifTab}
             onChange={setNotifTab}
@@ -261,14 +336,14 @@ export default function ProLayout() {
               { id: 'system', label: 'Sistema' },
             ]}
           />
-          <ul className="ap-stack" style={{ listStyle: 'none', margin: 0, padding: 0, gap: '0.75rem' }}>
+          <ul className="pro-list">
             {filteredNotifs.map((n) => (
-              <li key={n.id} className="ap-card" style={{ padding: '0.85rem' }}>
-                <div className="ap-row" style={{ justifyContent: 'space-between' }}>
+              <li key={n.id} className="ap-card pro-notif">
+                <div className="pro-list__row">
                   <strong className="ap-small">{n.title}</strong>
                   <span className="ap-xs ap-muted">{n.time}</span>
                 </div>
-                <p className="ap-small ap-muted" style={{ margin: '0.3rem 0 0 0' }}>{n.desc}</p>
+                <p className="ap-small ap-muted pro-notif__desc">{n.desc}</p>
               </li>
             ))}
           </ul>
@@ -282,14 +357,15 @@ export default function ProLayout() {
         title="Iniciar Sessão Clínica"
         description="Selecione o caso para abrir o SessionRunner ou continuar o atendimento."
       >
-        <div className="ap-stack" style={{ gap: '0.75rem' }}>
+        <div className="ap-stack pro-gap-sm">
+          {myCases.length === 0 && <p className="pro-empty-line">Nenhum caso ativo vinculado a você.</p>}
           {myCases.map((c) => {
             const child = db.childOf(c);
             const activeSession = st.sessions.find((s) => s.caseId === c.id && s.status === 'active');
             return (
-              <div key={c.id} className="ap-card ap-row" style={{ padding: '0.85rem 1rem', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <strong style={{ fontSize: 'var(--ap-text-md)' }}>{child.preferredName}</strong>
+              <div key={c.id} className="ap-card pro-quick-case">
+                <div className="pro-min0">
+                  <strong>{child.preferredName}</strong>
                   <div className="ap-xs ap-muted">Modelo {c.model} · Plano v{c.planVersion}</div>
                 </div>
                 {activeSession ? (

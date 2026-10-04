@@ -6,9 +6,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { StimulusArt } from '@aprumo/stimuli';
-import { Button, IconCheck, IconFile, IconHeart, IconLogout, Logo, IconSmile } from '@aprumo/ui';
-import { actions, db, formatAge, summariesFor, useStore } from '../../data/store';
-import type { Guidance, HomeTask } from '../../data/types';
+import { Button, IconArrowRight, IconBook, IconChart, IconCheck, IconFile, IconHeart, IconHome, IconLogout, Logo } from '@aprumo/ui';
+import { actions, db, formatAge, screenMinutesToday, summariesFor, useStore } from '../../data/store';
+import type { Child, Guidance, HomeTask } from '../../data/types';
 import './family.css';
 
 const GUARDIAN_ID = 'gd-teo-mae';
@@ -35,12 +35,19 @@ export default function FamilyPortal() {
   const answered = st.socialValidity.some((v) => v.caseId === c.id && v.guardianId === guardian.id);
   const nextSessions = st.sessions.filter((s) => s.caseId === c.id).length;
 
+  // Crianças sob responsabilidade deste adulto (hoje o cadastro liga um responsável a uma criança;
+  // a lista já acomoda irmãos quando o vínculo for múltiplo).
+  const myChildren = db.guardians
+    .filter((g) => g.id === guardian.id || (g.name === guardian.name && g.relationship === guardian.relationship))
+    .map((g) => st.children.find((x) => x.id === g.childId))
+    .filter((x): x is Child => !!x);
+
   const [activeTab, setActiveTab] = useState<'inicio' | 'aprendendo' | 'casa' | 'orient' | 'docs'>('inicio');
 
   const scrollTo = (id: string, tab: 'inicio' | 'aprendendo' | 'casa' | 'orient' | 'docs') => {
     setActiveTab(tab);
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    document.getElementById(id)?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
   };
 
   return (
@@ -48,7 +55,7 @@ export default function FamilyPortal() {
       <header className="fam-top">
         <Logo href="/familia" />
         <span className="fam-demo">Demonstração · dados fictícios</span>
-        <Link className="ap-btn ap-btn--ghost" to="/"><IconLogout /> Sair</Link>
+        <Link className="ap-btn ap-btn--ghost fam-exit" to="/"><IconLogout /> Sair</Link>
       </header>
 
       <main className="fam-main" id="conteudo">
@@ -60,8 +67,16 @@ export default function FamilyPortal() {
           </div>
         </section>
 
+        <section className="fam-section" aria-labelledby="espaco-title">
+          <h2 id="espaco-title" className="ap-visually-hidden">Espaço da criança</h2>
+          <div className="fam-spaces">
+            {myChildren.map((k) => <ChildSpaceCard key={k.id} child={k} />)}
+          </div>
+        </section>
+
         <section className="fam-section" id="aprendendo" aria-labelledby="aprendendo-title">
           <h2 id="aprendendo-title">O que {child.preferredName} está aprendendo ({targets.length})</h2>
+          {targets.length === 0 && <p className="fam-empty">O plano ainda está sendo preparado pela equipe. Os objetivos aparecem aqui assim que forem definidos.</p>}
           <div className="fam-grid">
             {targets.map((t) => {
               const p = db.programOf(t);
@@ -89,7 +104,7 @@ export default function FamilyPortal() {
           <h2 id="casa-title">Para fazer em casa</h2>
           <div className="ap-stack" style={{ gap: '1rem' }}>
             {tasks.length === 0 ? (
-              <p className="fam-hint">Nenhuma tarefa ativa no momento.</p>
+              <p className="fam-empty">Nenhuma tarefa para casa agora. Quando a equipe sugerir uma atividade, ela aparece aqui com o passo a passo.</p>
             ) : (
               tasks.map((t) => <HomeTaskCard key={t.id} task={t} guardianId={guardian.id} />)
             )}
@@ -100,6 +115,7 @@ export default function FamilyPortal() {
           <section className="fam-section" id="orient" aria-labelledby="orient-title">
             <h2 id="orient-title">Orientações da equipe ({guidance.length})</h2>
             <div className="ap-stack" style={{ gap: '1rem' }}>
+              {guidance.length === 0 && <p className="fam-empty">Nenhuma orientação publicada ainda. A equipe envia dicas para o dia a dia por aqui.</p>}
               {guidance.map((g) => (
                 <GuidanceCard key={g.id} g={g} guardianId={guardian.id} />
               ))}
@@ -107,8 +123,8 @@ export default function FamilyPortal() {
           </section>
 
           <section className="fam-section" id="docs" aria-labelledby="docs-title">
-            <h2 id="docs-title">Documentos Compartilhados</h2>
-            {docs.length === 0 && <p className="fam-hint">Nenhum documento compartilhado ainda.</p>}
+            <h2 id="docs-title">Documentos compartilhados</h2>
+            {docs.length === 0 && <p className="fam-empty">Nenhum documento por aqui ainda. Quando a equipe finalizar um relatório para a família, ele aparece nesta lista.</p>}
             {docs.map((d) => {
               const v = [...d.versions].reverse().find((x) => x.status === 'final')!;
               return (
@@ -147,7 +163,7 @@ export default function FamilyPortal() {
           aria-current={activeTab === 'inicio' ? 'page' : undefined}
           onClick={() => scrollTo('conteudo', 'inicio')}
         >
-          <IconSmile />
+          <IconHome />
           <span>Início</span>
         </button>
         <button
@@ -156,7 +172,7 @@ export default function FamilyPortal() {
           aria-current={activeTab === 'aprendendo' ? 'page' : undefined}
           onClick={() => scrollTo('aprendendo', 'aprendendo')}
         >
-          <IconCheck />
+          <IconChart />
           <span>Progresso</span>
         </button>
         <button
@@ -174,7 +190,7 @@ export default function FamilyPortal() {
           aria-current={activeTab === 'orient' ? 'page' : undefined}
           onClick={() => scrollTo('orient', 'orient')}
         >
-          <IconFile />
+          <IconBook />
           <span>Orientações</span>
         </button>
         <button
@@ -188,6 +204,51 @@ export default function FamilyPortal() {
         </button>
       </nav>
     </div>
+  );
+}
+
+/**
+ * Entrada da criança no espaço dela. O adulto já está autenticado neste portal, então não há código
+ * nem PIN: um toque abre /espaco/:childId. A saída do espaço é a pressão prolongada (useHoldPress)
+ * e volta para cá (state.returnTo).
+ */
+function ChildSpaceCard({ child }: { child: Child }) {
+  const st = useStore((s) => s);
+  const c = st.cases.find((x) => x.childId === child.id && x.status === 'active');
+  const policy = db.screenPolicy(child.birthDate);
+  const name = child.preferredName;
+
+  if (!c || !policy.childPortalAllowed) {
+    return (
+      <article className="fam-space fam-space--off">
+        <span className="fam-avatar fam-avatar--sm" style={{ background: `hsl(${child.hue} 34% 44%)` }} aria-hidden="true">{name[0]}</span>
+        <div>
+          <h3>Espaço de {name}</h3>
+          <p className="fam-hint">
+            {!c
+              ? 'O espaço abre quando a equipe ativar o plano de atendimento.'
+              : 'Antes dos 2 anos não há espaço com tela para a criança: a plataforma é usada só pelo adulto (SBP, 2024).'}
+          </p>
+        </div>
+      </article>
+    );
+  }
+
+  const used = screenMinutesToday(st, c.id);
+  const limit = policy.dailyLimitMinutes;
+  const over = used >= limit;
+  return (
+    <Link className="fam-space" to={`/espaco/${child.id}`} state={{ returnTo: '/familia' }}>
+      <span className="fam-avatar fam-avatar--sm" style={{ background: `hsl(${child.hue} 34% 44%)` }} aria-hidden="true">{name[0]}</span>
+      <span className="fam-space__text">
+        <strong>Abrir o espaço de {name}</strong>
+        <span>
+          {over ? `Limite de tela de hoje atingido (${limit} min). Os jogos ficam pausados até amanhã.` : `Tela hoje: ${used} de ${limit} min · fique por perto enquanto ${name} usa.`}
+        </span>
+        <span className="fam-space__exit">Para voltar a este portal, mantenha pressionado o botão de sair, no canto da tela.</span>
+      </span>
+      <IconArrowRight className="fam-space__go" aria-hidden="true" />
+    </Link>
   );
 }
 

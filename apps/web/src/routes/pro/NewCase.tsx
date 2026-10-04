@@ -110,17 +110,19 @@ export default function NewCase() {
   };
 
   return (
-    <div className="ap-stack" style={{ gap: '1.25rem', maxWidth: 820, width: '100%', margin: '0 auto' }}>
-      <div>
-        <Link to="/app/casos" className="ap-small ap-back-link" style={{ textDecoration: 'none' }}>
-          <IconChevronLeft style={{ width: 16, verticalAlign: '-3px' }} /> Voltar para Casos
-        </Link>
-        <h1 style={{ fontSize: 'var(--ap-text-2xl)', marginTop: '0.2rem' }}>Novo caso clínico</h1>
-        <p className="ap-muted ap-small">Cadastro de prontuário individualizado com fluxo guiado de 7 etapas.</p>
-      </div>
+    <div className="pro-page pro-page--narrow">
+      <header className="page-head">
+        <div>
+          <Link to="/app/casos" className="pro-back-link">
+            <IconChevronLeft aria-hidden="true" /> Voltar para Casos
+          </Link>
+          <h1>Novo caso clínico</h1>
+          <p>Cadastro de prontuário individualizado com fluxo guiado de 7 etapas.</p>
+        </div>
+      </header>
 
       {/* Stepper em 7 etapas */}
-      <ol className="wizard-steps" aria-label="Etapas de abertura de caso" style={{ overflowX: 'auto', paddingBottom: '0.4rem' }}>
+      <ol className="wizard-steps wizard-steps--fluid" aria-label="Etapas de abertura de caso">
         {STEPS.map((label, i) => (
           <li
             key={label}
@@ -382,7 +384,7 @@ export default function NewCase() {
 
           {error && <p role="alert" className="form-error">{error}</p>}
 
-          <div className="form-actions ap-row" style={{ justifyContent: 'space-between' }}>
+          <div className="form-actions form-actions--split form-actions--sticky">
             {step > 0 ? (
               <Button onClick={back}>Voltar</Button>
             ) : (

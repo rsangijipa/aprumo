@@ -72,7 +72,7 @@ function AbaData({ caseId }: { caseId: string }) {
         </div>
       </Card>
 
-      <div className="ap-stack" style={{ gap: '1.25rem' }}>
+      <div className="pro-page">
         <Card
           title={<>{p.name} — {t.name}</>}
           actions={

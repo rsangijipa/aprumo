@@ -22,9 +22,9 @@ export default function CaseOverview() {
 
   return (
     <div className="grid-main">
-      <div className="ap-stack" style={{ gap: '1.25rem', alignContent: 'start' }}>
-        <Card title="Decisões e alertas">
-          <div style={{ margin: '-1.25rem' }}><AlertList alerts={alerts} /></div>
+      <div className="pro-page pro-page--top">
+        <Card title="Decisões e alertas" bodyClassName="pro-card-flush">
+          <AlertList alerts={alerts} />
         </Card>
 
         {c.model === 'ABA' ? (
@@ -37,8 +37,8 @@ export default function CaseOverview() {
               return (
                 <div className="target-row" key={t.id}>
                   <div className="target-thumb"><StimulusArt art={t.art} label={t.name} /></div>
-                  <div style={{ minWidth: 0 }}>
-                    <div style={{ fontWeight: 700 }}>{t.name}</div>
+                  <div className="pro-min0">
+                    <div className="pro-strong">{t.name}</div>
                     <div className="ap-xs ap-muted">{p.name} · {t.teachingChannel === 'digital' ? 'ensinado em jogo' : t.teachingChannel === 'natural' ? 'ensino natural' : 'mesa'}</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
@@ -75,7 +75,7 @@ export default function CaseOverview() {
         )}
       </div>
 
-      <div className="ap-stack" style={{ gap: '1.25rem', alignContent: 'start' }}>
+      <div className="pro-page pro-page--top">
         <Card title="Tempo de tela hoje">
           {policy.childPortalAllowed ? (
             <div className="ap-stack" style={{ gap: '0.5rem' }}>
@@ -83,7 +83,7 @@ export default function CaseOverview() {
                 <span className="stat__value" style={{ fontSize: 'var(--ap-text-xl)' }}>{todayScreen} <span className="ap-small ap-muted">de {policy.dailyLimitMinutes} min</span></span>
                 <span className="ap-xs ap-muted">blocos de até {policy.maxBlockMinutes} min</span>
               </div>
-              <div className="progress" style={{ width: '100%' }}><span style={{ width: `${Math.min(100, (todayScreen / policy.dailyLimitMinutes) * 100)}%` }} /></div>
+              <div className="progress progress--full"><span style={{ width: `${Math.min(100, (todayScreen / policy.dailyLimitMinutes) * 100)}%` }} /></div>
               <p className="ap-xs ap-muted">Limite padrão pela faixa etária (SBP, 2024). Sempre com adulto presente.</p>
             </div>
           ) : (
@@ -101,12 +101,12 @@ export default function CaseOverview() {
         </Card>
 
         <Card title="Perfil sensorial e interesses">
-          <dl className="ap-small" style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '0.35rem 1rem', margin: 0 }}>
-            <dt className="ap-muted">Movimento</dt><dd style={{ margin: 0 }}>{{ full: 'completo', reduced: 'reduzido', static: 'estático' }[c.adaptation.motion]}</dd>
-            <dt className="ap-muted">Som</dt><dd style={{ margin: 0 }}>{{ off: 'desligado', low: 'baixo', normal: 'normal' }[c.adaptation.sound]}</dd>
-            <dt className="ap-muted">Retorno de acerto</dt><dd style={{ margin: 0 }}>{{ none: 'nenhum', subtle: 'discreto', festive: 'festivo' }[c.adaptation.feedback]}</dd>
-            <dt className="ap-muted">Opções por tela</dt><dd style={{ margin: 0 }}>até {c.adaptation.maxChoices}</dd>
-            <dt className="ap-muted">Interesses</dt><dd style={{ margin: 0 }}>{c.interests.join(', ')}</dd>
+          <dl className="ap-small pro-dl">
+            <dt className="ap-muted">Movimento</dt><dd>{{ full: 'completo', reduced: 'reduzido', static: 'estático' }[c.adaptation.motion]}</dd>
+            <dt className="ap-muted">Som</dt><dd>{{ off: 'desligado', low: 'baixo', normal: 'normal' }[c.adaptation.sound]}</dd>
+            <dt className="ap-muted">Retorno de acerto</dt><dd>{{ none: 'nenhum', subtle: 'discreto', festive: 'festivo' }[c.adaptation.feedback]}</dd>
+            <dt className="ap-muted">Opções por tela</dt><dd>até {c.adaptation.maxChoices}</dd>
+            <dt className="ap-muted">Interesses</dt><dd>{c.interests.join(', ')}</dd>
           </dl>
         </Card>
 
@@ -115,7 +115,7 @@ export default function CaseOverview() {
             {timeline.slice(0, 8).map((t) => (
               <li key={t.id}>
                 <div>
-                  <div className="ap-small" style={{ fontWeight: 650 }}>{t.title}</div>
+                  <div className="ap-small pro-strong">{t.title}</div>
                   {t.detail && <div className="ap-xs ap-muted">{t.detail}</div>}
                   <div className="ap-xs ap-muted">{new Date(t.at).toLocaleDateString('pt-BR')}</div>
                 </div>

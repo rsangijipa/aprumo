@@ -1,129 +1,80 @@
-import {
-  Card,
-  
-  
-  
-  IconHeart,
-  IconLock,
-  IconShield,
-  
-} from '@aprumo/ui';
+import { IconHeart, IconLock, IconShield } from '@aprumo/ui';
 import { INSTITUTION_CONFIG } from '../../../config/institution';
-import { PublicPageLayout } from '../PublicNav';
+import { FeatureCard, PublicPageLayout, Section } from '../PublicNav';
+
+const dpoHref = `mailto:${INSTITUTION_CONFIG.dpoEmail}`;
 
 export default function SegurancaPage() {
   return (
     <PublicPageLayout
-      eyebrow="Segurança, Ética & Privacidade"
-      title={
-        <>
-          Dados de saúde de crianças exigem o <em>máximo cuidado e respeito à lei</em>
-        </>
-      }
-      lead="Construído desde o primeiro dia para conformidade integral com a LGPD (arts. 11 e 14), o ECA Digital e as normas dos conselhos profissionais de Psicologia (CFP) e Medicina (CFM)."
-      ctaText="Acessar ambiente seguro"
-      ctaHref="/entrar"
-      secondaryCtaText="Falar com o DPO"
-      secondaryCtaHref={`mailto:${INSTITUTION_CONFIG.dpoEmail}`}
+      eyebrow="Segurança e privacidade"
+      title={<>Dados de saúde de crianças pedem <em>cuidado redobrado</em></>}
+      lead="Projetado desde o início para a LGPD (arts. 11 e 14), o ECA Digital e as normas dos conselhos profissionais de Psicologia (CFP) e Medicina (CFM)."
+      ctaText="Acessar a demonstração"
+      secondaryCtaText="Falar com o encarregado (DPO)"
+      secondaryCtaHref={dpoHref}
+      closing={{
+        title: 'Dúvidas sobre dados e privacidade?',
+        text: 'O encarregado de proteção de dados responde a solicitações de titulares e de instituições parceiras.',
+        primary: { label: 'Escrever ao DPO', href: dpoHref },
+        secondary: { label: 'Outros contatos', href: '/contato' },
+      }}
     >
-      <section className="lp-section lp-section--sunken" id="seguranca">
-        <div className="lp-wrap">
-          <div className="lp-head">
-            <span className="ap-eyebrow">Pilares de Proteção</span>
-            <h2 className="lp-h2 ap-display">Como protegemos os registros dos seus pacientes</h2>
-          </div>
-
-          <div className="grid-3" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
-            <Card title="Prontuário Eletrônico Imutável">
-              <p className="ap-small ap-muted">
-                Em conformidade com a Resolução CFP 01/2009 e CFM 1.821/2007, nenhum registro clínico pode ser deletado ou alterado silenciosamente. Retificações geram adendos formais assinados com data, hora, autor e motivo da retificação.
-              </p>
-            </Card>
-
-            <Card title="Guarda Obrigatória de 20 Anos">
-              <p className="ap-small ap-muted">
-                O banco de dados possui bloqueio automático no nível de banco de dados (triggers e RLS) que impede a exclusão acidental de prontuários de menores de idade, assegurando o cumprimento do prazo legal de guarda de 20 anos.
-              </p>
-            </Card>
-
-            <Card title="Acesso Estrito por Vínculo com o Caso">
-              <p className="ap-small ap-muted">
-                Profissionais de uma clínica só conseguem visualizar os pacientes para os quais foram explicitamente designados. Administradores gerais da clínica não têm acesso a notas clínicas e conteúdos sensíveis de psicoterapia por padrão.
-              </p>
-            </Card>
-
-            <Card title="Auditoria Completa de Leitura e Escrita">
-              <p className="ap-small ap-muted">
-                Saber quem consultou um prontuário é tão importante quanto saber quem fez anotações. Cada abertura de caso gera um evento auditável imutável (`audit_read`), prevenindo acessos indevidos por curiosidade.
-              </p>
-            </Card>
-
-            <Card title="Hospedagem em Território Nacional">
-              <p className="ap-small ap-muted">
-                Os dados de saúde e prontuários são hospedados exclusivamente em data centers localizados no Brasil ({INSTITUTION_CONFIG.dataRegion}), garantindo conformidade com a soberania de dados prevista na legislação sanitária e na LGPD.
-              </p>
-            </Card>
-
-            <Card title="Pseudonimização no Ambiente de Jogos">
-              <p className="ap-small ap-muted">
-                Jogos e ferramentas interativas infantis nunca recebem o nome completo, CPF ou diagnóstico da criança. Apenas o apelido de preferência e um identificador opaco temporário são trafegados no runtime.
-              </p>
-            </Card>
-          </div>
+      <Section sunken id="seguranca" eyebrow="Pilares de proteção" title="Como os registros dos pacientes são protegidos">
+        <div className="lp-grid">
+          <FeatureCard title="Prontuário imutável">
+            Conforme as Resoluções CFP 01/2009 e CFM 1.821/2007, nenhum registro clínico é apagado ou alterado em
+            silêncio. Retificações geram adendos com data, hora, autor e motivo.
+          </FeatureCard>
+          <FeatureCard title="Guarda por 20 anos">
+            Bloqueios no próprio banco de dados (triggers e RLS) impedem a exclusão acidental de prontuários de
+            menores, garantindo o prazo legal de guarda.
+          </FeatureCard>
+          <FeatureCard title="Acesso por vínculo com o caso">
+            Cada profissional vê apenas os pacientes aos quais foi designado. Por padrão, administradores da clínica
+            não acessam notas clínicas sensíveis.
+          </FeatureCard>
+          <FeatureCard title="Auditoria de leitura e escrita">
+            Saber quem consultou um prontuário importa tanto quanto saber quem escreveu nele. Cada abertura de caso
+            gera um evento de auditoria imutável.
+          </FeatureCard>
+          <FeatureCard title="Hospedagem no Brasil">
+            Dados de saúde e prontuários ficam em data centers no Brasil ({INSTITUTION_CONFIG.dataRegion}), conforme a
+            legislação sanitária e a LGPD.
+          </FeatureCard>
+          <FeatureCard title="Pseudonimização nos jogos">
+            Jogos e ferramentas infantis nunca recebem nome completo, CPF ou diagnóstico. Trafegam apenas o apelido e
+            um identificador opaco temporário.
+          </FeatureCard>
         </div>
-      </section>
+      </Section>
 
-      <section className="lp-section" id="eca">
-        <div className="lp-wrap">
-          <div className="lp-head lp-head--center">
-            <span className="ap-eyebrow">ECA Digital & Ética na Infância</span>
-            <h2 className="lp-h2 ap-display">Compromissos inegociáveis de design com a infância</h2>
-          </div>
-
-          <div className="grid-3" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '2rem' }}>
-            <div className="ap-stack" style={{ gap: '0.5rem' }}>
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--ap-sage-50)', color: 'var(--ap-sage-700)', display: 'grid', placeItems: 'center' }}>
-                <IconShield />
-              </div>
-              <strong style={{ fontSize: 'var(--ap-text-lg)' }}>Zero Mecânicas Predatórias</strong>
-              <p className="ap-small ap-muted">Sem rankings entre crianças, sem caixas misteriosas de sorteio (loot boxes), sem notificações para a criança e sem compras no aplicativo.</p>
-            </div>
-
-            <div className="ap-stack" style={{ gap: '0.5rem' }}>
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--ap-sage-50)', color: 'var(--ap-sage-700)', display: 'grid', placeItems: 'center' }}>
-                <IconHeart />
-              </div>
-              <strong style={{ fontSize: 'var(--ap-text-lg)' }}>Zero Triagem Pública Aberta</strong>
-              <p className="ap-small ap-muted">O Aprumo não fornece testes abertos na internet que gerem escores diagnósticos sobre crianças fora de um vínculo ético profissional formal e consentido.</p>
-            </div>
-
-            <div className="ap-stack" style={{ gap: '0.5rem' }}>
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--ap-sage-50)', color: 'var(--ap-sage-700)', display: 'grid', placeItems: 'center' }}>
-                <IconLock />
-              </div>
-              <strong style={{ fontSize: 'var(--ap-text-lg)' }}>Canal do DPO Aberto</strong>
-              <p className="ap-small ap-muted">
-                Encarregado de Proteção de Dados (DPO) identificado com e-mail direto (<a href={`mailto:${INSTITUTION_CONFIG.dpoEmail}`}>{INSTITUTION_CONFIG.dpoEmail}</a>) para solicitações de titulares conforme art. 41 da LGPD.
-              </p>
-            </div>
-          </div>
+      <Section id="eca" eyebrow="ECA Digital e ética na infância" title="Compromissos de design com a infância">
+        <div className="lp-grid">
+          <FeatureCard icon={<IconShield />} title="Sem mecânicas predatórias">
+            Sem rankings entre crianças, sem caixas de sorteio (loot boxes), sem notificações para a criança e sem
+            compras no aplicativo.
+          </FeatureCard>
+          <FeatureCard icon={<IconHeart />} title="Sem triagem pública">
+            O Aprumo não oferece testes abertos na internet que gerem escores sobre crianças fora de um vínculo
+            profissional formal e consentido.
+          </FeatureCard>
+          <FeatureCard icon={<IconLock />} title="Encarregado identificado">
+            O encarregado de proteção de dados atende solicitações de titulares pelo e-mail{' '}
+            <a className="lp-text-link" href={dpoHref}>{INSTITUTION_CONFIG.dpoEmail}</a> (LGPD, art. 41).
+          </FeatureCard>
         </div>
-      </section>
-      <section className="lp-section lp-section--sunken" id="termos">
-        <div className="lp-wrap" style={{ maxWidth: 760 }}>
-          <div className="lp-head">
-            <span className="ap-eyebrow">Termos de uso & privacidade</span>
-            <h2 className="lp-h2 ap-display">Regras claras, em linguagem simples</h2>
-          </div>
-          <ul className="ap-stack" style={{ gap: '0.75rem', paddingLeft: '1.25rem' }}>
-            <li>Os dados clínicos pertencem ao paciente e ao responsável técnico; o Aprumo atua como operador (art. 5º, VII da LGPD).</li>
-            <li>Dados de crianças só são tratados com consentimento específico e destacado de ao menos um responsável legal (art. 14 da LGPD).</li>
-            <li>Registros de prontuário são imutáveis: correções geram adendos datados, nunca apagam o original (Res. CFP 06/2019).</li>
-            <li>Nenhum jogo recebe nome completo, documentos, câmera, microfone ou diagnóstico — apenas apelido e parâmetros de adaptação.</li>
-            <li>Você pode solicitar acesso, correção, portabilidade ou eliminação dos dados pelo canal do DPO acima.</li>
-          </ul>
-        </div>
-      </section>
+      </Section>
+
+      <Section sunken id="termos" eyebrow="Termos de uso e privacidade" title="Regras claras, em linguagem simples">
+        <ul className="lp-list">
+          <li>Os dados clínicos pertencem ao paciente e ao responsável técnico; o Aprumo atua como operador (LGPD, art. 5º, VII).</li>
+          <li>Dados de crianças só são tratados com consentimento específico e destacado de ao menos um responsável legal (LGPD, art. 14).</li>
+          <li>Registros de prontuário são imutáveis: correções geram adendos datados e nunca apagam o original (Res. CFP 06/2019).</li>
+          <li>Nenhum jogo recebe nome completo, documentos, câmera, microfone ou diagnóstico — apenas apelido e parâmetros de adaptação.</li>
+          <li>Você pode solicitar acesso, correção, portabilidade ou eliminação dos dados pelo canal do encarregado.</li>
+        </ul>
+      </Section>
     </PublicPageLayout>
   );
 }
