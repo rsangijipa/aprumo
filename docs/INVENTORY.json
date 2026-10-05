@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-10-05T02:31:43.424Z",
+  "generatedAt": "2026-10-05T04:07:51.052Z",
   "counts": {
-    "games": 15,
+    "games": 23,
     "migrations": 18,
     "therapeuticResources": 14,
     "publicRoutes": 16,
@@ -10,6 +10,30 @@
     "protocolEvents": 21
   },
   "games": [
+    {
+      "appId": "bolhas-magicas",
+      "name": "Bolhas Mágicas",
+      "version": "1.0.0",
+      "summary": "Treino de pedido (mand) e estimulação sensorial: estouro de bolhas e pausa comportamental para pedir mais.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "mand",
+        "play"
+      ],
+      "purposes": [
+        "teaching",
+        "reinforcer",
+        "regulation"
+      ],
+      "models": {
+        "ABA": "support",
+        "DENVER": "joint-routine"
+      }
+    },
     {
       "appId": "causa-efeito",
       "name": "Causa e Efeito",
@@ -28,7 +52,10 @@
         "reinforcer",
         "teaching"
       ],
-      "models": {}
+      "models": {
+        "ABA": "support",
+        "DENVER": "joint-routine"
+      }
     },
     {
       "appId": "circuito-executivo",
@@ -47,7 +74,34 @@
         "teaching",
         "probe"
       ],
-      "models": {}
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
+      "appId": "danca-do-congelar",
+      "name": "Dança do Congelar",
+      "version": "1.0.0",
+      "summary": "Regulação auditivo-motora e controle de impulsos (ABA e Denver): dançar com a música e congelar imediatamente quando a música parar.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "play",
+        "alternative_behavior"
+      ],
+      "purposes": [
+        "teaching",
+        "regulation",
+        "reinforcer"
+      ],
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
     },
     {
       "appId": "detetive-das-emocoes",
@@ -66,7 +120,33 @@
         "teaching",
         "probe"
       ],
-      "models": {}
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
+      "appId": "encaixa-ai",
+      "name": "Encaixa Aí",
+      "version": "1.0.0",
+      "summary": "Quebra-cabeça de encaixe com pino ensinado como cadeia (encadeamento reverso, direto ou tarefa total): cada peça é um passo registrado, com raio de captura e tolerância angular por nível.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "matching",
+        "play"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "not-indicated"
+      }
     },
     {
       "appId": "encontre-o-igual",
@@ -85,7 +165,10 @@
         "teaching",
         "probe"
       ],
-      "models": {}
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "not-indicated"
+      }
     },
     {
       "appId": "escolha-pela-instrucao",
@@ -105,7 +188,10 @@
         "teaching",
         "probe"
       ],
-      "models": {}
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "not-indicated"
+      }
     },
     {
       "appId": "espelho-magico",
@@ -124,7 +210,37 @@
         "teaching",
         "probe"
       ],
-      "models": {}
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
+      "appId": "fazendinha-sonora",
+      "name": "Fazendinha Sonora",
+      "version": "1.0.0",
+      "summary": "Leitura compartilhada (Denver): livro de abas ",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "social",
+        "echoic",
+        "imitation",
+        "mand",
+        "tact",
+        "listener"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {
+        "ABA": "not-indicated",
+        "DENVER": "joint-routine"
+      }
     },
     {
       "appId": "historia-ordem",
@@ -145,7 +261,35 @@
         "teaching",
         "probe"
       ],
-      "models": {}
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
+      "appId": "lanche-do-urso",
+      "name": "Hora do Lanche do Urso",
+      "version": "1.0.0",
+      "summary": "Brincar de faz de conta (Denver): dar comida, água, limpar e pôr o urso para dormir; de ações isoladas a sequências e substituição simbólica. Formato espelho com o kit real ao lado do tablet.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "play",
+        "imitation",
+        "listener",
+        "social"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {
+        "ABA": "not-indicated",
+        "DENVER": "joint-routine"
+      }
     },
     {
       "appId": "memoria-bichos",
@@ -165,7 +309,10 @@
         "teaching",
         "probe"
       ],
-      "models": {}
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
     },
     {
       "appId": "minha-vez-sua-vez",
@@ -184,7 +331,10 @@
       "purposes": [
         "teaching"
       ],
-      "models": {}
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
     },
     {
       "appId": "minimundos",
@@ -203,7 +353,10 @@
         "teaching",
         "probe"
       ],
-      "models": {}
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
     },
     {
       "appId": "missao-independencia",
@@ -224,7 +377,10 @@
         "probe",
         "reinforcer"
       ],
-      "models": {}
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
     },
     {
       "appId": "olha-comigo",
@@ -243,7 +399,10 @@
         "teaching",
         "probe"
       ],
-      "models": {}
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
     },
     {
       "appId": "organize-categoria",
@@ -264,7 +423,10 @@
         "teaching",
         "probe"
       ],
-      "models": {}
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
     },
     {
       "appId": "pequeno-chef",
@@ -286,7 +448,57 @@
         "probe",
         "reinforcer"
       ],
-      "models": {}
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
+      "appId": "rampa-maluca",
+      "name": "Rampa Maluca",
+      "version": "1.0.0",
+      "summary": "Rotina de atividade conjunta (Denver) com carrinhos e bolinhas na rampa: o adulto conduz ",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "mand",
+        "echoic",
+        "social",
+        "play"
+      ],
+      "purposes": [
+        "teaching"
+      ],
+      "models": {
+        "ABA": "not-indicated",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
+      "appId": "siga-o-mestre",
+      "name": "Siga o Mestre",
+      "version": "1.0.0",
+      "summary": "Discriminação auditiva e controle inibitório (ABA): seguir comandos apenas quando o mestre mandar e segurar o impulso nas pegadinhas.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "listener",
+        "alternative_behavior"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "not-indicated"
+      }
     },
     {
       "appId": "social-city",
@@ -307,7 +519,33 @@
         "probe",
         "reinforcer"
       ],
-      "models": {}
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
+      "appId": "tambor-da-imitacao",
+      "name": "Tambor da Imitação",
+      "version": "1.0.0",
+      "summary": "Imitação motora com objetos (Denver e ABA): reciprocidade musical com Tico e treino de imitação de sequências no tambor.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "imitation",
+        "play"
+      ],
+      "purposes": [
+        "teaching",
+        "reinforcer"
+      ],
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
     }
   ],
   "migrations": [

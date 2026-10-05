@@ -1,0 +1,40 @@
+import type { GameManifest } from '@aprumo/protocol';
+
+export const manifest: GameManifest = {
+  appId: 'bolhas-magicas',
+  version: '1.0.0',
+  name: 'Bolhas Mágicas',
+  kind: 'game',
+  summary: 'Treino de pedido (mand) e estimulação sensorial: estouro de bolhas e pausa comportamental para pedir mais.',
+  clinical: {
+    purposes: ['teaching', 'reinforcer', 'regulation'],
+    models: { ABA: 'support', DENVER: 'joint-routine' },
+    repertoires: ['mand', 'play'],
+    autoScoring: ['mand'],
+    therapistScoring: [],
+    playLevel: 'functional',
+    trialUnit: 'Ciclo de sopro de bolhas, estouro sensorial e pedido (mand) durante a pausa comportamental.',
+    correctResponse: 'Comunicação de pedido (toque no botão MAIS ou frase de mando) para reiniciar o sopro.',
+    minFieldSize: 1,
+    maxFieldSize: 4,
+    latencyMaxMs: 15000,
+    builtInPrompts: [
+      { code: 'PULSE_MORE', afterMs: 5000, intrusiveness: 0.2 },
+      { code: 'VOICE_PROMPT', afterMs: 10000, intrusiveness: 0.5 },
+    ],
+    prerequisites: [],
+    ageRangeMonths: [12, 60],
+    requiresAdult: false,
+    sensory: { flashes: false, motionReducible: true, sound: 'adjustable' },
+    emits: [
+      'SESSION_STARTED',
+      'TRIAL_STARTED',
+      'TRIAL_COMPLETED',
+      'PROMPT_USED',
+      'REWARD_TRIGGERED',
+      'SESSION_PAUSED',
+      'SESSION_RESUMED',
+      'SESSION_COMPLETED',
+    ],
+  },
+};

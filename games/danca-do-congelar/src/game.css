@@ -1,0 +1,233 @@
+:root {
+  --ddc-bg-dance: #090a1a;
+  --ddc-bg-ice: #0c1a2e;
+  --ddc-neon-pink: #ec4899;
+  --ddc-neon-purple: #a855f7;
+  --ddc-neon-cyan: #06b6d4;
+  --ddc-ice-cyan: #38bdf8;
+  --ddc-ice-glow: rgba(56, 189, 248, 0.4);
+  --ddc-text: #f8fafc;
+  --ddc-gold: #fbbf24;
+}
+
+.ddc-root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  min-height: 520px;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  background: radial-gradient(circle at 50% 30%, #2e1065 0%, #090a1a 100%);
+  color: var(--ddc-text);
+  font-family: system-ui, -apple-system, sans-serif;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background 0.4s ease;
+}
+
+.ddc-root.frozen {
+  background: radial-gradient(circle at 50% 30%, #075985 0%, #082f49 50%, #020617 100%);
+}
+
+/* Header */
+.ddc-header {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.ddc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.4rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+}
+
+.ddc-badge strong {
+  color: var(--ddc-gold);
+  font-weight: 700;
+}
+
+/* Status Banner */
+.ddc-status-banner {
+  margin: 0.5rem 0;
+  padding: 0.75rem 1.6rem;
+  border-radius: 2rem;
+  font-size: 1.35rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+  animation: ddc-pulse-banner 1.5s infinite alternate;
+}
+
+.ddc-status-banner.dancing {
+  background: linear-gradient(135deg, var(--ddc-neon-pink), var(--ddc-neon-purple));
+  color: #ffffff;
+}
+
+.ddc-status-banner.frozen {
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  color: #0f172a;
+  box-shadow: 0 0 35px var(--ddc-ice-glow);
+}
+
+/* Center Dancer Stage */
+.ddc-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 280px;
+  height: 280px;
+  max-width: 75vw;
+  max-height: 75vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.15) 0%, rgba(168, 85, 247, 0.05) 70%, transparent 100%);
+  border: 4px dashed rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.1s ease, border-color 0.3s ease;
+  z-index: 10;
+}
+
+.ddc-stage.frozen {
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(2, 132, 199, 0.1) 70%, transparent 100%);
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 40px var(--ddc-ice-glow);
+}
+
+.ddc-dancer-mascot {
+  font-size: 6rem;
+  line-height: 1;
+  transition: transform 0.2s ease, filter 0.3s ease;
+}
+
+.ddc-dancer-mascot.dancing {
+  animation: ddc-dance-groove 0.5s infinite alternate ease-in-out;
+}
+
+.ddc-dancer-mascot.frozen {
+  filter: drop-shadow(0 0 20px #38bdf8) brightness(1.2);
+  transform: scale(0.98);
+}
+
+.ddc-tap-prompt {
+  margin-top: 0.75rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Frost overlay on freeze */
+.ddc-frost-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at center, transparent 40%, rgba(56, 189, 248, 0.15) 90%, rgba(56, 189, 248, 0.35) 100%);
+  z-index: 20;
+}
+
+/* Snowflake particles / decoration */
+.ddc-ice-shards {
+  position: absolute;
+  top: 15%;
+  font-size: 2rem;
+  opacity: 0.7;
+  animation: ddc-spin 10s linear infinite;
+  pointer-events: none;
+}
+
+/* Impulsive tap feedback alert */
+.ddc-impulsive-warning {
+  position: absolute;
+  bottom: 5.5rem;
+  background: #ef4444;
+  color: #ffffff;
+  padding: 0.6rem 1.4rem;
+  border-radius: 1rem;
+  font-weight: 800;
+  font-size: 1.1rem;
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.5);
+  z-index: 30;
+  animation: ddc-shake 0.35s ease;
+}
+
+/* Bottom Controls */
+.ddc-footer {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+}
+
+.ddc-btn {
+  background: linear-gradient(135deg, var(--ddc-neon-pink), var(--ddc-neon-purple));
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 1.8rem;
+  border-radius: 9999px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+  transition: transform 0.1s ease, filter 0.2s ease;
+  min-height: 48px;
+}
+
+.ddc-btn:hover {
+  filter: brightness(1.15);
+}
+
+.ddc-btn:active {
+  transform: scale(0.96);
+}
+
+/* Animations */
+@keyframes ddc-dance-groove {
+  0% { transform: translateY(0) rotate(-6deg) scale(1); }
+  50% { transform: translateY(-16px) rotate(0deg) scale(1.08); }
+  100% { transform: translateY(0) rotate(6deg) scale(1); }
+}
+
+@keyframes ddc-pulse-banner {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.03); }
+}
+
+@keyframes ddc-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+@keyframes ddc-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ddc-dancer-mascot.dancing,
+  .ddc-status-banner,
+  .ddc-ice-shards {
+    animation: none !important;
+  }
+}

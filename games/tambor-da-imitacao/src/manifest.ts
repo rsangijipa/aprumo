@@ -1,0 +1,40 @@
+import type { GameManifest } from '@aprumo/protocol';
+
+export const manifest: GameManifest = {
+  appId: 'tambor-da-imitacao',
+  version: '1.0.0',
+  name: 'Tambor da Imitação',
+  kind: 'game',
+  summary: 'Imitação motora com objetos (Denver e ABA): reciprocidade musical com Tico e treino de imitação de sequências no tambor.',
+  clinical: {
+    purposes: ['teaching', 'reinforcer'],
+    models: { ABA: 'trial-based', DENVER: 'joint-routine' },
+    repertoires: ['imitation', 'play'],
+    autoScoring: ['imitation'],
+    therapistScoring: [],
+    playLevel: 'reciprocal',
+    trialUnit: 'Imitação motora de padrão percussivo no tambor (centro/borda).',
+    correctResponse: 'Reprodução precisa da sequência de zonas batidas pelo modelo.',
+    minFieldSize: 2,
+    maxFieldSize: 4,
+    latencyMaxMs: 12000,
+    builtInPrompts: [
+      { code: 'HIGHLIGHT_ZONE', afterMs: 4000, intrusiveness: 0.25 },
+      { code: 'MODEL_REPEAT', afterMs: 8000, intrusiveness: 0.5 },
+    ],
+    prerequisites: ['atencao-compartilhada-inicial'],
+    ageRangeMonths: [15, 72],
+    requiresAdult: false,
+    sensory: { flashes: false, motionReducible: true, sound: 'adjustable' },
+    emits: [
+      'SESSION_STARTED',
+      'TRIAL_STARTED',
+      'TRIAL_COMPLETED',
+      'PROMPT_USED',
+      'REWARD_TRIGGERED',
+      'SESSION_PAUSED',
+      'SESSION_RESUMED',
+      'SESSION_COMPLETED',
+    ],
+  },
+};

@@ -89,7 +89,7 @@ export default function ChildShell() {
               targetId: p.targetId, sessionId, phase: target?.phase ?? 'acquisition', response: p.response,
               promptIntrusiveness: p.promptLevel === 'IND' ? 0 : level?.intrusiveness ?? 0.25, promptCode: p.promptLevel,
               latencyMs: p.latencyMs, channel: 'digital', positionOfTarget: p.positionOfTarget, selectedPosition: p.selectedPosition,
-              fieldSize: p.presented.length || null, probe: false, art: target?.art,
+              fieldSize: p.presented.length || null, probe: false, art: target?.art, detail: p.detail,
             },
             ev.eventId,
           );

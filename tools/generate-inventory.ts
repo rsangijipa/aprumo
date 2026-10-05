@@ -55,13 +55,15 @@ const gamesList: GameInfo[] = gameDirs.map((dir) => {
   let summary = '';
   let repertoires: string[] = [];
   let purposes: string[] = [];
-  let models: { ABA?: string; DENVER?: string } = {};
+  const models: { ABA?: string; DENVER?: string } = {};
 
   if (fs.existsSync(pkgPath)) {
     try {
       const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
       version = pkg.version || '1.0.0';
-    } catch {}
+    } catch {
+      // ignore parse error
+    }
   }
 
   if (fs.existsSync(manifestPath)) {
@@ -78,6 +80,10 @@ const gamesList: GameInfo[] = gameDirs.map((dir) => {
     if (purpMatch) {
       purposes = purpMatch[1].split(',').map((s) => s.replace(/['"\s]/g, '')).filter(Boolean);
     }
+    const abaMatch = code.match(/ABA:\s*['"]([^'"]+)['"]/);
+    if (abaMatch) models.ABA = abaMatch[1];
+    const denverMatch = code.match(/DENVER:\s*['"]([^'"]+)['"]/);
+    if (denverMatch) models.DENVER = denverMatch[1];
   }
 
   let renderType = 'DOM / SVG vetorial';
@@ -192,7 +198,7 @@ const migrationsList: MigrationInfo[] = migrationFiles.map((file) => {
     purpose: 'Migração de banco de dados Supabase/PostgreSQL',
   };
   const content = fs.readFileSync(path.join(migrationsDir, file), 'utf8');
-  const tableMatches = Array.from(content.matchAll(/CREATE\s+(?:TABLE|VIEW)\s+(?:IF\s+NOT\s+EXISTS\s+)?([a-zA-Z0-9_\.]+)/gi)).map(
+  const tableMatches = Array.from(content.matchAll(/CREATE\s+(?:TABLE|VIEW)\s+(?:IF\s+NOT\s+EXISTS\s+)?([a-zA-Z0-9_.]+)/gi)).map(
     (m) => m[1]
   );
 
@@ -447,7 +453,7 @@ const inventoryData = {
 fs.writeFileSync(path.join(rootDir, 'docs', 'INVENTORY.json'), JSON.stringify(inventoryData, null, 2), 'utf8');
 
 // Write Markdown report
-let md = `# Inventário Geral e Reconciliação Técnica — Aprumo v3.0
+const md = `# Inventário Geral e Reconciliação Técnica — Aprumo v3.0
 
 > Documento gerado automaticamente por \`tools/generate-inventory.ts\` inspecionando diretamente os arquivos de código-fonte, esquemas SQL e manifestos clínicos.
 

@@ -20,6 +20,14 @@ import { manifest as detetiveDasEmocoes } from '@aprumo/game-detetive-das-emocoe
 import { manifest as circuitoExecutivo } from '@aprumo/game-circuito-executivo/manifest';
 import { manifest as miniMundos } from '@aprumo/game-minimundos/manifest';
 import { manifest as socialCity } from '@aprumo/game-social-city/manifest';
+import { manifest as bolhasMagicas } from '@aprumo/game-bolhas-magicas/manifest';
+import { manifest as tamborDaImitacao } from '@aprumo/game-tambor-da-imitacao/manifest';
+import { manifest as sigaOMestre } from '@aprumo/game-siga-o-mestre/manifest';
+import { manifest as dancaDoCongelar } from '@aprumo/game-danca-do-congelar/manifest';
+import { manifest as encaixaAi } from '@aprumo/game-encaixa-ai/manifest';
+import { manifest as rampaMaluca } from '@aprumo/game-rampa-maluca/manifest';
+import { manifest as lancheDoUrso } from '@aprumo/game-lanche-do-urso/manifest';
+import { manifest as fazendinhaSonora } from '@aprumo/game-fazendinha-sonora/manifest';
 import { manifest as quadroDeFichas } from '@aprumo/resource-quadro-de-fichas/manifest';
 import { manifest as agendaVisual } from '@aprumo/resource-agenda-visual/manifest';
 
@@ -44,6 +52,14 @@ export const GAMES: Record<string, GameEntry> = {
   'circuito-executivo': { manifest: circuitoExecutivo, load: () => import('@aprumo/game-circuito-executivo').then((m) => m.Game) },
   'minimundos': { manifest: miniMundos, load: () => import('@aprumo/game-minimundos').then((m) => m.Game) },
   'social-city': { manifest: socialCity, load: () => import('@aprumo/game-social-city').then((m) => m.Game) },
+  'bolhas-magicas': { manifest: bolhasMagicas, load: () => import('@aprumo/game-bolhas-magicas').then((m) => m.Game) },
+  'tambor-da-imitacao': { manifest: tamborDaImitacao, load: () => import('@aprumo/game-tambor-da-imitacao').then((m) => m.Game) },
+  'siga-o-mestre': { manifest: sigaOMestre, load: () => import('@aprumo/game-siga-o-mestre').then((m) => m.Game) },
+  'danca-do-congelar': { manifest: dancaDoCongelar, load: () => import('@aprumo/game-danca-do-congelar').then((m) => m.Game) },
+  'encaixa-ai': { manifest: encaixaAi, load: () => import('@aprumo/game-encaixa-ai').then((m) => m.Game) },
+  'rampa-maluca': { manifest: rampaMaluca, load: () => import('@aprumo/game-rampa-maluca').then((m) => m.Game) },
+  'lanche-do-urso': { manifest: lancheDoUrso, load: () => import('@aprumo/game-lanche-do-urso').then((m) => m.Game) },
+  'fazendinha-sonora': { manifest: fazendinhaSonora, load: () => import('@aprumo/game-fazendinha-sonora').then((m) => m.Game) },
 };
 
 /** Recursos de apoio rodam na própria moldura infantil (não em iframe): são da plataforma. */

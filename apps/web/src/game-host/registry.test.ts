@@ -35,6 +35,30 @@ describe('Game Registry Release Gate', () => {
     expect(GAMES['social-city']!.manifest.name).toBe('Social City 3D');
   });
 
+  it('includes the 4 specialized ABA and Denver games: Bolhas Mágicas, Tambor da Imitação, Siga o Mestre, and Dança do Congelar', () => {
+    expect(GAMES['bolhas-magicas']).toBeDefined();
+    expect(GAMES['tambor-da-imitacao']).toBeDefined();
+    expect(GAMES['siga-o-mestre']).toBeDefined();
+    expect(GAMES['danca-do-congelar']).toBeDefined();
+
+    expect(GAMES['bolhas-magicas']!.manifest.name).toBe('Bolhas Mágicas');
+    expect(GAMES['tambor-da-imitacao']!.manifest.name).toBe('Tambor da Imitação');
+    expect(GAMES['siga-o-mestre']!.manifest.name).toBe('Siga o Mestre');
+    expect(GAMES['danca-do-congelar']!.manifest.name).toBe('Dança do Congelar');
+  });
+
+  it('includes the 4 specialized games: Encaixa Aí, Rampa Maluca, Hora do Lanche do Urso, and Fazendinha Sonora', () => {
+    expect(GAMES['encaixa-ai']).toBeDefined();
+    expect(GAMES['rampa-maluca']).toBeDefined();
+    expect(GAMES['lanche-do-urso']).toBeDefined();
+    expect(GAMES['fazendinha-sonora']).toBeDefined();
+
+    expect(GAMES['encaixa-ai']!.manifest.name).toBe('Encaixa Aí');
+    expect(GAMES['rampa-maluca']!.manifest.name).toBe('Rampa Maluca');
+    expect(GAMES['lanche-do-urso']!.manifest.name).toBe('Hora do Lanche do Urso');
+    expect(GAMES['fazendinha-sonora']!.manifest.name).toBe('Fazendinha Sonora');
+  });
+
   it('validates support resources manifests', () => {
     for (const res of SUPPORT_RESOURCES) {
       const parsed = GameManifest.safeParse(res);

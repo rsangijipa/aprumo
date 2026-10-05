@@ -1,0 +1,204 @@
+/* Encaixa Aí — madeira clara em recorte de papel. Tokens próprios `--ea-*`. */
+.ea {
+  --ea-bg: #f3ede2;
+  --ea-ink: #3d3a33;
+  --ea-tray: #dfe7da;
+  --ea-tray-edge: #b9c9b1;
+  --ea-wood: #ecd6b3;
+  --ea-wood-edge: #c9a87c;
+  --ea-wood-shadow: rgba(92, 66, 38, 0.22);
+  --ea-grain: rgba(150, 110, 66, 0.18);
+  --ea-cavity: #c7a57a;
+  --ea-glow: #f4c95d;
+  --ea-ring: #4f7f6b;
+  --ea-pin: #d8b384;
+  --ea-pin-edge: #9f774a;
+  --ea-p-sol: #e9b949;
+  --ea-p-ceu: #6fa3cf;
+  --ea-p-folha: #74a56c;
+  --ea-p-mostarda: #d9a53c;
+  --ea-p-coral: #e08e7f;
+  --ea-p-lilas: #9b8bc4;
+  --ea-p-terracota: #cf7d55;
+  --ea-p-petroleo: #3f8a86;
+  --ea-s-sky: #cfe3ee;
+  --ea-s-hill: #9cc28c;
+  --ea-s-hill2: #b8d3a3;
+  --ea-s-barn: #c46c4f;
+  --ea-s-roof: #8a4a3a;
+  --ea-s-leaf: #6b9c5e;
+  --ea-s-pond: #8dbbd6;
+  --ea-move-snap: 180ms;
+  --ea-move-return: 350ms;
+  --ea-spring: cubic-bezier(0.3, 1.25, 0.6, 1); /* ≈ mola k=400, c=30 (ζ≈0,75, leve ultrapassagem) */
+  --ea-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--ea-bg);
+  color: var(--ea-ink);
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+.ea[data-palette='vivid'] {
+  --ea-p-sol: #f2b632; --ea-p-ceu: #4f93d1; --ea-p-folha: #5fa556; --ea-p-coral: #ef7f6c; --ea-p-lilas: #8c74d0;
+}
+.ea[data-palette='high-contrast'] {
+  --ea-bg: #ffffff; --ea-ink: #111; --ea-wood: #f6e6c8; --ea-cavity: #6b4a26; --ea-ring: #0b4d8c; --ea-glow: #ffb000;
+}
+.ea[data-sensory='minimal'] { --ea-bg: #faf9f6; }
+
+.ea-stage { width: 100%; height: 100%; display: block; touch-action: none; }
+
+/* ---------------------------------------------------------------- tabuleiro */
+.ea-board { fill: var(--ea-wood); stroke: var(--ea-wood-edge); stroke-width: 3; }
+.ea-board-shadow, .ea-tray-shadow { fill: var(--ea-wood-shadow); }
+.ea-tray { fill: var(--ea-tray); stroke: var(--ea-tray-edge); stroke-width: 3; stroke-dasharray: 2 10; stroke-linecap: round; }
+.ea-grain path { fill: none; stroke: var(--ea-grain); stroke-width: 3; stroke-linecap: round; }
+.ea-farm-grass { fill: var(--ea-s-hill2); opacity: 0.55; }
+.ea-farm-sun { fill: var(--ea-p-sol); opacity: 0.5; }
+.ea-frame { fill: none; stroke: var(--ea-wood-edge); stroke-width: 3; stroke-dasharray: 12 10; }
+.ea-ghost-scene { opacity: 0.16; }
+
+/* ---------------------------------------------------------------- cavidades */
+.ea-slot { outline: none; }
+.ea-slot__hit { fill: transparent; }
+.ea-slot[data-open='false'] { pointer-events: none; }
+.ea-cavity { fill: var(--ea-cavity); }
+.ea-cavity__glow { fill: none; stroke: var(--ea-glow); stroke-width: 14; stroke-linejoin: round; opacity: 0; transition: opacity 400ms ease; }
+.ea-slot[data-glow='true'] .ea-cavity__glow { opacity: 0.85; }
+.ea[data-motion='normal'] .ea-slot[data-glow='true'] .ea-cavity__glow { animation: ea-breathe 2.4s ease-in-out infinite; }
+.ea-slot[data-target='true'] .ea-slot__hit { stroke: var(--ea-ring); stroke-width: 2; stroke-dasharray: 4 8; opacity: 0.5; }
+.ea-slot:focus-visible .ea-slot__hit { stroke: var(--ea-ring); stroke-width: 5; stroke-dasharray: none; opacity: 1; }
+
+/* ---------------------------------------------------------------- peças */
+.ea-piece {
+  cursor: grab;
+  outline: none;
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transition: transform var(--ea-move-return) var(--ea-ease-out), opacity 300ms ease;
+}
+.ea-piece[data-status='drag'] { cursor: grabbing; transition: none; }
+.ea-piece[data-status='held'] { transition: transform 120ms ease-out; }
+.ea-piece[data-status='placed'] { cursor: default; transition: transform var(--ea-move-snap) var(--ea-spring); }
+.ea-piece[data-status='hidden'] { opacity: 0; pointer-events: none; }
+.ea[data-phase='autofill'] .ea-piece[data-status='placed'] { transition: transform 420ms var(--ea-ease-out), opacity 300ms ease; }
+.ea-piece__hit { fill: transparent; }
+.ea-piece__body { stroke: rgba(0, 0, 0, 0.12); stroke-width: 2; stroke-linejoin: round; }
+.ea-piece__shadow { fill: rgba(70, 48, 26, 0.22); }
+.ea-piece__shine { fill: rgba(255, 255, 255, 0.14); transform: translate(-2px, -3px) scale(0.92); transform-box: fill-box; transform-origin: center; pointer-events: none; }
+.ea-piece__edge { fill: none; stroke: rgba(255, 255, 255, 0.7); stroke-width: 2; }
+.ea-piece__ring { fill: none; stroke: var(--ea-ring); stroke-width: 5; stroke-dasharray: 10 8; opacity: 0; pointer-events: none; }
+.ea-piece[data-selected='true'] .ea-piece__ring, .ea-piece:focus-visible .ea-piece__ring { opacity: 1; }
+.ea-piece:focus-visible .ea-piece__ring { stroke-dasharray: none; }
+.ea-pin__base { fill: var(--ea-pin-edge); }
+.ea-pin__top { fill: var(--ea-pin); stroke: var(--ea-pin-edge); stroke-width: 1.5; }
+.ea-pin__hi { fill: rgba(255, 255, 255, 0.55); }
+.ea[data-palette='high-contrast'] .ea-piece__body { stroke: #111; stroke-width: 3; }
+
+.ea-rot-hint path { fill: none; stroke: var(--ea-ring); stroke-width: 6; stroke-linecap: round; }
+.ea-rot-hint .ea-rot-hint__head { fill: var(--ea-ring); stroke: none; }
+.ea[data-motion='normal'] .ea-rot-hint { animation: ea-nudge 1.6s ease-in-out infinite; transform-origin: 0 0; }
+
+/* ---------------------------------------------------------------- dica gestual */
+.ea-ghost { pointer-events: none; }
+.ea-ghost__path { stroke: var(--ea-ring); stroke-width: 4; stroke-dasharray: 2 12; stroke-linecap: round; opacity: 0.6; }
+.ea-ghost__mover { transform: translate(var(--tx), var(--ty)); }
+.ea[data-motion='normal'] .ea-ghost__mover { animation: ea-guide 2.2s var(--ea-ease-out) infinite; }
+.ea[data-motion='reduced'] .ea-ghost__mover { animation: ea-guide 3s linear infinite; }
+.ea-hand path { fill: #fff7ec; stroke: var(--ea-ink); stroke-width: 2.5; stroke-linejoin: round; }
+
+/* ---------------------------------------------------------------- conclusão (cena ganha vida) */
+.ea-anim { transform-box: fill-box; transform-origin: center; }
+.ea[data-phase='celebrate'][data-motion='normal'] .ea-piece[data-anim='hop'] .ea-anim { animation: ea-hop 0.7s ease-in-out 3; }
+.ea[data-phase='celebrate'][data-motion='normal'] .ea-piece[data-anim='fly'] .ea-anim { animation: ea-fly 1.6s ease-in-out 1; }
+.ea[data-phase='celebrate'][data-motion='normal'] .ea-piece[data-anim='swim'] .ea-anim { animation: ea-swim 1s ease-in-out 2; }
+.ea[data-phase='celebrate'][data-motion='normal'] .ea-piece[data-anim='drive'] .ea-anim { animation: ea-drive 1.8s ease-in-out 1; }
+.ea[data-phase='celebrate'][data-motion='normal'] .ea-piece[data-anim='sway'] .ea-anim { animation: ea-sway 1s ease-in-out 2; }
+.ea[data-phase='celebrate'][data-motion='normal'] .ea-piece[data-anim='bob'] .ea-anim { animation: ea-bob 0.8s ease-in-out 2; }
+.ea[data-phase='celebrate'][data-motion='reduced'] .ea-piece .ea-anim { animation: ea-bob-soft 1.2s ease-in-out 1; }
+.ea[data-phase='celebrate'] .ea-piece[data-anim='glow'] .ea-piece__body,
+.ea[data-phase='celebrate'] .ea-piece[data-anim='glow'] .ea-piece__edge { filter: brightness(1.08); }
+
+.ea-sparkles circle { fill: var(--ea-glow); opacity: 0; animation: ea-rise 2.4s ease-out forwards; animation-delay: calc(var(--k) * 120ms); }
+
+.ea-badge {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  padding: 14px 30px; border-radius: 999px; background: #fff; border: 3px solid var(--ea-ring);
+  font-size: 28px; font-weight: 700; color: var(--ea-ring);
+}
+
+/* ---------------------------------------------------------------- controles */
+.ea-rotate {
+  position: absolute; bottom: 18px; width: var(--ea-rot-size); height: var(--ea-rot-size);
+  min-width: 64px; min-height: 64px; border-radius: 50%;
+  border: 3px solid var(--ea-ring); background: #fff; color: var(--ea-ring);
+  display: grid; place-items: center; cursor: pointer; touch-action: manipulation;
+  box-shadow: 0 4px 0 var(--ea-wood-shadow);
+}
+.ea[data-tray='left'] .ea-rotate { left: 18px; }
+.ea[data-tray='right'] .ea-rotate { right: 18px; }
+.ea-rotate svg { width: 60%; height: 60%; }
+.ea-rotate path { fill: none; stroke: currentColor; stroke-width: 5; stroke-linecap: round; }
+.ea-rotate .ea-rotate__head { fill: currentColor; stroke: none; }
+.ea-rotate:disabled { opacity: 0.4; cursor: default; }
+.ea-rotate:focus-visible { outline: 4px solid var(--ea-glow); outline-offset: 3px; }
+.ea-rotate:not(:disabled):active { transform: translateY(2px); box-shadow: 0 2px 0 var(--ea-wood-shadow); }
+
+.ea-steps { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
+.ea-steps span { width: 12px; height: 12px; border-radius: 50%; background: var(--ea-tray-edge); opacity: 0.6; }
+.ea-steps span[data-done='true'] { background: var(--ea-ring); opacity: 1; }
+.ea-steps span[data-current='true'] { outline: 2px solid var(--ea-ring); outline-offset: 2px; opacity: 1; }
+
+.ea-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.ea-overlay { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(243, 237, 226, 0.78); }
+.ea-overlay__card { padding: 22px 34px; border-radius: 24px; background: #fff; font-size: 26px; font-weight: 600; box-shadow: 0 6px 0 var(--ea-wood-shadow); }
+
+/* ---------------------------------------------------------------- arte da cena (recorte) */
+.ea-s-sky { fill: var(--ea-s-sky); }
+.ea-s-sun { fill: var(--ea-p-sol); }
+.ea-s-cloud { fill: #fff; opacity: 0.9; }
+.ea-s-hill { fill: var(--ea-s-hill); }
+.ea-s-hill2 { fill: var(--ea-s-hill2); }
+.ea-s-barn { fill: var(--ea-s-barn); }
+.ea-s-roof { fill: var(--ea-s-roof); }
+.ea-s-door { fill: #f3e2c7; }
+.ea-s-trunk { fill: #8a6242; }
+.ea-s-leaf { fill: var(--ea-s-leaf); }
+.ea-s-leaf2 { fill: var(--ea-p-folha); }
+.ea-s-pond { fill: var(--ea-s-pond); }
+.ea-s-duck { fill: var(--ea-p-sol); }
+.ea-s-beak { fill: var(--ea-p-terracota); }
+.ea-s-fence { fill: none; stroke: #b98a5e; stroke-width: 6; stroke-linecap: round; }
+
+/* ---------------------------------------------------------------- movimento */
+.ea[data-motion='static'] .ea-piece,
+.ea[data-motion='static'] .ea-cavity__glow { transition: none !important; }
+.ea[data-motion='reduced'] { --ea-spring: linear; --ea-move-snap: 120ms; --ea-move-return: 250ms; }
+@media (prefers-reduced-motion: reduce) {
+  .ea * { animation: none !important; }
+  .ea-piece { transition-duration: 1ms !important; }
+}
+
+@keyframes ea-breathe { 0%, 100% { opacity: 0.55; } 50% { opacity: 0.95; } }
+@keyframes ea-nudge { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(14deg); } }
+@keyframes ea-guide {
+  0% { transform: translate(var(--fx), var(--fy)); opacity: 0; }
+  15% { opacity: 1; }
+  75% { transform: translate(var(--tx), var(--ty)); opacity: 1; }
+  100% { transform: translate(var(--tx), var(--ty)); opacity: 0; }
+}
+@keyframes ea-hop { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-16px); } }
+@keyframes ea-fly { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(18px, -40px) rotate(-8deg); } }
+@keyframes ea-swim { 0%, 100% { transform: translateX(0) rotate(0); } 33% { transform: translateX(-10px) rotate(-5deg); } 66% { transform: translateX(10px) rotate(5deg); } }
+@keyframes ea-drive { 0% { transform: translateX(0); } 45% { transform: translateX(46px); } 55% { transform: translateX(46px); } 100% { transform: translateX(0); } }
+@keyframes ea-sway { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(5deg); } }
+@keyframes ea-bob { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+@keyframes ea-bob-soft { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+@keyframes ea-rise { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 0.8; } 100% { opacity: 0; transform: translateY(-120px); } }

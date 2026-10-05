@@ -8,7 +8,7 @@
 
 | Componente | Quantidade Real no Código | Observações |
 |---|---|---|
-| **Jogos Clínicos Integrados** | **15 jogos** | Todos integrados com `@aprumo/protocol` v2.0 |
+| **Jogos Clínicos Integrados** | **23 jogos** | Todos integrados com `@aprumo/protocol` v2.0 |
 | **Migrações Supabase / PostgreSQL** | **18 migrações** | 0001 a 0018 testadas em PostgreSQL via PGlite |
 | **Ferramentas Terapêuticas Interativas** | **14 ferramentas** | Prontas para tela, toque e impressão física |
 | **Rotas Públicas** | **16 rotas** | Acessíveis a pacientes, famílias e instituições |
@@ -18,25 +18,33 @@
 
 ---
 
-## 2. Catálogo Real de Jogos Clínicos (15)
+## 2. Catálogo Real de Jogos Clínicos (23)
 
 | # | App ID | Nome do Jogo | Versão | Tipo de Renderização | Motor / Runtime | Toque | Áudio |
 |---|---|---|---|---|---|---|---|
-| 1 | `causa-efeito` | **Causa e Efeito** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
-| 2 | `circuito-executivo` | **Circuito Executivo** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
-| 3 | `detetive-das-emocoes` | **Detetive das Emoções** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
-| 4 | `encontre-o-igual` | **Match Lab** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
-| 5 | `escolha-pela-instrucao` | **Missão Instrução** | v2.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
-| 6 | `espelho-magico` | **Espelho Mágico** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
-| 7 | `historia-ordem` | **História em Ordem** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
-| 8 | `memoria-bichos` | **Memória dos Bichos** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
-| 9 | `minha-vez-sua-vez` | **Minha Vez, Sua Vez** | v1.1.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
-| 10 | `minimundos` | **MiniMundos** | v1.0.0 | Canvas 2D + DOM | Própria (Canvas 2D loop + @aprumo/game-sdk) | Sim (≥48px) | Web Audio |
-| 11 | `missao-independencia` | **Missão Independência** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
-| 12 | `olha-comigo` | **Olha Comigo** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
-| 13 | `organize-categoria` | **Organize por Categoria** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
-| 14 | `pequeno-chef` | **Pequeno Chef** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
-| 15 | `social-city` | **Social City 3D** | v1.0.0 | Canvas 2D Pseudo-3D isométrico (Nota: NÃO é 3D real até Three.js) | Própria (Projeção isométrica canvas + @aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 1 | `bolhas-magicas` | **Bolhas Mágicas** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 2 | `causa-efeito` | **Causa e Efeito** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 3 | `circuito-executivo` | **Circuito Executivo** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 4 | `danca-do-congelar` | **Dança do Congelar** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 5 | `detetive-das-emocoes` | **Detetive das Emoções** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 6 | `encaixa-ai` | **Encaixa Aí** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 7 | `encontre-o-igual` | **Match Lab** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 8 | `escolha-pela-instrucao` | **Missão Instrução** | v2.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 9 | `espelho-magico` | **Espelho Mágico** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 10 | `fazendinha-sonora` | **Fazendinha Sonora** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 11 | `historia-ordem` | **História em Ordem** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 12 | `lanche-do-urso` | **Hora do Lanche do Urso** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 13 | `memoria-bichos` | **Memória dos Bichos** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 14 | `minha-vez-sua-vez` | **Minha Vez, Sua Vez** | v1.1.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 15 | `minimundos` | **MiniMundos** | v1.0.0 | Canvas 2D + DOM | Própria (Canvas 2D loop + @aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 16 | `missao-independencia` | **Missão Independência** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 17 | `olha-comigo` | **Olha Comigo** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 18 | `organize-categoria` | **Organize por Categoria** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 19 | `pequeno-chef` | **Pequeno Chef** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 20 | `rampa-maluca` | **Rampa Maluca** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 21 | `siga-o-mestre` | **Siga o Mestre** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 22 | `social-city` | **Social City 3D** | v1.0.0 | Canvas 2D Pseudo-3D isométrico (Nota: NÃO é 3D real até Three.js) | Própria (Projeção isométrica canvas + @aprumo/game-sdk) | Sim (≥48px) | Web Audio |
+| 23 | `tambor-da-imitacao` | **Tambor da Imitação** | v1.0.0 | DOM / SVG vetorial | Compartilhado (@aprumo/game-sdk) | Sim (≥48px) | Web Audio |
 
 > **Nota Arquitetural sobre o `social-city`:** O jogo utiliza projeção isométrica em Canvas 2D de alta fidelidade visual (pseudo-3D). De acordo com a Regra 0, ele **não deve** ser referenciado como 3D real até que um motor Three.js / React Three Fiber seja integrado.
 

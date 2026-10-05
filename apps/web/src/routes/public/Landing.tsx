@@ -526,4 +526,129 @@ export const ArtSharedAttention = () => (
   </svg>
 );
 
+export const ArtEncaixaAi = () => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="#78350f" />
+    {/* Tabuleiro de madeira de encaixe */}
+    <rect x="14" y="16" width="132" height="88" rx="10" fill="#d97706" stroke="#b45309" strokeWidth="3" />
+    {/* Cavidades vazias */}
+    <circle cx="44" cy="45" r="16" fill="#451a03" opacity="0.8" />
+    <rect x="74" y="32" width="28" height="28" rx="4" fill="#451a03" opacity="0.8" />
+    <polygon points="124,31 138,58 110,58" fill="#451a03" opacity="0.8" />
+    {/* Peça com pino sendo encaixada (círculo azul suave) */}
+    <g transform="translate(42, 43)">
+      <circle cx="0" cy="0" r="15" fill="#38bdf8" stroke="#0284c7" strokeWidth="2" />
+      {/* Pino central de madeira para segurar */}
+      <circle cx="0" cy="0" r="5" fill="#fef08a" stroke="#ca8a04" strokeWidth="1.5" />
+      <circle cx="0" cy="-1" r="2.5" fill="#ffffff" opacity="0.7" />
+    </g>
+    {/* Peça quadrada já encaixada com pino */}
+    <g transform="translate(88, 46)">
+      <rect x="-13" y="-13" width="26" height="26" rx="3" fill="#4ade80" stroke="#16a34a" strokeWidth="2" />
+      <circle cx="0" cy="0" r="4.5" fill="#fef08a" stroke="#ca8a04" strokeWidth="1.5" />
+    </g>
+    {/* Peça triangular aguardando no rodapé */}
+    <g transform="translate(75, 82)">
+      <polygon points="0,-12 13,10 -13,10" fill="#f43f5e" stroke="#e11d48" strokeWidth="2" />
+      <circle cx="0" cy="2" r="3.5" fill="#fef08a" stroke="#ca8a04" strokeWidth="1.5" />
+    </g>
+  </svg>
+);
+
+export const ArtRampaMaluca = () => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="#1e293b" />
+    {/* Rampa inclinada */}
+    <path d="M 15 32 L 145 92 L 145 106 L 15 106 Z" fill="#334155" />
+    <line x1="15" y1="32" x2="145" y2="92" stroke="#38bdf8" strokeWidth="6" strokeLinecap="round" />
+    {/* Trava mecânica "Preparar... apontar..." */}
+    <rect x="48" y="24" width="8" height="28" rx="2" fill="#ef4444" stroke="#b91c1c" strokeWidth="1.5" />
+    <circle cx="52" cy="24" r="5" fill="#fef08a" />
+    {/* Carrinho na rampa esperando o sinal do adulto */}
+    <g transform="translate(32, 28) rotate(22)">
+      <rect x="-14" y="-10" width="26" height="14" rx="4" fill="#fbbf24" stroke="#d97706" strokeWidth="1.5" />
+      <rect x="-6" y="-8" width="10" height="6" rx="2" fill="#e0f2fe" />
+      <circle cx="-8" cy="4" r="3.5" fill="#0f172a" />
+      <circle cx="6" cy="4" r="3.5" fill="#0f172a" />
+    </g>
+    {/* Linhas de movimento e bolinha descendo na ponta */}
+    <circle cx="118" cy="80" r="8" fill="#ec4899" stroke="#db2777" strokeWidth="1.5" />
+    <line x1="90" y1="67" x2="105" y2="74" stroke="#f472b6" strokeWidth="2" strokeDasharray="3 3" />
+    {/* Placa "JÁ!" */}
+    <rect x="110" y="14" width="36" height="20" rx="6" fill="#22c55e" />
+    <text x="128" y="28" textAnchor="middle" fontSize="10" fontWeight="900" fill="#ffffff">JÁ!</text>
+  </svg>
+);
+
+export const ArtLancheDoUrso = () => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="#451a03" />
+    {/* Toalha de piquenique / mesa */}
+    <rect x="0" y="65" width="160" height="55" fill="#fef3c7" />
+    <path d="M 0 65 L 160 65" stroke="#f59e0b" strokeWidth="3" />
+    {/* Ursinho fofo sentado */}
+    <g transform="translate(50, 48)">
+      {/* Orelhas */}
+      <circle cx="-16" cy="-14" r="7" fill="#b45309" />
+      <circle cx="-16" cy="-14" r="3.5" fill="#fde68a" />
+      <circle cx="16" cy="-14" r="7" fill="#b45309" />
+      <circle cx="16" cy="-14" r="3.5" fill="#fde68a" />
+      {/* Cabeça */}
+      <circle cx="0" cy="0" r="20" fill="#b45309" />
+      {/* Focinho */}
+      <ellipse cx="0" cy="5" rx="8" ry="6" fill="#fde68a" />
+      <circle cx="0" cy="3" r="2.5" fill="#451a03" />
+      {/* Olhos amigáveis */}
+      <circle cx="-6" cy="-2" r="2.2" fill="#1e293b" />
+      <circle cx="6" cy="-2" r="2.2" fill="#1e293b" />
+      {/* Babador */}
+      <path d="M -10 18 Q 0 28 10 18 L 8 26 L -8 26 Z" fill="#38bdf8" />
+    </g>
+    {/* Tigela e comidinha na mesa */}
+    <g transform="translate(105, 82)">
+      <ellipse cx="0" cy="0" rx="18" ry="8" fill="#fda4af" stroke="#f43f5e" strokeWidth="1.5" />
+      <ellipse cx="0" cy="-2" rx="14" ry="5" fill="#fef08a" />
+      {/* Colher */}
+      <path d="M -6 -10 L 8 -1" stroke="#94a3b8" strokeWidth="3" strokeLinecap="round" />
+      <ellipse cx="9" cy="0" rx="3.5" ry="2.5" fill="#94a3b8" />
+    </g>
+    {/* Copinho de água */}
+    <g transform="translate(136, 74)">
+      <path d="M -6 -10 L -4 6 L 4 6 L 6 -10 Z" fill="#bae6fd" stroke="#0284c7" strokeWidth="1.5" />
+      <line x1="-3" y1="-2" x2="3" y2="-2" stroke="#38bdf8" strokeWidth="2" />
+    </g>
+  </svg>
+);
+
+export const ArtFazendinhaSonora = () => (
+  <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="160" height="120" fill="#14532d" />
+    {/* Capa do livro de abas com grama e céu suave */}
+    <rect x="12" y="14" width="136" height="92" rx="8" fill="#f0fdf4" stroke="#86efac" strokeWidth="2" />
+    <rect x="12" y="70" width="136" height="36" rx="0 0 8 8" fill="#bbf7d0" />
+    {/* Celeiro ao fundo */}
+    <path d="M 45 42 L 70 24 L 95 42 L 95 72 L 45 72 Z" fill="#dc2626" />
+    <polygon points="70,24 45,42 95,42" fill="#b91c1c" />
+    {/* Aba "Cadê a vaca?" sendo levantada */}
+    <g transform="translate(70, 56)">
+      {/* Vaquinha atrás da aba */}
+      <ellipse cx="0" cy="0" rx="16" ry="12" fill="#ffffff" stroke="#1e293b" strokeWidth="1.5" />
+      <circle cx="-10" cy="-5" r="4" fill="#1e293b" />
+      <ellipse cx="0" cy="4" rx="8" ry="5" fill="#fbcfe8" />
+      <circle cx="-3" cy="4" r="1.2" fill="#1e293b" />
+      <circle cx="3" cy="4" r="1.2" fill="#1e293b" />
+      <circle cx="-5" cy="-2" r="1.5" fill="#1e293b" />
+      <circle cx="5" cy="-2" r="1.5" fill="#1e293b" />
+      {/* Aba de papel levantada em ângulo */}
+      <path d="M -16 6 L 16 6 L 22 -14 L -10 -14 Z" fill="#facc15" stroke="#ca8a04" strokeWidth="1.5" opacity="0.92" />
+      <text x="6" y="-2" fontSize="7" fontWeight="bold" fill="#713f12">CADÊ?</text>
+    </g>
+    {/* Notas musicais / som do "Muuu!" */}
+    <g fill="#0284c7">
+      <path d="M 112 36 L 118 34 L 118 42 A 3 3 0 1 1 115 39 L 115 35 Z" />
+      <path d="M 124 46 L 130 44 L 130 52 A 3 3 0 1 1 127 49 L 127 45 Z" />
+    </g>
+  </svg>
+);
+
 export default Landing;

@@ -20,6 +20,10 @@ import {
   ArtCauseEffect,
   ArtMagicMirror,
   ArtSharedAttention,
+  ArtEncaixaAi,
+  ArtRampaMaluca,
+  ArtLancheDoUrso,
+  ArtFazendinhaSonora,
 } from '../public/Landing';
 import { TaskAnalysisStudio } from './resources/TaskAnalysisStudio';
 import { ChoiceBoardStudio } from './resources/ChoiceBoardStudio';
@@ -55,6 +59,10 @@ const ART: Record<string, ReactNode> = {
   'causa-efeito': <ArtCauseEffect />,
   'espelho-magico': <ArtMagicMirror />,
   'olha-comigo': <ArtSharedAttention />,
+  'encaixa-ai': <ArtEncaixaAi />,
+  'rampa-maluca': <ArtRampaMaluca />,
+  'lanche-do-urso': <ArtLancheDoUrso />,
+  'fazendinha-sonora': <ArtFazendinhaSonora />,
 };
 
 const DefaultGameArt = ({ name }: { name: string }) => (
@@ -231,6 +239,8 @@ export default function Library() {
   const [category, setCategory] = useState<StudioCategory>('todos');
   const [search, setSearch] = useState('');
   const [activeTool, setActiveTool] = useState<string | null>(null);
+  const [modelFilter, setModelFilter] = useState<'todos' | 'ABA' | 'DENVER'>('todos');
+  const [ageFilter, setAgeFilter] = useState<'todas' | 'bebe' | 'pre' | 'escolar'>('todas');
 
   const filteredInteractive = INTERACTIVE_RESOURCES.filter((r) => {
     const matchCat = category === 'todos' || r.category === category || (category === 'imprimiveis' && r.printable);
@@ -240,9 +250,23 @@ export default function Library() {
 
   const filteredGames = Object.values(GAMES).filter((g) => {
     const m = g.manifest;
+    const c = m.clinical;
     const matchCat = category === 'todos' || category === 'ensino';
     const matchSearch = m.name.toLowerCase().includes(search.toLowerCase()) || m.summary.toLowerCase().includes(search.toLowerCase());
-    return matchCat && matchSearch;
+
+    const matchModel =
+      modelFilter === 'todos' ||
+      (modelFilter === 'ABA' && c.models.ABA && c.models.ABA !== 'not-indicated') ||
+      (modelFilter === 'DENVER' && c.models.DENVER && c.models.DENVER !== 'not-indicated');
+
+    const [minM, maxM] = c.ageRangeMonths;
+    const matchAge =
+      ageFilter === 'todas' ||
+      (ageFilter === 'bebe' && minM <= 36 && maxM >= 12) ||
+      (ageFilter === 'pre' && minM <= 72 && maxM >= 36) ||
+      (ageFilter === 'escolar' && maxM >= 72);
+
+    return matchCat && matchSearch && matchModel && matchAge;
   });
 
   return (
@@ -348,9 +372,45 @@ export default function Library() {
       {/* Seção 2: Jogos de Ensino */}
       {(category === 'todos' || category === 'ensino') && (
         <section aria-labelledby="sec-jogos" style={{ marginBottom: '3rem' }}>
-          <h2 id="sec-jogos" style={{ fontSize: 'var(--ap-text-xl)', marginBottom: '1rem' }}>
-            Jogos Clínicos Integrados ({filteredGames.length})
-          </h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
+            <h2 id="sec-jogos" style={{ fontSize: 'var(--ap-text-xl)', margin: 0 }}>
+              Jogos Clínicos Integrados ({filteredGames.length})
+            </h2>
+            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+                <span className="ap-xs ap-muted" style={{ fontWeight: 600 }}>Modelo:</span>
+                {(['todos', 'ABA', 'DENVER'] as const).map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    role="tab"
+                    className="rs-tab-pill"
+                    aria-selected={modelFilter === m}
+                    style={{ fontSize: '0.75rem', padding: '0.25rem 0.65rem' }}
+                    onClick={() => setModelFilter(m)}
+                  >
+                    {m === 'todos' ? 'Todos' : m === 'ABA' ? 'ABA' : 'Denver'}
+                  </button>
+                ))}
+              </div>
+              <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+                <span className="ap-xs ap-muted" style={{ fontWeight: 600 }}>Idade:</span>
+                {(['todas', 'bebe', 'pre', 'escolar'] as const).map((age) => (
+                  <button
+                    key={age}
+                    type="button"
+                    role="tab"
+                    className="rs-tab-pill"
+                    aria-selected={ageFilter === age}
+                    style={{ fontSize: '0.75rem', padding: '0.25rem 0.65rem' }}
+                    onClick={() => setAgeFilter(age)}
+                  >
+                    {age === 'todas' ? 'Todas' : age === 'bebe' ? '1–3 anos' : age === 'pre' ? '3–6 anos' : '6+ anos'}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
           <div className="rs-grid">
             {filteredGames.map((g) => (
               <GameCard key={g.manifest.appId} m={g.manifest} />

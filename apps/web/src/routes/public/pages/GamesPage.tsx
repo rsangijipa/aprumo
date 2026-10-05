@@ -6,12 +6,16 @@ import {
   ArtCauseEffect,
   ArtChef,
   ArtDetective,
+  ArtEncaixaAi,
   ArtExecutive,
+  ArtFazendinhaSonora,
   ArtIndependence,
+  ArtLancheDoUrso,
   ArtListener,
   ArtMagicMirror,
   ArtMatch,
   ArtMiniWorlds,
+  ArtRampaMaluca,
   ArtSharedAttention,
   ArtSocialCity,
   ArtStoryOrder,
@@ -22,6 +26,7 @@ interface GameItem {
   id: string;
   name: string;
   repertoire: string;
+  model?: string;
   age: string;
   summary: string;
   art?: ReactNode;
@@ -148,6 +153,42 @@ const GAMES: GameItem[] = [
     art: <ArtSocialCity />,
     summary: 'Cidade 3D para adolescentes com missões de conversa, cafeteria da praça, transporte público e resolução de conflitos.',
   },
+  {
+    id: 'encaixa-ai',
+    name: 'Encaixa Aí',
+    repertoire: 'Pareamento & Coordenação',
+    model: 'ABA',
+    age: '2 a 8 anos',
+    art: <ArtEncaixaAi />,
+    summary: 'Quebra-cabeça de encaixe com pino, em 6 níveis, com rotação de peça a partir do nível 4. Funciona por arrastar, por toque na peça e depois no buraco, ou pelo teclado.',
+  },
+  {
+    id: 'rampa-maluca',
+    name: 'Rampa Maluca',
+    repertoire: 'Comunicação & Mando',
+    model: 'Denver',
+    age: '18 a 60 meses',
+    art: <ArtRampaMaluca />,
+    summary: 'Carrinhos e bolinhas na rampa com "Preparar… apontar… já!". Há uma pausa que espera a criança se comunicar, e o carrinho só desce quando o adulto registra a comunicação.',
+  },
+  {
+    id: 'lanche-do-urso',
+    name: 'Hora do Lanche do Urso',
+    repertoire: 'Brincar de Faz de Conta',
+    model: 'Denver',
+    age: '18 a 60 meses',
+    art: <ArtLancheDoUrso />,
+    summary: 'Dar comida, água, banho e pôr o urso (ou outro personagem) para dormir, chegando até a substituição simbólica (o bloco vira pão).',
+  },
+  {
+    id: 'fazendinha-sonora',
+    name: 'Fazendinha Sonora',
+    repertoire: 'Leitura Compartilhada',
+    model: 'Denver',
+    age: '12 a 48 meses',
+    art: <ArtFazendinhaSonora />,
+    summary: 'Livro de abas "Cadê a vaca?" com sons de animais gerados no navegador e controles do adulto (revelar devagar, apontar, pausa de espera).',
+  },
 ];
 
 export default function GamesPage() {
@@ -160,7 +201,7 @@ export default function GamesPage() {
       secondaryCtaText="Recursos terapêuticos"
       secondaryCtaHref="/recursos-terapeuticos"
     >
-      <Section sunken eyebrow="Catálogo" title="15 jogos clínicos para ABA, Denver e neurodesenvolvimento">
+      <Section sunken eyebrow="Catálogo" title={`${GAMES.length} jogos clínicos para ABA, Denver e neurodesenvolvimento`}>
         <ul className="lp-grid lp-unlist">
           {GAMES.map((game) => (
             <li key={game.id} id={game.id}>
@@ -169,6 +210,11 @@ export default function GamesPage() {
                 <div className="ap-game-card__body">
                   <div className="lp-game-meta">
                     <span className="ap-badge">{game.repertoire}</span>
+                    {game.model && (
+                      <span className={`ap-badge ${game.model.includes('ABA') ? 'ap-badge--aba' : 'ap-badge--denver'}`}>
+                        {game.model}
+                      </span>
+                    )}
                     <span className="ap-xs ap-muted">{game.age}</span>
                   </div>
                   <h3 className="ap-game-card__title lp-game-title">{game.name}</h3>

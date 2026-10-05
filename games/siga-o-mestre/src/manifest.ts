@@ -1,0 +1,40 @@
+import type { GameManifest } from '@aprumo/protocol';
+
+export const manifest: GameManifest = {
+  appId: 'siga-o-mestre',
+  version: '1.0.0',
+  name: 'Siga o Mestre',
+  kind: 'game',
+  summary: 'Discriminação auditiva e controle inibitório (ABA): seguir comandos apenas quando o mestre mandar e segurar o impulso nas pegadinhas.',
+  clinical: {
+    purposes: ['teaching', 'probe'],
+    models: { ABA: 'trial-based', DENVER: 'not-indicated' },
+    repertoires: ['listener', 'alternative_behavior'],
+    autoScoring: ['listener', 'alternative_behavior'],
+    therapistScoring: [],
+    playLevel: 'functional',
+    trialUnit: 'Apresentação de comando verbal (válido ou pegadinha) com registro de tempo de resposta ou inibição.',
+    correctResponse: 'Execução da ação solicitada somente se iniciada por "O Mestre mandou", ou inibição motora por 3s em caso de pegadinha.',
+    minFieldSize: 2,
+    maxFieldSize: 4,
+    latencyMaxMs: 10000,
+    builtInPrompts: [
+      { code: 'HIGHLIGHT_TARGET', afterMs: 4000, intrusiveness: 0.3 },
+      { code: 'VERBAL_REMINDER', afterMs: 7000, intrusiveness: 0.6 },
+    ],
+    prerequisites: ['ouvinte-basico'],
+    ageRangeMonths: [36, 120],
+    requiresAdult: false,
+    sensory: { flashes: false, motionReducible: true, sound: 'adjustable' },
+    emits: [
+      'SESSION_STARTED',
+      'TRIAL_STARTED',
+      'TRIAL_COMPLETED',
+      'PROMPT_USED',
+      'REWARD_TRIGGERED',
+      'SESSION_PAUSED',
+      'SESSION_RESUMED',
+      'SESSION_COMPLETED',
+    ],
+  },
+};

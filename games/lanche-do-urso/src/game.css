@@ -1,0 +1,275 @@
+/* Hora do Lanche do Urso — identidade própria (tokens --lu-*), não compartilhar com outros jogos. */
+.lu {
+  --lu-bg: #f6ecdf;
+  --lu-bg-2: #ecd9c4;
+  --lu-ink: #43352c;
+  --lu-ink-soft: #7a6656;
+  --lu-wall: #f3e3cf;
+  --lu-wall-2: #ead2b8;
+  --lu-line: #4a3a30;
+  --lu-paper: #fffaf3;
+  --lu-accent: #c9714f;
+  --lu-accent-2: #e9a37f;
+  --lu-sage: #8fa98a;
+  --lu-cheek: #ee9f8e;
+  --lu-tongue: #c9605a;
+  --lu-cloth-red: #d98471;
+  --lu-cloth-white: #fbf1e6;
+  --lu-wood: #c99a6c;
+  --lu-wood-2: #a87a4f;
+  --lu-clay: #c97f5a;
+  --lu-water: #9cc8dc;
+  --lu-shadow: rgba(67, 53, 44, 0.16);
+  --lu-touch: calc(64px * var(--lu-scale, 1));
+  --lu-radius: 22px;
+  --lu-dur: 1.3s;
+
+  position: relative;
+  box-sizing: border-box;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 10px;
+  padding: 14px;
+  color: var(--lu-ink);
+  background: radial-gradient(120% 80% at 50% 0%, var(--lu-bg) 45%, var(--lu-bg-2) 100%);
+  font-family: ui-rounded, 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.lu *, .lu *::before, .lu *::after { box-sizing: border-box; }
+
+/* personagens: pelúcia em massa de modelar */
+.lu-char { --lu-fur: #b98058; --lu-fur-edge: #8a5a3a; --lu-inner: #e2b48e; --lu-muzzle: #ecd2b4; --lu-cloth: #b98058; --lu-belly: #ecd2b4; --lu-hair: #6e4a36; }
+.lu-char[data-char='cachorro'] { --lu-fur: #e6cfa8; --lu-fur-edge: #b69466; --lu-inner: #a77650; --lu-muzzle: #f6e8d2; --lu-cloth: #e6cfa8; --lu-belly: #f6e8d2; }
+.lu-char[data-char='boneca'] { --lu-fur: #f1c9a6; --lu-fur-edge: #c99a74; --lu-inner: #f1c9a6; --lu-cloth: #d98c8c; --lu-belly: #efb2a6; --lu-hair: #7a4a35; }
+.lu-char[data-char='avo'] { --lu-fur: #e9bf9c; --lu-fur-edge: #bf8f6b; --lu-inner: #e9bf9c; --lu-cloth: #8fa98a; --lu-belly: #b9cdb2; --lu-hair: #cfc8bf; }
+
+.lu[data-palette='vivid'] { --lu-bg: #fbe9d6; --lu-bg-2: #f3cfae; --lu-accent: #d4623a; --lu-cloth-red: #df6f58; }
+.lu[data-palette='high-contrast'] {
+  --lu-bg: #ffffff; --lu-bg-2: #ffffff; --lu-ink: #111111; --lu-ink-soft: #222222; --lu-line: #111111;
+  --lu-wall: #ffffff; --lu-wall-2: #ffffff; --lu-accent: #8a3416; --lu-paper: #ffffff;
+}
+.lu[data-palette='high-contrast'] .lu-char { --lu-fur-edge: #111111; }
+/* Sensorial mínimo: fundo liso neutro, sem decoração. */
+.lu[data-sensory='minimal'] { --lu-bg: #faf9f6; --lu-bg-2: #faf9f6; --lu-wall: #faf9f6; --lu-wall-2: #faf9f6; }
+.lu[data-sensory='minimal'] .lu-blur,
+.lu[data-sensory='minimal'] .lu-gloss,
+.lu[data-sensory='minimal'] .lu-foam { display: none; }
+
+/* ---------------------------------------------------------------- topo */
+.lu-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; min-height: 28px; }
+.lu-phase { font-weight: 700; font-size: 15px; color: var(--lu-ink-soft); }
+.lu-tag { padding: 4px 12px; border-radius: 999px; background: var(--lu-sage); color: #fff; font-weight: 700; font-size: 13px; }
+
+/* ---------------------------------------------------------------- abertura */
+.lu-opening { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.lu-title { margin: 0; font-size: clamp(22px, 4vw, 30px); color: var(--lu-accent); letter-spacing: 0.01em; }
+.lu-choice { border: 0; margin: 0; padding: 0; width: min(100%, 720px); }
+.lu-choice legend { font-weight: 700; margin-bottom: 8px; color: var(--lu-ink-soft); }
+.lu-choice__row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.lu-card {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  width: calc(var(--lu-touch) * 2); min-height: calc(var(--lu-touch) * 2.2);
+  padding: 8px; border: 3px solid transparent; border-radius: var(--lu-radius);
+  background: var(--lu-paper); color: var(--lu-ink); font: inherit; font-weight: 700; cursor: pointer;
+  box-shadow: 0 5px 0 -1px var(--lu-bg-2), 0 10px 18px -12px var(--lu-shadow);
+}
+.lu-card[aria-pressed='true'] { border-color: var(--lu-accent); }
+.lu-thumb { width: 100%; height: auto; aspect-ratio: 1; border-radius: 16px; overflow: hidden; }
+.lu-go, .lu-btn--main {
+  min-height: var(--lu-touch); padding: 0 28px; border: 0; border-radius: 999px;
+  background: var(--lu-accent); color: #fff; font: inherit; font-weight: 800; font-size: 18px; cursor: pointer;
+  box-shadow: 0 5px 0 -1px color-mix(in srgb, var(--lu-accent) 70%, #000);
+}
+.lu-go:disabled, .lu-btn:disabled, .lu-chip:disabled, .lu-item:disabled { opacity: 0.45; cursor: default; }
+
+/* ---------------------------------------------------------------- cena */
+.lu-play { display: flex; flex-direction: column; align-items: center; gap: 8px; min-height: 0; }
+.lu-scene {
+  position: relative;
+  width: min(100%, 460px, 52dvh);
+  min-width: 260px;
+  aspect-ratio: 1;
+  border-radius: 32px;
+  overflow: hidden;
+  background: var(--lu-wall);
+  box-shadow: 0 8px 0 -2px var(--lu-bg-2), 0 18px 32px -20px var(--lu-shadow);
+  touch-action: none;
+}
+.lu-svg { display: block; width: 100%; height: 100%; }
+.lu-wall { fill: var(--lu-wall); }
+.lu-blur { filter: blur(3px); opacity: 0.8; }
+.lu-clay { fill: var(--lu-clay); }
+.lu-clay-dark { fill: color-mix(in srgb, var(--lu-clay) 70%, #000); }
+.lu-window { fill: #dfe9e4; }
+.lu-headboard { fill: var(--lu-wood); }
+.lu-moon { fill: #f3dca0; }
+.lu-tile { fill: var(--lu-wall-2); }
+.lu-cloth-table { fill: var(--lu-cloth-white); }
+.lu-check { fill: var(--lu-cloth-red); opacity: 0.55; }
+.lu-table-edge { fill: var(--lu-wood-2); }
+.lu-bed { fill: #b8c9d8; }
+.lu-bed-line { stroke: #fff; stroke-width: 4; stroke-dasharray: 10 8; opacity: 0.7; }
+.lu-tub { fill: #f8fbfc; stroke: #c9d6dc; stroke-width: 4; }
+.lu-foam { fill: #ffffff; stroke: #dbe6ea; stroke-width: 2; }
+.lu-puddle { fill: var(--lu-water); opacity: 0.7; }
+
+.lu-shadow { fill: var(--lu-shadow); }
+.lu-fur, .lu-cloth { stroke: var(--lu-fur-edge); stroke-width: 4; }
+.lu-fur { fill: var(--lu-fur); }
+.lu-cloth { fill: var(--lu-cloth); }
+.lu-belly { fill: var(--lu-belly); opacity: 0.9; }
+.lu-inner { fill: var(--lu-inner); }
+.lu-hair { fill: var(--lu-hair); stroke: color-mix(in srgb, var(--lu-hair) 75%, #000); stroke-width: 3; }
+.lu-muzzle { fill: var(--lu-muzzle); }
+.lu-nose { fill: var(--lu-line); }
+.lu-gloss { fill: #fff; opacity: 0.32; }
+.lu-cheek { fill: var(--lu-cheek); opacity: 0.55; }
+.lu-eye { fill: var(--lu-line); }
+.lu-glint { fill: #fff; }
+.lu-line, .lu-lid, .lu-mark { fill: none; stroke: var(--lu-line); stroke-width: 4.5; stroke-linecap: round; }
+.lu-lid { stroke: var(--lu-fur-edge); stroke-width: 7; }
+.lu-mark { stroke-width: 3; opacity: 0.6; }
+.lu-mouth-open { fill: var(--lu-tongue); stroke: var(--lu-line); stroke-width: 4; stroke-linejoin: round; }
+.lu-glasses { fill: none; stroke: #6b5a4e; stroke-width: 3.5; }
+.lu-dirt { fill: #6d3f69; opacity: 0.75; }
+.lu-blanket { fill: #e7b85d; stroke: #b98a35; stroke-width: 4; }
+.lu-drop { fill: var(--lu-water); stroke: #6fa5bd; stroke-width: 2; }
+.lu-zzz text, .lu-bubble text { font: 800 30px ui-rounded, 'Nunito', system-ui, sans-serif; fill: var(--lu-ink-soft); text-anchor: middle; }
+.lu-zzz-2 { font-size: 22px; }
+.lu-bubble rect { fill: var(--lu-paper); stroke: var(--lu-accent-2); stroke-width: 3; }
+.lu-suds circle { fill: #fff; stroke: #cfe0e8; stroke-width: 2; }
+.lu-held { overflow: visible; }
+
+/* objetos em recorte de papel */
+.lu-icon { display: block; width: 100%; height: 100%; overflow: visible; }
+.lu-i-shadow { fill: var(--lu-shadow); }
+.lu-i-gloss { fill: #fff; opacity: 0.5; }
+.lu-i-metal { fill: #b9c4cc; stroke: #7e8b94; stroke-width: 2.5; }
+.lu-i-plate { fill: #fffdf8; stroke: #d7c7b4; stroke-width: 2.5; }
+.lu-i-plate-in { fill: #f4ebe0; }
+.lu-i-glass { fill: #eef6f9; stroke: #9db7c3; stroke-width: 2.5; }
+.lu-i-water { fill: var(--lu-water); }
+.lu-i-banana { fill: #f2cf5b; stroke: #c49a2c; stroke-width: 2.5; }
+.lu-i-stem { fill: #7c5a2e; }
+.lu-i-bread { fill: #d9a061; stroke: #a8733b; stroke-width: 2.5; }
+.lu-i-score { fill: none; stroke: #a8733b; stroke-width: 2.5; stroke-linecap: round; }
+.lu-i-bowl { fill: #e9d2b6; stroke: #b8946c; stroke-width: 2.5; }
+.lu-i-bowl-dark { fill: #b8946c; stroke: #8a6a48; stroke-width: 2.5; }
+.lu-i-rice { fill: #fffaf0; }
+.lu-i-beans { fill: #7a4b33; }
+.lu-i-acai { fill: #6d3f69; }
+.lu-i-granola { fill: #c9955a; }
+.lu-i-rind { fill: #7fa86a; }
+.lu-i-melon { fill: #e87f78; }
+.lu-i-seed { fill: #43352c; }
+.lu-i-napkin { fill: #f7efe6; stroke: #cdb9a5; stroke-width: 2.5; stroke-linejoin: round; }
+.lu-i-fold { fill: none; stroke: #cdb9a5; stroke-width: 2.5; }
+.lu-i-napkin-line { stroke: var(--lu-cloth-red); stroke-width: 2.5; opacity: 0.6; stroke-linecap: round; }
+.lu-i-blanket { fill: #e7b85d; stroke: #b98a35; stroke-width: 2.5; }
+.lu-i-blanket-stripe { stroke: #d18f5a; stroke-width: 4; }
+.lu-i-fringe { stroke: #b98a35; stroke-width: 2.5; stroke-linecap: round; }
+.lu-i-brush { fill: #a6c3a0; stroke: #6f8d69; stroke-width: 2.5; }
+.lu-i-bristle { stroke: #fff; stroke-width: 2.5; stroke-linecap: round; }
+.lu-i-sponge { fill: #f3d36b; stroke: #c9a63e; stroke-width: 2.5; }
+.lu-i-hole { fill: #d7b24a; }
+.lu-i-bubble { fill: #fff; stroke: #cfe0e8; stroke-width: 2; }
+.lu-i-block { fill: #d8c3a5; stroke: #a58a66; stroke-width: 2.5; stroke-linejoin: round; }
+.lu-i-block-edge { fill: none; stroke: #a58a66; stroke-width: 2.5; stroke-linejoin: round; }
+
+/* zonas de ação (teclado; o toque usa a mesma geometria da cena) */
+.lu-zone {
+  position: absolute; padding: 0; border: 3px dashed transparent; border-radius: 50%;
+  background: transparent; pointer-events: none; cursor: pointer;
+}
+.lu-scene[data-selecting] .lu-zone { border-color: color-mix(in srgb, var(--lu-accent) 45%, transparent); }
+.lu-zone[data-hot] { border-style: solid; border-color: var(--lu-accent); background: color-mix(in srgb, var(--lu-accent) 12%, transparent); }
+.lu-zone:focus-visible { outline: 4px solid var(--lu-accent); outline-offset: 2px; border-color: var(--lu-accent); }
+
+.lu-caption { margin: 0; min-height: 1.5em; font-weight: 700; font-size: 18px; color: var(--lu-ink); text-align: center; }
+
+/* cesta */
+.lu-basket {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+  margin: 0; padding: 10px 12px; list-style: none;
+  width: min(100%, 760px);
+  border-radius: 28px;
+  background: color-mix(in srgb, var(--lu-wood) 30%, var(--lu-paper));
+  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--lu-wood) 45%, transparent);
+}
+.lu-item {
+  display: grid; place-items: center;
+  width: var(--lu-touch); height: var(--lu-touch); min-width: 48px; min-height: 48px;
+  padding: 6px; border: 3px solid transparent; border-radius: 20px;
+  background: var(--lu-paper); cursor: grab; touch-action: none;
+  box-shadow: 0 4px 0 -1px var(--lu-bg-2);
+}
+.lu-item[aria-pressed='true'] { border-color: var(--lu-accent); }
+.lu-item:focus-visible, .lu-card:focus-visible, .lu-btn:focus-visible, .lu-chip:focus-visible, .lu-go:focus-visible {
+  outline: 4px solid var(--lu-accent); outline-offset: 2px;
+}
+.lu-ghost {
+  position: fixed; z-index: 20; width: calc(var(--lu-touch) * 1.15); height: calc(var(--lu-touch) * 1.15);
+  transform: translate(-50%, -60%); pointer-events: none; filter: drop-shadow(0 6px 6px var(--lu-shadow));
+}
+
+/* resumo */
+.lu-summary { width: min(100%, 560px); padding: 12px 16px; border-radius: var(--lu-radius); background: var(--lu-paper); }
+.lu-summary h2 { margin: 0 0 8px; font-size: 17px; }
+.lu-summary dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin: 0; }
+.lu-summary dt { font-size: 13px; color: var(--lu-ink-soft); }
+.lu-summary dd { margin: 0; font-size: 22px; font-weight: 800; }
+
+/* ---------------------------------------------------------------- adulto */
+.lu-adult { width: min(100%, 860px); justify-self: center; padding: 8px 12px; border-radius: var(--lu-radius); background: color-mix(in srgb, var(--lu-paper) 85%, transparent); }
+.lu-adult summary { min-height: 48px; display: flex; align-items: center; font-weight: 800; color: var(--lu-ink-soft); cursor: pointer; }
+.lu-adult__group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 6px 0; }
+.lu-adult__reg { padding: 4px 8px; border-radius: 16px; background: color-mix(in srgb, var(--lu-sage) 14%, transparent); }
+.lu-adult__label { font-weight: 700; font-size: 14px; color: var(--lu-ink-soft); }
+.lu-btn, .lu-chip {
+  min-height: 48px; padding: 0 14px; border: 2px solid color-mix(in srgb, var(--lu-ink) 18%, transparent);
+  border-radius: 14px; background: var(--lu-paper); color: var(--lu-ink); font: inherit; font-weight: 700; font-size: 15px; cursor: pointer;
+}
+.lu-btn.lu-btn--main { font-size: 15px; padding: 0 18px; border: 0; }
+.lu-btn--end { border-color: color-mix(in srgb, var(--lu-accent) 50%, transparent); }
+.lu-btn[aria-pressed='true'], .lu-chip[aria-pressed='true'], .lu-chip[aria-checked='true'] {
+  background: var(--lu-sage); border-color: var(--lu-sage); color: #fff;
+}
+
+.lu-overlay { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(246, 236, 223, 0.7); z-index: 30; }
+.lu-overlay__badge { padding: 12px 24px; border-radius: 999px; background: var(--lu-paper); font-weight: 800; font-size: 20px; }
+
+/* ---------------------------------------------------------------- movimento (lento e previsível) */
+.lu[data-motion='reduced'] { --lu-dur: 2.2s; }
+.lu-breathe, .lu-headbob, .lu-chomp, .lu-yawn, .lu-zzz text, .lu-rumble, .lu-card, .lu-item { transform-box: fill-box; transform-origin: center; }
+.lu[data-motion='normal'] .lu-breathe, .lu[data-motion='reduced'] .lu-breathe { animation: lu-breathe calc(var(--lu-dur) * 3) ease-in-out infinite; transform-origin: 50% 100%; }
+.lu[data-motion]:not([data-motion='static']) [data-state='comendo'] .lu-chomp { animation: lu-chomp calc(var(--lu-dur) / 3) ease-in-out infinite; }
+.lu[data-motion]:not([data-motion='static']) [data-state='bebendo'] .lu-headbob { animation: lu-tilt var(--lu-dur) ease-in-out 1; }
+.lu[data-motion]:not([data-motion='static']) [data-state='ue'] .lu-headbob { animation: lu-tilt var(--lu-dur) ease-in-out 1; }
+.lu[data-motion]:not([data-motion='static']) [data-state='limpando'] .lu-headbob { animation: lu-wiggle calc(var(--lu-dur) / 2) ease-in-out 2; }
+.lu[data-motion]:not([data-motion='static']) [data-state='sono'] .lu-yawn { animation: lu-yawn calc(var(--lu-dur) * 2) ease-in-out infinite; }
+.lu[data-motion]:not([data-motion='static']) [data-state='dormindo'] .lu-zzz text { animation: lu-float calc(var(--lu-dur) * 2.5) ease-in-out infinite; }
+.lu[data-motion]:not([data-motion='static']) [data-state='fome'] .lu-rumble { animation: lu-wiggle var(--lu-dur) ease-in-out infinite; }
+.lu[data-motion]:not([data-motion='static']) [data-state='surpresa'] .lu-headbob { animation: lu-hop calc(var(--lu-dur) / 1.5) ease-out 1; }
+.lu[data-motion='normal'] .lu-item:active, .lu[data-motion='normal'] .lu-card:active { transform: scale(1.08); }
+.lu[data-motion]:not([data-motion='static']) .lu-cup { transition: transform 0.45s ease-in; transform-box: fill-box; }
+/* Repouso após 20 s: tudo para. */
+.lu[data-rest] .lu-char * { animation: none !important; }
+
+@keyframes lu-breathe { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.012, 0.99); } }
+@keyframes lu-chomp { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0.35); } }
+@keyframes lu-tilt { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-6deg); } }
+@keyframes lu-wiggle { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
+@keyframes lu-yawn { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15, 1.25); } }
+@keyframes lu-float { 0%, 100% { transform: translateY(0); opacity: 0.9; } 50% { transform: translateY(-6px); opacity: 0.6; } }
+@keyframes lu-hop { 0% { transform: translateY(0); } 40% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .lu *, .lu *::before, .lu *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+@media (min-width: 900px) {
+  .lu[data-screen='play'], .lu[data-screen='done'] { grid-template-columns: 1fr minmax(300px, 380px); grid-template-rows: auto 1fr; }
+  .lu[data-screen='play'] .lu-top, .lu[data-screen='done'] .lu-top { grid-column: 1 / -1; }
+  .lu[data-screen='play'] .lu-adult { align-self: start; }
+}

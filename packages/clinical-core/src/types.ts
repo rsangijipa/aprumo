@@ -32,6 +32,8 @@ export interface TrialFact {
   fieldSize?: number | null;
   /** Sonda de manutenção/generalização (sem ensino). */
   probe?: boolean;
+  /** Telemetria e dados específicos do jogo (gameSpecific) */
+  detail?: Record<string, unknown>;
 }
 
 /** Equivale a fact_target_session. */

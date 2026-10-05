@@ -47,15 +47,24 @@ importers:
       '@aprumo/clinical-core':
         specifier: workspace:*
         version: link:../../packages/clinical-core
+      '@aprumo/game-bolhas-magicas':
+        specifier: workspace:*
+        version: link:../../games/bolhas-magicas
       '@aprumo/game-causa-efeito':
         specifier: workspace:*
         version: link:../../games/causa-efeito
       '@aprumo/game-circuito-executivo':
         specifier: workspace:*
         version: link:../../games/circuito-executivo
+      '@aprumo/game-danca-do-congelar':
+        specifier: workspace:*
+        version: link:../../games/danca-do-congelar
       '@aprumo/game-detetive-das-emocoes':
         specifier: workspace:*
         version: link:../../games/detetive-das-emocoes
+      '@aprumo/game-encaixa-ai':
+        specifier: workspace:*
+        version: link:../../games/encaixa-ai
       '@aprumo/game-encontre-o-igual':
         specifier: workspace:*
         version: link:../../games/encontre-o-igual
@@ -65,9 +74,15 @@ importers:
       '@aprumo/game-espelho-magico':
         specifier: workspace:*
         version: link:../../games/espelho-magico
+      '@aprumo/game-fazendinha-sonora':
+        specifier: workspace:*
+        version: link:../../games/fazendinha-sonora
       '@aprumo/game-historia-ordem':
         specifier: workspace:*
         version: link:../../games/historia-ordem
+      '@aprumo/game-lanche-do-urso':
+        specifier: workspace:*
+        version: link:../../games/lanche-do-urso
       '@aprumo/game-memoria-bichos':
         specifier: workspace:*
         version: link:../../games/memoria-bichos
@@ -89,12 +104,21 @@ importers:
       '@aprumo/game-pequeno-chef':
         specifier: workspace:*
         version: link:../../games/pequeno-chef
+      '@aprumo/game-rampa-maluca':
+        specifier: workspace:*
+        version: link:../../games/rampa-maluca
       '@aprumo/game-sdk':
         specifier: workspace:*
         version: link:../../packages/game-sdk
+      '@aprumo/game-siga-o-mestre':
+        specifier: workspace:*
+        version: link:../../games/siga-o-mestre
       '@aprumo/game-social-city':
         specifier: workspace:*
         version: link:../../games/social-city
+      '@aprumo/game-tambor-da-imitacao':
+        specifier: workspace:*
+        version: link:../../games/tambor-da-imitacao
       '@aprumo/offline':
         specifier: workspace:*
         version: link:../../packages/offline
@@ -196,6 +220,25 @@ importers:
         specifier: ^7.4.1
         version: 7.4.1
 
+  games/bolhas-magicas:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@aprumo/stimuli':
+        specifier: workspace:*
+        version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
   games/causa-efeito:
     dependencies:
       '@aprumo/game-sdk':
@@ -234,7 +277,42 @@ importers:
         specifier: ^19.3.0
         version: 19.3.0
 
+  games/danca-do-congelar:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
   games/detetive-das-emocoes:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@aprumo/stimuli':
+        specifier: workspace:*
+        version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
+  games/encaixa-ai:
     dependencies:
       '@aprumo/game-sdk':
         specifier: workspace:*
@@ -310,7 +388,45 @@ importers:
         specifier: ^19.3.0
         version: 19.3.0
 
+  games/fazendinha-sonora:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@aprumo/stimuli':
+        specifier: workspace:*
+        version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
   games/historia-ordem:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@aprumo/stimuli':
+        specifier: workspace:*
+        version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
+  games/lanche-do-urso:
     dependencies:
       '@aprumo/game-sdk':
         specifier: workspace:*
@@ -462,6 +578,41 @@ importers:
         specifier: ^19.3.0
         version: 19.3.0
 
+  games/rampa-maluca:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@aprumo/stimuli':
+        specifier: workspace:*
+        version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
+  games/siga-o-mestre:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
   games/social-city:
     dependencies:
       '@aprumo/game-sdk':
@@ -473,6 +624,22 @@ importers:
       '@aprumo/stimuli':
         specifier: workspace:*
         version: link:../../packages/stimuli
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+
+  games/tambor-da-imitacao:
+    dependencies:
+      '@aprumo/game-sdk':
+        specifier: workspace:*
+        version: link:../../packages/game-sdk
+      '@aprumo/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
     devDependencies:
       '@types/react':
         specifier: ^19.3.0
