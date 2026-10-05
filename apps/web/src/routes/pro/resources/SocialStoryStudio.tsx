@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Badge } from '@aprumo/ui';
 import { speak, playTones } from '@aprumo/game-sdk';
-import { SOCIAL_STORIES, type SocialStory, type StorySlide } from './socialStory';
+import { SOCIAL_STORIES, type StorySlide } from './socialStory';
 
 function LeoAvatar({ mood }: { mood: StorySlide['characterMood'] }) {
   // Expressive soft-styled vector avatar for consistent character presentation (Léo)

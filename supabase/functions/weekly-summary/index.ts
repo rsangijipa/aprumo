@@ -35,7 +35,7 @@ serve(async (req: Request) => {
 
     if (caseErr || !c) throw new Error('Case not found');
 
-    const preferredName = (c.children as any)?.preferred_name ?? 'A criança';
+    const preferredName = (c.children as { preferred_name?: string } | null)?.preferred_name ?? 'A criança';
     const weekStart = new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10);
     const weekEnd = new Date().toISOString().slice(0, 10);
 

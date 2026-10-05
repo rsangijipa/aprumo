@@ -672,11 +672,15 @@ export function CommandPalette({
   onSelect: (id: string) => void;
 }) {
   const [q, setQ] = useState('');
+  const [prevOpen, setPrevOpen] = useState(open);
+  if (open !== prevOpen) {
+    setPrevOpen(open);
+    if (open) setQ('');
+  }
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (open) {
-      setQ('');
       setTimeout(() => inputRef.current?.focus(), 50);
     }
   }, [open]);

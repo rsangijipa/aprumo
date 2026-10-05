@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { playTones, speak, useGameClient, useMotion } from '@aprumo/game-sdk';
 import { IndependenceArt } from './Art';
 import { INDEPENDENCE_MISSIONS, planMissionTrials, type PlannedMissionTrial } from './logic';
@@ -49,9 +49,15 @@ export default function MissaoIndependencia() {
   const [done, setDone] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
 
-  const trialStartRef = useRef<number>(Date.now());
+  const trialStartRef = useRef<number>(0);
   const busyRef = useRef(false);
   const promptTimerRef = useRef<number | null>(null);
+
+  const [prevStepIdx, setPrevStepIdx] = useState(stepIdx);
+  if (prevStepIdx !== stepIdx) {
+    setPrevStepIdx(stepIdx);
+    setShowPrompt(false);
+  }
 
   const currentMission = INDEPENDENCE_MISSIONS[missionIdx]!;
   const trials: PlannedMissionTrial[] = useMemo(() => {
@@ -73,7 +79,6 @@ export default function MissaoIndependencia() {
     if (!config || !currentTrial || done) return;
 
     trialStartRef.current = Date.now();
-    setShowPrompt(false);
 
     client.trialStarted({
       trialIndex: stepIdx,
@@ -110,15 +115,11 @@ export default function MissaoIndependencia() {
     };
   }, [config, currentTrial, stepIdx, done, client, sound]);
 
-  if (!config || !currentTrial) {
-    return <div className="adl" aria-busy="true" />;
-  }
-
-  const handleSelectOption = (pos: number) => {
-    if (busyRef.current || done) return;
+  const handleSelectOption = useCallback((pos: number) => {
+    if (!currentTrial || busyRef.current || done) return;
     const selected = currentTrial.options[pos]!;
     const isTarget = pos === currentTrial.positionOfTarget;
-    const latencyMs = Date.now() - trialStartRef.current;
+    const latencyMs = trialStartRef.current > 0 ? Date.now() - trialStartRef.current : 0;
 
     if (promptTimerRef.current) {
       window.clearTimeout(promptTimerRef.current);
@@ -177,15 +178,19 @@ export default function MissaoIndependencia() {
         promptSource: 'none',
       });
     }
-  };
+  }, [currentTrial, done, completedSteps, stepIdx, showPrompt, motion, trials.length, sound, client]);
 
-  const switchMission = (idx: number) => {
+  const switchMission = useCallback((idx: number) => {
     setMissionIdx(idx);
     setStepIdx(0);
     setCompletedSteps([]);
     setDone(false);
     busyRef.current = false;
-  };
+  }, []);
+
+  if (!config || !currentTrial) {
+    return <div className="adl" aria-busy="true" />;
+  }
 
   return (
     <div

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { playTones, useGameClient, useMotion } from '@aprumo/game-sdk';
 import { type Bubble, createBubble, shouldTriggerMilestone } from './logic';
 import { manifest } from './manifest';
@@ -14,10 +14,14 @@ export default function CausaEEfeito() {
   const { client, config, paused, ended } = useGameClient(manifest.appId, manifest.version);
   const motion = useMotion(config);
 
-  const [bubbles, setBubbles] = useState<Bubble[]>([]);
+  const [bubbles, setBubbles] = useState<Bubble[]>(() => [
+    createBubble('b-1', 120, 180, 1),
+    createBubble('b-2', 260, 260, 2),
+    createBubble('b-3', 180, 420, 3),
+  ]);
   const [poppingId, setPoppingId] = useState<string | null>(null);
   const [tapCount, setTapCount] = useState(0);
-  const trialStartRef = useRef<number>(Date.now());
+  const trialStartRef = useRef<number>(0);
   const seedCounterRef = useRef(1);
 
   const sound = config?.adaptation.sound ?? 'low';
@@ -27,20 +31,10 @@ export default function CausaEEfeito() {
       client.emit('SESSION_STARTED', { configVersion: manifest.version });
       client.emit('TRIAL_STARTED', { trialIndex: 0, targetId: 'toque-sensorial', presented: ['toque-sensorial'] });
       trialStartRef.current = Date.now();
-
-      // Spawn initial bubbles
-      const initial: Bubble[] = [
-        createBubble('b-1', 120, 180, 1),
-        createBubble('b-2', 260, 260, 2),
-        createBubble('b-3', 180, 420, 3),
-      ];
-      setBubbles(initial);
     }
   }, [config, client]);
 
-  if (!config) return <div className="cee" aria-busy="true" />;
-
-  const handleInteraction = (x: number, y: number, bubbleId?: string) => {
+  const handleInteraction = useCallback((x: number, y: number, bubbleId?: string) => {
     const latencyMs = Date.now() - trialStartRef.current;
     const targetBubble = bubbles.find((b) => b.id === bubbleId);
     const freq = targetBubble ? targetBubble.noteFreq : 440;
@@ -92,7 +86,9 @@ export default function CausaEEfeito() {
 
     trialStartRef.current = Date.now();
     client.emit('TRIAL_STARTED', { trialIndex: nextCount, targetId: 'toque-sensorial', presented: ['toque-sensorial'] });
-  };
+  }, [bubbles, sound, tapCount, client, config]);
+
+  if (!config) return <div className="cee" aria-busy="true" />;
 
   const onContainerClick = (e: React.MouseEvent<HTMLElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();

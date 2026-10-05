@@ -63,22 +63,33 @@ export function useTrialRunner<T extends SelectionTrial>(opts: {
   /** RESPONSE_STARTED é emitido no máximo uma vez por tentativa (primeiro gesto). */
   const responseStarted = useRef(false);
   const detailRef = useRef(opts.detail);
-  detailRef.current = opts.detail;
   const onStartRef = useRef(opts.onTrialStart);
-  onStartRef.current = opts.onTrialStart;
 
   const trial = trials[i];
   const clear = () => {
     timers.current.forEach((t) => window.clearTimeout(t));
     timers.current = [];
   };
-  const scheduleAdvance = (ms: number) => {
+  const advance = useCallback(() => {
+    clear();
+    setHint(false);
+    setLastSelected(null);
+    const next = i + 1;
+    setI(next);
+    if (next >= trials.length) {
+      setStage('done');
+      client.emit('SESSION_COMPLETED', { trialsCompleted: trials.length });
+    } else setStage('awaiting');
+  }, [i, trials.length, client]);
+
+  const scheduleAdvance = useCallback((ms: number) => {
     if (transition.current != null) window.clearTimeout(transition.current);
     transition.current = window.setTimeout(() => {
       transition.current = null;
-      advanceRef.current();
+      advance();
     }, ms);
-  };
+  }, [advance]);
+
   useEffect(() => () => { if (transition.current != null) window.clearTimeout(transition.current); }, []);
 
   const finish = useCallback(
@@ -119,27 +130,13 @@ export function useTrialRunner<T extends SelectionTrial>(opts: {
         setStage('correction');
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [trial, config, client, feedbackMs, runtime],
+    [trial, config, client, feedbackMs, runtime, scheduleAdvance],
   );
 
-  const iRef = useRef(0);
-  iRef.current = i;
-  // Efeitos colaterais fora do updater de estado (o StrictMode executa updaters duas vezes).
-  const advance = useCallback(() => {
-    clear();
-    setHint(false);
-    setLastSelected(null);
-    const next = iRef.current + 1;
-    iRef.current = next;
-    setI(next);
-    if (next >= trials.length) {
-      setStage('done');
-      client.emit('SESSION_COMPLETED', { trialsCompleted: trials.length });
-    } else setStage('awaiting');
-  }, [trials.length, client]);
-  const advanceRef = useRef(advance);
-  advanceRef.current = advance;
+  useEffect(() => {
+    detailRef.current = opts.detail;
+    onStartRef.current = opts.onTrialStart;
+  });
 
   // Início de cada tentativa.
   useEffect(() => {
@@ -241,8 +238,7 @@ export function useTrialRunner<T extends SelectionTrial>(opts: {
       }
       return 'ignored';
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [trial, paused, stage, finish, feedbackMs, markResponseStart],
+    [trial, paused, stage, finish, feedbackMs, markResponseStart, scheduleAdvance],
   );
 
   const state: TrialRunnerState<T> = { trial, stage, hint, lastOutcome, lastSelected, completed: Math.min(i, trials.length), total: trials.length };

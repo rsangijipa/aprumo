@@ -58,7 +58,7 @@ function myLeadCases() {
 function Overview() {
   const st = useStore((s) => s);
   const implementers = st.professionals.filter((p) => p.id !== CURRENT_USER_ID);
-  const monthAgo = Date.now() - 30 * 86_400_000;
+  const [monthAgo] = useState(() => Date.now() - 30 * 86_400_000);
   const gaps = useMemo(() => {
     const out: Array<{ who: string; caseName: string; caseId: string; proc: string }> = [];
     for (const c of st.cases) {
@@ -299,7 +299,7 @@ function Hours() {
   const st = useStore((s) => s);
   const [open, setOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
-  const monthAgo = Date.now() - 30 * 86_400_000;
+  const [monthAgo] = useState(() => Date.now() - 30 * 86_400_000);
   const people = st.professionals.filter((p) => p.id !== CURRENT_USER_ID);
   return (
     <div className="ap-stack" style={{ gap: '1rem' }}>

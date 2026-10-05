@@ -22,9 +22,9 @@ const trials: SelectionTrial[] = [
 ];
 
 function fakeClient() {
-  const events: Array<{ type: string; payload: any }> = [];
+  const events: Array<{ type: string; payload: Record<string, any> }> = [];
   const client = {
-    emit: (type: string, payload: unknown) => { events.push({ type, payload }); return String(events.length); },
+    emit: (type: string, payload: unknown) => { events.push({ type, payload: payload as Record<string, any> }); return String(events.length); },
     onConfig: () => () => {}, onCommand: () => () => {}, pendingCount: () => 0,
     connect: () => {}, disconnect: () => {}, dispose: () => {},
   } as unknown as GameClient;

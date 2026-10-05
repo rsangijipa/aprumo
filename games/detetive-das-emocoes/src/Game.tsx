@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { playTones, speak, useGameClient } from '@aprumo/game-sdk';
 import {
   planDetectiveTrials,
@@ -33,8 +33,16 @@ export default function DetetiveDasEmocoes() {
   const [solvedCount, setSolvedCount] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
-  const trialStartRef = useRef<number>(Date.now());
+  const trialStartRef = useRef<number>(0);
   const currentCase: DetectiveCase | undefined = cases[caseIndex];
+
+  const [prevCaseIndex, setPrevCaseIndex] = useState(caseIndex);
+  if (caseIndex !== prevCaseIndex) {
+    setPrevCaseIndex(caseIndex);
+    setUnlockedClues(1);
+    setSelectedChoiceId(null);
+    setFeedback(null);
+  }
 
   // Início da sessão
   useEffect(() => {
@@ -60,11 +68,70 @@ export default function DetetiveDasEmocoes() {
         positionOfTarget: targetPos >= 0 ? targetPos : null,
       });
       trialStartRef.current = Date.now();
-      setUnlockedClues(1);
-      setSelectedChoiceId(null);
-      setFeedback(null);
     }
   }, [config, client, currentCase, caseIndex]);
+
+  const handleRevealClue = useCallback(() => {
+    if (!currentCase || unlockedClues >= currentCase.clues.length) return;
+    const nextCount = unlockedClues + 1;
+    setUnlockedClues(nextCount);
+    const clue = currentCase.clues[nextCount - 1]!;
+    void speak(`${clue.label}: ${clue.detail}`, 'normal');
+  }, [currentCase, unlockedClues]);
+
+  const handleSelectChoice = useCallback((choiceId: string) => {
+    if (feedback?.isCorrect || !currentCase) return; // Já resolveu o caso
+
+    setSelectedChoiceId(choiceId);
+    const latencyMs = trialStartRef.current > 0 ? Date.now() - trialStartRef.current : 0;
+    const result = evaluateChoice(currentCase.id, choiceId);
+    setFeedback(result);
+
+    if (result.isCorrect) {
+      playTones(TONES_CORRECT, 'normal');
+      setSolvedCount((c) => c + 1);
+      const targetPos = currentCase.choices.findIndex((c) => c.isCorrect);
+      const selectedPos = currentCase.choices.findIndex((c) => c.id === choiceId);
+      client.responseRecorded({
+        trialIndex: caseIndex,
+        targetId: currentCase.id,
+        stimulusId: choiceId,
+        presented: currentCase.choices.map((c) => c.id),
+        positionOfTarget: targetPos >= 0 ? targetPos : null,
+        selected: choiceId,
+        selectedPosition: selectedPos >= 0 ? selectedPos : null,
+        response: 'correct',
+        latencyMs,
+        promptLevel: 'independent',
+        promptSource: 'none',
+        detail: { cluesRevealed: unlockedClues, scenario: currentCase.scenarioTitle },
+      });
+      client.reinforcerPresented({ kind: 'animation', contingentOn: currentCase.id, intensity: 'subtle' });
+      void speak(result.explanation, 'normal');
+    } else if (result.isPlausible) {
+      playTones(TONES_PLAUSIBLE, 'normal');
+      void speak(result.explanation, 'normal');
+    } else {
+      playTones(TONES_TRY_AGAIN, 'normal');
+      void speak(result.explanation, 'normal');
+    }
+  }, [feedback, currentCase, caseIndex, client, unlockedClues]);
+
+  const handleNextCase = useCallback(() => {
+    if (caseIndex < cases.length - 1) {
+      setCaseIndex((idx) => idx + 1);
+    } else {
+      setIsFinished(true);
+      client.levelCompleted({
+        levelId: 'detetive-nivel-1',
+        levelIndex: 0,
+        trialsCompleted: cases.length,
+        correct: solvedCount + 1,
+        outcome: 'completed',
+      });
+      client.gameCompleted(cases.length);
+    }
+  }, [caseIndex, cases.length, client, solvedCount]);
 
   if (!config || !currentCase) {
     if (isFinished) {
@@ -97,69 +164,6 @@ export default function DetetiveDasEmocoes() {
     }
     return <main className="det-root" aria-busy="true"><p>Carregando dossiê...</p></main>;
   }
-
-  const handleRevealClue = () => {
-    if (unlockedClues < currentCase.clues.length) {
-      const nextCount = unlockedClues + 1;
-      setUnlockedClues(nextCount);
-      const clue = currentCase.clues[nextCount - 1]!;
-      void speak(`${clue.label}: ${clue.detail}`, 'normal');
-    }
-  };
-
-  const handleSelectChoice = (choiceId: string) => {
-    if (feedback?.isCorrect) return; // Já resolveu o caso
-
-    setSelectedChoiceId(choiceId);
-    const latencyMs = Date.now() - trialStartRef.current;
-    const result = evaluateChoice(currentCase.id, choiceId);
-    setFeedback(result);
-
-    if (result.isCorrect) {
-      playTones(TONES_CORRECT, 'normal');
-      setSolvedCount((c) => c + 1);
-      const targetPos = currentCase.choices.findIndex((c) => c.isCorrect);
-      const selectedPos = currentCase.choices.findIndex((c) => c.id === choiceId);
-      client.responseRecorded({
-        trialIndex: caseIndex,
-        targetId: currentCase.id,
-        stimulusId: choiceId,
-        presented: currentCase.choices.map((c) => c.id),
-        positionOfTarget: targetPos >= 0 ? targetPos : null,
-        selected: choiceId,
-        selectedPosition: selectedPos >= 0 ? selectedPos : null,
-        response: 'correct',
-        latencyMs,
-        promptLevel: 'independent',
-        promptSource: 'none',
-        detail: { cluesRevealed: unlockedClues, scenario: currentCase.scenarioTitle },
-      });
-      client.reinforcerPresented({ kind: 'animation', contingentOn: currentCase.id, intensity: 'subtle' });
-      void speak(result.explanation, 'normal');
-    } else if (result.isPlausible) {
-      playTones(TONES_PLAUSIBLE, 'normal');
-      void speak(result.explanation, 'normal');
-    } else {
-      playTones(TONES_TRY_AGAIN, 'normal');
-      void speak(result.explanation, 'normal');
-    }
-  };
-
-  const handleNextCase = () => {
-    if (caseIndex < cases.length - 1) {
-      setCaseIndex((idx) => idx + 1);
-    } else {
-      setIsFinished(true);
-      client.levelCompleted({
-        levelId: 'detetive-nivel-1',
-        levelIndex: 0,
-        trialsCompleted: cases.length,
-        correct: solvedCount + 1,
-        outcome: 'completed',
-      });
-      client.gameCompleted(cases.length);
-    }
-  };
 
   return (
     <main className="det-root">

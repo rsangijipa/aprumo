@@ -21,7 +21,10 @@ export default function PlayShell() {
   const c = st.cases.find((x) => x.childId === childId && x.status === 'active');
   const space = st.childSpaces.find((x) => x.childId === childId) ?? childSpaceOf(childId);
   const frame = useRef<HTMLIFrameElement>(null);
-  const started = useRef(Date.now());
+  const started = useRef(0);
+  useEffect(() => {
+    started.current = Date.now();
+  }, []);
   const [result, setResult] = useState<{ stars: number; completed: boolean } | null>(null);
   const [round, setRound] = useState(0);
   const config = useMemo(() => (c && GAMES[appId] ? buildPracticeConfig(c, appId) : null), [c, appId, round]); // eslint-disable-line react-hooks/exhaustive-deps

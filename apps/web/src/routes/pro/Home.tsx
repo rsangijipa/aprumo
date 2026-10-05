@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { Card, EmptyState, IconArrowRight, IconBell, IconCases, IconLibrary, IconRoute, ModelBadge, PageHeader, SectionHeader } from '@aprumo/ui';
 import { CURRENT_USER_ID } from '../../data/seed';
@@ -11,16 +11,17 @@ export default function Home() {
   const st = useStore((s) => s);
   const me = db.professional(CURRENT_USER_ID)!;
   const myCases = db.cases.filter((c) => c.team.some((m) => m.professionalId === me.id) && c.status === 'active');
+  const [now] = useState(() => Date.now());
   const alerts = useMemo(() => myCases.flatMap((c) => alertsForCase(st, c.id)), [st, myCases]);
   const priority = alerts.filter((a) => a.severity === 'priority').length;
-  const weekSessions = st.sessions.filter((s) => myCases.some((c) => c.id === s.caseId) && Date.now() - Date.parse(s.startedAt) < 7 * DAY).length;
+  const weekSessions = st.sessions.filter((s) => myCases.some((c) => c.id === s.caseId) && now - Date.parse(s.startedAt) < 7 * DAY).length;
   const reviews = myCases
-    .map((c) => ({ c, days: Math.ceil((Date.parse(c.planReviewOn) - Date.now()) / DAY) }))
+    .map((c) => ({ c, days: Math.ceil((Date.parse(c.planReviewOn) - now) / DAY) }))
     .filter((x) => x.days <= 21)
     .sort((a, b) => a.days - b.days);
   const recent = [...st.timeline].filter((t) => myCases.some((c) => c.id === t.caseId)).sort((a, b) => b.at.localeCompare(a.at)).slice(0, 6);
 
-  const hour = new Date().getHours();
+  const hour = new Date(now).getHours();
   const greet = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite';
 
   return (

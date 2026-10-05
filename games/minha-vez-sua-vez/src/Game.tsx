@@ -30,7 +30,7 @@ export default function MinhaVezSuaVez() {
   const partner = partnerKindFrom(config?.params ?? {});
   const [{ s, last }, dispatch] = useReducer(reducer, { s: initialTurns(turns, 0) });
   const [hint, setHint] = useState(false);
-  const [softSignal, setSoftSignal] = useState(0);
+  const softSignal = last?.offTurn ? last.seq : 0;
   const prompt = useRef<{ level: string; source: PromptSource }>({ level: 'IND', source: 'none' });
   const responded = useRef(false);
   const correct = useRef(0);
@@ -91,7 +91,6 @@ export default function MinhaVezSuaVez() {
   // Emissão das tentativas produzidas pelo redutor (fora do reducer: efeito colateral).
   useEffect(() => {
     if (!last || !target || !config) return;
-    if (last.offTurn) setSoftSignal((n) => n + 1);
     if (last.trial) {
       const t = last.trial;
       client.responseRecorded({

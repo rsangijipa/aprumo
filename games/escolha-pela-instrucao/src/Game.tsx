@@ -54,7 +54,10 @@ export default function MissaoInstrucao() {
 
   // Na correção, a instrução é repetida com calma enquanto a luz guia.
   useEffect(() => {
-    if (run.stage === 'correction' && trial) void say(trial.instruction);
+    if (run.stage === 'correction' && trial) {
+      const timer = window.setTimeout(() => void say(trial.instruction), 100);
+      return () => window.clearTimeout(timer);
+    }
   }, [run.stage, trial, say]);
 
   useEffect(() => {

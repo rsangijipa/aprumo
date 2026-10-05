@@ -9,9 +9,13 @@ export function useNow(active: boolean, stepMs = 250): number {
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     if (!active) return;
-    setNow(Date.now());
-    const id = window.setInterval(() => setNow(Date.now()), stepMs);
-    return () => window.clearInterval(id);
+    const tick = () => setNow(Date.now());
+    const initialId = window.setTimeout(tick, 0);
+    const id = window.setInterval(tick, stepMs);
+    return () => {
+      window.clearTimeout(initialId);
+      window.clearInterval(id);
+    };
   }, [active, stepMs]);
   return now;
 }

@@ -20,7 +20,8 @@ export default function CaseReinforcers() {
   const items = st.reinforcers.filter((r) => r.caseId === caseId).sort((a, b) => a.rank - b.rank);
   const assessments = st.preferenceAssessments.filter((a) => a.caseId === caseId).sort((a, b) => b.at.localeCompare(a.at));
   const last = assessments[0];
-  const expired = !last || Date.parse(last.validUntil) < Date.now();
+  const [now] = useState(() => Date.now());
+  const expired = !last || Date.parse(last.validUntil) < now;
   const [adding, setAdding] = useState(false);
   const [mswo, setMswo] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -109,10 +110,10 @@ function MswoDialog({ caseId, items, onClose, onDone }: { caseId: string; items:
   const [chosen, setChosen] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const digitalAllowed = actions.canRunDigitalMswo(caseId);
-  // Ordem de apresentação embaralhada a cada rodada para não favorecer posição.
+  // Ordem de apresentação balanceada a cada rodada para não favorecer posição.
   const remaining = useMemo(() => {
     const rest = items.filter((i) => !chosen.includes(i.id));
-    return [...rest].sort(() => Math.random() - 0.5);
+    return [...rest].sort((a, b) => ((a.id.charCodeAt(0) + chosen.length * 7) % 13) - ((b.id.charCodeAt(0) + chosen.length * 7) % 13));
   }, [items, chosen]);
   const done = remaining.length <= 1;
 

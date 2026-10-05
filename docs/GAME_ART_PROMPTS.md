@@ -1,20 +1,12 @@
 # APRUMO — GAME ART PROMPTS & ASSET PIPELINE
 
-**Versão:** 2.1.0  
+**Versão:** 3.0.0  
 **Data:** Outubro de 2026  
-**Regra de Transparência:** Nano Banana e geradores neurais não fornecem canal alpha/transparência com confiabilidade total. Portanto, todo asset isolado é gerado sobre fundo sólido uniforme de alto contraste (branco puro `#FFFFFF`, cinza neutro `#808080` ou verde chroma `#00FF00`), devidamente marcado como `NEEDS_BACKGROUND_REMOVAL`.
-**Status de Entrega:** Todos os 7 assets foram gerados e implementados como ilustrações vetoriais escaláveis SVG (3D Soft Clay / volumetric shading) em `apps/web/public/assets/` e exportados como componentes tipados em `@aprumo/stimuli`.
-
----
-
-## 1. Protocolo de Geração e Remoção
-
-Para cada asset que requeira transparência para compor a interface ou o canvas:
-1. Definir a cor do objeto principal.
-2. Selecionar o fundo sólido mais contrastante (evitar verde se o objeto for verde; usar branco puro para objetos coloridos e contrastantes).
-3. Registrar o prompt exato, a resolução e a finalidade.
-4. Identificar o asset com a tag: `NEEDS_BACKGROUND_REMOVAL: TRUE` ou `GERADO & IMPLEMENTADO`.
-5. Sinalizar que a remoção manual será realizada com software de recorte dedicado ou ferramenta de máscara.
+**Regra Arquitetural de Arte (Regra 0 & Seção 6):**
+1. **Diferenciação Estrita de Formatos:** Arquivos vetoriais SVG são ilustrações programáticas/procedurais de fallback (alto contraste, escalabilidade infinita e carregamento leve). Eles **não** são gerados pelo Nano Banana.
+2. **Pipeline Nano Banana (IA Multimodal):** Produz imagens raster reais (PNG, WebP, JPG) via modelos de difusão/geração neural, salvos canonicamente em `apps/web/public/generated/<categoria>/`.
+3. **Catálogo Canônico:** Todo asset raster ou vetorial é rastreado em [`docs/IMAGE_ASSET_MANIFEST.json`](docs/IMAGE_ASSET_MANIFEST.json) com prompt, resolução, formato e fallback associado.
+4. **Fundo e Transparência:** Assets isolados são gerados sobre fundo sólido uniforme (branco puro `#FFFFFF` ou neutro), com máscara/recorte suave para integração limpa.
 
 ---
 

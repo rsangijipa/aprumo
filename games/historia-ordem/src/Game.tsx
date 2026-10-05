@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { playTones, useGameClient, useMotion } from '@aprumo/game-sdk';
 import { planStoryTrials, type StoryStep } from './logic';
 import { manifest } from './manifest';
@@ -20,7 +20,7 @@ export default function HistoriaEmOrdem() {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedSteps, setSelectedSteps] = useState<StoryStep[]>([]);
   const [done, setDone] = useState(false);
-  const trialStartRef = useRef<number>(Date.now());
+  const trialStartRef = useRef<number>(0);
   const busyRef = useRef(false);
 
   const sound = config?.adaptation.sound ?? 'low';
@@ -34,11 +34,8 @@ export default function HistoriaEmOrdem() {
     }
   }, [config, client, currentTrial]);
 
-  if (!config || !currentTrial) return <div className="heo" aria-busy="true" />;
-  const scale = config.adaptation.touchScale;
-
-  const onSelectCard = (step: StoryStep) => {
-    if (busyRef.current || selectedSteps.some((s) => s.id === step.id)) return;
+  const onSelectCard = useCallback((step: StoryStep) => {
+    if (!currentTrial || busyRef.current || selectedSteps.some((s) => s.id === step.id)) return;
 
     playTones(TAP, sound);
     const updated = [...selectedSteps, step];
@@ -46,7 +43,7 @@ export default function HistoriaEmOrdem() {
 
     if (updated.length === 3) {
       busyRef.current = true;
-      const latencyMs = Date.now() - trialStartRef.current;
+      const latencyMs = trialStartRef.current > 0 ? Date.now() - trialStartRef.current : 0;
       const isCorrect =
         updated[0]!.stepNumber === 1 &&
         updated[1]!.stepNumber === 2 &&
@@ -108,7 +105,10 @@ export default function HistoriaEmOrdem() {
         }, motion === 'static' ? 300 : 800);
       }
     }
-  };
+  }, [currentTrial, selectedSteps, sound, currentIdx, client, trials, motion]);
+
+  if (!config || !currentTrial) return <div className="heo" aria-busy="true" />;
+  const scale = config.adaptation.touchScale;
 
   return (
     <div className="heo" data-palette={config.adaptation.palette} data-motion={motion} style={{ ['--heo-scale' as string]: scale }}>

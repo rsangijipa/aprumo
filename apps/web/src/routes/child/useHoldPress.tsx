@@ -11,7 +11,9 @@ export function useHoldPress(onComplete: () => void, ms = HOLD_MS) {
   const [holding, setHolding] = useState(false);
   const timer = useRef<number | null>(null);
   const done = useRef(onComplete);
-  done.current = onComplete;
+  useEffect(() => {
+    done.current = onComplete;
+  }, [onComplete]);
 
   const cancel = useCallback(() => {
     if (timer.current) window.clearTimeout(timer.current);

@@ -373,7 +373,7 @@ function TargetDialog({ program, onClose, onDone }: { program: Program | null; o
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
           <div>
             {step > 1 && (
-              <Button onClick={() => setStep((s) => (s - 1) as any)}>
+              <Button onClick={() => setStep((s) => (s > 1 ? ((s - 1) as 1 | 2 | 3 | 4 | 5 | 6) : s))}>
                 ← Voltar
               </Button>
             )}
@@ -384,7 +384,7 @@ function TargetDialog({ program, onClose, onDone }: { program: Program | null; o
               <Button
                 variant="primary"
                 disabled={!isStepComplete(step)}
-                onClick={() => setStep((s) => (s + 1) as any)}
+                onClick={() => setStep((s) => (s < 6 ? ((s + 1) as 1 | 2 | 3 | 4 | 5 | 6) : s))}
               >
                 Próximo passo →
               </Button>
@@ -399,18 +399,18 @@ function TargetDialog({ program, onClose, onDone }: { program: Program | null; o
     >
       {/* Indicador de etapas */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.25rem', borderBottom: '1px solid var(--ap-border)', paddingBottom: '0.75rem' }}>
-        {[
+        {([
           { num: 1, label: 'Definição' },
           { num: 2, label: 'Estímulos' },
           { num: 3, label: 'Dicas' },
           { num: 4, label: 'Correção' },
           { num: 5, label: 'Critério' },
           { num: 6, label: 'Generalização' },
-        ].map((s) => (
+        ] as const).map((s) => (
           <button
             key={s.num}
             type="button"
-            onClick={() => setStep(s.num as any)}
+            onClick={() => setStep(s.num)}
             style={{
               background: 'none',
               border: 'none',

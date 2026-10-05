@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { installAudioUnlock, playCue, playTones, seededRandom, speak, useGameClient, useMotion } from '@aprumo/game-sdk';
 import {
   OUTCOMES, REST_POSE, buildTimeline, outcomeToRecord, planTrials, resolveMotion, resolveSettings, samplePose,
@@ -52,8 +52,11 @@ export default function EspelhoMagico() {
   const pausedRef = useRef(paused);
   const stageRef = useRef<Stage>('demo');
   const timerRef = useRef<number | null>(null);
-  pausedRef.current = paused || ended;
-  stageRef.current = stage;
+
+  useEffect(() => {
+    pausedRef.current = paused || ended;
+    stageRef.current = stage;
+  });
 
   const trial = plan[index];
 
@@ -110,69 +113,72 @@ export default function EspelhoMagico() {
     return () => cancelAnimationFrame(raf);
   }, [trial, demoNonce, motion, settings, sound]);
 
-  if (!config || !settings) return <div className="em" aria-busy="true" />;
-
   const busy = paused || ended || stage === 'feedback' || stage === 'done';
 
-  const replay = () => {
+  const replay = useCallback(() => {
     if (busy) return;
     replaysRef.current += 1;
     setStage('demo');
     setDemoNonce((n) => n + 1);
-  };
+  }, [busy]);
 
-  const record = (outcome: Outcome) => {
-    if (busy || !trial) return;
-    const rec = outcomeToRecord(outcome, trial.target.promptHierarchy);
-    const lat = Math.max(0, Math.round(performance.now() - presentedAtRef.current));
-    const base = { targetId: trial.target.targetId, trialIndex: trial.trialIndex };
-    if (rec.promptSource === 'therapist') client.promptPresented({ ...base, level: rec.promptLevel, source: 'therapist', latencyMs: lat });
-    client.responseRecorded({
-      ...base,
-      stimulusId: trial.action.id,
-      presented: [trial.action.id],
-      positionOfTarget: null,
-      selected: null,
-      selectedPosition: null,
-      response: rec.response,
-      latencyMs: null,
-      promptLevel: rec.promptLevel,
-      promptSource: rec.promptSource,
-      detail: {
-        action: trial.action.id,
-        category: trial.action.category,
-        outcome,
-        replays: replaysRef.current,
-        demoCycles: trial.action.singleCycle ? 1 : settings.demoCycles,
-        motion,
-        sensory: settings.sensory,
-        inputMode: 'therapist',
-        recordLatencyMs: lat,
-      },
-    });
-    const performed = rec.response === 'correct';
-    if (performed) {
-      correctRef.current += 1;
-      setHappy(true);
-      if (settings.sensory !== 'minimal') playCue('correct', sound);
-      client.reinforcerPresented({ kind: 'animation', contingentOn: trial.target.targetId, intensity: 'subtle' });
-    }
-    setStage('feedback');
-    timerRef.current = window.setTimeout(() => {
-      setHappy(false);
-      setPose(REST_POSE);
-      if (index + 1 >= plan.length) {
-        client.levelCompleted({ levelId: LEVEL_ID, levelIndex: 0, trialsCompleted: plan.length, correct: correctRef.current, outcome: 'completed' });
-        client.gameCompleted(plan.length);
-        if (settings.sensory !== 'minimal') playCue('complete', sound);
+  const record = useCallback(
+    (outcome: Outcome) => {
+      if (busy || !trial) return;
+      const rec = outcomeToRecord(outcome, trial.target.promptHierarchy);
+      const lat = Math.max(0, Math.round(performance.now() - presentedAtRef.current));
+      const base = { targetId: trial.target.targetId, trialIndex: trial.trialIndex };
+      if (rec.promptSource === 'therapist') client.promptPresented({ ...base, level: rec.promptLevel, source: 'therapist', latencyMs: lat });
+      client.responseRecorded({
+        ...base,
+        stimulusId: trial.action.id,
+        presented: [trial.action.id],
+        positionOfTarget: null,
+        selected: null,
+        selectedPosition: null,
+        response: rec.response,
+        latencyMs: null,
+        promptLevel: rec.promptLevel,
+        promptSource: rec.promptSource,
+        detail: {
+          action: trial.action.id,
+          category: trial.action.category,
+          outcome,
+          replays: replaysRef.current,
+          demoCycles: trial.action.singleCycle ? 1 : (settings?.demoCycles ?? 1),
+          motion,
+          sensory: settings?.sensory,
+          inputMode: 'therapist',
+          recordLatencyMs: lat,
+        },
+      });
+      const performed = rec.response === 'correct';
+      if (performed) {
+        correctRef.current += 1;
         setHappy(true);
-        setStage('done');
-      } else {
-        setIndex((i) => i + 1);
-        setStage('demo');
+        if (settings?.sensory !== 'minimal') playCue('correct', sound);
+        client.reinforcerPresented({ kind: 'animation', contingentOn: trial.target.targetId, intensity: 'subtle' });
       }
-    }, performed ? (motion === 'static' ? 900 : 1400) : 700);
-  };
+      setStage('feedback');
+      timerRef.current = window.setTimeout(() => {
+        setHappy(false);
+        setPose(REST_POSE);
+        if (index + 1 >= plan.length) {
+          client.levelCompleted({ levelId: LEVEL_ID, levelIndex: 0, trialsCompleted: plan.length, correct: correctRef.current, outcome: 'completed' });
+          client.gameCompleted(plan.length);
+          if (settings?.sensory !== 'minimal') playCue('complete', sound);
+          setHappy(true);
+          setStage('done');
+        } else {
+          setIndex((i) => i + 1);
+          setStage('demo');
+        }
+      }, performed ? (motion === 'static' ? 900 : 1400) : 700);
+    },
+    [busy, trial, client, settings, motion, sound, index, plan.length],
+  );
+
+  if (!config || !settings) return <div className="em" aria-busy="true" />;
 
   const action = trial?.action;
   const style = { '--em-scale': String(config.adaptation.touchScale) } as CSSProperties;

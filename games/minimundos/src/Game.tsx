@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { playTones, speak, useGameClient } from '@aprumo/game-sdk';
 import {
   type WorldTheme,
@@ -41,6 +41,14 @@ export default function MiniMundos() {
   const bubbleTimerRef = useRef<number | null>(null);
   const currentWorld = WORLD_ENVIRONMENTS[activeTheme];
 
+  const [prevThemeMode, setPrevThemeMode] = useState({ activeTheme, mode });
+  if (prevThemeMode.activeTheme !== activeTheme || prevThemeMode.mode !== mode) {
+    setPrevThemeMode({ activeTheme, mode });
+    setInteractionHistory([]);
+    setLastActionText(null);
+    setIsMissionComplete(false);
+  }
+
   useEffect(() => {
     if (config) {
       client.gameStarted(manifest.version);
@@ -48,18 +56,12 @@ export default function MiniMundos() {
   }, [config, client]);
 
   useEffect(() => {
-    setInteractionHistory([]);
-    setLastActionText(null);
-    setIsMissionComplete(false);
-  }, [activeTheme, mode]);
-
-  useEffect(() => {
     return () => {
       if (bubbleTimerRef.current) window.clearTimeout(bubbleTimerRef.current);
     };
   }, []);
 
-  const handleObjectClick = (obj: WorldObject) => {
+  const handleObjectClick = useCallback((obj: WorldObject) => {
     playTones(SOUNDS[obj.soundType], 'normal');
     setLastActionText(obj.actionText);
 
@@ -81,11 +83,11 @@ export default function MiniMundos() {
         client.gameCompleted(1);
       }
     }
-  };
+  }, [interactionHistory, mode, currentWorld.mission, isMissionComplete, client]);
 
-  const handleHearMission = () => {
+  const handleHearMission = useCallback(() => {
     void speak(currentWorld.mission.instruction, 'normal');
-  };
+  }, [currentWorld.mission.instruction]);
 
   return (
     <main className="mini-root">

@@ -11,16 +11,27 @@ import { GAMES } from './registry';
 
 function GameRoot() {
   const appId = new URLSearchParams(location.search).get('app') ?? '';
+  const entry = GAMES[appId];
   const [Game, setGame] = useState<ComponentType | null>(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const entry = GAMES[appId];
-    if (!entry) return setError(true);
-    entry.load().then((G) => setGame(() => G)).catch(() => setError(true));
-  }, [appId]);
+    if (!entry) return;
+    let active = true;
+    entry
+      .load()
+      .then((G) => {
+        if (active) setGame(() => G);
+      })
+      .catch(() => {
+        if (active) setError(true);
+      });
+    return () => {
+      active = false;
+    };
+  }, [entry]);
 
-  if (error) return <p style={{ fontFamily: 'system-ui', padding: 24 }}>Atividade indisponível.</p>;
+  if (!entry || error) return <p style={{ fontFamily: 'system-ui', padding: 24 }}>Atividade indisponível.</p>;
   return Game ? <Game /> : null;
 }
 

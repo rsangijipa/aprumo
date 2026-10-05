@@ -44,6 +44,23 @@ export default function ChildShell() {
   const hold = useHoldPress(() => setAdultOpen(true));
   const portrait = usePortrait();
 
+  // Ficha nunca é retirada: só existe entrega. Efeito colateral fora do updater (StrictMode).
+  const earnedRef = useRef(0);
+  useEffect(() => {
+    earnedRef.current = earned;
+  }, [earned]);
+
+  const deliverToken = useCallback(() => {
+    if (!run?.tokenBoard || earnedRef.current >= run.tokenBoard.required) return;
+    earnedRef.current += 1;
+    setEarned(earnedRef.current);
+    void actions.recordToken(sessionId);
+    playTones([
+      { freq: 587.33, dur: 0.08, type: 'sine' },
+      { freq: 880, dur: 0.15, delay: 0.06, type: 'sine' },
+    ], run?.config.adaptation.sound === 'off' ? 'off' : 'normal');
+  }, [run, sessionId]);
+
   const goBack = useCallback(() => {
     host.current?.send({ kind: 'END', reason: 'adult' });
     const targetId = getState().activeRun?.config.clinical.targets[0]?.targetId;
@@ -118,20 +135,6 @@ export default function ChildShell() {
   useEffect(() => {
     if (overBlock) host.current?.send({ kind: 'PAUSE' });
   }, [overBlock]);
-
-  // Ficha nunca é retirada: só existe entrega. Efeito colateral fora do updater (StrictMode).
-  const earnedRef = useRef(0);
-  earnedRef.current = earned;
-  const deliverToken = useCallback(() => {
-    if (!run?.tokenBoard || earnedRef.current >= run.tokenBoard.required) return;
-    earnedRef.current += 1;
-    setEarned(earnedRef.current);
-    void actions.recordToken(sessionId);
-    playTones([
-      { freq: 587.33, dur: 0.08, type: 'sine' },
-      { freq: 880, dur: 0.15, delay: 0.06, type: 'sine' },
-    ], run?.config.adaptation.sound === 'off' ? 'off' : 'normal');
-  }, [run, sessionId]);
 
   if (!run) {
     return (

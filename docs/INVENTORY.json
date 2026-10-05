@@ -1,0 +1,742 @@
+{
+  "generatedAt": "2026-10-05T02:31:43.424Z",
+  "counts": {
+    "games": 15,
+    "migrations": 18,
+    "therapeuticResources": 14,
+    "publicRoutes": 16,
+    "proRoutes": 19,
+    "childAndFamilyRoutes": 4,
+    "protocolEvents": 21
+  },
+  "games": [
+    {
+      "appId": "causa-efeito",
+      "name": "Causa e Efeito",
+      "version": "1.0.0",
+      "summary": "Intencionalidade e regulação: toques táteis criam estrelas flutuantes e sons pentatônicos calmantes sem frustração.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "play"
+      ],
+      "purposes": [
+        "regulation",
+        "reinforcer",
+        "teaching"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "circuito-executivo",
+      "name": "Circuito Executivo",
+      "version": "1.0.0",
+      "summary": "Funções executivas: desafios adaptativos de controle inibitório (Go/No-Go), flexibilidade cognitiva (troca de regra) e memória operacional de trabalho.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "academic"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "detetive-das-emocoes",
+      "name": "Detetive das Emoções",
+      "version": "1.0.0",
+      "summary": "Cognição social e teoria da mente: analise pistas faciais, postura corporal e contexto situacional para desvendar sentimentos e intenções sem infantilização.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "social"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "encontre-o-igual",
+      "name": "Match Lab",
+      "version": "1.0.0",
+      "summary": "Laboratório de pareamento: idêntico, cor, forma, categoria e associação funcional, com campo de 2 a 12 estímulos, toque ou arrastar e visual por idade (Soft Clay, Cozy Cartoon, Laboratório Clean).",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "matching"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "escolha-pela-instrucao",
+      "name": "Missão Instrução",
+      "version": "2.0.0",
+      "summary": "Resposta de ouvinte num palco: instruções faladas de 1, 2 ou 3 etapas, com cor, tamanho e relações espaciais (dentro, em cima, embaixo, ao lado da caixa). Nível 1 mantém o modo simples “Toque no/na …”.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "listener",
+        "tact"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "espelho-magico",
+      "name": "Espelho Mágico",
+      "version": "1.0.0",
+      "summary": "Imitação motora: um personagem no espelho demonstra ações (palmas, braços, tambor, blocos) e o adulto registra a ajuda usada.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "imitation"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "historia-ordem",
+      "name": "História em Ordem",
+      "version": "1.0.0",
+      "summary": "Sequenciamento temporal e causalidade: a criança organiza 3 etapas cronológicas de uma rotina ou evento.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "intraverbal",
+        "listener",
+        "academic"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "memoria-bichos",
+      "name": "Memória dos Bichos",
+      "version": "1.0.0",
+      "summary": "Memória de trabalho visual e pareamento diferido: a criança vira cartas para encontrar os pares de bichinhos.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "matching",
+        "play"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "minha-vez-sua-vez",
+      "name": "Minha Vez, Sua Vez",
+      "version": "1.1.0",
+      "summary": "Torre construída a quatro mãos no tapete com um parceiro (adulto ou colega). O indicador mostra “Minha vez” / “Sua vez”; o tempo de espera é medido e toques fora da vez são só sinalizados com suavidade, nunca punidos.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "social",
+        "play"
+      ],
+      "purposes": [
+        "teaching"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "minimundos",
+      "name": "MiniMundos",
+      "version": "1.0.0",
+      "summary": "Brincar simbólico e funcional: explore ambientes cotidianos acolhedores (casa, mercado, consultório e escola) em modo livre ou cumprindo missões lúdicas.",
+      "renderType": "Canvas 2D + DOM",
+      "engine": "Própria (Canvas 2D loop + @aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "play"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "missao-independencia",
+      "name": "Missão Independência",
+      "version": "1.0.0",
+      "summary": "Autonomia da vida real e funções executivas: missões de arrumar a mochila escolar, fazer compras e conferir troco no mercadinho, navegar itinerário de transporte público e rotina de saída.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "adl",
+        "play"
+      ],
+      "purposes": [
+        "teaching",
+        "probe",
+        "reinforcer"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "olha-comigo",
+      "name": "Olha Comigo",
+      "version": "1.0.0",
+      "summary": "Atenção compartilhada: um guia amigo olha, aponta e diz ",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "social"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "organize-categoria",
+      "name": "Organize por Categoria",
+      "version": "1.0.0",
+      "summary": "Categorização e RFFC: a criança classifica o estímulo na caixa temática correta (alimentos, animais, veículos ou roupas).",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "matching",
+        "listener",
+        "academic"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "pequeno-chef",
+      "name": "Pequeno Chef",
+      "version": "1.0.0",
+      "summary": "Culinária terapêutica, análise de tarefas e tolerância alimentar: a criança prepara receitas passo a passo, explorando ingredientes e sequências funcionais.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "adl",
+        "imitation",
+        "play"
+      ],
+      "purposes": [
+        "teaching",
+        "probe",
+        "reinforcer"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "social-city",
+      "name": "Social City 3D",
+      "version": "1.0.0",
+      "summary": "Simulação urbana 3D para adolescentes: prática de interações sociais reais em cafeteria, transporte público, conversas em grupo e estabelecimento assertivo de limites.",
+      "renderType": "Canvas 2D Pseudo-3D isométrico (Nota: NÃO é 3D real até Three.js)",
+      "engine": "Própria (Projeção isométrica canvas + @aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "social",
+        "play"
+      ],
+      "purposes": [
+        "teaching",
+        "probe",
+        "reinforcer"
+      ],
+      "models": {}
+    }
+  ],
+  "migrations": [
+    {
+      "number": "0001",
+      "fileName": "0001_foundation.sql",
+      "title": "Fundações & Tenancy",
+      "purpose": "Extensões criptográficas (pgcrypto), estruturas fundamentais multi-tenant, perfis e log de auditoria imutável.",
+      "tablesAndViews": [
+        "public.organizations",
+        "public.organization_memberships",
+        "public.professional_profiles",
+        "public.audit_log"
+      ]
+    },
+    {
+      "number": "0002",
+      "fileName": "0002_cases.sql",
+      "title": "Gestão de Casos Clínicos",
+      "purpose": "Cadastro de aprendizes, prontuários, termos de consentimento LGPD e cuidadores.",
+      "tablesAndViews": [
+        "public.children",
+        "public.cases",
+        "public.case_team_members",
+        "public.guardians",
+        "public.guardian_links",
+        "public.consents",
+        "public.anamnesis",
+        "public.case_timeline_events",
+        "public.record_addenda"
+      ]
+    },
+    {
+      "number": "0003",
+      "fileName": "0003_plans.sql",
+      "title": "Planos Terapêuticos (PEI)",
+      "purpose": "Programas clínicos, objetivos operacionais, hierarquias de dicas e alvos ABA/Denver.",
+      "tablesAndViews": [
+        "public.prompt_hierarchies",
+        "public.prompt_levels",
+        "public.mastery_criteria",
+        "public.stimulus_sets",
+        "public.stimuli",
+        "public.behavior_definitions",
+        "public.intervention_plans",
+        "public.plan_goals",
+        "public.programs",
+        "public.targets",
+        "public.denver_cycles",
+        "public.denver_objectives",
+        "public.denver_steps"
+      ]
+    },
+    {
+      "number": "0004",
+      "fileName": "0004_sessions.sql",
+      "title": "Sessões & Ingestão de Telemetria",
+      "purpose": "Blocos de execução, registro idempotente de tentativas e fatos brutos de sessão.",
+      "tablesAndViews": [
+        "public.sessions",
+        "public.session_blocks",
+        "public.trial_records",
+        "public.opportunity_records",
+        "public.chain_step_records",
+        "public.denver_routine_records",
+        "public.denver_step_scores",
+        "public.behavior_events",
+        "public.session_notes",
+        "public.app_registry",
+        "public.activity_runs",
+        "public.clinical_events",
+        "public.event_quarantine",
+        "public.child_sessions"
+      ]
+    },
+    {
+      "number": "0005",
+      "fileName": "0005_reinforcers_screen.sql",
+      "title": "Economia de Reforçadores & Tela",
+      "purpose": "Cardápio de reforçadores, controle de orçamento de tela e histórico de emparelhamento.",
+      "tablesAndViews": [
+        "public.reinforcers",
+        "public.preference_assessments",
+        "public.preference_results",
+        "public.digital_prerequisite_probes",
+        "public.reinforcer_deliveries",
+        "public.token_deliveries",
+        "public.screen_time_ledger"
+      ]
+    },
+    {
+      "number": "0006",
+      "fileName": "0006_projections_alerts.sql",
+      "title": "Projeções & Regras de Alerta Clínico",
+      "purpose": "Visões materializadas de desempenho e 15 regras automatizadas de supervisão (R1–R15).",
+      "tablesAndViews": [
+        "public.fact_trials",
+        "public.fact_target_session",
+        "public.fact_behavior_session",
+        "public.decision_alerts"
+      ]
+    },
+    {
+      "number": "0007",
+      "fileName": "0007_family_documents.sql",
+      "title": "Portal da Família & Documentos",
+      "purpose": "Comunicações protegidas, relatórios de evolução e anexos clínicos sigilosos.",
+      "tablesAndViews": [
+        "public.home_tasks",
+        "public.home_task_records",
+        "public.family_guidance",
+        "public.guidance_reads",
+        "public.social_validity_responses",
+        "public.documents",
+        "public.document_versions"
+      ]
+    },
+    {
+      "number": "0008",
+      "fileName": "0008_org_defaults.sql",
+      "title": "Padrões Organizacionais",
+      "purpose": "Parâmetros padrão de clínica, limites de blocos e hierarquias corporativas.",
+      "tablesAndViews": [
+        "public.organization_defaults"
+      ]
+    },
+    {
+      "number": "0009",
+      "fileName": "0009_demo_flag.sql",
+      "title": "Isolamento de Demonstração",
+      "purpose": "Sinalizadores para dados puramente sintéticos com garantia de não contaminação.",
+      "tablesAndViews": [
+        "public.real_cases"
+      ]
+    },
+    {
+      "number": "0010",
+      "fileName": "0010_plan_versioning.sql",
+      "title": "Versionamento Imutável de Planos",
+      "purpose": "Histórico rastreável de revisões de metas com preservação de baseline.",
+      "tablesAndViews": []
+    },
+    {
+      "number": "0011",
+      "fileName": "0011_child_session_resolve.sql",
+      "title": "Resolução de Acesso Infantil",
+      "purpose": "Resolução segura e leve de tokens temporários para o Child Space.",
+      "tablesAndViews": []
+    },
+    {
+      "number": "0012",
+      "fileName": "0012_session_blocks_runtime.sql",
+      "title": "Estruturação de Tempo de Execução",
+      "purpose": "Agendamento de blocos e persistência de estados entre pausas sensoriais.",
+      "tablesAndViews": [
+        "public.trial_retractions",
+        "public.session_pauses"
+      ]
+    },
+    {
+      "number": "0013",
+      "fileName": "0013_denver_projection.sql",
+      "title": "Projeções do Modelo Denver (ESDM)",
+      "purpose": "Agrupamentos cumulativos de marcos por domínio do Modelo Denver.",
+      "tablesAndViews": []
+    },
+    {
+      "number": "0014",
+      "fileName": "0014_assessment_instruments.sql",
+      "title": "Instrumentos Padronizados de Avaliação",
+      "purpose": "Suporte a protocolos de avaliação comportamental e inventários de desenvolvimento.",
+      "tablesAndViews": [
+        "public.instruments",
+        "public.instrument_scores",
+        "public.baseline_probes",
+        "public.functional_assessments"
+      ]
+    },
+    {
+      "number": "0015",
+      "fileName": "0015_alerts_snooze.sql",
+      "title": "Gestão & Adiamento de Alertas",
+      "purpose": "Adiar alertas clínicos com registro mandatório de justificativa técnica.",
+      "tablesAndViews": []
+    },
+    {
+      "number": "0016",
+      "fileName": "0016_child_space_telemetry.sql",
+      "title": "Telemetria do Espaço Infantil",
+      "purpose": "Métricas finas de interação sensorial, engajamento e autorregulação.",
+      "tablesAndViews": [
+        "public.child_space_state",
+        "public.practice_runs"
+      ]
+    },
+    {
+      "number": "0017",
+      "fileName": "0017_family_comms.sql",
+      "title": "Comunicação Bidirecional com a Família",
+      "purpose": "Troca orientada de feedbacks entre equipe multidisciplinar e responsáveis.",
+      "tablesAndViews": [
+        "public.family_invites",
+        "public.messages",
+        "public.family_videos",
+        "public.weekly_summaries"
+      ]
+    },
+    {
+      "number": "0018",
+      "fileName": "0018_admin_security.sql",
+      "title": "Segurança Administrativa & RBAC",
+      "purpose": "Permissões granulares de acesso, controle por perfil de usuário e auditoria de segurança.",
+      "tablesAndViews": [
+        "public.units",
+        "public.instrument_licenses",
+        "public.security_incidents",
+        "public.data_subject_requests",
+        "public.progressive_login_locks"
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "timer-visual",
+      "name": "Timer Visual Interativo",
+      "category": "Rotina & Visual",
+      "summary": "Cronômetro visual circular com transição suave de cores e sinais sonoros.",
+      "evidence": "Apoio visual baseado em evidências (Wong et al., 2015)",
+      "printable": true,
+      "interactive": true
+    },
+    {
+      "id": "primeiro-depois",
+      "name": "Primeiro → Depois (Premack)",
+      "category": "Comportamento & Fichas",
+      "summary": "Quadro visual de contingência simples de alta e baixa probabilidade.",
+      "evidence": "Princípio de Premack & Suportes Visuais ABA (Cooper, Heron & Heward)",
+      "printable": true,
+      "interactive": true
+    },
+    {
+      "id": "agenda-visual",
+      "name": "Agenda de Rotina Diária",
+      "category": "Rotina & Visual",
+      "summary": "Sequência temporal de atividades com checagem de passos e status de conclusão.",
+      "evidence": "National Clearinghouse on Autism Evidence and Practice (NCAEP)",
+      "printable": true,
+      "interactive": true
+    },
+    {
+      "id": "quadro-de-fichas",
+      "name": "Quadro de Fichas (Economia de Fichas)",
+      "category": "Comportamento & Fichas",
+      "summary": "Sistema de reforçamento condicionado com 3, 5, 8 ou 10 fichas colecionáveis.",
+      "evidence": "Token Economy Systems (Hackenberg, 2009; Cooper et al.)",
+      "printable": true,
+      "interactive": true
+    },
+    {
+      "id": "analise-tarefa",
+      "name": "Análise de Tarefa (Chaining)",
+      "category": "Autonomia & AVDs",
+      "summary": "Desdobramento de habilidades de vida diária em passos com registro de nível de dica.",
+      "evidence": "Task Analysis and Chaining Procedures in Applied Behavior Analysis",
+      "printable": true,
+      "interactive": true
+    },
+    {
+      "id": "historia-social",
+      "name": "História Social Interativa",
+      "category": "Comunicação & CAA",
+      "summary": "Narrativa visual explicativa de situações sociais, sentimentos e condutas esperadas.",
+      "evidence": "Social Narratives (Gray, 2010; Wong et al., 2015)",
+      "printable": true,
+      "interactive": true
+    },
+    {
+      "id": "prancha-escolha",
+      "name": "Prancha de Escolha Direta",
+      "category": "Comunicação & CAA",
+      "summary": "Quadro de escolha tátil de 2, 4 ou 6 estímulos com retorno sonoro de confirmação.",
+      "evidence": "Choice-making interventions in ASD (Shogren et al.)",
+      "printable": true,
+      "interactive": true
+    },
+    {
+      "id": "prancha-comunicacao",
+      "name": "Prancha de Comunicação (PECS/CAA)",
+      "category": "Comunicação & CAA",
+      "summary": "Tira de sentença visual com botão de voz para formação de pedidos e relatos.",
+      "evidence": "Picture Exchange Communication System (Frost & Bondy, 2002)",
+      "printable": true,
+      "interactive": true
+    },
+    {
+      "id": "arvore-emocoes",
+      "name": "Árvore das Emoções & Regulação Somática",
+      "category": "Regulação & Sensorial",
+      "summary": "Mapeamento visual e somático de 5 zonas emocionais com respiração guiada 4-2-4 e grounding nos modos Soft Clay e Graphic Novel.",
+      "evidence": "The Zones of Regulation & Somatic Grounding (Kuypers, 2011; Levine, 2010)",
+      "printable": true,
+      "interactive": true
+    },
+    {
+      "id": "semaforo-regulacao",
+      "name": "Semáforo de Regulação (Zones)",
+      "category": "Regulação & Sensorial",
+      "summary": "Mapeamento visual de quatro zonas fisiológicas e emocionais com estratégias imediatas e check-in somático.",
+      "evidence": "The Zones of Regulation framework (Kuypers, 2011)",
+      "printable": true,
+      "interactive": true
+    },
+    {
+      "id": "termometro-emocional",
+      "name": "Termômetro Emocional de 5 Níveis",
+      "category": "Regulação & Sensorial",
+      "summary": "Escala visual graduada de 5 níveis de intensidade emocional com checklist de sensações corporais e ações de regulação.",
+      "evidence": "The Incredible 5-Point Scale (Buron & Curtis, 2003)",
+      "printable": true,
+      "interactive": true
+    },
+    {
+      "id": "rotina-checklist",
+      "name": "Rotina Visual com Checklist",
+      "category": "Autonomia & AVDs",
+      "summary": "Lista interativa de checagem para rotinas da manhã, clínica, escola e noite com sintetizador de voz.",
+      "evidence": "Visual Schedules & Checklists (Carnahan et al., 2009)",
+      "printable": true,
+      "interactive": true
+    },
+    {
+      "id": "contrato-comportamental",
+      "name": "Contrato Comportamental (ABA)",
+      "category": "Comportamento & Fichas",
+      "summary": "Pacto formal de contingência com meta operacionalizada, reforçador pactuado e assinaturas do aprendiz, terapeuta e família.",
+      "evidence": "Behavioral Contracting in Applied Behavior Analysis (Cooper, Heron & Heward)",
+      "printable": true,
+      "interactive": true
+    },
+    {
+      "id": "contador-abc",
+      "name": "Contador de Frequência & Registro ABC",
+      "category": "Comportamento & Fichas",
+      "summary": "Clicker em tempo real com cálculo de taxa por minuto, registro de tríplice contingência e exportação CSV.",
+      "evidence": "Direct Behavioral Assessment & ABC Contingency Recording (Bijou et al.)",
+      "printable": true,
+      "interactive": true
+    }
+  ],
+  "routes": {
+    "public": [
+      "/",
+      "/entrar",
+      "/produto",
+      "/profissionais",
+      "/familias",
+      "/criancas",
+      "/adolescentes",
+      "/recursos-terapeuticos",
+      "/games",
+      "/como-funciona",
+      "/supervisao-clinica",
+      "/dados-metricas",
+      "/seguranca-privacidade",
+      "/sobre",
+      "/ajuda",
+      "/contato"
+    ],
+    "pro": [
+      "/app",
+      "/app/casos",
+      "/app/casos/novo",
+      "/app/casos/:caseId",
+      "/app/casos/:caseId/plano",
+      "/app/casos/:caseId/dados",
+      "/app/casos/:caseId/sessoes",
+      "/app/casos/:caseId/comportamento",
+      "/app/casos/:caseId/reforcadores",
+      "/app/casos/:caseId/perfil",
+      "/app/casos/:caseId/familia",
+      "/app/casos/:caseId/documentos",
+      "/app/alertas",
+      "/app/recursos",
+      "/app/ferramentas/plano-individual",
+      "/app/supervisao",
+      "/app/equipe",
+      "/app/configuracoes",
+      "/app/sessao/:sessionId"
+    ],
+    "childAndFamily": [
+      "/crianca/:sessionId",
+      "/familia",
+      "/espaco/:childId",
+      "/espaco/:childId/jogar/:appId"
+    ]
+  },
+  "protocol": {
+    "protocolVersion": "2.0.0",
+    "eventCount": 19,
+    "clinicalEvents": [
+      "TRIAL_COMPLETED",
+      "PROMPT_USED",
+      "TOKEN_DELIVERED",
+      "BOARD_COMPLETED",
+      "SCHEDULE_ITEM_STARTED",
+      "SCHEDULE_ITEM_COMPLETED"
+    ],
+    "allEvents": [
+      "SESSION_STARTED",
+      "TRIAL_STARTED",
+      "TRIAL_COMPLETED",
+      "PROMPT_USED",
+      "REWARD_TRIGGERED",
+      "TOKEN_DELIVERED",
+      "BOARD_COMPLETED",
+      "EXCHANGE_STARTED",
+      "EXCHANGE_ENDED",
+      "SCHEDULE_ITEM_STARTED",
+      "SCHEDULE_ITEM_COMPLETED",
+      "SESSION_PAUSED",
+      "SESSION_RESUMED",
+      "SESSION_COMPLETED",
+      "ERROR_OCCURRED",
+      "APP_CLOSED",
+      "LEVEL_STARTED",
+      "LEVEL_COMPLETED",
+      "STIMULUS_PRESENTED",
+      "RESPONSE_STARTED",
+      "REINFORCER_PRESENTED"
+    ]
+  }
+}

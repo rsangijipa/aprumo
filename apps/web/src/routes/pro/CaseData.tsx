@@ -18,7 +18,7 @@ function AbaData({ caseId }: { caseId: string }) {
   const [showCdc, setShowCdc] = useState(false);
   const t = targets.find((x) => x.id === selected)!;
   const p = db.programOf(t);
-  const summaries = summariesFor(st.facts, t.id);
+  const summaries = useMemo(() => summariesFor(st.facts, t.id), [st.facts, t.id]);
   const markers = st.timeline.filter((e) => e.caseId === caseId && e.kind === 'context').map((e) => ({ at: e.at, label: e.title }));
 
   const cdc: CdcOverlay | null = useMemo(() => {

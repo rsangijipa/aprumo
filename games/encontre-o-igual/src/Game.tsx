@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from 'react';
 import { playTones, useGameClient, useMotion, useTrialRunner } from '@aprumo/game-sdk';
 import { fitGrid, planTrials, resolveMotion, resolveSettings, summarizeAttempts, type GridFit, type PlannedTrial } from './logic';
 import { Stim } from './LabToken';
@@ -64,7 +64,9 @@ export default function MatchLab() {
     },
   });
   const trial = run.trial;
-  trialRef.current = trial;
+  useEffect(() => {
+    trialRef.current = trial;
+  }, [trial]);
 
   const handRef = useRef<HTMLDivElement>(null);
   const slotRef = useRef<HTMLDivElement>(null);
@@ -74,6 +76,9 @@ export default function MatchLab() {
   const suppressClick = useRef(false);
   const [grid, setGrid] = useState<GridFit>({ cols: 3, rows: 1, item: 110, gap: 16, fits: true });
   const [fly, setFly] = useState<{ dx: number; dy: number; s: number } | null>(null);
+  if (run.stage !== 'feedback' && fly !== null) {
+    setFly(null);
+  }
   const [drag, setDrag] = useState<{ pos: number; dx: number; dy: number; over: boolean } | null>(null);
   const [picked, setPicked] = useState<number | null>(null);
   const [settle, setSettle] = useState<number | null>(null);
@@ -83,6 +88,15 @@ export default function MatchLab() {
   const feedback = config?.adaptation.feedback ?? 'subtle';
   const scale = config?.adaptation.touchScale ?? 1;
   const field = trial?.fieldSize ?? 0;
+
+  // Nova tentativa: limpa estados de interação durante a renderização
+  const [prevTrialIndex, setPrevTrialIndex] = useState(trial?.index);
+  if (trial?.index !== prevTrialIndex) {
+    setPrevTrialIndex(trial?.index);
+    setPicked(null);
+    setDrag(null);
+    setSettle(null);
+  }
 
   useEffect(() => {
     if (config) client.emit('SESSION_STARTED', { configVersion: manifest.version });
@@ -103,35 +117,41 @@ export default function MatchLab() {
     return () => ro.disconnect();
   }, [field, scale]);
 
-  // Nova tentativa: limpa estados de interação.
-  useEffect(() => { setPicked(null); setDrag(null); setSettle(null); }, [trial?.index]);
-
   // FLIP: voo do cartão correto até o encaixe, ajustando a escala ao tamanho do encaixe.
   useLayoutEffect(() => {
-    if (run.stage !== 'feedback' || run.lastSelected == null) return setFly(null);
+    if (run.stage !== 'feedback' || run.lastSelected == null) return;
     const card = cardRefs.current[run.lastSelected]?.getBoundingClientRect();
     const slot = slotRef.current?.getBoundingClientRect();
-    if (card && slot) setFly({ dx: slot.left + slot.width / 2 - (card.left + card.width / 2), dy: slot.top + slot.height / 2 - (card.top + card.height / 2), s: slot.width / card.width });
+    if (card && slot) {
+      setFly({
+        dx: slot.left + slot.width / 2 - (card.left + card.width / 2),
+        dy: slot.top + slot.height / 2 - (card.top + card.height / 2),
+        s: slot.width / card.width,
+      });
+    }
   }, [run.stage, run.lastSelected]);
 
   useEffect(() => {
     if (run.stage !== 'feedback') return;
     if (feedback !== 'none') playTones(CHIME, sound);
-    if (settings?.sensory === 'rich' && motion !== 'static') setSparks(true);
-    setAnnounce('Combinou!');
-    const t = window.setTimeout(() => setSparks(false), 1300);
-    return () => window.clearTimeout(t);
+    const timer = window.setTimeout(() => {
+      if (settings?.sensory === 'rich' && motion !== 'static') setSparks(true);
+      setAnnounce('Combinou!');
+    }, 0);
+    const endTimer = window.setTimeout(() => setSparks(false), 1300);
+    return () => {
+      window.clearTimeout(timer);
+      window.clearTimeout(endTimer);
+    };
   }, [run.stage, feedback, sound, motion, settings?.sensory]);
 
-  if (!config || !settings) return <div className="mlab" aria-busy="true" />;
-
   const canAct = !paused && !ended && (run.stage === 'awaiting' || run.stage === 'correction');
-  const markTouch = () => {
+  const markTouch = useCallback(() => {
     const s = stats.current;
     if (s.firstTouch == null) s.firstTouch = performance.now() - s.t0;
-  };
+  }, []);
 
-  const commit = (pos: number, method: Method) => {
+  const commit = useCallback((pos: number, method: Method) => {
     if (!trial || !canAct) return;
     markTouch();
     if (run.stage === 'awaiting') { stats.current.method = method; stats.current.committed = pos; }
@@ -145,7 +165,7 @@ export default function MatchLab() {
       setAnnounce('Vamos olhar o modelo de novo.');
       window.setTimeout(() => setSettle((p) => (p === pos ? null : p)), 900);
     }
-  };
+  }, [trial, canAct, markTouch, run, sound]);
 
   const pick = (pos: number, method: Method) => {
     if (!canAct) return;
@@ -221,6 +241,10 @@ export default function MatchLab() {
     '--mlab-cols': grid.cols,
     '--mlab-gap': `${grid.gap}px`,
   } as CSSProperties;
+
+  if (!config || !settings) {
+    return <div className="mlab" aria-busy="true" />;
+  }
 
   return (
     <div

@@ -44,7 +44,7 @@ describe('Game Registry Release Gate', () => {
   });
 
   it('can dynamically load game components without errors', async () => {
-    for (const [key, entry] of Object.entries(GAMES)) {
+    for (const entry of Object.values(GAMES)) {
       const Comp = await entry.load();
       expect(Comp).toBeDefined();
     }

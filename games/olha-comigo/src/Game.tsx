@@ -43,7 +43,6 @@ export default function OlhaComigo() {
   const therapistPrompt = useRef(false);
   const hintRef = useRef(false);
   const cueRef = useRef(cue);
-  cueRef.current = cue;
 
   const run = useTrialRunner({
     client, config, trials, paused,
@@ -68,12 +67,14 @@ export default function OlhaComigo() {
     },
   });
   const trial = run.trial;
-  hintRef.current = run.hint;
+
+  useEffect(() => {
+    cueRef.current = cue;
+    hintRef.current = run.hint;
+  });
 
   const sceneRef = useRef<HTMLDivElement>(null);
   const [box, setBox] = useState({ w: 360, h: 560 });
-  const [announce, setAnnounce] = useState('');
-  const [sparkle, setSparkle] = useState(false);
 
   useEffect(() => installAudioUnlock(), []);
 
@@ -114,7 +115,6 @@ export default function OlhaComigo() {
       setCue({ index: trial.index, level, phase: 'cue' });
       setReadyFor(trial.index);
       if (cueHasVerbal(level)) void speak('Olha!', sound);
-      setAnnounce(cueHasVerbal(level) ? 'Olha!' : 'Para onde o Nino está olhando?');
     }, NEUTRAL_MS[motion]);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -130,7 +130,6 @@ export default function OlhaComigo() {
     if (run.stage === 'correction') {
       // Reorientação: o guia volta a olhar para a criança e repete a pista com todo o apoio.
       playCue('retry', sound);
-      setAnnounce('Vamos olhar juntos de novo.');
       setCue({ index: trial.index, level, phase: 'reorient' });
       const t = window.setTimeout(() => {
         setCue({ index: trial.index, level: 'gaze_point_verbal', phase: 'cue' });
@@ -143,13 +142,10 @@ export default function OlhaComigo() {
 
   // Reforço ao acertar (também após a correção).
   useEffect(() => {
-    if (run.stage !== 'feedback') return;
-    if (feedback !== 'none') playCue('correct', sound);
-    setAnnounce('Isso! Olhamos juntos!');
-    if (settings?.sensory === 'rich' && motion !== 'static') setSparkle(true);
-    const t = window.setTimeout(() => setSparkle(false), 1300);
-    return () => window.clearTimeout(t);
-  }, [run.stage, feedback, sound, motion, settings?.sensory]);
+    if (run.stage === 'feedback' && feedback !== 'none') {
+      playCue('correct', sound);
+    }
+  }, [run.stage, feedback, sound]);
 
   useEffect(() => {
     if (run.stage !== 'done' || !trials.length) return;
@@ -179,6 +175,18 @@ export default function OlhaComigo() {
   };
 
   const vars = { '--oc-scale': scale, '--oc-obj': `${objSize}px` } as CSSProperties;
+  const sparkle = run.stage === 'feedback' && settings?.sensory === 'rich' && motion !== 'static';
+
+  const announce =
+    run.stage === 'feedback'
+      ? 'Isso! Olhamos juntos!'
+      : run.stage === 'correction'
+      ? 'Vamos olhar juntos de novo.'
+      : activeCue?.phase === 'cue'
+      ? cueHasVerbal(level)
+        ? 'Olha!'
+        : 'Para onde o Nino está olhando?'
+      : '';
 
   return (
     <div

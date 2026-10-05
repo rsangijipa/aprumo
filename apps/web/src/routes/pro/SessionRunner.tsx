@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
 import { summarizeTargetSession } from '@aprumo/clinical-core';
 import { DEFAULT_ADAPTATION, PROTOCOL_VERSION, type SessionConfig, type TargetConfig } from '@aprumo/protocol';
@@ -37,7 +37,7 @@ const PLANNED: Record<string, number> = { baseline: 3, acquisition: 10, maintena
 const DAY = 86_400_000;
 
 function useElapsed(since: string) {
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     const id = window.setInterval(() => setNow(Date.now()), 1000);
     return () => window.clearInterval(id);
@@ -128,63 +128,68 @@ function AbaRunner({ session }: { session: SessionRecord }) {
   const [trialStartedAt, setTrialStartedAt] = useState<number>(() => Date.now());
   const [lastRecorded, setLastRecorded] = useState<{ factId: string; label: string } | null>(null);
 
-  useEffect(() => {
+  const [prevCurrentId, setPrevCurrentId] = useState(current?.id);
+  if (current?.id !== prevCurrentId) {
+    setPrevCurrentId(current?.id);
     if (current) {
       setPrompt(current.phase === 'acquisition' ? current.defaultPrompt : 'IND');
       setTrialStartedAt(Date.now());
     }
-  }, [current]);
+  }
 
   const sessionFacts = st.facts.filter((f) => f.sessionId === session.id);
   const factsOf = (t: Target) => sessionFacts.filter((f) => f.targetId === t.id);
   const curFacts = current ? factsOf(current) : [];
   const planned = current ? PLANNED[current.phase] ?? 10 : 0;
 
-  const record = async (response: Fact['response']) => {
-    if (!current || !hierarchy || session.status !== 'active') return;
-    const level = hierarchy.levels.find((l) => l.code === prompt) ?? hierarchy.levels[0]!;
-    const now = Date.now();
-    const latencyMs = Math.max(0, now - trialStartedAt);
+  const record = useCallback(
+    async (response: Fact['response']) => {
+      if (!current || !hierarchy || session.status !== 'active') return;
+      const level = hierarchy.levels.find((l) => l.code === prompt) ?? hierarchy.levels[0]!;
+      const now = Date.now();
+      const latencyMs = Math.max(0, now - trialStartedAt);
 
-    const fact = await actions.recordTrial({
-      targetId: current.id,
-      sessionId: session.id,
-      phase: current.phase,
-      response,
-      promptIntrusiveness: level.intrusiveness,
-      promptCode: level.code,
-      latencyMs,
-      channel: 'table',
-      probe: current.phase === 'maintenance' || current.phase === 'generalization',
-      art: current.art,
-    });
+      const fact = await actions.recordTrial({
+        targetId: current.id,
+        sessionId: session.id,
+        phase: current.phase,
+        response,
+        promptIntrusiveness: level.intrusiveness,
+        promptCode: level.code,
+        latencyMs,
+        channel: 'table',
+        probe: current.phase === 'maintenance' || current.phase === 'generalization',
+        art: current.art,
+      });
 
-    setTrialStartedAt(Date.now());
+      setTrialStartedAt(Date.now());
 
-    if (response === 'correct') {
-      playTones([
-        { freq: 523.25, dur: 0.08, type: 'sine' },
-        { freq: 659.25, dur: 0.12, delay: 0.06, type: 'sine' },
-      ], 'normal');
-    } else if (response === 'incorrect') {
-      playTones([{ freq: 330, dur: 0.1, type: 'sine' }], 'normal');
-    } else {
-      playTones([{ freq: 261.63, dur: 0.12, type: 'sine' }], 'normal');
-    }
+      if (response === 'correct') {
+        playTones([
+          { freq: 523.25, dur: 0.08, type: 'sine' },
+          { freq: 659.25, dur: 0.12, delay: 0.06, type: 'sine' },
+        ], 'normal');
+      } else if (response === 'incorrect') {
+        playTones([{ freq: 330, dur: 0.1, type: 'sine' }], 'normal');
+      } else {
+        playTones([{ freq: 261.63, dur: 0.12, type: 'sine' }], 'normal');
+      }
 
-    const respMap = { correct: 'Correta', incorrect: 'Incorreta', no_response: 'Sem resposta' };
-    setLastRecorded({
-      factId: fact.id,
-      label: `${current.name} · ${respMap[response]} (${level.code} · ${(latencyMs / 1000).toFixed(1)}s)`,
-    });
+      const respMap = { correct: 'Correta', incorrect: 'Incorreta', no_response: 'Sem resposta' };
+      setLastRecorded({
+        factId: fact.id,
+        label: `${current.name} · ${respMap[response]} (${level.code} · ${(latencyMs / 1000).toFixed(1)}s)`,
+      });
 
-    // Avança para o próximo alvo com tentativas pendentes quando o planejado é atingido (estado mais recente).
-    const count = (id: string) => getState().facts.filter((f) => f.sessionId === session.id && f.targetId === id).length;
-    if (count(current.id) >= planned) {
-      const next = targets.find((t) => t.id !== current.id && count(t.id) < (PLANNED[t.phase] ?? 10));
-      if (next) setCurrentId(next.id);
-    }
-  };
+      // Avança para o próximo alvo com tentativas pendentes quando o planejado é atingido (estado mais recente).
+      const count = (id: string) => getState().facts.filter((f) => f.sessionId === session.id && f.targetId === id).length;
+      if (count(current.id) >= planned) {
+        const next = targets.find((t) => t.id !== current.id && count(t.id) < (PLANNED[t.phase] ?? 10));
+        if (next) setCurrentId(next.id);
+      }
+    },
+    [current, hierarchy, session.status, session.id, prompt, trialStartedAt, planned, targets],
+  );
 
   const handleUndo = async () => {
     if (!lastRecorded) return;
@@ -409,7 +414,7 @@ function LaunchDialog({ session, target, onClose, onLaunch }: { session: Session
   const overLimit = todayMin >= policy.dailyLimitMinutes;
   const [justification, setJustification] = useState('');
 
-  const launch = () => {
+  const launch = useCallback(() => {
     const manifest = GAMES[appId]!.manifest;
     const h = db.hierarchy(program.promptHierarchyId);
     const siblings = withSiblings ? getState().targets.filter((t) => t.programId === program.id && t.id !== target.id && t.phase === 'acquisition') : [];
@@ -447,7 +452,7 @@ function LaunchDialog({ session, target, onClose, onLaunch }: { session: Session
     // Tela cheia exige gesto do usuário: o próprio clique de lançar.
     void document.documentElement.requestFullscreen?.().catch(() => {});
     onLaunch();
-  };
+  }, [appId, program, withSiblings, target, c, child.preferredName, trials, policy.maxBlockMinutes, reinforcers, rewardId, session.id, tokens, required, onLaunch]);
 
   return (
     <Dialog
@@ -530,10 +535,14 @@ function AbcDialog({ sessionId, definitionId, onClose }: { sessionId: string; de
 /* ================================================================ encerramento */
 function EndDialog({ open, session, initialNote, onClose, onDone }: { open: boolean; session: SessionRecord; initialNote: string; onClose: () => void; onDone: () => void }) {
   const st = useStore((s) => s);
-  const [note, setNote] = useState('');
+  const [note, setNote] = useState(initialNote);
+  const [prevOpen, setPrevOpen] = useState(open);
+  if (open !== prevOpen) {
+    setPrevOpen(open);
+    if (open) setNote((n) => n || initialNote);
+  }
   const [author, setAuthor] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  useEffect(() => { if (open) setNote((n) => n || initialNote); }, [open, initialNote]);
   const facts = st.facts.filter((f) => f.sessionId === session.id);
   const byTarget = [...new Set(facts.map((f) => f.targetId))].map((id) => ({ t: st.targets.find((x) => x.id === id)!, s: summarizeTargetSession(facts.filter((f) => f.targetId === id)) }));
   const behaviors = db.behaviorDefinitions.filter((d) => d.caseId === session.caseId).map((d) => ({ d, n: st.behaviorEvents.filter((e) => e.sessionId === session.id && e.definitionId === d.id).length }));
@@ -594,22 +603,26 @@ function DenverRunner({ session }: { session: SessionRecord }) {
   const [routinesDone, setRoutinesDone] = useState<string[]>([]);
   const [scores, setScores] = useState<Record<string, Record<number, 'pass' | 'partial' | 'fail'>>>({});
   const [ending, setEnding] = useState(false);
-  const [now, setNow] = useState(Date.now());
-  useEffect(() => { const id = window.setInterval(() => setNow(Date.now()), 1000); return () => window.clearInterval(id); }, []);
+  const [now, setNow] = useState(() => Date.now());
+  const lastNotifiedRef = useRef(0);
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      const cur = Date.now();
+      setNow(cur);
+      const curInterval = Math.floor((cur - Date.parse(session.startedAt)) / (INTERVAL_MIN * 60000));
+      if (curInterval > lastNotifiedRef.current) {
+        lastNotifiedRef.current = curInterval;
+        if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+          try { navigator.vibrate([150, 80, 150]); } catch { /* ignore if not supported/allowed */ }
+        }
+      }
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [session.startedAt]);
   const elapsedMin = (now - Date.parse(session.startedAt)) / 60000;
   const interval = Math.floor(elapsedMin / INTERVAL_MIN);
   const intervalProgress = (elapsedMin % INTERVAL_MIN) / INTERVAL_MIN;
   const pendingInInterval = steps.filter((s) => scores[s.id]?.[interval] == null).length;
-  const [lastNotifiedInterval, setLastNotifiedInterval] = useState(0);
-
-  useEffect(() => {
-    if (interval > lastNotifiedInterval) {
-      setLastNotifiedInterval(interval);
-      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-        try { navigator.vibrate([150, 80, 150]); } catch { /* ignore if not supported/allowed */ }
-      }
-    }
-  }, [interval, lastNotifiedInterval]);
 
   const score = async (stepId: string, value: 'pass' | 'partial' | 'fail') => {
     setScores((sc) => ({ ...sc, [stepId]: { ...sc[stepId], [interval]: value } }));

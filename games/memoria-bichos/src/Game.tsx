@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { playTones, useGameClient, useMotion } from '@aprumo/game-sdk';
 import { StimulusArt } from '@aprumo/stimuli';
 import { isMatch, type MemoryCard, planMemoryBoard } from './logic';
@@ -21,7 +21,7 @@ export default function MemoriaBichos() {
   const [flipped, setFlipped] = useState<string[]>([]);
   const [matched, setMatched] = useState<string[]>([]);
   const [done, setDone] = useState(false);
-  const trialStartRef = useRef<number>(Date.now());
+  const trialStartRef = useRef<number>(0);
   const busyRef = useRef(false);
 
   const sound = config?.adaptation.sound ?? 'low';
@@ -35,10 +35,7 @@ export default function MemoriaBichos() {
     }
   }, [config, client, cards]);
 
-  if (!config) return <div className="mdb" aria-busy="true" />;
-  const scale = config.adaptation.touchScale;
-
-  const onCardClick = (card: MemoryCard) => {
+  const onCardClick = useCallback((card: MemoryCard) => {
     if (busyRef.current || flipped.includes(card.id) || matched.includes(card.pairKey)) {
       return;
     }
@@ -52,7 +49,7 @@ export default function MemoriaBichos() {
       const [firstId, secondId] = newFlipped;
       const firstCard = cards.find((c) => c.id === firstId)!;
       const secondCard = cards.find((c) => c.id === secondId)!;
-      const latencyMs = Date.now() - trialStartRef.current;
+      const latencyMs = trialStartRef.current > 0 ? Date.now() - trialStartRef.current : 0;
 
       if (isMatch(firstCard, secondCard)) {
         playTones(MATCH, sound);
@@ -110,7 +107,10 @@ export default function MemoriaBichos() {
         }, motion === 'static' ? 400 : 800);
       }
     }
-  };
+  }, [flipped, matched, cards, sound, totalPairs, client, motion]);
+
+  if (!config) return <div className="mdb" aria-busy="true" />;
+  const scale = config.adaptation.touchScale;
 
   return (
     <div className="mdb" data-palette={config.adaptation.palette} data-motion={motion} style={{ ['--mdb-scale' as string]: scale }}>

@@ -455,21 +455,24 @@ function Board({ sound, teen }: { sound: boolean; teen: boolean }) {
 function Calm({ sound, teen }: { sound: boolean; teen: boolean }) {
   const [breathing, setBreathing] = useState(false);
   const [phase, setPhase] = useState<'in' | 'out'>('in');
-  const [count, setCount] = useState(0);
   useEffect(() => {
     if (!breathing) return;
+    let cycles = 0;
     const id = window.setInterval(() => {
       setPhase((p) => (p === 'in' ? 'out' : 'in'));
-      setCount((n) => n + 1);
+      cycles += 1;
+      if (cycles >= 12) setBreathing(false); // 6 respirações completas
     }, 4000);
     return () => window.clearInterval(id);
   }, [breathing]);
-  useEffect(() => {
-    if (count >= 12) setBreathing(false); // 6 respirações completas
-  }, [count]);
+
+  const handleRespirar = () => {
+    setPhase('in');
+    setBreathing(true);
+  };
 
   const strategies = [
-    { id: 'respirar', label: 'Respirar devagar', icon: <CalmIcon />, act: () => { setCount(0); setPhase('in'); setBreathing(true); } },
+    { id: 'respirar', label: 'Respirar devagar', icon: <CalmIcon />, act: handleRespirar },
     { id: 'contar', label: 'Contar até 5', icon: <span className="cs-big-num">5</span>, act: () => void speak('Um. Dois. Três. Quatro. Cinco.', sound ? 'low' : 'off', 0.6) },
     { id: 'apertar', label: teen ? 'Apertar a bolinha' : 'Apertar a almofada', icon: <span className="cs-big-num">✊</span>, act: () => void speak('Aperta forte... e solta.', sound ? 'low' : 'off', 0.7) },
     { id: 'pausa', label: 'Pedir uma pausa', icon: <Need id="pausa" />, act: () => void speak('Eu quero uma pausa', sound ? 'normal' : 'off') },

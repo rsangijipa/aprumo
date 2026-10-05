@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { playTones, speak, useGameClient, useMotion } from '@aprumo/game-sdk';
 import { CulinaryArt } from './Art';
 import { CHEF_RECIPES, planChefTrials, type PlannedChefTrial } from './logic';
@@ -60,9 +60,15 @@ export default function PequenoChef() {
   const [done, setDone] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
 
-  const trialStartRef = useRef<number>(Date.now());
+  const trialStartRef = useRef<number>(0);
   const busyRef = useRef(false);
   const promptTimerRef = useRef<number | null>(null);
+
+  const [prevStepIdx, setPrevStepIdx] = useState(stepIdx);
+  if (prevStepIdx !== stepIdx) {
+    setPrevStepIdx(stepIdx);
+    setShowPrompt(false);
+  }
 
   const currentRecipe = CHEF_RECIPES[recipeIdx]!;
   const trials: PlannedChefTrial[] = useMemo(() => {
@@ -84,7 +90,6 @@ export default function PequenoChef() {
     if (!config || !currentTrial || done) return;
 
     trialStartRef.current = Date.now();
-    setShowPrompt(false);
 
     client.trialStarted({
       trialIndex: stepIdx,
@@ -123,15 +128,11 @@ export default function PequenoChef() {
     };
   }, [config, currentTrial, stepIdx, done, client, sound]);
 
-  if (!config || !currentTrial) {
-    return <div className="chef" aria-busy="true" />;
-  }
-
-  const handleSelectOption = (pos: number) => {
-    if (busyRef.current || done) return;
+  const handleSelectOption = useCallback((pos: number) => {
+    if (!currentTrial || busyRef.current || done) return;
     const selected = currentTrial.options[pos]!;
     const isTarget = pos === currentTrial.positionOfTarget;
-    const latencyMs = Date.now() - trialStartRef.current;
+    const latencyMs = trialStartRef.current > 0 ? Date.now() - trialStartRef.current : 0;
 
     if (promptTimerRef.current) {
       window.clearTimeout(promptTimerRef.current);
@@ -191,15 +192,19 @@ export default function PequenoChef() {
         promptSource: 'none',
       });
     }
-  };
+  }, [currentTrial, done, assembledItems, stepIdx, showPrompt, motion, trials.length, sound, client]);
 
-  const switchRecipe = (idx: number) => {
+  const switchRecipe = useCallback((idx: number) => {
     setRecipeIdx(idx);
     setStepIdx(0);
     setAssembledItems([]);
     setDone(false);
     busyRef.current = false;
-  };
+  }, []);
+
+  if (!config || !currentTrial) {
+    return <div className="chef" aria-busy="true" />;
+  }
 
   return (
     <div

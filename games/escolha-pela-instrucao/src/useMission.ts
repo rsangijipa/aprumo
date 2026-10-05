@@ -34,9 +34,7 @@ export function useMission(opts: {
   const responded = useRef(false);
   const prompt = useRef<{ level: string; source: PromptSource }>({ level: 'IND', source: 'none' });
   const progressRef = useRef(progress);
-  progressRef.current = progress;
   const repeatsRef = useRef(opts.repeats);
-  repeatsRef.current = opts.repeats;
   const correct = useRef(0);
   const timers = useRef<number[]>([]);
   const advanceTimer = useRef<number | null>(null);
@@ -60,15 +58,13 @@ export function useMission(opts: {
       client.gameCompleted(trials.length);
     } else setStage('awaiting');
   }, [i, trials, client]);
-  const advanceRef = useRef(advance);
-  advanceRef.current = advance;
-  const scheduleAdvance = () => {
+  const scheduleAdvance = useCallback(() => {
     if (advanceTimer.current != null) window.clearTimeout(advanceTimer.current);
     advanceTimer.current = window.setTimeout(() => {
       advanceTimer.current = null;
-      advanceRef.current();
+      advance();
     }, feedbackMs);
-  };
+  }, [advance, feedbackMs]);
 
   const finish = useCallback(
     (forced: TrialResponse | null, p: Progress) => {
@@ -104,10 +100,15 @@ export function useMission(opts: {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [trial, config, client, feedbackMs],
+    [trial, config, client, feedbackMs, scheduleAdvance],
   );
   const finishRef = useRef(finish);
-  finishRef.current = finish;
+
+  useEffect(() => {
+    progressRef.current = progress;
+    repeatsRef.current = opts.repeats;
+    finishRef.current = finish;
+  });
 
   // Início (e retomada) da tentativa.
   useEffect(() => {

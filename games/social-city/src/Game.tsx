@@ -53,10 +53,13 @@ export default function SocialCityGame() {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const rendererRef = useRef<SocialCityRenderer | null>(null);
-  const trialStartRef = useRef<number>(Date.now());
+  const trialStartRef = useRef<number>(0);
   const promptTimerRef = useRef<number | null>(null);
   const playerPosRef = useRef(playerPos);
-  playerPosRef.current = playerPos;
+
+  useEffect(() => {
+    playerPosRef.current = playerPos;
+  });
 
   const trials: PlannedSocialCityTrial[] = useMemo(() => {
     return config ? planSocialCityTrials(config) : [];
@@ -215,6 +218,46 @@ export default function SocialCityGame() {
     }
   }, [currentTrial, isDialogueOpen, done, sound, client, trialIdx, config?.adaptation.builtInPromptAfterMs]);
 
+  // Seleção de resposta na interação social
+  const handleSelectChoice = useCallback((choice: SocialChoice, index: number) => {
+    if (!currentTrial || selectedChoice) return;
+
+    if (promptTimerRef.current) {
+      window.clearTimeout(promptTimerRef.current);
+      promptTimerRef.current = null;
+    }
+
+    const latencyMs = trialStartRef.current > 0 ? Date.now() - trialStartRef.current : 0;
+    const isOptimal = choice.isOptimal;
+
+    client.responseRecorded({
+      trialIndex: trialIdx,
+      targetId: currentTrial.targetChoice.stimulusId,
+      stimulusId: choice.stimulusId,
+      presented: currentTrial.options.map((o) => o.stimulusId),
+      positionOfTarget: currentTrial.positionOfTarget,
+      selected: choice.stimulusId,
+      selectedPosition: index,
+      response: isOptimal ? 'correct' : 'incorrect',
+      latencyMs,
+      promptLevel: showPrompt ? 'visual-highlight' : 'none',
+      promptSource: 'none',
+    });
+
+    setSelectedChoice(choice);
+    setScore((s) => s + choice.score);
+
+    if (sound !== 'off') {
+      if (isOptimal) {
+        void playTones(SOUND_EFFECTS.assertive, sound);
+      } else {
+        void playTones(SOUND_EFFECTS.coaching, sound);
+      }
+    }
+
+    void speak(choice.clinicalFeedback, sound);
+  }, [currentTrial, selectedChoice, trialIdx, showPrompt, sound, client]);
+
   // Teclado para movimentação e interação
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -265,57 +308,17 @@ export default function SocialCityGame() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [paused, ended, done, isDialogueOpen, selectedChoice, currentTrial, canInteract, handleOpenDialogue, movePlayer]);
+  }, [paused, ended, done, isDialogueOpen, selectedChoice, currentTrial, canInteract, handleOpenDialogue, movePlayer, handleSelectChoice]);
 
   // Teletransporte para conveniência / acessibilidade motora
-  const handleTeleportToTarget = () => {
+  const handleTeleportToTarget = useCallback(() => {
     if (!currentTrial) return;
     const targetPos = currentTrial.scenario.position3D;
     setPlayerPos({ x: targetPos[0] + 0.8, z: targetPos[2] + 1.2 });
-  };
-
-  // Seleção de resposta na interação social
-  const handleSelectChoice = (choice: SocialChoice, index: number) => {
-    if (!currentTrial || selectedChoice) return;
-
-    if (promptTimerRef.current) {
-      window.clearTimeout(promptTimerRef.current);
-      promptTimerRef.current = null;
-    }
-
-    const latencyMs = Date.now() - trialStartRef.current;
-    const isOptimal = choice.isOptimal;
-
-    client.responseRecorded({
-      trialIndex: trialIdx,
-      targetId: currentTrial.targetChoice.stimulusId,
-      stimulusId: choice.stimulusId,
-      presented: currentTrial.options.map((o) => o.stimulusId),
-      positionOfTarget: currentTrial.positionOfTarget,
-      selected: choice.stimulusId,
-      selectedPosition: index,
-      response: isOptimal ? 'correct' : 'incorrect',
-      latencyMs,
-      promptLevel: showPrompt ? 'visual-highlight' : 'none',
-      promptSource: 'none',
-    });
-
-    setSelectedChoice(choice);
-    setScore((s) => s + choice.score);
-
-    if (sound !== 'off') {
-      if (isOptimal) {
-        void playTones(SOUND_EFFECTS.assertive, sound);
-      } else {
-        void playTones(SOUND_EFFECTS.coaching, sound);
-      }
-    }
-
-    void speak(choice.clinicalFeedback, sound);
-  };
+  }, [currentTrial]);
 
   // Prosseguir para o próximo cenário após ler o feedback
-  const handleNextScenario = () => {
+  const handleNextScenario = useCallback(() => {
     setIsDialogueOpen(false);
     setSelectedChoice(null);
     setShowPrompt(false);
@@ -329,10 +332,10 @@ export default function SocialCityGame() {
     } else {
       setTrialIdx((prev) => prev + 1);
     }
-  };
+  }, [trialIdx, trials.length, client, sound]);
 
   return (
-    <div className="sc-container" data-testid="social-city-container">
+    <div className="sc-container" data-testid="social-city-container" data-motion={motion}>
       <canvas ref={canvasRef} className="sc-canvas" />
 
       {/* HUD Superior */}

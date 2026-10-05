@@ -47,6 +47,7 @@ const NAV_GROUPS: { id: string; label: string; items: NavItem[] }[] = [
   ] },
   { id: 'recursos', label: 'Recursos & Ferramentas', items: [
     { to: '/app/recursos', label: 'Resource Studio', icon: <IconLibrary /> },
+    { to: '/app/galeria-assets', label: 'Galeria de Assets', icon: <IconLibrary /> },
     { to: '/app/ferramentas/plano-individual', label: 'Construtor de Plano', icon: <IconRoute /> },
   ] },
   { id: 'org', label: 'Organização', items: [
@@ -90,11 +91,16 @@ export default function ProLayout() {
     });
 
   // Ao navegar, o grupo da página atual se abre e o item ativo fica visível na lista rolável.
-  useEffect(() => {
+  const [prevPath, setPrevPath] = useState(loc.pathname);
+  if (loc.pathname !== prevPath) {
+    setPrevPath(loc.pathname);
+    setOpen(false);
     const g = NAV_GROUPS.find((gr) => gr.items.some((it) => isActive(it.to, it.end)));
-    if (g) setCollapsed((c) => (c[g.id] ? { ...c, [g.id]: false } : c));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loc.pathname]);
+    if (g && collapsed[g.id]) {
+      setCollapsed((c) => ({ ...c, [g.id]: false }));
+    }
+  }
+
   useEffect(() => {
     const el = navRef.current?.querySelector<HTMLElement>('a[aria-current="page"]');
     el?.scrollIntoView?.({ block: 'nearest' });
@@ -109,10 +115,6 @@ export default function ProLayout() {
     () => myCases.reduce((n, c) => n + alertsForCase(st, c.id).length, 0),
     [myCases, st],
   );
-
-  useEffect(() => {
-    setOpen(false);
-  }, [loc.pathname]);
 
   useEffect(() => {
     document.documentElement.dataset.theme = settings.theme;

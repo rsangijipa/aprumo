@@ -32,12 +32,16 @@ export function TokenBoard(p: TokenBoardProps) {
   const full = p.earned >= p.required;
   const variant = resolveVariant({ variant: p.variant, ageYears: p.ageYears });
   const [left, setLeft] = useState(p.accessSec);
+  const [prevFull, setPrevFull] = useState(full);
+  if (full !== prevFull) {
+    setPrevFull(full);
+    if (!full) setLeft(p.accessSec);
+  }
   const startedRef = useRef(false);
 
   useEffect(() => {
     if (!full) {
       startedRef.current = false;
-      setLeft(p.accessSec);
       return;
     }
     if (!startedRef.current) {

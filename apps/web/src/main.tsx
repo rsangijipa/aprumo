@@ -55,6 +55,7 @@ const FamilyPortal = lazy(() => import('./routes/family/FamilyPortal'));
 const ChildSpace = lazy(() => import('./routes/space/ChildSpace'));
 const PlayShell = lazy(() => import('./routes/space/PlayShell'));
 const PlanBuilder = lazy(() => import('./routes/pro/PlanBuilder'));
+const AssetGallery = lazy(() => import('./routes/pro/AssetGallery'));
 
 const Loading = () => (
   <div className="ap-loading" role="status" aria-live="polite">
@@ -114,6 +115,7 @@ const router = createBrowserRouter([
           { path: 'ferramentas/plano-individual', element: s(<PlanBuilder />) },
           { path: 'supervisao', element: s(<Supervision />) },
           { path: 'equipe', element: s(<Team />) },
+          { path: 'galeria-assets', element: s(<AssetGallery />) },
           { path: 'configuracoes', element: s(<Settings />) },
         ],
       },

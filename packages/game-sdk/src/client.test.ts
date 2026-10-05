@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest';
-import { DEFAULT_ADAPTATION, MESSAGE_CHANNEL, PROTOCOL_VERSION, validateEvent, type SessionConfig } from '@aprumo/protocol';
+import { DEFAULT_ADAPTATION, MESSAGE_CHANNEL, PROTOCOL_VERSION, validateEvent, type EventEnvelope, type SessionConfig } from '@aprumo/protocol';
 import { createGameClient } from './client';
 import { attachGameHost } from './host';
 
@@ -12,15 +12,15 @@ const config: SessionConfig = {
 
 /** Alvo falso: captura postMessage e permite entregar mensagens do "hospedeiro". */
 function setup() {
-  const posted: any[] = [];
-  const target = { postMessage: (m: unknown) => posted.push(m) } as unknown as Window;
+  const posted: Array<{ msg: { kind: string; event?: EventEnvelope } }> = [];
+  const target = { postMessage: (m: unknown) => posted.push(m as { msg: { kind: string; event?: EventEnvelope } }) } as unknown as Window;
   const client = createGameClient({ appId: 'match-lab', appVersion: '1', target });
   client.connect();
   window.dispatchEvent(new MessageEvent('message', {
     data: { channel: MESSAGE_CHANNEL, msg: { kind: 'SESSION_CONFIG', config } },
     origin: window.location.origin, source: target as unknown as MessageEventSource,
   }));
-  const events = () => posted.filter((p) => p.msg.kind === 'EVENT').map((p) => p.msg.event);
+  const events = () => posted.filter((p) => p.msg.kind === 'EVENT').map((p) => p.msg.event!);
   return { client, events };
 }
 
@@ -51,8 +51,8 @@ describe('atalhos do runtime no GameClient', () => {
     ]);
     expect(evs.map((e) => e.sequence)).toEqual(evs.map((_, i) => i));
     for (const e of evs) expect(validateEvent(e)).toMatchObject({ ok: true });
-    expect(evs[6].payload.detail).toEqual({});
-    expect(evs[10].payload).toEqual({ reason: null });
+    expect((evs[6]!.payload as { detail: unknown }).detail).toEqual({});
+    expect((evs[10]!.payload as { reason: unknown }).reason).toBeNull();
     client.disconnect();
   });
 });

@@ -101,10 +101,12 @@ export function PublicHeader() {
   const menuBtnRef = useRef<HTMLButtonElement>(null);
 
   // Fecha tudo ao trocar de rota.
-  useEffect(() => {
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
     setOpenMenu(null);
     setDrawer(false);
-  }, [pathname]);
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);

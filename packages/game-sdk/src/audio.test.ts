@@ -37,9 +37,9 @@ describe('áudio procedural', () => {
   beforeEach(() => {
     instances = [];
     __resetAudioForTests();
-    (window as any).AudioContext = FakeCtx;
+    (window as unknown as { AudioContext?: unknown }).AudioContext = FakeCtx;
   });
-  afterEach(() => { delete (window as any).AudioContext; });
+  afterEach(() => { delete (window as unknown as { AudioContext?: unknown }).AudioContext; });
 
   it('cria o AudioContext só no primeiro som (preguiçoso)', () => {
     expect(instances).toHaveLength(0);

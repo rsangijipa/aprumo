@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { playTones, speak, useGameClient } from '@aprumo/game-sdk';
 import {
   type ExecutiveChallengeType,
@@ -40,7 +40,7 @@ export default function CircuitoExecutivo() {
   const [isDemoingSequence, setIsDemoingSequence] = useState(false);
   const [memoryScore, setMemoryScore] = useState(0);
 
-  const trialStartRef = useRef<number>(Date.now());
+  const trialStartRef = useRef<number>(0);
   const timerRef = useRef<number | null>(null);
 
   const trials = useMemo(() => planExecutiveTrials(challenge, config), [challenge, config]);
@@ -61,31 +61,7 @@ export default function CircuitoExecutivo() {
   }, []);
 
   // Handlers para Go / No-Go
-  const startGoNoGoTrial = () => {
-    if (!currentTrial || challenge !== 'gonogo') return;
-    const gn = currentTrial as GoNoGoTrial;
-    setGoNoGoState('showing');
-    trialStartRef.current = Date.now();
-
-    client.trialStarted({
-      trialIndex,
-      targetId: gn.id,
-      presented: [gn.type],
-    });
-    client.stimulusPresented({
-      trialIndex,
-      targetId: gn.id,
-      presented: [gn.type],
-      positionOfTarget: 0,
-    });
-
-    // Se a criança não tocar até o final do tempo de exposição
-    timerRef.current = window.setTimeout(() => {
-      handleGoNoGoTap(false);
-    }, gn.displayDurationMs);
-  };
-
-  const handleGoNoGoTap = (didTap: boolean) => {
+  const handleGoNoGoTap = useCallback((didTap: boolean) => {
     if (goNoGoState !== 'showing') return;
     if (timerRef.current) window.clearTimeout(timerRef.current);
 
@@ -142,10 +118,34 @@ export default function CircuitoExecutivo() {
         client.gameCompleted(trials.length);
       }
     }, 1000);
-  };
+  }, [goNoGoState, currentTrial, trialIndex, client, hitCount, trials.length]);
+
+  const startGoNoGoTrial = useCallback(() => {
+    if (!currentTrial || challenge !== 'gonogo') return;
+    const gn = currentTrial as GoNoGoTrial;
+    setGoNoGoState('showing');
+    trialStartRef.current = Date.now();
+
+    client.trialStarted({
+      trialIndex,
+      targetId: gn.id,
+      presented: [gn.type],
+    });
+    client.stimulusPresented({
+      trialIndex,
+      targetId: gn.id,
+      presented: [gn.type],
+      positionOfTarget: 0,
+    });
+
+    // Se a criança não tocar até o final do tempo de exposição
+    timerRef.current = window.setTimeout(() => {
+      handleGoNoGoTap(false);
+    }, gn.displayDurationMs);
+  }, [currentTrial, challenge, trialIndex, client, handleGoNoGoTap]);
 
   // Handlers para Troca de Regra
-  const handleSelectRuleOption = (optId: string) => {
+  const handleSelectRuleOption = useCallback((optId: string) => {
     const rs = currentTrial as RuleShiftTrial;
     const isCorrect = optId === rs.correctOptionId;
     const latencyMs = Date.now() - trialStartRef.current;
@@ -188,7 +188,7 @@ export default function CircuitoExecutivo() {
         client.gameCompleted(trials.length);
       }
     }, 1200);
-  };
+  }, [currentTrial, trialIndex, client, trials, ruleScore]);
 
   // Handlers para Memória Operacional Corsi
   const playMemoryDemo = () => {
