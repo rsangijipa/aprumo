@@ -1,0 +1,314 @@
+--- a/README.md
++++ b/README.md
+@@ -42,7 +42,7 @@
+ packages/offline/              outbox cifrada (IndexedDB + AES-GCM)
+ packages/ui/                   design system da plataforma (tokens sálvia, componentes, gráfico de alvo)
+ packages/stimuli/              acervo de estímulos clínicos compartilhado entre jogos e mesa
+-games/                         23 jogos clínicos integrados (veja docs/INVENTORY.md)
++games/                         34 jogos catalogados (23 com integração direta ao SDK identificada; 11 ainda requerem adaptadores clínicos) (veja docs/INVENTORY.md)
+ resources/                     recursos de apoio embarcados (agenda-visual, quadro-de-fichas)
+ apps/web/src/routes/pro/resources/ 14 estúdios terapêuticos interativos e imprimíveis
+ supabase/migrations/           18 migrações SQL (0001–0018), RLS, triggers de modelo único, ingestão idempotente
+@@ -56,7 +56,7 @@
+ ## Testes e Qualidade
+ 
+ ```bash
+-pnpm test       # Roda todos os testes (Postgres real, clinical-core, game-sdk, todos os 23 jogos, recursos e web)
++pnpm test       # Roda todos os testes (Postgres real, clinical-core, game-sdk, todos os jogos com testes próprios, recursos e web)
+ pnpm lint       # ESLint 9 com React Compiler
+ pnpm typecheck  # TypeScript estrito em todos os pacotes do workspace
+ pnpm build      # Bundle de produção do PWA com Workbox Service Worker
+@@ -64,7 +64,7 @@
+ 
+ ## Estado atual e limites conhecidos
+ 
+-- **23 Jogos Clínicos Integrados.** Todos utilizam o `@aprumo/protocol` v2.0 com touch >=48px, Web Audio e manifesto clínico validado, incluindo os jogos especializados Encaixa Aí, Rampa Maluca, Hora do Lanche do Urso e Fazendinha Sonora. O jogo `social-city` utiliza projeção isométrica em Canvas 2D (pseudo-3D) e não deve ser reportado como 3D real até que um motor Three.js/R3F seja implementado.
++- **34 Jogos no Catálogo.** Destes, 23 possuem integração direta observável com o SDK; 11 jogos especializados exigem adaptadores completos antes de afirmar telemetria clínica via `@aprumo/protocol` v2.0. Há implementações variadas de touch, Web Audio e manifesto clínico; sua aderência deve ser verificada individualmente. O jogo `social-city` utiliza projeção isométrica em Canvas 2D (pseudo-3D) e não deve ser reportado como 3D real até que um motor Three.js/R3F seja implementado.
+ - **18 Migrações Supabase (0001–0018).** Validadas em Postgres real via PGlite (39 testes cobrindo isolamento multi-tenant, RLS, regras R1–R15, ingestão idempotente e RBAC administrativo).
+ - **14 Recursos Terapêuticos Interativos.** Estúdios completos para sessões clínicas e geração de pranchas imprimíveis em alta resolução (Timer Visual, Primeiro-Depois, Agenda, Quadro de Fichas, Análise de Tarefas, Histórias Sociais, Pranchas CAA/PECS, Árvore de Emoções, Semáforo de Regulação, Termômetro de 5 Pontos, Checklist Visual, Contrato Comportamental ABA e Contador ABC).
+ - **Modo demonstração.** Os dados vivem em memória e passam pela outbox cifrada (IndexedDB + AES-GCM) como em produção. Recarregar a página volta ao estado inicial com dados estritamente sintéticos.
+--- a/apps/web/src/game-host/game-main.tsx
++++ b/apps/web/src/game-host/game-main.tsx
+@@ -1,44 +1,85 @@
+-/**
+- * Página que roda DENTRO do iframe da atividade. Não importa nada da área profissional:
+- * conhece apenas o SDK, o protocolo e o código do jogo pedido.
++/** Hospedeiro universal da atividade: acolhimento narrado antes da primeira tentativa.
++ * A conexão do acolhimento é encerrada ANTES de montar o jogo, impedindo que tempo de
++ * instrução seja registrado como latência da primeira tentativa. O jogo envia novo APP_READY.
+  */
+-import { StrictMode, useEffect, useState, type ComponentType } from 'react';
++import { StrictMode, useEffect, useMemo, useState, type ComponentType } from 'react';
+ import { createRoot } from 'react-dom/client';
++import { createGameClient, speak, stopAllSounds } from '@aprumo/game-sdk';
++import type { SoundLevel } from '@aprumo/game-sdk';
+ import '@fontsource/fredoka/400.css';
+ import '@fontsource/fredoka/500.css';
+ import '@fontsource/fredoka/600.css';
+ import { GAMES } from './registry';
++import { GAME_INTRODUCTIONS } from './narration';
++import './intro.css';
+ 
+ function GameRoot() {
+   const appId = new URLSearchParams(location.search).get('app') ?? '';
+   const entry = GAMES[appId];
++  const script = GAME_INTRODUCTIONS[appId];
+   const [Game, setGame] = useState<ComponentType | null>(null);
+   const [error, setError] = useState(false);
++  const [started, setStarted] = useState(false);
++  const [configured, setConfigured] = useState(false);
++  const [sound, setSound] = useState<SoundLevel>('low');
++  const [reading, setReading] = useState(false);
++  const introClient = useMemo(() => entry ? createGameClient({ appId, appVersion: entry.manifest.version }) : null, [appId, entry]);
+ 
+   useEffect(() => {
+-    if (!entry) return;
++    if (!introClient || started) return;
++    const unlisten = introClient.onConfig((config) => {
++      setConfigured(true);
++      setSound(config.adaptation.sound);
++    });
++    introClient.connect();
++    return () => { unlisten(); introClient.dispose(); stopAllSounds(); };
++  }, [introClient, started]);
++
++  useEffect(() => {
++    if (!entry || !started) return;
+     let active = true;
+-    entry
+-      .load()
+-      .then((G) => {
+-        if (active) setGame(() => G);
+-      })
+-      .catch(() => {
+-        if (active) setError(true);
+-      });
+-    return () => {
+-      active = false;
+-    };
+-  }, [entry]);
++    entry.load().then((loaded) => { if (active) setGame(() => loaded); })
++      .catch(() => { if (active) setError(true); });
++    return () => { active = false; };
++  }, [entry, started]);
+ 
+-  if (!entry || error) return <p style={{ fontFamily: 'system-ui', padding: 24 }}>Atividade indisponível.</p>;
+-  return Game ? <Game /> : null;
++  const readExplanation = () => {
++    if (!script || !configured || sound === 'off') return;
++    if (reading) { stopAllSounds(); setReading(false); return; }
++    setReading(true);
++    void speak(`${script.world}. ${script.mission} ${script.howToPlay}`, sound, 0.88)
++      .finally(() => setReading(false));
++  };
++  const begin = () => { stopAllSounds(); setReading(false); setStarted(true); };
++
++  if (!entry || error) return <p style={{ fontFamily: 'system-ui', padding: 24, color: '#fff' }}>Atividade indisponível.</p>;
++  if (!started) return (
++    <main className="ap-game-intro">
++      <section className="ap-game-intro__panel" aria-labelledby="ap-intro-title">
++        <span className="ap-game-intro__eyebrow">Vamos conhecer a atividade</span>
++        <h1 id="ap-intro-title" className="ap-game-intro__title">{entry.manifest.name}</h1>
++        <p className="ap-game-intro__mission">{script?.mission ?? 'Vamos descobrir como jogar!'}</p>
++        <p className="ap-game-intro__instructions">{script?.howToPlay ?? entry.manifest.summary}</p>
++        <div className="ap-game-intro__buttons">
++          <button type="button" className="ap-game-intro__button" onClick={readExplanation}
++            disabled={!configured || sound === 'off'} aria-label={reading ? 'Parar leitura' : 'Ouvir como jogar'}>
++            {reading ? '■ Parar leitura' : '🔊 Ouvir como jogar'}
++          </button>
++          <button type="button" className="ap-game-intro__button ap-game-intro__button--primary"
++            onClick={begin} disabled={!configured}>
++            ▶ Começar a jogar
++          </button>
++        </div>
++        <p className="ap-game-intro__note" role="status">
++          {!configured ? 'Preparando a atividade…' : sound === 'off' ? 'Som desativado no perfil: siga as instruções escritas.' : 'A voz é opcional. Você pode ouvir novamente antes de começar.'}
++        </p>
++        {script?.therapistTip && <details className="ap-game-intro__tip"><summary>Orientação para o profissional ou responsável</summary><p>{script.therapistTip}</p></details>}
++      </section>
++    </main>
++  );
++  return Game ? <Game /> : <p className="ap-game-intro ap-game-intro__note">Abrindo o jogo…</p>;
+ }
+ 
+ document.documentElement.style.background = '#222';
+ document.body.style.margin = '0';
+-createRoot(document.getElementById('game')!).render(
+-  <StrictMode>
+-    <GameRoot />
+-  </StrictMode>,
+-);
++createRoot(document.getElementById('game')!).render(<StrictMode><GameRoot /></StrictMode>);
+--- a/apps/web/src/game-host/config.ts
++++ b/apps/web/src/game-host/config.ts
+@@ -41,7 +41,12 @@
+     appVersion: manifest.version,
+     childDisplayName: child.preferredName,
+     clinical: { model: 'ABA', targets: appId === 'minha-vez-sua-vez' ? targets.slice(0, 1) : targets, trialsPerTarget: appId === 'minha-vez-sua-vez' ? 5 : trialsPerTarget, interleave: true, seed: Math.floor(Math.random() * 2 ** 31) },
+-    adaptation: { ...DEFAULT_ADAPTATION, ...c.adaptation, screenBudgetSec: db.screenPolicy(child.birthDate).maxBlockMinutes * 60 },
++    adaptation: {
++      ...DEFAULT_ADAPTATION, ...c.adaptation,
++      // O botão Som do Espaço Infantil prevalece sobre os sons dos jogos no treino livre.
++      sound: getState().childSpaces.find((s) => s.childId === c.childId)?.sound === false ? 'off' : c.adaptation.sound,
++      screenBudgetSec: db.screenPolicy(child.birthDate).maxBlockMinutes * 60,
++    },
+     params: { practice: true },
+   };
+ }
+--- a/apps/web/src/routes/space/ChildSpace.tsx
++++ b/apps/web/src/routes/space/ChildSpace.tsx
+@@ -25,6 +25,7 @@
+ } from '../../data/store';
+ import type { ChildTheme } from '../../data/types';
+ import { GAMES } from '../../game-host/registry';
++import { isGameAgeAppropriate } from '../../game-host/narration';
+ import { GameIllustration } from '../../components/GameIllustration';
+ import {
+   ArtListener,
+@@ -161,9 +162,13 @@
+   const used = screenMinutesToday(st, c.id);
+   const limitReached = used >= policy.dailyLimitMinutes;
+   const released = c.releasedApps;
+-  // Para um primeiro momento, todos os games do catálogo ficam disponíveis para a criança e adolescentes nos dados mock
+-  const allGameKeys = Object.keys(GAMES);
+-  const games = Array.from(new Set([...allGameKeys, ...released.filter((a) => GAMES[a])]));
++  // Somente jogos liberados pelo profissional E adequados à idade real da criança.
++  // A escolha da aparência infantil/adolescente não altera os critérios de elegibilidade.
++  const games = released.filter((a) => {
++    const game = GAMES[a];
++    if (!game) return false;
++    return isGameAgeAppropriate(months, game.manifest.clinical.ageRangeMonths);
++  });
+   const stars = totalStars(space);
+   const T = TEXT[ageMode];
+ 
+--- a/apps/web/src/routes/space/PlayShell.tsx
++++ b/apps/web/src/routes/space/PlayShell.tsx
+@@ -10,6 +10,7 @@
+ import { actions, childSpaceOf, db, screenMinutesToday, useStore } from '../../data/store';
+ import { buildPracticeConfig } from '../../game-host/config';
+ import { GAMES } from '../../game-host/registry';
++import { isGameAgeAppropriate } from '../../game-host/narration';
+ import { HoldToExit, StarIcon } from './ChildSpace';
+ import './space.css';
+ 
+@@ -29,8 +30,9 @@
+   const [round, setRound] = useState(0);
+   const config = useMemo(() => (c && GAMES[appId] ? buildPracticeConfig(c, appId) : null), [c, appId, round]); // eslint-disable-line react-hooks/exhaustive-deps
+ 
+-  // Para um primeiro momento, todos os games registrados estão disponíveis no modo mock/treino
+-  const allowed = !!c && !!GAMES[appId];
++  // Abertura direta de URL também precisa respeitar liberação clínica e faixa etária.
++  const allowed = !!c && !!child && c.releasedApps.includes(appId) && !!GAMES[appId]
++    && isGameAgeAppropriate(db.ageMonths(child.birthDate), GAMES[appId]!.manifest.clinical.ageRangeMonths);
+   const policy = child ? db.screenPolicy(child.birthDate) : null;
+   const overLimit = !!c && !!policy && screenMinutesToday(st, c.id) >= policy.dailyLimitMinutes;
+ 
+--- /dev/null
++++ b/apps/web/src/game-host/narration.ts
+@@ -0,0 +1,49 @@
++/** Roteiros de acolhimento antes do jogo. Voz sempre opcional e por ação do usuário. */
++export interface GameIntroduction {
++  world: string;
++  mission: string;
++  howToPlay: string;
++  therapistTip: string;
++}
++
++export const GAME_INTRODUCTIONS: Record<string, GameIntroduction> = {
++  'bolhas-magicas': { world: 'Jardim das Bolhas', mission: 'Vamos fazer bolhas brilhantes!', howToPlay: 'Toque nas bolhas para brincar. Quando quiser mais, peça para o adulto ajudar você a dizer: mais bolhas, por favor!', therapistTip: 'Modele pedidos funcionais; não exija fala oral para liberar reforço.' },
++  'escolha-pela-instrucao': { world: 'Missão Instrução', mission: 'Vamos descobrir o que a voz está pedindo!', howToPlay: 'Ouça com atenção. Depois toque na figura certa. Se precisar, use o botão para ouvir outra vez.', therapistTip: 'Diferencie repetição da instrução de dicas; registre os níveis de ajuda.' },
++  'fazendinha-sonora': { world: 'Fazendinha Sonora', mission: 'Os animais querem brincar com você!', howToPlay: 'Toque nas abas e nos animais para descobrir sons e pequenas surpresas. Mostre ao adulto o que você mais gostou.', therapistTip: 'Priorize atenção compartilhada e oportunidades naturais de comunicação.' },
++  'leitura-de-cena': { world: 'Leitura de Cena', mission: 'Toda imagem esconde uma história!', howToPlay: 'Observe as pessoas, os objetos e o lugar. Escute a pergunta e escolha a pista que ajuda a entender o que aconteceu.', therapistTip: 'Explore múltiplas interpretações plausíveis, sem transformar inferência social em diagnóstico.' },
++  'encontre-o-igual': { world: 'Match Lab', mission: 'Vamos encontrar os pares!', howToPlay: 'Veja a figura modelo. Procure a que combina com ela e toque na sua escolha. Pode olhar com calma!', therapistTip: 'Controle campo de comparação, posições e nível de dica.' },
++  'encaixa-ai': { world: 'Encaixa Aí', mission: 'Cada peça tem um lugar especial!', howToPlay: 'Escolha uma peça e leve-a até o espaço com a mesma forma. Solte quando ela estiver bem perto.', therapistTip: 'Ofereça alternativa de toque para selecionar e posicionar quando arrastar for difícil.' },
++  'organize-categoria': { world: 'Organize por Categoria', mission: 'Vamos colocar cada coisa no seu lugar!', howToPlay: 'Olhe o objeto e descubra onde ele combina melhor. Arraste ou toque para escolher o lugar certo.', therapistTip: 'Progrida de categorias concretas a relações funcionais; evite distratores ambíguos.' },
++  'memoria-bichos': { world: 'Memória dos Bichos', mission: 'Os bichinhos estão brincando de esconder!', howToPlay: 'Observe as cartas. Vire duas de cada vez e tente encontrar dois bichinhos iguais. Se não acertar, tudo bem: tente de novo!', therapistTip: 'Ajuste pares e tempo de observação para não confundir memória com destreza motora.' },
++  'par-perfeito': { world: 'Par Perfeito', mission: 'Olhe, compare e encontre!', howToPlay: 'Observe a imagem e escolha outra que seja igual. Você pode experimentar quantas vezes precisar.', therapistTip: 'Alinhe o tipo de pareamento ao programa e à hierarquia de ajuda.' },
++  'cada-um-no-seu-pote': { world: 'Cada Um no Seu Pote', mission: 'Os potes precisam de ajuda!', howToPlay: 'Pegue os objetos e organize nos potes combinando as cores, formas ou tipos de objeto. Pode ir um de cada vez!', therapistTip: 'Separe exigência cognitiva de exigência de precisão do arrasto.' },
++  'detetive-das-emocoes': { world: 'Detetive das Emoções', mission: 'Vamos investigar pistas sobre sentimentos!', howToPlay: 'Observe o rosto, o corpo e a situação. Escolha uma possibilidade e descubra mais pistas. Pessoas podem sentir coisas diferentes na mesma situação.', therapistTip: 'Evite ensinar que uma expressão facial sempre indica uma única emoção.' },
++  'olha-comigo': { world: 'Olha Comigo', mission: 'Olhar juntos pode mostrar coisas incríveis!', howToPlay: 'O amigo vai olhar ou apontar para alguma coisa. Acompanhe a indicação e toque no que vocês encontrarem.', therapistTip: 'Não condicione o reforço a contato ocular; aceite outras formas de atenção conjunta.' },
++  'minha-vez-sua-vez': { world: 'Minha Vez, Sua Vez', mission: 'Vamos construir juntos!', howToPlay: 'Veja de quem é a vez. Quando aparecer sua vez, coloque uma peça. Depois espere o parceiro jogar.', therapistTip: 'Use parceiro real quando possível, com intervalo de espera ajustável.' },
++  'social-city': { world: 'Social City', mission: 'Explore a cidade e escolha seu caminho!', howToPlay: 'Converse com personagens em situações da vida cotidiana. Leia ou escute as opções e escolha como prefere responder. Você pode comparar possibilidades.', therapistTip: 'Ofereça escolhas legítimas e respeite estilos comunicativos diversos.' },
++  'mutirao-do-parque': { world: 'Mutirão do Parque', mission: 'O parque precisa de uma equipe!', howToPlay: 'Explore o parque, veja o que precisa ser feito e combine tarefas com os personagens. Cada pessoa pode colaborar de um jeito.', therapistTip: 'Permita cooperação sem obrigar respostas sociais padronizadas.' },
++  'espelho-magico': { world: 'Espelho Mágico', mission: 'Que tal inventar movimentos?', howToPlay: 'Veja o movimento do personagem e faça do seu jeito. O adulto pode ajudar a registrar como foi a brincadeira.', therapistTip: 'Adapte a ação às possibilidades motoras; não inferir execução física pelo toque.' },
++  'tambor-da-imitacao': { world: 'Tambor da Imitação', mission: 'O Tico quer formar uma dupla musical!', howToPlay: 'Escute o ritmo do Tico. Quando chegar sua vez, toque no tambor para responder.', therapistTip: 'Considere latência e volume, com opção de sequência simplificada.' },
++  'siga-o-mestre': { world: 'Siga o Mestre', mission: 'Você conhece o segredo do mestre?', howToPlay: 'Escute com atenção. Só faça a ação quando a frase começar com: o mestre mandou. Quando ele não mandar, pode esperar!', therapistTip: 'Adapte velocidade, tempo de resposta e exigência de controle inibitório.' },
++  'danca-do-congelar': { world: 'Dança do Congelar', mission: 'Hora de dançar e virar estátua!', howToPlay: 'Quando a música tocar, você pode se mexer. Quando ela parar, tente congelar! Vale adaptar o movimento ao seu corpo.', therapistTip: 'Ofereça modalidade sem movimento corporal e controle sensorial de música.' },
++  'banda-do-tico': { world: 'Banda do Tico', mission: 'Prepare seu show de música!', howToPlay: 'Experimente instrumentos, descubra sons e acompanhe o ritmo quando quiser. Vamos tocar juntos!', therapistTip: 'Normalize o volume dos instrumentos e ofereça modo silencioso com pistas visuais.' },
++  'rampa-maluca': { world: 'Rampa Maluca', mission: 'Qual carrinho vai descer agora?', howToPlay: 'Escolha um carrinho, prepare a rampa e veja o que acontece! Pode pedir mais uma rodada.', therapistTip: 'Use pausas intencionais para abrir oportunidades de pedidos, sem exigir fala.' },
++  'lanche-do-urso': { world: 'Lanche do Urso', mission: 'Nosso ursinho precisa de cuidado!', howToPlay: 'Veja como o urso está e escolha o que pode ajudar: comida, água, limpeza ou descanso. Vamos cuidar dele juntos!', therapistTip: 'Amplie brincadeiras simbólicas com narrativas criadas pela criança.' },
++  'minimundos': { world: 'MiniMundos', mission: 'Entre em um mundinho cheio de possibilidades!', howToPlay: 'Explore os ambientes, mova objetos e descubra pequenas missões. Você pode criar sua própria história!', therapistTip: 'Abra espaço para brincar livre, sem pontuação obrigatória.' },
++  'torre-derruba': { world: 'Torre Derruba', mission: 'Vamos construir uma torre!', howToPlay: 'Coloque os blocos, um por um, e veja a torre crescer. Depois, se quiser, derrube e comece outra!', therapistTip: 'Configure gravidade e tolerância da colisão para reduzir erros motores.' },
++  'causa-efeito': { world: 'Jardim de Luzes', mission: 'Um toque pode mudar o jardim!', howToPlay: 'Toque, segure ou arraste as coisas na tela para descobrir pequenas surpresas. Explore no seu ritmo!', therapistTip: 'Mantenha consequências imediatas, previsíveis e sensorialmente reguláveis.' },
++  'circuito-executivo': { world: 'Circuito Executivo', mission: 'O robô Bip precisa da sua estratégia!', howToPlay: 'Você vai encontrar desafios de atenção, troca de regras e memória. Escute a regra de cada etapa antes de escolher.', therapistTip: 'Não confunda tempo motor e impulsividade; registre acertos e omissões separadamente.' },
++  'missao-independencia': { world: 'Missão Independência', mission: 'Vamos resolver desafios do dia a dia!', howToPlay: 'Escolha uma missão, observe a situação e organize as ações para concluí-la. As pistas podem ajudar quando precisar.', therapistTip: 'Planeje prática fora da tela e generalização funcional.' },
++  'pequeno-chef': { world: 'Pequeno Chef', mission: 'Uma receita gostosa começa com um plano!', howToPlay: 'Escolha os ingredientes, acompanhe as etapas e prepare a receita no seu ritmo. Pode pedir uma dica se precisar!', therapistTip: 'Não promova exposição alimentar forçada; respeite preferências e segurança.' },
++  'historia-ordem': { world: 'História em Ordem', mission: 'O que aconteceu primeiro?', howToPlay: 'Observe as imagens, descubra a ordem dos acontecimentos e organize a história. Depois conte-a do seu jeito!', therapistTip: 'Aceite narrativas coerentes alternativas quando a sequência permitir.' },
++  'mercadinho-da-esquina': { world: 'Mercadinho da Esquina', mission: 'Hora de fazer compras!', howToPlay: 'Confira sua lista, escolha os produtos e veja como usar o dinheiro para pagar. Confira o troco com calma!', therapistTip: 'Personalize valores reais e complexidade de troco; simule sem coletar dados financeiros.' },
++  'passo-a-passo': { world: 'Passo a Passo', mission: 'Uma tarefa fica mais fácil em etapas!', howToPlay: 'Veja qual é o próximo passo, complete uma etapa de cada vez e acompanhe seu progresso. Peça ajuda sempre que quiser.', therapistTip: 'Vincule os passos à análise de tarefas individual e ao contexto natural.' },
++  'quadro-de-conquistas': { world: 'Quadro de Conquistas', mission: 'Vamos acompanhar o que você conquistou!', howToPlay: 'Veja as metas combinadas com seu profissional e acompanhe os símbolos conquistados. Cada passo importa!', therapistTip: 'Nunca remova fichas já conquistadas como punição; escolha metas alcançáveis.' },
++  'escape-room-kids': { world: 'Escape Room Kids', mission: 'Um mistério precisa de boas pistas!', howToPlay: 'Explore a sala, toque nos objetos e procure pistas. Resolva os desafios com calma. Você pode pedir ajuda quando precisar.', therapistTip: 'Ofereça navegação por toque sem precisão 3D e opção de desativar limite de tempo.' },
++  'vida-online': { world: 'Vida Online', mission: 'Faça escolhas seguras no mundo digital!', howToPlay: 'Explore o celular fictício, leia mensagens e situações de redes sociais. Antes de agir, pense nas possibilidades e peça ajuda quando precisar.', therapistTip: 'Não solicite senhas nem dados reais; incentive conversa sobre privacidade e consentimento.' },
++};
++
++/** Verificação de elegibilidade para o ambiente infantil; o profissional pode usar o catálogo integral em supervisão. */
++export function isGameAgeAppropriate(ageMonths: number, ageRangeMonths: readonly [number, number]): boolean {
++  return ageMonths >= ageRangeMonths[0] && ageMonths <= ageRangeMonths[1];
++}
+--- /dev/null
++++ b/apps/web/src/game-host/intro.css
+@@ -0,0 +1,29 @@
++.ap-game-intro {
++  box-sizing: border-box;
++  min-height: 100dvh;
++  padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
++  background: linear-gradient(155deg, #f7faf7 0%, #f4f0e7 100%);
++  display: flex;
++  justify-content: center;
++  align-items: center;
++  font-family: 'Fredoka', ui-rounded, system-ui, sans-serif;
++  color: #243b37;
++}
++.ap-game-intro * { box-sizing: border-box; }
++.ap-game-intro__panel { width: min(100%, 780px); padding: clamp(24px, 4vw, 48px); background: #fffdfa; border: 2px solid #cbded3; border-radius: 28px; display: grid; gap: 18px; box-shadow: 0 12px 28px #1c4c3e0c; }
++.ap-game-intro__eyebrow { font-size: 0.95rem; letter-spacing: 0.04em; color: #48675c; font-weight: 600; }
++.ap-game-intro__title { font-size: clamp(1.7rem, 4vw, 2.7rem); line-height: 1.16; margin: 0; }
++.ap-game-intro__mission { font-size: clamp(1.2rem, 3vw, 1.65rem); line-height: 1.35; margin: 0; }
++.ap-game-intro__instructions { margin: 0; color: #31473e; line-height: 1.5; font-size: clamp(1.08rem, 2vw, 1.3rem); }
++.ap-game-intro__buttons { display: flex; flex-wrap: wrap; gap: 12px; }
++.ap-game-intro__button { flex: 1 1 200px; min-height: 64px; border: 2px solid #3b6259; border-radius: 18px; padding: 12px 20px; cursor: pointer; font: 600 1.15rem 'Fredoka', system-ui, sans-serif; background: #e9f3ee; color: #24443b; touch-action: manipulation; }
++.ap-game-intro__button--primary { background: #28624c; color: #fff; border-color: #28624c; }
++.ap-game-intro__button:focus-visible { outline: 4px solid #df9a48; outline-offset: 4px; }
++.ap-game-intro__button:disabled { cursor: not-allowed; opacity: 0.56; }
++.ap-game-intro__note { margin: 0; font: 500 0.95rem/1.4 system-ui, sans-serif; color: #52605d; }
++.ap-game-intro__tip { border-top: 1px solid #d9e4dd; padding-top: 12px; font: 500 0.9rem/1.45 system-ui, sans-serif; color: #44554b; }
++.ap-game-intro__tip summary { cursor: pointer; padding: 6px 0; }
++.ap-game-intro__tip p { margin: 8px 0 0; }
++@media (min-width: 740px) { .ap-game-intro__panel { gap: 22px; } }
++@media (max-width: 480px) { .ap-game-intro { padding: 12px; } .ap-game-intro__panel { border-radius: 18px; padding: 20px; } }
++@media (prefers-reduced-motion: reduce) { .ap-game-intro *, .ap-game-intro *::before { animation: none !important; transition: none !important; } }
+--- /dev/null
++++ b/apps/web/src/game-host/narration.test.ts
+@@ -0,0 +1,21 @@
++import { describe, expect, it } from 'vitest';
++import { GAMES } from './registry';
++import { GAME_INTRODUCTIONS, isGameAgeAppropriate } from './narration';
++
++describe('acolhimento narrado e elegibilidade', () => {
++  it('tem roteiro narrável e apoio visual em todos os jogos registrados', () => {
++    expect(Object.keys(GAME_INTRODUCTIONS).sort()).toEqual(Object.keys(GAMES).sort());
++    for (const intro of Object.values(GAME_INTRODUCTIONS)) {
++      expect(intro.mission.length).toBeGreaterThan(12);
++      expect(intro.howToPlay.length).toBeGreaterThan(25);
++      expect(intro.therapistTip.length).toBeGreaterThan(15);
++    }
++  });
++
++  it('respeita os dois limites de cada faixa etária', () => {
++    expect(isGameAgeAppropriate(48, [48, 144])).toBe(true);
++    expect(isGameAgeAppropriate(144, [48, 144])).toBe(true);
++    expect(isGameAgeAppropriate(47, [48, 144])).toBe(false);
++    expect(isGameAgeAppropriate(145, [48, 144])).toBe(false);
++  });
++});

@@ -80,8 +80,8 @@ export const GAMES: Record<string, GameEntry> = {
   'mercadinho-da-esquina': { manifest: mercadinhoDaEsquina, load: () => import('@aprumo/game-mercadinho-da-esquina').then((m) => m.Game) },
   'passo-a-passo': { manifest: passoAPasso, load: () => import('@aprumo/game-passo-a-passo').then((m) => m.Game) },
   'quadro-de-conquistas': { manifest: quadroDeConquistas, load: () => import('@aprumo/game-quadro-de-conquistas').then((m) => m.Game) },
-  'escape-room-kids': { manifest: escapeRoomKids, load: () => import('@aprumo/game-escape-room-kids').then((m) => m.Game) },
-  'vida-online': { manifest: vidaOnline, load: () => import('@aprumo/game-vida-online').then((m) => m.Game) },
+  'escape-room-kids': { manifest: escapeRoomKids, load: () => import('@aprumo/game-escape-room-kids').then((m) => m.Game as ComponentType<any>) },
+  'vida-online': { manifest: vidaOnline, load: () => import('@aprumo/game-vida-online').then((m) => m.Game as ComponentType<any>) },
 };
 
 /** Recursos de apoio rodam na própria moldura infantil (não em iframe): são da plataforma. */

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createActor } from 'xstate';
+import { useGameClient } from '@aprumo/game-sdk';
+import { manifest } from './manifest';
 import { parPerfeitoMachine } from './engine-aba/machine';
 import { MatchBoard } from './scene/MatchBoard';
 import { TrialHUD } from './scene/TrialHUD';
@@ -19,6 +21,19 @@ export const App: React.FC = () => {
   const [isMuted, setIsMuted] = useState<boolean>(soundManager.getMuted());
   const [activeLocutor, setActiveLocutor] = useState<LocutorId>(soundManager.getLocutor());
   const [outsideDropsCount, setOutsideDropsCount] = useState<number>(0);
+
+  const { client, config, paused, ended } = useGameClient(manifest.appId, manifest.version);
+
+  useEffect(() => {
+    if (config?.adaptation?.sound) {
+      soundManager.setSound(config.adaptation.sound);
+      setIsMuted(config.adaptation.sound === 'off');
+    }
+  }, [config]);
+
+  useEffect(() => {
+    client.gameStarted(manifest.version);
+  }, [client]);
 
   // Subscribe to XState actor on mount
   useEffect(() => {
@@ -97,8 +112,49 @@ export const App: React.FC = () => {
     };
   }, [stateValue, currentTrial?.trialNumber, currentTrial?.promptDelayMs, currentTrial?.timeoutMs]);
 
+  useEffect(() => {
+    if (!currentTrial) return;
+    const presented = currentTrial.comparisonSlots.map((s) => s.target.id);
+    const targetSlotIndex = currentTrial.comparisonSlots.findIndex((s) => s.isCorrect);
+    client.levelStarted({
+      levelId: `level-${currentTrial.level}`,
+      levelIndex: currentTrial.level,
+      fieldSize: currentTrial.comparisonSlots.length,
+    });
+    client.trialStarted({
+      targetId: currentTrial.target.id,
+      trialIndex: currentTrial.trialNumber - 1,
+      presented,
+    });
+    client.stimulusPresented({
+      targetId: currentTrial.target.id,
+      trialIndex: currentTrial.trialNumber - 1,
+      presented,
+      positionOfTarget: targetSlotIndex >= 0 ? targetSlotIndex : 0,
+      modality: 'visual_auditory',
+    });
+  }, [client, currentTrial?.trialNumber, currentTrial?.target.id, currentTrial?.level]);
+
   // Telemetry handlers
   const handleDropCorrect = (dragPathLength: number, dropDistancePx: number, mode: InteractionMode) => {
+    if (currentTrial) {
+      const presented = currentTrial.comparisonSlots.map((s) => s.target.id);
+      const targetSlotIndex = currentTrial.comparisonSlots.findIndex((s) => s.isCorrect);
+      client.responseRecorded({
+        targetId: currentTrial.target.id,
+        stimulusId: currentTrial.target.id,
+        trialIndex: currentTrial.trialNumber - 1,
+        presented,
+        positionOfTarget: targetSlotIndex >= 0 ? targetSlotIndex : 0,
+        selected: currentTrial.target.id,
+        selectedPosition: targetSlotIndex >= 0 ? targetSlotIndex : 0,
+        response: 'correct',
+        latencyMs: Math.max(10, Math.round(dragPathLength > 0 ? dragPathLength * 2 : 1200)),
+        promptLevel: currentTrial.promptType,
+        promptSource: currentTrial.promptType === 'none' ? 'none' : 'built_in',
+        detail: { dragPathLength, dropDistancePx, mode },
+      });
+    }
     actorRef.current.send({
       type: 'DROP_ON_CORRECT',
       dragPathLength,
@@ -108,6 +164,25 @@ export const App: React.FC = () => {
   };
 
   const handleDropWrong = (slotIndex: number, dragPathLength: number, dropDistancePx: number, mode: InteractionMode) => {
+    if (currentTrial) {
+      const presented = currentTrial.comparisonSlots.map((s) => s.target.id);
+      const targetSlotIndex = currentTrial.comparisonSlots.findIndex((s) => s.isCorrect);
+      const wrongTarget = currentTrial.comparisonSlots[slotIndex]?.target.id ?? null;
+      client.responseRecorded({
+        targetId: currentTrial.target.id,
+        stimulusId: currentTrial.target.id,
+        trialIndex: currentTrial.trialNumber - 1,
+        presented,
+        positionOfTarget: targetSlotIndex >= 0 ? targetSlotIndex : 0,
+        selected: wrongTarget,
+        selectedPosition: slotIndex,
+        response: 'incorrect',
+        latencyMs: Math.max(10, Math.round(dragPathLength > 0 ? dragPathLength * 2 : 1200)),
+        promptLevel: currentTrial.promptType,
+        promptSource: currentTrial.promptType === 'none' ? 'none' : 'built_in',
+        detail: { slotIndex, dragPathLength, dropDistancePx, mode },
+      });
+    }
     actorRef.current.send({
       type: 'DROP_ON_WRONG',
       slotIndex,
@@ -292,8 +367,22 @@ export const App: React.FC = () => {
     );
   }
 
+  if (ended) {
+    return (
+      <div style={{ display: 'grid', placeItems: 'center', minHeight: '100vh', background: '#1c2f28', color: '#fff', fontFamily: 'system-ui' }}>
+        <h2>Sessão concluída!</h2>
+        <p>Você completou o pareamento das figuras.</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="app-container">
+    <div className="app-container" style={{ position: 'relative' }}>
+      {paused && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 9999, display: 'grid', placeItems: 'center', color: '#fff', fontFamily: 'system-ui' }}>
+          <h2>Atividade pausada pelo mediador</h2>
+        </div>
+      )}
       {/* Top HUD */}
       <TrialHUD
         currentTrial={currentTrial}

@@ -159,9 +159,9 @@ class SoundManager {
       const ptVoices = voices.filter(v => v.lang.startsWith('pt'));
       if (ptVoices.length > 0) {
         if (this.currentLocutor === 'locutor_2' && ptVoices.length > 1) {
-          utterance.voice = ptVoices[1];
+          utterance.voice = ptVoices[1] ?? null;
         } else {
-          utterance.voice = ptVoices[0];
+          utterance.voice = ptVoices[0] ?? null;
         }
       }
 
@@ -179,11 +179,15 @@ class SoundManager {
     });
   }
 
+  public setSound(level: 'off' | 'low' | 'normal') {
+    this.setMuted(level === 'off');
+  }
+
   /**
    * Plays one of the 8 varied praise phrases
    */
   public playRandomPraise(): string {
-    const phrase = PRAISES[Math.floor(Math.random() * PRAISES.length)];
+    const phrase = PRAISES[Math.floor(Math.random() * PRAISES.length)] ?? 'Muito bem!';
     this.playChime();
 
     if (typeof window !== 'undefined' && !this.isMuted && 'speechSynthesis' in window) {

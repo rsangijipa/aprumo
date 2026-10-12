@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createActor } from 'xstate';
 import confetti from 'canvas-confetti';
+import { useGameClient } from '@aprumo/game-sdk';
+import { manifest } from './manifest';
 import { cadaUmNoSeuPoteMachine } from './engine-aba/machine';
 import { PhaserHost } from './scene/PhaserHost';
 import { SortHUD } from './scene/SortHUD';
@@ -20,6 +22,19 @@ export const App: React.FC = () => {
 
   const [isPhysicalBridgeOpen, setIsPhysicalBridgeOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(soundManager.getMuted());
+
+  const { client, config, paused, ended } = useGameClient(manifest.appId, manifest.version);
+
+  useEffect(() => {
+    if (config?.adaptation?.sound) {
+      soundManager.setSound(config.adaptation.sound);
+      setIsMuted(config.adaptation.sound === 'off');
+    }
+  }, [config]);
+
+  useEffect(() => {
+    client.gameStarted(manifest.version);
+  }, [client]);
 
   // Subscribe to XState actor on mount
   useEffect(() => {
@@ -76,8 +91,51 @@ export const App: React.FC = () => {
     }
   }, [stateValue]);
 
+  useEffect(() => {
+    if (!context.currentItem) return;
+    const presented = context.bins.map((b) => b.id);
+    const targetBinIndex = context.bins.findIndex((b) => b.attributeValue === context.currentItem?.attributeValue);
+    client.levelStarted({
+      levelId: `rule-${context.rule}`,
+      levelIndex: ['cor', 'forma', 'tamanho', 'categoria', 'funcao'].indexOf(context.rule),
+      fieldSize: context.bins.length,
+    });
+    client.trialStarted({
+      targetId: context.currentItem.id,
+      trialIndex: context.history.length,
+      presented,
+    });
+    client.stimulusPresented({
+      targetId: context.currentItem.id,
+      trialIndex: context.history.length,
+      presented,
+      positionOfTarget: targetBinIndex >= 0 ? targetBinIndex : 0,
+      modality: 'visual_auditory',
+    });
+  }, [client, context.currentItem?.id, context.rule, context.bins.length]);
+
   // Telemetry drop handler from Matter.js world
   const handleItemEnterBin = (item: SortItem, bin: BinDefinition, throwVelocity: number) => {
+    const isCorrect = bin.attributeValue === item.attributeValue;
+    const presented = context.bins.map((b) => b.id);
+    const targetBinIndex = context.bins.findIndex((b) => b.attributeValue === item.attributeValue);
+    const selectedBinIndex = context.bins.findIndex((b) => b.id === bin.id);
+
+    client.responseRecorded({
+      targetId: item.id,
+      stimulusId: item.id,
+      trialIndex: context.history.length,
+      presented,
+      positionOfTarget: targetBinIndex >= 0 ? targetBinIndex : 0,
+      selected: bin.id,
+      selectedPosition: selectedBinIndex >= 0 ? selectedBinIndex : 0,
+      response: isCorrect ? 'correct' : 'incorrect',
+      latencyMs: Math.max(10, Math.round(throwVelocity > 0 ? 1000 / throwVelocity : 1200)),
+      promptLevel: context.activePrompt ?? 'none',
+      promptSource: context.activePrompt !== 'none' ? 'built_in' : 'none',
+      detail: { rule: context.rule, throwVelocity, bin: bin.label },
+    });
+
     actorRef.current.send({
       type: 'ITEM_DROPPED_IN_BIN',
       item,
@@ -111,10 +169,20 @@ export const App: React.FC = () => {
   };
 
   const handleRecordAdultPrompt = () => {
+    if (context.currentItem) {
+      client.promptPresented({
+        targetId: context.currentItem.id,
+        trialIndex: context.history.length,
+        level: 'verbal',
+        source: 'therapist',
+        latencyMs: 1000,
+      });
+    }
     actorRef.current.send({ type: 'RECORD_ADULT_PROMPT' });
   };
 
   const handleRecordOffTaskPause = () => {
+    client.paused('off_task');
     actorRef.current.send({ type: 'RECORD_OFF_TASK_PAUSE' });
   };
 
@@ -122,8 +190,22 @@ export const App: React.FC = () => {
     actorRef.current.send({ type: 'START_TRIAL' });
   };
 
+  if (ended) {
+    return (
+      <div style={{ display: 'grid', placeItems: 'center', minHeight: '100vh', background: '#1c2f28', color: '#fff', fontFamily: 'system-ui' }}>
+        <h2>Sessão concluída!</h2>
+        <p>Você guardou todos os objetos nos potes certos.</p>
+      </div>
+    );
+  }
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw', position: 'relative' }}>
+      {paused && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 9999, display: 'grid', placeItems: 'center', color: '#fff', fontFamily: 'system-ui' }}>
+          <h2>Atividade pausada pelo mediador</h2>
+        </div>
+      )}
       {/* Top Clinical & Status HUD */}
       <SortHUD
         mode={context.mode}

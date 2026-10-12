@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { EPISODES } from '../content/episodes';
-import { Choice, Indicators } from '../types';
+import type { Choice, Indicators } from '../types';
 import { sound } from '../../audio/audioEngine';
 
 export interface GameSettings {

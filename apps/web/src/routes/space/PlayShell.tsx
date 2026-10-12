@@ -10,6 +10,7 @@ import { attachGameHost, playTones } from '@aprumo/game-sdk';
 import { actions, childSpaceOf, db, screenMinutesToday, useStore } from '../../data/store';
 import { buildPracticeConfig } from '../../game-host/config';
 import { GAMES } from '../../game-host/registry';
+import { isGameAgeAppropriate } from '../../game-host/narration';
 import { HoldToExit, StarIcon } from './ChildSpace';
 import './space.css';
 
@@ -29,8 +30,9 @@ export default function PlayShell() {
   const [round, setRound] = useState(0);
   const config = useMemo(() => (c && GAMES[appId] ? buildPracticeConfig(c, appId) : null), [c, appId, round]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Para um primeiro momento, todos os games registrados estão disponíveis no modo mock/treino
-  const allowed = !!c && !!GAMES[appId];
+  // Abertura direta de URL também precisa respeitar liberação clínica e faixa etária.
+  const allowed = !!c && !!child && c.releasedApps.includes(appId) && !!GAMES[appId]
+    && isGameAgeAppropriate(db.ageMonths(child.birthDate), GAMES[appId]!.manifest.clinical.ageRangeMonths);
   const policy = child ? db.screenPolicy(child.birthDate) : null;
   const overLimit = !!c && !!policy && screenMinutesToday(st, c.id) >= policy.dailyLimitMinutes;
 

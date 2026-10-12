@@ -42,7 +42,7 @@ packages/game-sdk/             cliente/hospedeiro postMessage, motor de tentativ
 packages/offline/              outbox cifrada (IndexedDB + AES-GCM)
 packages/ui/                   design system da plataforma (tokens sálvia, componentes, gráfico de alvo)
 packages/stimuli/              acervo de estímulos clínicos compartilhado entre jogos e mesa
-games/                         23 jogos clínicos integrados (veja docs/INVENTORY.md)
+games/                         34 jogos catalogados com 100% de integração direta a @aprumo/game-sdk e @aprumo/protocol v2.0 (veja docs/INVENTORY.md)
 resources/                     recursos de apoio embarcados (agenda-visual, quadro-de-fichas)
 apps/web/src/routes/pro/resources/ 14 estúdios terapêuticos interativos e imprimíveis
 supabase/migrations/           18 migrações SQL (0001–0018), RLS, triggers de modelo único, ingestão idempotente
@@ -56,7 +56,7 @@ docs/INVENTORY.md              inventário técnico automatizado gerado a partir
 ## Testes e Qualidade
 
 ```bash
-pnpm test       # Roda todos os testes (Postgres real, clinical-core, game-sdk, todos os 23 jogos, recursos e web)
+pnpm test       # Roda todos os testes (Postgres real, clinical-core, game-sdk, todos os jogos com testes próprios, recursos e web)
 pnpm lint       # ESLint 9 com React Compiler
 pnpm typecheck  # TypeScript estrito em todos os pacotes do workspace
 pnpm build      # Bundle de produção do PWA com Workbox Service Worker
@@ -64,7 +64,7 @@ pnpm build      # Bundle de produção do PWA com Workbox Service Worker
 
 ## Estado atual e limites conhecidos
 
-- **23 Jogos Clínicos Integrados.** Todos utilizam o `@aprumo/protocol` v2.0 com touch >=48px, Web Audio e manifesto clínico validado, incluindo os jogos especializados Encaixa Aí, Rampa Maluca, Hora do Lanche do Urso e Fazendinha Sonora. O jogo `social-city` utiliza projeção isométrica em Canvas 2D (pseudo-3D) e não deve ser reportado como 3D real até que um motor Three.js/R3F seja implementado.
+- **34 Jogos no Catálogo 100% Integrados.** Todos os 34 jogos operam com integração nativa direta ao `@aprumo/game-sdk` e emitem telemetria clínica estruturada via `@aprumo/protocol` v2.0 (`gameStarted`, `levelStarted`, `trialStarted`, `stimulusPresented`, `responseRecorded`, `levelCompleted`, `gameCompleted`). Todos possuem suporte a adaptação sensorial de som (`off`, `low`, `normal`), e suporte duplo a interação motora (arrastar/soltar com `setPointerCapture` e tocar para selecionar/posicionar com hitboxes mínimas de 64x64px). O jogo `social-city` utiliza projeção isométrica em Canvas 2D (pseudo-3D de alta fidelidade visual).
 - **18 Migrações Supabase (0001–0018).** Validadas em Postgres real via PGlite (39 testes cobrindo isolamento multi-tenant, RLS, regras R1–R15, ingestão idempotente e RBAC administrativo).
 - **14 Recursos Terapêuticos Interativos.** Estúdios completos para sessões clínicas e geração de pranchas imprimíveis em alta resolução (Timer Visual, Primeiro-Depois, Agenda, Quadro de Fichas, Análise de Tarefas, Histórias Sociais, Pranchas CAA/PECS, Árvore de Emoções, Semáforo de Regulação, Termômetro de 5 Pontos, Checklist Visual, Contrato Comportamental ABA e Contador ABC).
 - **Modo demonstração.** Os dados vivem em memória e passam pela outbox cifrada (IndexedDB + AES-GCM) como em produção. Recarregar a página volta ao estado inicial com dados estritamente sintéticos.

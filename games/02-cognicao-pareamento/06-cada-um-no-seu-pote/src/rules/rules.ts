@@ -39,7 +39,7 @@ export function generateItemsForRule(rule: ClassificationRule, count: number = 1
   if (rule === 'cor') {
     const colors: Array<keyof typeof COLOR_PATTERNS> = ['vermelho', 'azul', 'amarelo', 'verde'];
     for (let i = 0; i < count; i++) {
-      const c = colors[i % colors.length];
+      const c = colors[i % colors.length]!;
       const cfg = COLOR_PATTERNS[c];
       items.push({
         id: `ursinho-${c}-${i}`,
@@ -64,7 +64,7 @@ export function generateItemsForRule(rule: ClassificationRule, count: number = 1
   } else if (rule === 'forma') {
     const shapeKeys: Array<keyof typeof SHAPES> = ['circulo', 'quadrado', 'triangulo', 'estrela'];
     for (let i = 0; i < count; i++) {
-      const s = shapeKeys[i % shapeKeys.length];
+      const s = shapeKeys[i % shapeKeys.length]!;
       const cfg = SHAPES[s];
       let shapeSvg = `<circle cx="50" cy="50" r="28" fill="${cfg.color}"/>`;
       if (s === 'quadrado') shapeSvg = `<rect x="24" y="24" width="52" height="52" rx="6" fill="${cfg.color}"/>`;
@@ -89,7 +89,7 @@ export function generateItemsForRule(rule: ClassificationRule, count: number = 1
   } else if (rule === 'tamanho') {
     const sizes: Array<keyof typeof SIZES> = ['grande', 'pequeno'];
     for (let i = 0; i < count; i++) {
-      const sz = sizes[i % sizes.length];
+      const sz = sizes[i % sizes.length]!;
       const isLarge = sz === 'grande';
       const r = isLarge ? 32 : 18;
       items.push({
@@ -118,8 +118,9 @@ export function generateItemsForRule(rule: ClassificationRule, count: number = 1
     };
 
     for (let i = 0; i < count; i++) {
-      const cat = cats[i % cats.length];
-      const subname = names[cat][i % names[cat].length];
+      const cat = cats[i % cats.length]!;
+      const catNames = names[cat];
+      const subname = catNames[i % catNames.length] ?? 'Item';
       items.push({
         id: `item-${cat}-${i}`,
         name: subname,

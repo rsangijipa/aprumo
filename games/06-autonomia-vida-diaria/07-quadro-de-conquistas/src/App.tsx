@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useGameClient } from '@aprumo/game-sdk';
+import { manifest } from './manifest';
 import { TokenService } from './services/tokenService';
 import type {
   BoardState,
@@ -34,9 +36,45 @@ import {
 } from 'lucide-react';
 
 export const App: React.FC = () => {
+  const { client, config, paused: hostPaused, ended } = useGameClient(manifest.appId, manifest.version);
   const tokenService = useMemo(() => new TokenService('inicial'), []);
   const [boardState, setBoardState] = useState<BoardState>(tokenService.getState());
   const [events, setEvents] = useState<TokenEvent[]>(tokenService.getEvents());
+
+  useEffect(() => {
+    client.gameStarted(manifest.version);
+  }, [client]);
+
+  useEffect(() => {
+    client.levelStarted({
+      levelId: boardState.boardId,
+      levelIndex: 0,
+      trialsPlanned: boardState.targetSlots,
+    });
+    client.trialStarted({
+      targetId: boardState.boardId,
+      trialIndex: boardState.currentTokens,
+      presented: [boardState.boardId],
+    });
+    client.stimulusPresented({
+      targetId: boardState.boardId,
+      trialIndex: boardState.currentTokens,
+      presented: [boardState.boardId],
+      positionOfTarget: 0,
+      modality: 'visual',
+    });
+  }, [client, boardState.boardId, boardState.phase, boardState.targetSlots]);
+
+  useEffect(() => {
+    const soundPref = config?.adaptation?.sound;
+    if (soundPref === 'off') {
+      sound.setVolume(0);
+    } else if (soundPref === 'low') {
+      sound.setVolume(0.35);
+    } else {
+      sound.setVolume(1.0);
+    }
+  }, [config]);
 
   // Mode: 'child' vs 'teen'
   const [activeAudience, setActiveAudience] = useState<'child' | 'teen'>('child');
@@ -81,6 +119,20 @@ export const App: React.FC = () => {
           disableForReducedMotion: true,
         });
 
+        client.reinforcerPresented({
+          kind: 'token',
+          reinforcerId: boardState.selectedReinforcer?.id || 'reforcador',
+          contingentOn: 'quadro-cheio',
+          intensity: 'festive',
+        });
+        client.levelCompleted({
+          levelId: boardState.boardId,
+          levelIndex: 0,
+          trialsCompleted: boardState.targetSlots,
+          correct: boardState.targetSlots,
+          outcome: 'completed',
+        });
+
         // Auto-start reinforcement timer after a brief celebratory pause
         const timer = setTimeout(() => {
           tokenService.startReinforcementTimer();
@@ -90,11 +142,25 @@ export const App: React.FC = () => {
       }
     }
     prevTokensRef.current = boardState.currentTokens;
-  }, [boardState.currentTokens, boardState.isCompleted, tokenService]);
+  }, [boardState.currentTokens, boardState.isCompleted, boardState.boardId, boardState.targetSlots, boardState.selectedReinforcer, client, tokenService]);
 
   // Handle Token Delivery
   const handleAwardToken = (source: 'jogo' | 'clinic', description: string) => {
     tokenService.award('comportamento-alvo', description, source, 1);
+    client.responseRecorded({
+      targetId: 'ficha',
+      stimulusId: `ficha-${boardState.currentTokens + 1}`,
+      trialIndex: boardState.currentTokens,
+      presented: ['ficha'],
+      positionOfTarget: boardState.currentTokens,
+      selected: 'ficha',
+      selectedPosition: boardState.currentTokens,
+      response: 'correct',
+      latencyMs: 1000,
+      promptLevel: 'none',
+      promptSource: 'none',
+      detail: { source, description },
+    });
   };
 
   // Handle Reinforcer Selection
@@ -175,6 +241,15 @@ export const App: React.FC = () => {
     setIsLowSensory(!isLowSensory);
   };
 
+  if (ended) {
+    return (
+      <div style={{ display: 'grid', placeItems: 'center', minHeight: '100vh', backgroundColor: '#F8F9FA', color: '#212529', fontFamily: 'system-ui' }}>
+        <h2>Quadro de Conquistas Concluído!</h2>
+        <p>A economia de fichas foi concluída com sucesso!</p>
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
@@ -182,8 +257,14 @@ export const App: React.FC = () => {
         flexDirection: 'column',
         minHeight: '100vh',
         backgroundColor: 'var(--fundo)',
+        position: 'relative',
       }}
     >
+      {hostPaused && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 9999, display: 'grid', placeItems: 'center', color: '#fff', fontFamily: 'system-ui' }}>
+          <h2>Atividade pausada pelo mediador</h2>
+        </div>
+      )}
       {/* Header */}
       <header
         style={{

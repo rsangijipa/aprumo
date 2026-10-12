@@ -59,6 +59,9 @@ export class SortMatterWorld {
     });
 
     Render.run(this.render);
+    if (this.render.canvas) {
+      this.render.canvas.style.touchAction = 'none';
+    }
     this.runner = Runner.create();
     Runner.run(this.runner, this.engine);
 
@@ -251,6 +254,22 @@ export class SortMatterWorld {
   public setSensoryProfile(profile: SensoryProfile) {
     this.sensoryProfile = profile;
     this.engine.gravity.y = profile === 'baixo' ? 0.6 : 0.9;
+  }
+
+  public placeItemIntoBin(item: SortItem, bin: BinDefinition) {
+    const binEntry = this.binBodies.get(bin.id);
+    if (!binEntry) return;
+    const itemEntry = this.itemBodies.get(item.id);
+    if (!itemEntry) return;
+
+    if (!this.debouncedItems.has(item.id)) {
+      this.debouncedItems.add(item.id);
+      const targetX = binEntry.sensor.position.x;
+      const targetY = binEntry.sensor.position.y;
+      Matter.Body.setPosition(itemEntry.body, { x: targetX, y: targetY });
+      Matter.Body.setVelocity(itemEntry.body, { x: 0, y: 1 });
+      this.callbacks.onItemEnterBin(item, bin, 1.0);
+    }
   }
 
   public destroy() {

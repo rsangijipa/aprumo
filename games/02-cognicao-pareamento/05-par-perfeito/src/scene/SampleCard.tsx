@@ -60,10 +60,12 @@ export const SampleCard: React.FC<SampleCardProps> = ({
       style={{
         ...dragTransformStyle,
         backgroundColor: layer === 'foto' ? 'var(--fundo-card)' : 'var(--fundo-card-ilustracao)',
-        pointerEvents: disabled ? 'none' : 'auto'
+        pointerEvents: disabled ? 'none' : 'auto',
+        cursor: disabled ? 'default' : 'grab',
+        touchAction: 'none'
       }}
       onClick={() => {
-        if (isTapModeActive && onTap && !disabled) {
+        if (onTap && !disabled) {
           onTap();
         }
       }}

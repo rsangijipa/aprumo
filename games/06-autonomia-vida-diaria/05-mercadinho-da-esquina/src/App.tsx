@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useGameClient } from '@aprumo/game-sdk';
+import { manifest } from './manifest';
 import type {
   GameModule,
   CurrencyItem,
@@ -34,8 +36,24 @@ import {
 } from 'lucide-react';
 
 export const App: React.FC = () => {
+  const { client, config, paused: hostPaused, ended } = useGameClient(manifest.appId, manifest.version);
   const [activeModule, setActiveModule] = useState<GameModule>('M3');
   const [level, setLevel] = useState<number>(3);
+
+  useEffect(() => {
+    client.gameStarted(manifest.version);
+  }, [client]);
+
+  useEffect(() => {
+    const soundPref = config?.adaptation?.sound;
+    if (soundPref === 'off') {
+      sound.setVolume(0);
+    } else if (soundPref === 'low') {
+      sound.setVolume(0.35);
+    } else {
+      sound.setVolume(1.0);
+    }
+  }, [config]);
 
   // Active Problem state
   const [targetProduct, setTargetProduct] = useState<GroceryProduct>(GROCERY_CATALOG[0]);
@@ -91,7 +109,25 @@ export const App: React.FC = () => {
     const greeting = `Bom dia! Seu total deu ${formatBRL(prob.priceCents)}. Vai querer sacola?`;
     setCashierSpeech(greeting);
     sound.speakCashier(greeting);
-  }, [level]);
+
+    client.levelStarted({
+      levelId: `modulo-${activeModule}-nivel-${level}`,
+      levelIndex: level - 1,
+      trialsPlanned: 5,
+    });
+    client.trialStarted({
+      targetId: prob.product.id,
+      trialIndex: trials.length,
+      presented: [prob.product.id],
+    });
+    client.stimulusPresented({
+      targetId: prob.product.id,
+      trialIndex: trials.length,
+      presented: [prob.product.id],
+      positionOfTarget: 0,
+      modality: 'visual_auditory',
+    });
+  }, [level, client, activeModule, trials.length]);
 
   useEffect(() => {
     initProblem();
@@ -138,6 +174,26 @@ export const App: React.FC = () => {
     const isSuccess = currentStrategy === 'exato' || currentStrategy === 'um-real-a-mais';
     const change = calculateChange(targetPriceCents, totalPaidCents);
 
+    client.responseRecorded({
+      targetId: targetProduct.id,
+      stimulusId: targetProduct.id,
+      trialIndex: trials.length,
+      presented: [targetProduct.id],
+      positionOfTarget: 0,
+      selected: targetProduct.id,
+      selectedPosition: 0,
+      response: isSuccess ? 'correct' : 'incorrect',
+      latencyMs: 2500,
+      promptLevel: 'none',
+      promptSource: 'none',
+      detail: {
+        priceCents: targetPriceCents,
+        paidCents: totalPaidCents,
+        strategy: currentStrategy,
+        change,
+      },
+    });
+
     if (isSuccess) {
       sound.playCashRegister();
       confetti({
@@ -145,6 +201,20 @@ export const App: React.FC = () => {
         spread: 60,
         origin: { y: 0.65 },
         colors: ['#2D6A4F', '#0E8388', '#F4A261'],
+      });
+
+      client.reinforcerPresented({
+        kind: 'visual',
+        reinforcerId: 'pagamento-aprovado',
+        contingentOn: 'compra-sucesso',
+        intensity: 'festive',
+      });
+      client.levelCompleted({
+        levelId: `modulo-${activeModule}-nivel-${level}`,
+        levelIndex: level - 1,
+        trialsCompleted: trials.length + 1,
+        correct: trials.length + 1,
+        outcome: 'completed',
       });
 
       const speech = `Pagamento aprovado! Seu troco é ${formatBRL(change)}. Muito obrigado, volte sempre!`;
@@ -212,6 +282,15 @@ export const App: React.FC = () => {
     setIsMuted(!isMuted);
   };
 
+  if (ended) {
+    return (
+      <div style={{ display: 'grid', placeItems: 'center', minHeight: '100vh', backgroundColor: '#F4F1DE', color: '#2B2D42', fontFamily: 'system-ui' }}>
+        <h2>Mercadinho da Esquina Concluído!</h2>
+        <p>Parabéns por completar as compras e transações com sucesso!</p>
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
@@ -219,8 +298,14 @@ export const App: React.FC = () => {
         flexDirection: 'column',
         minHeight: '100vh',
         backgroundColor: 'var(--fundo)',
+        position: 'relative',
       }}
     >
+      {hostPaused && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 9999, display: 'grid', placeItems: 'center', color: '#fff', fontFamily: 'system-ui' }}>
+          <h2>Atividade pausada pelo mediador</h2>
+        </div>
+      )}
       {/* Header */}
       <header
         style={{

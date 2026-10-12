@@ -112,6 +112,20 @@ export const PhaserHost: React.FC<PhaserHostProps> = ({
         {bins.map((bin) => (
           <div
             key={bin.id}
+            role="button"
+            tabIndex={0}
+            aria-label={`Pote ${bin.label}: toque para guardar o objeto`}
+            onClick={() => {
+              if (currentItem) {
+                worldRef.current?.placeItemIntoBin(currentItem, bin);
+              }
+            }}
+            onKeyDown={(e) => {
+              if ((e.key === 'Enter' || e.key === ' ') && currentItem) {
+                e.preventDefault();
+                worldRef.current?.placeItemIntoBin(currentItem, bin);
+              }
+            }}
             style={{
               width: '210px',
               height: '160px',
@@ -125,7 +139,12 @@ export const PhaserHost: React.FC<PhaserHostProps> = ({
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: '12px',
-              position: 'relative'
+              position: 'relative',
+              pointerEvents: 'auto',
+              cursor: 'pointer',
+              userSelect: 'none',
+              touchAction: 'manipulation',
+              transition: 'transform 0.15s ease, box-shadow 0.15s ease',
             }}
           >
             {/* Pattern sample for daltonismo */}

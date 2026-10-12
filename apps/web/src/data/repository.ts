@@ -18,6 +18,7 @@ import {
   db as demoDb,
   getState,
 } from './store';
+import { ALL_MOCK_APPS } from './seed';
 import {
   isSupabaseConfigured,
   supabase,
@@ -222,7 +223,7 @@ export class SupabaseRepository implements AprumoRepository {
       interests: [],
       restrictions: [],
       tokenTheme: 'estrela',
-      releasedApps: ['encontre-o-igual', 'escolha-pela-instrucao', 'minha-vez-sua-vez'],
+      releasedApps: [...ALL_MOCK_APPS],
       isDemo: row.is_demo ?? false,
     }));
   }
@@ -246,7 +247,7 @@ export class SupabaseRepository implements AprumoRepository {
       interests: [],
       restrictions: [],
       tokenTheme: 'estrela',
-      releasedApps: ['encontre-o-igual', 'escolha-pela-instrucao', 'minha-vez-sua-vez'],
+      releasedApps: [...ALL_MOCK_APPS],
       isDemo: data.is_demo ?? false,
     };
   }

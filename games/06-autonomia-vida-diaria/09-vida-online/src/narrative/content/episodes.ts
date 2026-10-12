@@ -1,4 +1,4 @@
-import { Episode } from '../types';
+import type { Episode } from '../types';
 
 export const EPISODES: Episode[] = [
   /* ------------------------------------------------------------------------

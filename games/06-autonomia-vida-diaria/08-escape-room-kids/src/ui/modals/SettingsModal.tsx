@@ -5,7 +5,16 @@
 
 import React from 'react';
 import { useGameStore } from '../../state/gameStore';
-import { X, Volume2, VolumeX, Eye, Sparkles, RotateCcw, Home, Compass } from 'lucide-react';
+import { X as _X, Volume2 as _V2, VolumeX as _VX, Eye as _Eye, Sparkles as _Sp, RotateCcw as _Rc, Home as _Hm, Compass as _Cp } from 'lucide-react';
+
+const X = _X as any;
+const Volume2 = _V2 as any;
+const VolumeX = _VX as any;
+const Eye = _Eye as any;
+const Sparkles = _Sp as any;
+const RotateCcw = _Rc as any;
+const Home = _Hm as any;
+const Compass = _Cp as any;
 
 interface SettingsModalProps {
   isOpen: boolean;

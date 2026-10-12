@@ -609,7 +609,7 @@ function GameCard({ m }: { m: GameManifest }) {
           {cat.icon} {cat.label}
         </span>
         {c.models.ABA !== 'not-indicated' && <Badge tone="info">ABA</Badge>}
-        {c.models.DENVER !== 'not-indicated' && <Badge tone="accent">Denver</Badge>}
+        {c.models.DENVER !== 'not-indicated' && <Badge tone="success">Denver</Badge>}
       </div>
       <p className="ap-small ap-muted" style={{ margin: 0 }}>{m.summary}</p>
       <div className="ap-row" style={{ gap: '0.35rem', flexWrap: 'wrap' }}>

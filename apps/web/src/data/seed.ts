@@ -81,7 +81,7 @@ export const children: Child[] = [
   { id: 'ch-nina', preferredName: 'Nina', fullName: 'Nina (fictícia)', birthDate: yearsAgo(1, 8), hue: 336, accessCode: 'NINA-2260' },
 ];
 
-const ALL_MOCK_APPS = [
+export const ALL_MOCK_APPS = [
   'encontre-o-igual',
   'escolha-pela-instrucao',
   'minha-vez-sua-vez',
@@ -97,9 +97,29 @@ const ALL_MOCK_APPS = [
   'circuito-executivo',
   'minimundos',
   'social-city',
+  'bolhas-magicas',
+  'tambor-da-imitacao',
+  'siga-o-mestre',
+  'danca-do-congelar',
+  'encaixa-ai',
+  'rampa-maluca',
+  'lanche-do-urso',
+  'fazendinha-sonora',
+  'leitura-de-cena',
+  'par-perfeito',
+  'cada-um-no-seu-pote',
+  'mutirao-do-parque',
+  'banda-do-tico',
+  'torre-derruba',
+  'mercadinho-da-esquina',
+  'passo-a-passo',
+  'quadro-de-conquistas',
+  'escape-room-kids',
+  'vida-online',
   'prancha',
   'calma',
 ];
+
 
 export const cases: CaseRecord[] = [
   {

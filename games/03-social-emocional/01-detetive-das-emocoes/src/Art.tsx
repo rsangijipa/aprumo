@@ -242,3 +242,11 @@ export function ClueIcon({ type }: { type: 'face' | 'context' | 'speech' | 'beli
     </svg>
   );
 }
+
+export function CaseAvatar({ characterId }: { characterId: string }) {
+  return (
+    <div className="det-case-avatar" aria-hidden="true" style={{ width: 100, height: 100 }}>
+      <Face emotion="feliz" label={characterId} />
+    </div>
+  );
+}

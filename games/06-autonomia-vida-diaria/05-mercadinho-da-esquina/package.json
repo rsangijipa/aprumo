@@ -11,6 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aprumo/game-sdk": "workspace:*",
+    "@aprumo/protocol": "workspace:*",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/utilities": "^3.2.2",
     "canvas-confetti": "^1.9.4",

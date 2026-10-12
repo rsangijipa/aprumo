@@ -19,7 +19,7 @@ export const ComparisonCard: React.FC<ComparisonCardProps> = ({
   promptIntensity,
   isPosPromptActive,
   onTapCard,
-  isTapModeActive
+  isTapModeActive: _isTapModeActive = false
 }) => {
   const { setNodeRef, isOver } = useDroppable({
     id: `comparison-slot-${slot.slotIndex}`,
@@ -49,12 +49,13 @@ export const ComparisonCard: React.FC<ComparisonCardProps> = ({
       style={{
         opacity,
         backgroundColor: layer === 'foto' ? 'var(--fundo-card)' : 'var(--fundo-card-ilustracao)',
-        cursor: isTapModeActive ? 'pointer' : 'default',
+        cursor: 'pointer',
+        touchAction: 'manipulation',
         '--pulse-scale': pulseScale,
         ...posStyle
       } as React.CSSProperties}
       onClick={() => {
-        if (isTapModeActive && onTapCard) {
+        if (onTapCard) {
           onTapCard(slot);
         }
       }}

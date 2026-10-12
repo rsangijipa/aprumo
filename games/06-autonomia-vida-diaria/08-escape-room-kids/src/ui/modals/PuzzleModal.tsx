@@ -6,7 +6,13 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../../state/gameStore';
 import { soundManager } from '../../audio/soundManager';
-import { X, CheckCircle, RotateCw, Volume2, ArrowUpDown } from 'lucide-react';
+import { X as _X, CheckCircle as _CC, RotateCw as _RC, Volume2 as _V2, ArrowUpDown as _AUD } from 'lucide-react';
+
+const X = _X as any;
+const CheckCircle = _CC as any;
+const RotateCw = _RC as any;
+const Volume2 = _V2 as any;
+const ArrowUpDown = _AUD as any;
 
 export const PuzzleModal: React.FC = () => {
   const {
@@ -104,7 +110,7 @@ const SymbolLockGame: React.FC<{ onSolve: () => void }> = ({ onSolve }) => {
   const rotate = (index: number) => {
     soundManager.playGearClick();
     const updated = [...dials];
-    updated[index] = (updated[index] + 1) % symbols.length;
+    updated[index] = ((updated[index] ?? 0) + 1) % symbols.length;
     setDials(updated);
 
     // Target solution: Martelo (0), Engrenagem (1), Chave (2)
@@ -297,18 +303,18 @@ const BookOrderGame: React.FC<{ onSolve: () => void }> = ({ onSolve }) => {
       setSelectedIdx(idx);
     } else {
       const updated = [...books];
-      const temp = updated[selectedIdx];
-      updated[selectedIdx] = updated[idx];
+      const temp = updated[selectedIdx]!;
+      updated[selectedIdx] = updated[idx]!;
       updated[idx] = temp;
       setBooks(updated);
       setSelectedIdx(null);
 
       // Target order: b1, b2, b3, b4
       if (
-        updated[0].id === 'b1' &&
-        updated[1].id === 'b2' &&
-        updated[2].id === 'b3' &&
-        updated[3].id === 'b4'
+        updated[0]?.id === 'b1' &&
+        updated[1]?.id === 'b2' &&
+        updated[2]?.id === 'b3' &&
+        updated[3]?.id === 'b4'
       ) {
         setTimeout(onSolve, 600);
       }
@@ -316,10 +322,10 @@ const BookOrderGame: React.FC<{ onSolve: () => void }> = ({ onSolve }) => {
   };
 
   const isSolved =
-    books[0].id === 'b1' &&
-    books[1].id === 'b2' &&
-    books[2].id === 'b3' &&
-    books[3].id === 'b4';
+    books[0]?.id === 'b1' &&
+    books[1]?.id === 'b2' &&
+    books[2]?.id === 'b3' &&
+    books[3]?.id === 'b4';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', width: '100%' }}>
@@ -566,7 +572,7 @@ const WaterCircuitGame: React.FC<{ onSolve: () => void }> = ({ onSolve }) => {
   const rotate = (idx: number) => {
     soundManager.playGearClick();
     const updated = [...valves];
-    updated[idx] = (updated[idx] + 90) % 360;
+    updated[idx] = ((updated[idx] ?? 0) + 90) % 360;
     setValves(updated);
 
     // Target alignment: 0 (horizontal), 0 (horizontal), 0, 0

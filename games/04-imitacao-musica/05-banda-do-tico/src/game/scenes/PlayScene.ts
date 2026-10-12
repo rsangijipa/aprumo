@@ -106,6 +106,12 @@ export default class PlayScene extends Phaser.Scene {
 
     // Hook up mode initial state
     this.initCurrentMode();
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('banda:started', {
+        detail: { mode: this.currentModeId, stage: this.stageDef.name }
+      }));
+    }
   }
 
   // ==========================================
@@ -738,6 +744,17 @@ export default class PlayScene extends Phaser.Scene {
         }
       }
     }
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('banda:hit', {
+        detail: {
+          instrumentId: id,
+          judgement: result.judgement,
+          combo: result.comboAfter,
+          latencyMs: Math.round(Math.abs(result.deltaMs)),
+        }
+      }));
+    }
   }
 
   private finishTurnRound(): void {
@@ -746,6 +763,15 @@ export default class PlayScene extends Phaser.Scene {
     this.setTurnMessage('🌟 Sensacional! Você acertou toda a frase!', 0x63a675);
     soundSynth.playUIStar();
     this.characters.forEach((c) => c.celebrate());
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('banda:round-complete', {
+        detail: {
+          mode: this.currentModeId,
+          notesCount: this.callNotesPlayed.length,
+        }
+      }));
+    }
 
     this.time.delayedCall(2200, () => {
       if (this.currentModeId === 'faz_igual') {

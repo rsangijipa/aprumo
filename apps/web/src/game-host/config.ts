@@ -41,7 +41,12 @@ export function buildPracticeConfig(c: CaseRecord, appId: string, trialsPerTarge
     appVersion: manifest.version,
     childDisplayName: child.preferredName,
     clinical: { model: 'ABA', targets: appId === 'minha-vez-sua-vez' ? targets.slice(0, 1) : targets, trialsPerTarget: appId === 'minha-vez-sua-vez' ? 5 : trialsPerTarget, interleave: true, seed: Math.floor(Math.random() * 2 ** 31) },
-    adaptation: { ...DEFAULT_ADAPTATION, ...c.adaptation, screenBudgetSec: db.screenPolicy(child.birthDate).maxBlockMinutes * 60 },
+    adaptation: {
+      ...DEFAULT_ADAPTATION, ...c.adaptation,
+      // O botão Som do Espaço Infantil prevalece sobre os sons dos jogos no treino livre.
+      sound: getState().childSpaces.find((s) => s.childId === c.childId)?.sound === false ? 'off' : c.adaptation.sound,
+      screenBudgetSec: db.screenPolicy(child.birthDate).maxBlockMinutes * 60,
+    },
     params: { practice: true },
   };
 }

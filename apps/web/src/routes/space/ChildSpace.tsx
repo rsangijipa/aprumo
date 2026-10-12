@@ -25,6 +25,7 @@ import {
 } from '../../data/store';
 import type { ChildTheme } from '../../data/types';
 import { GAMES } from '../../game-host/registry';
+import { isGameAgeAppropriate } from '../../game-host/narration';
 import { GameIllustration } from '../../components/GameIllustration';
 import {
   ArtListener,
@@ -161,9 +162,13 @@ export default function ChildSpace() {
   const used = screenMinutesToday(st, c.id);
   const limitReached = used >= policy.dailyLimitMinutes;
   const released = c.releasedApps;
-  // Para um primeiro momento, todos os games do catálogo ficam disponíveis para a criança e adolescentes nos dados mock
-  const allGameKeys = Object.keys(GAMES);
-  const games = Array.from(new Set([...allGameKeys, ...released.filter((a) => GAMES[a])]));
+  // Somente jogos liberados pelo profissional E adequados à idade real da criança.
+  // A escolha da aparência infantil/adolescente não altera os critérios de elegibilidade.
+  const games = released.filter((a) => {
+    const game = GAMES[a];
+    if (!game) return false;
+    return isGameAgeAppropriate(months, game.manifest.clinical.ageRangeMonths);
+  });
   const stars = totalStars(space);
   const T = TEXT[ageMode];
 

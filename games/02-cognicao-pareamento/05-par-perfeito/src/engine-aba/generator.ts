@@ -36,7 +36,9 @@ export class BalancedPositionGenerator {
     // Fisher-Yates shuffle
     for (let i = items.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [items[i], items[j]] = [items[j], items[i]];
+      const temp = items[i]!;
+      items[i] = items[j]!;
+      items[j] = temp;
     }
     this.pool.push(...items);
   }
@@ -92,7 +94,7 @@ export class BalancedPositionGenerator {
       }
     }
 
-    const chosen = this.pool.splice(chosenIndex >= 0 ? chosenIndex : 0, 1)[0];
+    const chosen = this.pool.splice(chosenIndex >= 0 ? chosenIndex : 0, 1)[0] ?? 0;
     this.secondLastPosition = this.lastPosition;
     this.lastPosition = chosen;
 
@@ -137,7 +139,7 @@ export class TrialGenerator {
 
     const unplayed = available.filter(t => !this.recentTargetIds.includes(t.id));
     const pool = unplayed.length > 0 ? unplayed : available;
-    const selected = pool[Math.floor(Math.random() * pool.length)];
+    const selected = pool[Math.floor(Math.random() * pool.length)] ?? TARGET_ITEMS[0]!;
 
     this.recentTargetIds.push(selected.id);
     if (this.recentTargetIds.length > 8) {
@@ -252,7 +254,7 @@ export class TrialGenerator {
           layer: comparisonLayer
         });
       } else {
-        const distractor = distractors[distractorIdx++];
+        const distractor = distractors[distractorIdx++] ?? target;
         comparisonSlots.push({
           slotIndex: i,
           target: distractor,

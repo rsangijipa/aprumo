@@ -31,6 +31,81 @@ const PLAIN_PHASE: Record<string, { label: string; tone: string; desc: string }>
   suspended: { label: 'Pausa temporária', tone: 'neutral', desc: 'Objetivo temporariamente em pausa pela equipe' },
 };
 
+const FAMILY_TIPS: Record<string, { tip: string; skill: string }> = {
+  'lanche-do-urso': {
+    tip: 'Brinque de oferecer comidinhas e água para o urso. Imitem juntos "hummm!" e dê um abraço carinhoso no brinquedo.',
+    skill: 'Brincar simbólico e afeto',
+  },
+  'rampa-maluca': {
+    tip: 'Diga "Preparar… apontar…" e faça uma pausa sorridente. Espere qualquer olhar, som ou gesto antes de soltar o carro comemorando.',
+    skill: 'Iniciativa de comunicação e turnos',
+  },
+  'fazendinha-sonora': {
+    tip: 'Brinque de adivinhar o bichinho antes de abrir a aba. Façam os sons dos animais juntos com expressões alegres.',
+    skill: 'Atenção compartilhada e sons da fala',
+  },
+  'bolhas-magicas': {
+    tip: 'Aponte para a bolha e celebre quando estourar dizendo "pop!" ou "estourou!". Deixe a criança liderar o ritmo.',
+    skill: 'Coordenação óculo-manual e vocabulário',
+  },
+  'encontre-o-igual': {
+    tip: 'Após a partida, procurem pares iguais na vida real (duas meias iguais, duas colheres iguais ou sapatos).',
+    skill: 'Pareamento visual e foco atencional',
+  },
+  'encaixa-ai': {
+    tip: 'Incentive a rotação e experimentação das peças com calma. Evite fazer por ela: apoie suavemente se ela pedir ajuda.',
+    skill: 'Coordenação motora e raciocínio espacial',
+  },
+  'detetive-das-emocoes': {
+    tip: 'Conversem sobre as carinhas dos personagens. Lembrem de momentos do dia: "Quando você comeu aquele bolo, ficou feliz assim!".',
+    skill: 'Reconhecimento de emoções e diálogo',
+  },
+  'banda-do-tico': {
+    tip: 'Batam palmas ou usem colheres de pau como baquetas para tocar no mesmo ritmo da música alegre.',
+    skill: 'Ritmo, imitação musical e coordenação',
+  },
+  'torre-derruba': {
+    tip: 'Empilhem bloquinhos ou almofadas e celebrem a hora de derrubar com "boom!". Isso ensina causa e efeito com diversão.',
+    skill: 'Causa e efeito e alegria compartilhada',
+  },
+  'mercadinho-da-esquina': {
+    tip: 'Na hora do lanche ou compras reais, peçam para a criança escolher ou pegar o item pelo nome e colocar na cestinha.',
+    skill: 'Autonomia e vida cotidiana',
+  },
+  'minha-vez-sua-vez': {
+    tip: 'Pratiquem a alternância dizendo com calma: "Agora é a minha vez… agora é a sua vez!". Elogie a paciência de esperar.',
+    skill: 'Espera de turnos e cooperação social',
+  },
+  'organize-categoria': {
+    tip: 'Na hora de arrumar os brinquedos, brinquem de separar carrinhos em uma caixa e bichinhos em outra.',
+    skill: 'Classificação e organização mental',
+  },
+  'memoria-bichos': {
+    tip: 'Virem cartas devagar e façam o som do animal que apareceu. Comemorem cada par encontrado.',
+    skill: 'Memória visual e concentração',
+  },
+  'espelho-magico': {
+    tip: 'Fiquem em frente a um espelho real e imitem caretas, piscadas ou palminhas juntos.',
+    skill: 'Imitação motora e consciência corporal',
+  },
+  'pequeno-chef': {
+    tip: 'Convide a criança para lavar uma fruta ou mexer uma massa leve na cozinha real, seguindo uma ordem simples.',
+    skill: 'Sequência de passos e coordenação prática',
+  },
+  'historia-ordem': {
+    tip: 'Contem uma historinha de 3 partes: "Acordou, escovou o dente, foi brincar". Peça para lembrar o que veio antes.',
+    skill: 'Noção de tempo e narrativa',
+  },
+  'escape-room-kids': {
+    tip: 'Brinque de caça ao tesouro em casa seguindo 2 pistas fáceis escondidas na sala.',
+    skill: 'Resolução de problemas e cooperação',
+  },
+  'vida-online': {
+    tip: 'Converse abertamente sobre o tempo saudável de tela e combinem juntos a hora da pausa.',
+    skill: 'Cidadania digital e autocontrole',
+  },
+};
+
 export default function FamilyPortal() {
   const guardian = db.guardians.find((g) => g.id === GUARDIAN_ID)!;
   const child = db.children.find((c) => c.id === guardian.childId)!;
@@ -50,9 +125,10 @@ export default function FamilyPortal() {
     .map((g) => st.children.find((x) => x.id === g.childId))
     .filter((x): x is Child => !!x);
 
-  const [activeTab, setActiveTab] = useState<'inicio' | 'aprendendo' | 'casa' | 'orient' | 'docs'>('inicio');
+  const [activeTab, setActiveTab] = useState<'inicio' | 'aprendendo' | 'casa' | 'jogos' | 'orient' | 'docs'>('inicio');
+  const [gameCategoryFilter, setGameCategoryFilter] = useState<GameCategoryId>('todos');
 
-  const scrollTo = (id: string, tab: 'inicio' | 'aprendendo' | 'casa' | 'orient' | 'docs') => {
+  const scrollTo = (id: string, tab: 'inicio' | 'aprendendo' | 'casa' | 'jogos' | 'orient' | 'docs') => {
     setActiveTab(tab);
     const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     document.getElementById(id)?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
@@ -116,6 +192,129 @@ export default function FamilyPortal() {
             ) : (
               tasks.map((t) => <HomeTaskCard key={t.id} task={t} guardianId={guardian.id} />)
             )}
+          </div>
+        </section>
+
+        {/* Seção de Jogos e Atividades Recomendadas com Ilustrações e Dicas */}
+        <section className="fam-section" id="jogos" aria-labelledby="jogos-title">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div>
+              <h2 id="jogos-title" style={{ margin: 0 }}>Jogos & Atividades Terapêuticas</h2>
+              <p className="fam-hint" style={{ margin: '0.25rem 0 0' }}>
+                Atividades com ilustrações dedicadas, objetivos clínicos e orientações para praticar com {child.preferredName} em casa.
+              </p>
+            </div>
+          </div>
+
+          {/* Filtro de Categorias */}
+          <div
+            role="tablist"
+            aria-label="Filtrar atividades por categoria de desenvolvimento"
+            style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}
+          >
+            <button
+              type="button"
+              role="tab"
+              aria-selected={gameCategoryFilter === 'todos'}
+              className="ap-btn ap-btn--sm"
+              style={{
+                borderRadius: '999px',
+                background: gameCategoryFilter === 'todos' ? 'var(--ap-primary)' : 'var(--ap-surface)',
+                color: gameCategoryFilter === 'todos' ? '#fff' : 'var(--ap-text)',
+                borderColor: 'var(--ap-border)',
+                minHeight: '34px',
+              }}
+              onClick={() => setGameCategoryFilter('todos')}
+            >
+              Todas ({Object.keys(GAMES).length})
+            </button>
+            {Object.values(GAME_CATEGORIES).map((cat) => {
+              const count = Object.values(GAMES).filter((g) => GAME_TO_CATEGORY[g.manifest.appId] === cat.id).length;
+              const isSelected = gameCategoryFilter === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isSelected}
+                  className="ap-btn ap-btn--sm"
+                  style={{
+                    borderRadius: '999px',
+                    background: isSelected ? 'var(--ap-primary)' : 'var(--ap-surface)',
+                    color: isSelected ? '#fff' : 'var(--ap-text)',
+                    borderColor: 'var(--ap-border)',
+                    minHeight: '34px',
+                    gap: '0.25rem',
+                  }}
+                  onClick={() => setGameCategoryFilter(cat.id)}
+                >
+                  <span aria-hidden="true">{cat.icon}</span>
+                  <span>{cat.label}</span>
+                  <span style={{ opacity: 0.8, fontSize: '0.75rem' }}>({count})</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Grid de Atividades com Capa */}
+          <div className="fam-game-grid">
+            {Object.values(GAMES)
+              .filter((g) => {
+                const catId = GAME_TO_CATEGORY[g.manifest.appId] ?? 'cognicao-pareamento';
+                return gameCategoryFilter === 'todos' || catId === gameCategoryFilter;
+              })
+              .map((g) => {
+                const m = g.manifest;
+                const cat = getCategoryOfGame(m.appId);
+                const tipData = FAMILY_TIPS[m.appId];
+                return (
+                  <article key={m.appId} className="fam-game-card">
+                    <div className="fam-game-card__art" aria-hidden="true">
+                      <GameIllustration appId={m.appId} name={m.name} interactive />
+                    </div>
+                    <div className="fam-game-card__body">
+                      <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <span
+                          className="ap-badge"
+                          style={{
+                            background: `${cat.color}15`,
+                            color: cat.color,
+                            borderColor: `${cat.color}35`,
+                            fontWeight: 600,
+                            fontSize: '0.72rem',
+                          }}
+                        >
+                          {cat.icon} {cat.label}
+                        </span>
+                        {tipData && (
+                          <span className="ap-badge ap-badge--info" style={{ fontSize: '0.72rem' }}>
+                            {tipData.skill}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="fam-game-card__title">{m.name}</h3>
+                      <p className="fam-game-card__desc">{m.summary}</p>
+                      {tipData && (
+                        <div className="fam-game-card__tip">
+                          <strong>💡 Como apoiar em casa:</strong>
+                          <p style={{ margin: '0.25rem 0 0', lineHeight: 1.45 }}>{tipData.tip}</p>
+                        </div>
+                      )}
+                      <div style={{ marginTop: 'auto', paddingTop: '0.75rem' }}>
+                        <Link
+                          to={`/espaco/${child.id}`}
+                          state={{ returnTo: '/familia' }}
+                          className="ap-btn ap-btn--sm ap-btn--secondary"
+                          style={{ width: '100%', justifyContent: 'center' }}
+                          aria-label={`Abrir ${m.name} no espaço de ${child.preferredName}`}
+                        >
+                          Jogar com {child.preferredName}
+                        </Link>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
           </div>
         </section>
 
@@ -191,6 +390,17 @@ export default function FamilyPortal() {
         >
           <IconHeart />
           <span>Em Casa</span>
+        </button>
+        <button
+          type="button"
+          className="fam-tabbar-item"
+          aria-current={activeTab === 'jogos' ? 'page' : undefined}
+          onClick={() => scrollTo('jogos', 'jogos')}
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+            <path d="M21.58 14.07l-2.02-6.06A4.5 4.5 0 0 0 15.3 5H8.7a4.5 4.5 0 0 0-4.26 3.01L2.42 14.07a3.5 3.5 0 0 0 2.22 4.41c1.28.43 2.67-.08 3.36-1.18L9.5 15h5l1.5 2.3c.69 1.1 2.08 1.61 3.36 1.18a3.5 3.5 0 0 0 2.22-4.41zM11 11H9v2H8v-2H6v-1h2V8h1v2h2v1zm4.5 2a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm2-2a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+          </svg>
+          <span>Jogos</span>
         </button>
         <button
           type="button"

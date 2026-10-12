@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useGameClient } from '@aprumo/game-sdk';
+import { manifest } from './manifest';
 import type { Routine, SequenceVariant, AbaSequenceTrial, TaskAnalysisRecord } from './types/routine';
 import { DEFAULT_ROUTINES } from './data/defaultRoutines';
 import { sound } from './utils/sound';
@@ -20,6 +22,7 @@ import {
 } from 'lucide-react';
 
 export const App: React.FC = () => {
+  const { client, config, paused: hostPaused, ended } = useGameClient(manifest.appId, manifest.version);
   const [routines, setRoutines] = useState<Routine[]>(DEFAULT_ROUTINES);
   const [activeRoutineId, setActiveRoutineId] = useState<string>(DEFAULT_ROUTINES[0].id);
   const [activeMode, setActiveMode] = useState<'jogo' | 'roteiro' | 'metricas'>('jogo');
@@ -38,12 +41,96 @@ export const App: React.FC = () => {
 
   const activeRoutine = routines.find((r) => r.id === activeRoutineId) || routines[0];
 
+  useEffect(() => {
+    client.gameStarted(manifest.version);
+    client.levelStarted({
+      levelId: activeRoutine.id,
+      levelIndex: 0,
+      trialsPlanned: activeRoutine.steps.length,
+    });
+    client.trialStarted({
+      targetId: activeRoutine.steps[0]?.stepId || 'inicio',
+      trialIndex: 0,
+      presented: activeRoutine.steps.map((s) => s.stepId),
+    });
+    client.stimulusPresented({
+      targetId: activeRoutine.steps[0]?.stepId || 'inicio',
+      trialIndex: 0,
+      presented: activeRoutine.steps.map((s) => s.stepId),
+      positionOfTarget: 0,
+      modality: 'visual_auditory',
+    });
+  }, [client, activeRoutine]);
+
+  useEffect(() => {
+    const soundPref = config?.adaptation?.sound;
+    if (soundPref === 'off') {
+      sound.setVolume(0);
+    } else if (soundPref === 'low') {
+      sound.setVolume(0.35);
+    } else {
+      sound.setVolume(1.0);
+    }
+  }, [config]);
+
   const handleEmitTrial = (trial: AbaSequenceTrial) => {
     setTrials((prev) => [...prev, trial]);
+    client.responseRecorded({
+      targetId: trial.cardId,
+      stimulusId: trial.cardId,
+      trialIndex: trials.length,
+      presented: [trial.cardId],
+      positionOfTarget: trial.slotIndex,
+      selected: trial.cardId,
+      selectedPosition: trial.slotIndex,
+      response: trial.isCorrect ? 'correct' : 'incorrect',
+      latencyMs: 1500,
+      promptLevel: 'none',
+      promptSource: 'none',
+      detail: {
+        routineId: trial.routineId,
+        variant: trial.variant,
+        slotIndex: trial.slotIndex,
+        sequenceLength: trial.sequenceLength,
+      },
+    });
+
+    if (trial.isCorrect) {
+      client.reinforcerPresented({
+        kind: 'visual',
+        reinforcerId: 'passo-acertado',
+        contingentOn: 'ordenacao-correta',
+        intensity: 'subtle',
+      });
+      client.levelCompleted({
+        levelId: trial.routineId,
+        levelIndex: 0,
+        trialsCompleted: trials.length + 1,
+        correct: trials.length + 1,
+        outcome: 'completed',
+      });
+    }
   };
 
   const handleRecordStep = (record: TaskAnalysisRecord) => {
     setRecords((prev) => [...prev, record]);
+    client.responseRecorded({
+      targetId: record.stepId,
+      stimulusId: record.stepId,
+      trialIndex: records.length,
+      presented: [record.stepId],
+      positionOfTarget: record.stepOrder - 1,
+      selected: record.stepId,
+      selectedPosition: record.stepOrder - 1,
+      response: record.promptLevel === 'IND' ? 'correct' : 'incorrect',
+      latencyMs: record.durationMs,
+      promptLevel: record.promptLevel,
+      promptSource: 'therapist',
+      detail: {
+        setting: record.setting,
+        stepOrder: record.stepOrder,
+      },
+    });
   };
 
   const handleSaveNewRoutine = (newRoutine: Routine) => {
@@ -56,6 +143,15 @@ export const App: React.FC = () => {
     setIsMuted(!isMuted);
   };
 
+  if (ended) {
+    return (
+      <div style={{ display: 'grid', placeItems: 'center', minHeight: '100vh', backgroundColor: '#F8F9FA', color: '#212529', fontFamily: 'system-ui' }}>
+        <h2>Passo a Passo Concluído!</h2>
+        <p>A análise de tarefas e sequenciamento da rotina foram finalizados com êxito.</p>
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
@@ -63,8 +159,14 @@ export const App: React.FC = () => {
         flexDirection: 'column',
         minHeight: '100vh',
         backgroundColor: 'var(--fundo)',
+        position: 'relative',
       }}
     >
+      {hostPaused && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 9999, display: 'grid', placeItems: 'center', color: '#fff', fontFamily: 'system-ui' }}>
+          <h2>Atividade pausada pelo mediador</h2>
+        </div>
+      )}
       {/* Header */}
       <header
         style={{

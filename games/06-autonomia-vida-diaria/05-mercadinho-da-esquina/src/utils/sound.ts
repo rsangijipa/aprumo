@@ -5,6 +5,12 @@
 class SoundManager {
   private ctx: AudioContext | null = null;
   public isMuted: boolean = false;
+  public volumeMultiplier: number = 1;
+
+  public setVolume(vol: number) {
+    this.volumeMultiplier = Math.max(0, Math.min(1, vol));
+    this.isMuted = this.volumeMultiplier <= 0;
+  }
 
   private initCtx() {
     if (typeof window === 'undefined') return null;
@@ -39,7 +45,7 @@ class SoundManager {
       osc.frequency.setValueAtTime(2093, now + 0.08); // C7
 
       gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(0.22, now + 0.01);
+      gain.gain.linearRampToValueAtTime(0.22 * this.volumeMultiplier, now + 0.01);
       gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
 
       osc.connect(gain);
@@ -70,7 +76,7 @@ class SoundManager {
       osc.frequency.exponentialRampToValueAtTime(1400, now + 0.05);
 
       gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(0.15, now + 0.005);
+      gain.gain.linearRampToValueAtTime(0.15 * this.volumeMultiplier, now + 0.005);
       gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
 
       osc.connect(gain);

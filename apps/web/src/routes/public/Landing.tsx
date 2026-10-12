@@ -10,6 +10,7 @@ import {
   IconTarget,
 } from '@aprumo/ui';
 import { CtaBand, PublicFooter, PublicHeader } from './PublicNav';
+import { GameIllustration } from '../../components/GameIllustration';
 import './landing.css';
 
 interface ExploreItem {
@@ -59,6 +60,51 @@ const VALUE_POINTS = [
   { title: 'Independente não é o mesmo que com dica', text: 'A separação aparece em toda contagem, gráfico e relatório.' },
   { title: 'O sistema sugere, o profissional decide', text: 'Alertas com evidência numérica; nenhuma mudança de fase é automática.' },
   { title: 'ABA ou Denver, nunca misturados', text: 'Cada caso segue a lógica de um único modelo, garantida no banco de dados.' },
+];
+
+const FEATURED_GAMES = [
+  {
+    id: 'bolhas-magicas',
+    name: 'Bolhas Mágicas',
+    category: 'Comunicação',
+    model: 'Denver / Apoio',
+    summary: 'Estouro de bolhas sonoras responsivas e vocábulos com feedback suave.',
+  },
+  {
+    id: 'encontre-o-igual',
+    name: 'Encontre o Igual',
+    category: 'Cognição',
+    model: 'ABA / Tentativas',
+    summary: 'Pareamento visual idêntico com estímulos balanceados e dicas graduadas.',
+  },
+  {
+    id: 'detetive-das-emocoes',
+    name: 'Detetive das Emoções',
+    category: 'Social & Emoções',
+    model: 'Cognição Social',
+    summary: 'Identificação de expressões faciais e pistas sociais com cenários ilustrados.',
+  },
+  {
+    id: 'banda-do-tico',
+    name: 'Banda do Tico',
+    category: 'Imitação & Música',
+    model: 'Ritmo & Resposta',
+    summary: 'Ritmo musical interativo e controle inibitório com personagens carismáticos.',
+  },
+  {
+    id: 'rampa-maluca',
+    name: 'Rampa Maluca',
+    category: 'Rotinas & Brincar',
+    model: 'Denver / Rotina',
+    summary: 'Pausa estruturada de espera de comunicação antes de liberar o carrinho.',
+  },
+  {
+    id: 'mercadinho-da-esquina',
+    name: 'Mercadinho da Esquina',
+    category: 'Autonomia & AVDs',
+    model: 'Vida Real',
+    summary: 'Lista de compras, identificação de produtos e troca de moedas com autonomia.',
+  },
 ];
 
 export function Landing() {
@@ -148,8 +194,51 @@ export function Landing() {
           </div>
         </section>
 
+        {/* ------------------------------------------------------------ vitrine de games */}
+        <section className="lp-section lp-section--sunken" aria-labelledby="vitrine-games">
+          <div className="lp-wrap">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
+              <div>
+                <span className="ap-eyebrow">Jogos Clínicos</span>
+                <h2 id="vitrine-games" className="lp-h2 ap-display" style={{ margin: '0.25rem 0 0' }}>
+                  34 Jogos Terapêuticos Padronizados
+                </h2>
+                <p className="lp-sub" style={{ margin: '0.5rem 0 0', maxWidth: '42rem' }}>
+                  Categorizados em 6 domínios de desenvolvimento com ilustrações exclusivas, acessibilidade sensorial e conformidade aos protocolos ABA e Denver.
+                </p>
+              </div>
+              <Link to="/games" className="ap-btn ap-btn--secondary">
+                Ver catálogo completo (34 jogos) <IconArrowRight />
+              </Link>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '1.25rem' }}>
+              {FEATURED_GAMES.map((g) => (
+                <div key={g.id} className="ap-game-card">
+                  <div className="ap-game-card__art" aria-hidden="true">
+                    <GameIllustration appId={g.id} name={g.name} interactive />
+                  </div>
+                  <div className="ap-game-card__body">
+                    <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                      <span className="ap-badge">{g.category}</span>
+                      <span className="ap-badge ap-badge--info">{g.model}</span>
+                    </div>
+                    <h3 className="ap-game-card__title" style={{ marginTop: '0.25rem' }}>{g.name}</h3>
+                    <p className="ap-game-card__summary">{g.summary}</p>
+                    <div className="ap-game-card__actions" style={{ marginTop: 'auto', paddingTop: '0.5rem' }}>
+                      <Link to="/demonstracao" className="ap-btn ap-btn--sm ap-btn--secondary" style={{ width: '100%', justifyContent: 'center' }}>
+                        Experimentar jogo
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ------------------------------------------------------------ confiança */}
-        <section className="lp-section lp-section--sunken lp-section--tight" aria-labelledby="confianca">
+        <section className="lp-section lp-section--tight" aria-labelledby="confianca">
           <div className="lp-wrap">
             <h2 id="confianca" className="lp-explore__title">Compromissos de projeto</h2>
             <ul className="lp-trustbar">

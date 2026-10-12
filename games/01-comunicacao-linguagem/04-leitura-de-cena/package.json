@@ -11,6 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aprumo/game-sdk": "workspace:*",
+    "@aprumo/protocol": "workspace:*",
     "canvas-confetti": "^1.9.4",
     "lucide-react": "^1.52.0",
     "react": "^19.2.8",

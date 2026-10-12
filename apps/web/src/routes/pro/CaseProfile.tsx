@@ -8,6 +8,7 @@ import type { Adaptation } from '@aprumo/protocol';
 import { LEGACY_TOKEN_THEMES, TOKEN_THEMES, TokenArt, type TokenTheme } from '@aprumo/resource-quadro-de-fichas';
 import { Badge, Button, Card, IconCheck, IconX, Segmented, Stepper, Toast } from '@aprumo/ui';
 import { actions, db, formatAge, useStore } from '../../data/store';
+import { GAMES } from '../../game-host/registry';
 import type { CaseRole, PrerequisiteSkill } from '../../data/types';
 import './forms.css';
 
@@ -190,16 +191,11 @@ function AddMember({ caseId, onDone }: { caseId: string; onDone: (m: string) => 
 }
 
 const SPACE_ITEMS: Array<{ id: string; label: string; hint: string }> = [
-  { id: 'encontre-o-igual', label: 'Match Lab', hint: 'jogo de pareamento' },
-  { id: 'escolha-pela-instrucao', label: 'Missão Instrução', hint: 'jogo de ouvinte' },
-  { id: 'olha-comigo', label: 'Olha Comigo', hint: 'jogo de atenção compartilhada' },
-  { id: 'minha-vez-sua-vez', label: 'Minha Vez, Sua Vez', hint: 'jogo de turnos' },
-  { id: 'detetive-das-emocoes', label: 'Detetive das Emoções', hint: 'reconhecimento de pistas emocionais e contexto' },
-  { id: 'circuito-executivo', label: 'Circuito Executivo', hint: 'controle inibitório e flexibilidade cognitiva' },
-  { id: 'minimundos', label: 'MiniMundos', hint: 'brincar funcional e simbólico exploratório' },
-  { id: 'pequeno-chef', label: 'Pequeno Chef', hint: 'culinária, sequenciação e tolerância alimentar' },
-  { id: 'missao-independencia', label: 'Missão Independência', hint: 'autonomia urbana, mochila, compras e troco' },
-  { id: 'social-city', label: 'Social City 3D', hint: 'simulação urbana 3D, conversação e limites assertivos' },
+  ...Object.entries(GAMES).map(([id, g]) => ({
+    id,
+    label: g.manifest.name,
+    hint: g.manifest.summary,
+  })),
   { id: 'prancha', label: 'Prancha de comunicação', hint: 'sempre disponível, mesmo sem tempo de tela' },
   { id: 'calma', label: 'Cantinho da calma', hint: 'respiração e estratégias de regulação' },
 ];

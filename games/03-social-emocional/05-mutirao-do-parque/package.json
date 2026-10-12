@@ -12,6 +12,8 @@
     "test:sim": "vitest run tests/bot-simulation.test.ts"
   },
   "dependencies": {
+    "@aprumo/game-sdk": "workspace:*",
+    "@aprumo/protocol": "workspace:*",
     "canvas-confetti": "^1.9.4",
     "lucide-react": "^1.16.0",
     "phaser": "^3.88.2",

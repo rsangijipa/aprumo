@@ -2,6 +2,11 @@
 
 class TowerSoundManager {
   private ctx: AudioContext | null = null;
+  private masterVolume = 1;
+
+  setVolume(vol: number) {
+    this.masterVolume = Math.max(0, Math.min(1, vol));
+  }
 
   private getContext(): AudioContext | null {
     if (typeof window === 'undefined') return null;
@@ -18,6 +23,7 @@ class TowerSoundManager {
   }
 
   playClick() {
+    if (this.masterVolume <= 0) return;
     const ctx = this.getContext();
     if (!ctx) return;
     const osc = ctx.createOscillator();
@@ -25,7 +31,7 @@ class TowerSoundManager {
     osc.type = 'sine';
     osc.frequency.setValueAtTime(400, ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.04);
-    gain.gain.setValueAtTime(0.06, ctx.currentTime);
+    gain.gain.setValueAtTime(0.06 * this.masterVolume, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
     osc.connect(gain);
     gain.connect(ctx.destination);
@@ -38,6 +44,7 @@ class TowerSoundManager {
    * Level 1: ~260Hz, Level 10: ~880Hz
    */
   playWoodBlockPlaced(heightIndex: number) {
+    if (this.masterVolume <= 0) return;
     const ctx = this.getContext();
     if (!ctx) return;
 
@@ -49,7 +56,7 @@ class TowerSoundManager {
     osc.frequency.setValueAtTime(baseFreq * 1.8, ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(baseFreq, ctx.currentTime + 0.06);
 
-    gain.gain.setValueAtTime(0.18, ctx.currentTime);
+    gain.gain.setValueAtTime(0.18 * this.masterVolume, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
 
     osc.connect(gain);
@@ -64,6 +71,7 @@ class TowerSoundManager {
    * completely avoiding loud shrill sounds for children with sensory sensitivity.
    */
   playSoftCollapse() {
+    if (this.masterVolume <= 0) return;
     const ctx = this.getContext();
     if (!ctx) return;
     const now = ctx.currentTime;
@@ -76,7 +84,7 @@ class TowerSoundManager {
       osc.frequency.setValueAtTime(freq, now + idx * 0.06);
       osc.frequency.exponentialRampToValueAtTime(freq * 0.7, now + idx * 0.06 + 0.12);
 
-      gain.gain.setValueAtTime(0.12, now + idx * 0.06);
+      gain.gain.setValueAtTime(0.12 * this.masterVolume, now + idx * 0.06);
       gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.15);
 
       osc.connect(gain);
@@ -88,6 +96,7 @@ class TowerSoundManager {
   }
 
   playCelebration() {
+    if (this.masterVolume <= 0) return;
     const ctx = this.getContext();
     if (!ctx) return;
     const now = ctx.currentTime;
@@ -96,7 +105,7 @@ class TowerSoundManager {
       const gain = ctx.createGain();
       osc.type = 'triangle';
       osc.frequency.value = freq;
-      gain.gain.setValueAtTime(0.1, now + idx * 0.08);
+      gain.gain.setValueAtTime(0.1 * this.masterVolume, now + idx * 0.08);
       gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.3);
       osc.connect(gain);
       gain.connect(ctx.destination);

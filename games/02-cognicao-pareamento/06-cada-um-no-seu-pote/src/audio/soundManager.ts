@@ -137,8 +137,15 @@ class SoundManager {
     });
   }
 
+  public setSound(level: 'off' | 'low' | 'normal') {
+    this.setMuted(level === 'off');
+    if (level === 'off' && typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+  }
+
   public playRandomPraise(): string {
-    const phrase = PRAISES[Math.floor(Math.random() * PRAISES.length)];
+    const phrase = PRAISES[Math.floor(Math.random() * PRAISES.length)] ?? 'Muito bem!';
     this.playLidSnap();
 
     if (typeof window !== 'undefined' && !this.isMuted && 'speechSynthesis' in window) {

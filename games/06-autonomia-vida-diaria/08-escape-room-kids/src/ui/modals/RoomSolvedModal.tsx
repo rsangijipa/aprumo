@@ -6,7 +6,13 @@
 import React from 'react';
 import { useGameStore } from '../../state/gameStore';
 import { ROOMS_DATA } from '../../game/roomsData';
-import { Sparkles, Trophy, Star, ArrowRight, Home } from 'lucide-react';
+import { Sparkles as _Sp, Trophy as _Tr, Star as _St, ArrowRight as _Ar, Home as _Hm } from 'lucide-react';
+
+const Sparkles = _Sp as any;
+const Trophy = _Tr as any;
+const Star = _St as any;
+const ArrowRight = _Ar as any;
+const Home = _Hm as any;
 
 export const RoomSolvedModal: React.FC = () => {
   const {
@@ -18,7 +24,7 @@ export const RoomSolvedModal: React.FC = () => {
 
   if (gameMode !== 'ROOM_SOLVED') return null;
 
-  const currentRoom = ROOMS_DATA.find((r) => r.id === activeRoomId) || ROOMS_DATA[0];
+  const currentRoom = ROOMS_DATA.find((r) => r.id === activeRoomId) ?? ROOMS_DATA[0]!;
 
   return (
     <div

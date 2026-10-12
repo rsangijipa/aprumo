@@ -10,6 +10,13 @@ import {
   type GameCategoryId,
 } from '../../../data/gameCategories';
 
+const PUBLIC_SUMMARIES: Record<string, string> = {
+  'encaixa-ai': 'Quebra-cabeça de encaixe com pino, em 6 níveis, com rotação de peça a partir do nível 4. Funciona por arrastar, por toque na peça e depois no buraco, ou pelo teclado.',
+  'rampa-maluca': 'Carrinhos e bolinhas na rampa com "Preparar… apontar… já!". Há uma pausa que espera a criança se comunicar, e o carrinho só desce quando o adulto registra a comunicação.',
+  'lanche-do-urso': 'Dar comida, água, banho e pôr o urso (ou outro personagem) para dormir, chegando até a substituição simbólica (o bloco vira pão).',
+  'fazendinha-sonora': 'Livro de abas "Cadê a vaca?" com sons de animais gerados no navegador e controles do adulto (revelar devagar, apontar, pausa de espera).',
+};
+
 export default function GamesPage() {
   const [activeCategory, setActiveCategory] = useState<GameCategoryId>('todos');
   const [searchQuery, setSearchQuery] = useState('');
@@ -27,7 +34,7 @@ export default function GamesPage() {
       return {
         id: m.appId,
         name: m.name,
-        summary: m.summary,
+        summary: PUBLIC_SUMMARIES[m.appId] ?? m.summary,
         categoryId,
         categoryMeta,
         repertoires: m.clinical.repertoires,

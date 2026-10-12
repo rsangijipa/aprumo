@@ -7,6 +7,12 @@ class SoundManager {
   private ctx: AudioContext | null = null;
   public isMuted: boolean = false;
   public isLowSensory: boolean = false;
+  public volumeMultiplier: number = 1;
+
+  public setVolume(vol: number) {
+    this.volumeMultiplier = Math.max(0, Math.min(1, vol));
+    this.isMuted = this.volumeMultiplier <= 0;
+  }
 
   private initCtx() {
     if (typeof window === 'undefined') return null;
@@ -40,7 +46,7 @@ class SoundManager {
       osc.frequency.exponentialRampToValueAtTime(1318.5, now + 0.08); // E6
 
       gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(0.25, now + 0.015);
+      gain.gain.linearRampToValueAtTime(0.25 * this.volumeMultiplier, now + 0.015);
       gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
 
       osc.connect(gain);
@@ -80,7 +86,7 @@ class SoundManager {
         osc.frequency.setValueAtTime(freq, start);
 
         gain.gain.setValueAtTime(0.001, start);
-        gain.gain.linearRampToValueAtTime(0.18, start + 0.03);
+        gain.gain.linearRampToValueAtTime(0.18 * this.volumeMultiplier, start + 0.03);
         gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.7);
 
         osc.connect(gain);
@@ -112,7 +118,7 @@ class SoundManager {
       osc.frequency.linearRampToValueAtTime(554.37, now + 0.2); // C#5
 
       gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(0.12, now + 0.05);
+      gain.gain.linearRampToValueAtTime(0.12 * this.volumeMultiplier, now + 0.05);
       gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
 
       osc.connect(gain);

@@ -23,7 +23,7 @@ export const HomeScreen: React.FC = () => {
     notifications 
   } = useNarrativeStore();
 
-  const currentEp = EPISODES.find((e) => e.id === currentEpisodeId) || EPISODES[0];
+  const currentEp = EPISODES.find((e) => e.id === currentEpisodeId) ?? EPISODES[0]!;
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   const APPS = [

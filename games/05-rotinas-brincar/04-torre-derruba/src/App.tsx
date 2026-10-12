@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
+import { useGameClient } from '@aprumo/game-sdk';
+import { manifest } from './manifest';
 import { TowerPhysicsEngine } from './utils/towerPhysics';
 import { soundManager } from './utils/sound';
 import type {
@@ -22,6 +24,7 @@ import confetti from 'canvas-confetti';
 const WOOD_COLORS = ['#d97706', '#b45309', '#92400e', '#78350f', '#ca8a04', '#ea580c'];
 
 export function App() {
+  const { client, config, paused: hostPaused, ended } = useGameClient(manifest.appId, manifest.version);
   const [windowSize, setWindowSize] = useState({
     w: typeof window !== 'undefined' ? window.innerWidth : 1000,
     h: typeof window !== 'undefined' ? window.innerHeight : 700,
@@ -30,6 +33,38 @@ export function App() {
   const engine = useMemo(() => {
     return new TowerPhysicsEngine(windowSize.w, windowSize.h);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    client.gameStarted(manifest.version);
+    client.levelStarted({
+      levelId: 'torre-derruba-1',
+      levelIndex: 0,
+      trialsPlanned: 6,
+    });
+    client.trialStarted({
+      targetId: 'torre',
+      trialIndex: 0,
+      presented: ['bloco-adulto', 'bloco-crianca'],
+    });
+    client.stimulusPresented({
+      targetId: 'torre',
+      trialIndex: 0,
+      presented: ['bloco-adulto', 'bloco-crianca'],
+      positionOfTarget: 0,
+      modality: 'visual',
+    });
+  }, [client]);
+
+  useEffect(() => {
+    const soundPref = config?.adaptation?.sound;
+    if (soundPref === 'off') {
+      soundManager.setVolume(0);
+    } else if (soundPref === 'low') {
+      soundManager.setVolume(0.35);
+    } else {
+      soundManager.setVolume(1.0);
+    }
+  }, [config]);
 
   // Session & Turn State
   const [turnHolder, setTurnHolder] = useState<TurnHolder>('ADULTO');
@@ -173,6 +208,25 @@ export function App() {
     soundManager.playWoodBlockPlaced(towerHeight);
 
     const isChild = turnHolder === 'CRIANCA';
+    const totalPlaced = metrics.blocksPlacedChild + metrics.blocksPlacedAdult + 1;
+    client.responseRecorded({
+      targetId: 'bloco',
+      stimulusId: `bloco-h${towerHeight}`,
+      trialIndex: totalPlaced - 1,
+      presented: ['bloco'],
+      positionOfTarget: 0,
+      selected: 'bloco',
+      selectedPosition: 0,
+      response: 'correct',
+      latencyMs: 1200,
+      promptLevel: 'none',
+      promptSource: 'none',
+      detail: {
+        height: towerHeight,
+        turn: turnHolder,
+      },
+    });
+
     setMetrics((m) => ({
       ...m,
       blocksPlacedChild: isChild ? m.blocksPlacedChild + 1 : m.blocksPlacedChild,
@@ -194,6 +248,21 @@ export function App() {
     confetti({ particleCount: 60, spread: 90, origin: { y: 0.7 } });
     setCanKnockdown(false);
     engine.config.canKnockdown = false;
+
+    const totalPlaced = metrics.blocksPlacedChild + metrics.blocksPlacedAdult;
+    client.reinforcerPresented({
+      kind: 'visual',
+      reinforcerId: 'derrubada-catartica',
+      contingentOn: 'torre-completa',
+      intensity: 'festive',
+    });
+    client.levelCompleted({
+      levelId: 'torre-derruba-1',
+      levelIndex: 0,
+      trialsCompleted: totalPlaced,
+      correct: totalPlaced,
+      outcome: 'completed',
+    });
 
     const ep: TeachingEpisode = {
       episodeId: `ep-${Date.now()}`,
@@ -243,8 +312,22 @@ export function App() {
     }
   };
 
+  if (ended) {
+    return (
+      <div style={{ display: 'grid', placeItems: 'center', minHeight: '100vh', background: '#1e293b', color: '#f8fafc', fontFamily: 'system-ui' }}>
+        <h2>Torre Derruba Concluída!</h2>
+        <p>A rotina conjunta de blocos e derrubada foi finalizada com sucesso.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="den02-app">
+      {hostPaused && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 9999, display: 'grid', placeItems: 'center', color: '#fff', fontFamily: 'system-ui' }}>
+          <h2>Atividade pausada pelo mediador</h2>
+        </div>
+      )}
       {/* Turn Indicator */}
       <TurnIndicator
         turnHolder={turnHolder}

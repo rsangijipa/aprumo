@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useGameClient } from '@aprumo/game-sdk';
+import { manifest } from './manifest';
 import { SCENE_BANK } from './data/sceneBank';
 import type {
   SceneModule,
@@ -29,12 +31,48 @@ export function App() {
   const [rehearsalStatus, setRehearsalStatus] = useState<'sem-ajuda' | 'com-ajuda' | 'nao-executou' | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
 
-  // ABA History & Private Self-Reports
   const [trials, setTrials] = useState<AbaSceneTrial[]>([]);
   const [selfReports, setSelfReports] = useState<FeelingsThermometerState[]>([]);
   const [isTherapistOpen, setIsTherapistOpen] = useState(false);
 
+  const { client, config, paused, ended } = useGameClient(manifest.appId, manifest.version);
+  const trialStartTime = useRef<number>(Date.now());
+  const trialIdRef = useRef<string>(`trial-${Date.now()}`);
+
   const currentScene = SCENE_BANK[sceneIndex];
+
+  useEffect(() => {
+    if (config?.adaptation?.sound) {
+      soundManager.setSound(config.adaptation.sound);
+    }
+  }, [config]);
+
+  useEffect(() => {
+    client.gameStarted(manifest.version);
+  }, [client]);
+
+  useEffect(() => {
+    trialStartTime.current = Date.now();
+    trialIdRef.current = `trial-${Date.now()}`;
+    const presentedCues = currentScene.cues.map((c) => c.cueId);
+    client.levelStarted({
+      levelId: currentScene.id,
+      levelIndex: sceneIndex,
+      fieldSize: 4,
+    });
+    client.trialStarted({
+      targetId: currentScene.id,
+      trialIndex: sceneIndex,
+      presented: presentedCues,
+    });
+    client.stimulusPresented({
+      targetId: currentScene.id,
+      trialIndex: sceneIndex,
+      presented: presentedCues,
+      positionOfTarget: 0,
+      modality: 'visual',
+    });
+  }, [client, currentScene.id, currentScene.cues, sceneIndex, activeModule]);
 
   const handleNextScene = (index: number) => {
     soundManager.playClick();
@@ -71,7 +109,7 @@ export function App() {
     }
 
     const newTrial: AbaSceneTrial = {
-      trialId: `trial-${Date.now()}`,
+      trialId: trialIdRef.current,
       timestamp: Date.now(),
       module: 'E1',
       sceneId: currentScene.id,
@@ -82,6 +120,23 @@ export function App() {
       isSuccess,
     };
     setTrials((prev) => [newTrial, ...prev]);
+
+    const presentedEmotions: string[] = ['alegria', 'tristeza', 'raiva', 'medo', 'nojo', 'surpresa'];
+    const pos = presentedEmotions.indexOf(emotion);
+    client.responseRecorded({
+      targetId: currentScene.id,
+      stimulusId: currentScene.emotion,
+      trialIndex: sceneIndex,
+      presented: presentedEmotions,
+      positionOfTarget: presentedEmotions.indexOf(currentScene.emotion),
+      selected: emotion,
+      selectedPosition: pos >= 0 ? pos : null,
+      response: isSuccess ? 'correct' : 'incorrect',
+      latencyMs: Math.max(10, Date.now() - trialStartTime.current),
+      promptLevel: 'none',
+      promptSource: 'none',
+      detail: { module: 'E1', emotion, expected: currentScene.emotion },
+    });
   };
 
   // E2: Cue Hotspot Click
@@ -126,7 +181,7 @@ export function App() {
     }
 
     const newTrial: AbaSceneTrial = {
-      trialId: `trial-${Date.now()}`,
+      trialId: trialIdRef.current,
       timestamp: Date.now(),
       module: 'E3',
       sceneId: currentScene.id,
@@ -137,6 +192,24 @@ export function App() {
       isSuccess,
     };
     setTrials((prev) => [newTrial, ...prev]);
+
+    const options = currentScene.whyReasonOptions.map((w) => w.id);
+    const pos = options.indexOf(whyId);
+    const targetWhy = currentScene.whyReasonOptions.find((w) => w.isCorrect)?.id ?? options[0]!;
+    client.responseRecorded({
+      targetId: currentScene.id,
+      stimulusId: targetWhy,
+      trialIndex: sceneIndex,
+      presented: options,
+      positionOfTarget: options.indexOf(targetWhy),
+      selected: whyId,
+      selectedPosition: pos >= 0 ? pos : null,
+      response: isSuccess ? 'correct' : 'incorrect',
+      latencyMs: Math.max(10, Date.now() - trialStartTime.current),
+      promptLevel: 'none',
+      promptSource: 'none',
+      detail: { module: 'E3', whyId, isCorrect: isSuccess },
+    });
   };
 
   // E4: Action Selection
@@ -154,7 +227,7 @@ export function App() {
     }
 
     const newTrial: AbaSceneTrial = {
-      trialId: `trial-${Date.now()}`,
+      trialId: trialIdRef.current,
       timestamp: Date.now(),
       module: 'E4',
       sceneId: currentScene.id,
@@ -167,6 +240,24 @@ export function App() {
       isSuccess: isAcceptable,
     };
     setTrials((prev) => [newTrial, ...prev]);
+
+    const options = currentScene.actionOptions.map((a) => a.id);
+    const pos = options.indexOf(actionId);
+    const targetAction = currentScene.actionOptions.find((a) => a.isAcceptable)?.id ?? options[0]!;
+    client.responseRecorded({
+      targetId: currentScene.id,
+      stimulusId: targetAction,
+      trialIndex: sceneIndex,
+      presented: options,
+      positionOfTarget: options.indexOf(targetAction),
+      selected: actionId,
+      selectedPosition: pos >= 0 ? pos : null,
+      response: isAcceptable ? 'correct' : 'incorrect',
+      latencyMs: Math.max(10, Date.now() - trialStartTime.current),
+      promptLevel: 'none',
+      promptSource: 'none',
+      detail: { module: 'E4', actionId, isAcceptable },
+    });
   };
 
   // E4 Role-play rating
@@ -184,8 +275,22 @@ export function App() {
     setSelfReports((prev) => [state, ...prev]);
   };
 
+  if (ended) {
+    return (
+      <div style={{ display: 'grid', placeItems: 'center', minHeight: '100vh', background: '#1c2f28', color: '#fff', fontFamily: 'system-ui' }}>
+        <h2>Sessão concluída!</h2>
+        <p>Você explorou todas as histórias sociais de hoje.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="aba07-app">
+      {paused && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 9999, display: 'grid', placeItems: 'center', color: '#fff', fontFamily: 'system-ui' }}>
+          <h2>Atividade pausada pelo mediador</h2>
+        </div>
+      )}
       {/* Header */}
       <header className="app-header">
         <div className="header-inner">
