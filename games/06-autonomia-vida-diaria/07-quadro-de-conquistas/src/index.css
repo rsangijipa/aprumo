@@ -1,0 +1,129 @@
+:root {
+  --fundo: #FBF9F5;
+  --fundo-card: #FFFFFF;
+  --tinta: #1E252B;
+  --tinta-15: rgba(30, 37, 43, 0.12);
+  --tinta-30: rgba(30, 37, 43, 0.25);
+  --tinta-60: rgba(30, 37, 43, 0.60);
+
+  --vitoria-regia: #2D6A4F;
+  --vitoria-regia-light: #52B788;
+  --igarape: #0E8388;
+  --buriti: #F4A261;
+  --acai: #581845;
+  --neutro: #94A3B8;
+
+  --font-corpo: 'Andika', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-hud: 'Outfit', sans-serif;
+  --font-teen: 'Atkinson Hyperlegible', sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+body {
+  background-color: var(--fundo);
+  color: var(--tinta);
+  font-family: var(--font-corpo);
+  min-height: 100vh;
+  overflow-x: hidden;
+  touch-action: manipulation;
+}
+
+.btn-primary {
+  background: var(--vitoria-regia);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-family: var(--font-hud);
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.btn-primary:hover {
+  background: #1b4332;
+  transform: translateY(-1px);
+}
+
+.btn-tab {
+  background: #FFFFFF;
+  border: 1.5px solid var(--tinta-15);
+  color: var(--tinta-60);
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-family: var(--font-hud);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn-tab:hover {
+  background: rgba(30, 37, 43, 0.04);
+}
+
+.btn-tab.active {
+  background: var(--vitoria-regia);
+  color: #FFFFFF;
+  border-color: var(--vitoria-regia);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  font-family: var(--font-hud);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+@keyframes tokenLandingBounce {
+  0% {
+    transform: scale(0.3) translateY(-40px);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.18) translateY(4px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.99);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1.01);
+    opacity: 1;
+  }
+}

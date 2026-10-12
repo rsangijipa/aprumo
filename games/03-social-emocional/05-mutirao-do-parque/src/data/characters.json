@@ -1,0 +1,147 @@
+[
+  {
+    "id": "char_luan",
+    "name": "Luan",
+    "pronoun": "Ele",
+    "talent": "agil",
+    "talentName": "Passo Leve",
+    "talentDescription": "Desloca-se com agilidade pelos gramados e caminhos de cascalho.",
+    "specialActionName": "Arrancada Amiga",
+    "specialDescription": "Concede um impulso temporário de velocidade a si e a companheiros próximos.",
+    "specialCooldown": 18,
+    "appearance": {
+      "color": "#4F8198",
+      "secondaryColor": "#E8DCC8",
+      "hairColor": "#283033",
+      "skinTone": "#C68642",
+      "accessory": "boné"
+    }
+  },
+  {
+    "id": "char_samira",
+    "name": "Samira",
+    "pronoun": "Ela",
+    "talent": "organizado",
+    "talentName": "Mochila Ordenada",
+    "talentDescription": "Organiza ferramentas com maestria e não perde stamina ao carregar caixas.",
+    "specialActionName": "Arrumação Rápida",
+    "specialDescription": "Recolhe e empilha suavemente materiais soltos ao redor no carrinho ou depósito.",
+    "specialCooldown": 20,
+    "appearance": {
+      "color": "#5E8C61",
+      "secondaryColor": "#D9A441",
+      "hairColor": "#3D2314",
+      "skinTone": "#F1C27D",
+      "accessory": "faixa"
+    }
+  },
+  {
+    "id": "char_kaue",
+    "name": "Kauê",
+    "pronoun": "Ele",
+    "talent": "forte",
+    "talentName": "Firmeza Amiga",
+    "talentDescription": "Empurra o carrinho de mão com facilidade e transporta estrados pesados sem diminuir o ritmo.",
+    "specialActionName": "Erguer Conjunto",
+    "specialDescription": "Posiciona peças pesadas em segundos, acelerando montagens e instalações.",
+    "specialCooldown": 22,
+    "appearance": {
+      "color": "#B46D4F",
+      "secondaryColor": "#283033",
+      "hairColor": "#1C1C1C",
+      "skinTone": "#8D5524",
+      "accessory": "laço"
+    }
+  },
+  {
+    "id": "char_maya",
+    "name": "Maya",
+    "pronoun": "Ela",
+    "talent": "cuidadoso",
+    "talentName": "Cuidado Atento",
+    "talentDescription": "Maneja mudas delicadas e tintas sem desperdício. Cadeira esportiva rápida e todas as rotas contam com rampas.",
+    "specialActionName": "Rampa de Apoio",
+    "specialDescription": "Abre um corredor de passagem suave que reduz a fadiga de quem a acompanha.",
+    "specialCooldown": 19,
+    "appearance": {
+      "color": "#D9A441",
+      "secondaryColor": "#5E8C61",
+      "hairColor": "#4A2B11",
+      "skinTone": "#E0AC69",
+      "hasWheelchair": true,
+      "accessory": "fones"
+    }
+  },
+  {
+    "id": "char_ines",
+    "name": "Inês",
+    "pronoun": "Ela",
+    "talent": "observador",
+    "talentName": "Olhar Clínico",
+    "talentDescription": "Percebe detalhes e peças soltas a maior alcance, antecipando eventos e avisos sonoros.",
+    "specialActionName": "Sinalizar Rota",
+    "specialDescription": "Destaca a tarefa prioritária no mapa para todos os participantes por 12 segundos.",
+    "specialCooldown": 24,
+    "appearance": {
+      "color": "#283033",
+      "secondaryColor": "#4F8198",
+      "hairColor": "#B55239",
+      "skinTone": "#FFDBAC",
+      "accessory": "óculos"
+    }
+  },
+  {
+    "id": "char_beto",
+    "name": "Beto",
+    "pronoun": "Ele",
+    "talent": "pratico",
+    "talentName": "Mãos à Obra",
+    "talentDescription": "Aplica parafusos e conexões elétricas com precisão, economizando etapas mecânicas.",
+    "specialActionName": "Ajuste Mestre",
+    "specialDescription": "Preenche instantaneamente 25% do progresso de qualquer tarefa de reparo ou montagem.",
+    "specialCooldown": 25,
+    "appearance": {
+      "color": "#5E8C61",
+      "secondaryColor": "#B46D4F",
+      "hairColor": "#706E6B",
+      "skinTone": "#E0AC69",
+      "accessory": "boina"
+    }
+  },
+  {
+    "id": "char_clara",
+    "name": "Clara",
+    "pronoun": "Ela",
+    "talent": "criativo",
+    "talentName": "Traço Inspirador",
+    "talentDescription": "Pinta murais e placas com cores radiantes que elevam o ânimo de toda a equipe.",
+    "specialActionName": "Inspiração Coletiva",
+    "specialDescription": "Cria uma aura festiva em volta de si que recupera a stamina de todos os parceiros próximos.",
+    "specialCooldown": 22,
+    "appearance": {
+      "color": "#B46D4F",
+      "secondaryColor": "#D9A441",
+      "hairColor": "#1A1A1A",
+      "skinTone": "#C68642",
+      "accessory": "lenço"
+    }
+  },
+  {
+    "id": "char_davi",
+    "name": "Davi",
+    "pronoun": "Ele",
+    "talent": "conciliador",
+    "talentName": "Sinergia Boa",
+    "talentDescription": "Trabalhar em dupla com o Davi concede o maior multiplicador de velocidade de cooperação da turma.",
+    "specialActionName": "Chamado Solidário",
+    "specialDescription": "Convoca os companheiros para a tarefa atual com bônus de cooperação em dobro por 10s.",
+    "specialCooldown": 20,
+    "appearance": {
+      "color": "#4F8198",
+      "secondaryColor": "#5E8C61",
+      "hairColor": "#3B2219",
+      "skinTone": "#8D5524",
+      "accessory": "chapéu"
+    }
+  }
+]

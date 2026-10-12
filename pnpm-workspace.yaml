@@ -1,6 +1,6 @@
 packages:
   - apps/*
   - packages/*
-  - games/*
+  - games/*/*
   - resources/*
   - supabase

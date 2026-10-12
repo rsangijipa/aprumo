@@ -4,3 +4,6 @@ export * from './random';
 export * from './audio';
 export * from './react';
 export * from './trialRunner';
+export * from './physics';
+export * from './levels';
+export * from './frame';

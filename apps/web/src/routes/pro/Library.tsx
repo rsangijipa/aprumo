@@ -1,7 +1,15 @@
 import { useState, useEffect, useRef, type ReactNode } from 'react';
+import { Link } from 'react-router';
 import type { GameManifest } from '@aprumo/protocol';
 import { Badge, Card, Button, BackButton, CloseButton, IconCheck, IconPrinter } from '@aprumo/ui';
 import { GAMES } from '../../game-host/registry';
+import { GameIllustration } from '../../components/GameIllustration';
+import {
+  GAME_CATEGORIES,
+  GAME_TO_CATEGORY,
+  getCategoryOfGame,
+  type GameCategoryId,
+} from '../../data/gameCategories';
 import {
   ArtListener,
   ArtMatch,
@@ -237,6 +245,7 @@ const INTERACTIVE_RESOURCES: InteractiveResourceMeta[] = [
 
 export default function Library() {
   const [category, setCategory] = useState<StudioCategory>('todos');
+  const [gameCategoryFilter, setGameCategoryFilter] = useState<GameCategoryId>('todos');
   const [search, setSearch] = useState('');
   const [activeTool, setActiveTool] = useState<string | null>(null);
   const [modelFilter, setModelFilter] = useState<'todos' | 'ABA' | 'DENVER'>('todos');
@@ -254,6 +263,9 @@ export default function Library() {
     const matchCat = category === 'todos' || category === 'ensino';
     const matchSearch = m.name.toLowerCase().includes(search.toLowerCase()) || m.summary.toLowerCase().includes(search.toLowerCase());
 
+    const catId = GAME_TO_CATEGORY[m.appId] ?? 'cognicao-pareamento';
+    const matchGameCat = gameCategoryFilter === 'todos' || catId === gameCategoryFilter;
+
     const matchModel =
       modelFilter === 'todos' ||
       (modelFilter === 'ABA' && c.models.ABA && c.models.ABA !== 'not-indicated') ||
@@ -266,7 +278,7 @@ export default function Library() {
       (ageFilter === 'pre' && minM <= 72 && maxM >= 36) ||
       (ageFilter === 'escolar' && maxM >= 72);
 
-    return matchCat && matchSearch && matchModel && matchAge;
+    return matchCat && matchSearch && matchGameCat && matchModel && matchAge;
   });
 
   return (
@@ -411,6 +423,41 @@ export default function Library() {
               </div>
             </div>
           </div>
+          {/* Subfiltro de Categorias Padronizadas de Jogos */}
+          <div
+            role="tablist"
+            aria-label="Filtrar jogos integrados por categoria clínica"
+            style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}
+          >
+            <button
+              type="button"
+              role="tab"
+              className="rs-tab-pill"
+              aria-selected={gameCategoryFilter === 'todos'}
+              style={{ fontSize: '0.8rem', padding: '0.3rem 0.75rem' }}
+              onClick={() => setGameCategoryFilter('todos')}
+            >
+              Todas as Categorias ({Object.keys(GAMES).length})
+            </button>
+            {Object.values(GAME_CATEGORIES).map((cat) => {
+              const count = Object.values(GAMES).filter((g) => GAME_TO_CATEGORY[g.manifest.appId] === cat.id).length;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  role="tab"
+                  className="rs-tab-pill"
+                  aria-selected={gameCategoryFilter === cat.id}
+                  style={{ fontSize: '0.8rem', padding: '0.3rem 0.75rem', gap: '0.3rem' }}
+                  onClick={() => setGameCategoryFilter(cat.id)}
+                >
+                  <span aria-hidden="true">{cat.icon}</span>
+                  <span>{cat.label}</span>
+                  <span style={{ opacity: 0.75, fontSize: '0.72rem' }}>({count})</span>
+                </button>
+              );
+            })}
+          </div>
           <div className="rs-grid">
             {filteredGames.map((g) => (
               <GameCard key={g.manifest.appId} m={g.manifest} />
@@ -539,17 +586,33 @@ function ToolThumbnail({ id }: { id: string }) {
 
 function GameCard({ m }: { m: GameManifest }) {
   const c = m.clinical;
+  const cat = getCategoryOfGame(m.appId);
   return (
     <Card as="article" bodyClassName="ap-stack">
-      <div style={{ margin: '-1.25rem -1.25rem 0', aspectRatio: '16 / 8', overflow: 'hidden', borderRadius: '16px 16px 0 0' }} aria-hidden="true">
-        {ART[m.appId] ?? <DefaultGameArt name={m.name} />}
+      <div style={{ margin: '-1.25rem -1.25rem 0', aspectRatio: '16 / 9', overflow: 'hidden', borderRadius: '16px 16px 0 0' }} aria-hidden="true">
+        <GameIllustration appId={m.appId} name={m.name} fallbackArt={ART[m.appId]} interactive />
       </div>
-      <div className="ap-row" style={{ justifyContent: 'space-between' }}>
+      <div className="ap-row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
         <h3 style={{ fontSize: 'var(--ap-text-lg)', margin: 0 }}>{m.name}</h3>
         <span className="ap-xs ap-muted">v{m.version}</span>
       </div>
+      <div className="ap-row" style={{ gap: '0.35rem', flexWrap: 'wrap' }}>
+        <span
+          className="ap-badge"
+          style={{
+            background: `${cat.color}15`,
+            color: cat.color,
+            borderColor: `${cat.color}35`,
+            fontWeight: 600,
+          }}
+        >
+          {cat.icon} {cat.label}
+        </span>
+        {c.models.ABA !== 'not-indicated' && <Badge tone="info">ABA</Badge>}
+        {c.models.DENVER !== 'not-indicated' && <Badge tone="accent">Denver</Badge>}
+      </div>
       <p className="ap-small ap-muted" style={{ margin: 0 }}>{m.summary}</p>
-      <div className="ap-row" style={{ gap: '0.35rem' }}>
+      <div className="ap-row" style={{ gap: '0.35rem', flexWrap: 'wrap' }}>
         {c.purposes.map((p) => <Badge key={p}>{PURPOSE[p] ?? p}</Badge>)}
         {c.repertoires.map((r) => <Badge key={r} tone="info">{REPERTOIRE[r] ?? r}</Badge>)}
       </div>
@@ -566,15 +629,21 @@ function GameCard({ m }: { m: GameManifest }) {
             <dt className="ap-muted">Nível de brincar</dt><dd style={{ margin: 0 }}>{PLAY[c.playLevel] ?? c.playLevel}</dd>
           </>
         )}
-        <dt className="ap-muted">Modelos</dt>
-        <dd style={{ margin: 0 }}>
-          ABA: {c.models.ABA === 'not-indicated' ? 'não indicado' : c.models.ABA} · Denver: {c.models.DENVER === 'not-indicated' ? 'não indicado' : c.models.DENVER}
-        </dd>
         <dt className="ap-muted">Idade</dt>
         <dd style={{ margin: 0 }}>{months(c.ageRangeMonths[0])} a {months(c.ageRangeMonths[1])}{c.requiresAdult ? ' · com adulto' : ''}</dd>
         <dt className="ap-muted">Sensorial</dt>
         <dd style={{ margin: 0 }}>sem flashes · movimento {c.sensory.motionReducible ? 'ajustável' : 'fixo'} · som {c.sensory.sound === 'adjustable' ? 'ajustável' : c.sensory.sound}</dd>
       </dl>
+      <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.5rem' }}>
+        <Link
+          to="/demonstracao"
+          className="ap-btn ap-btn--sm ap-btn--secondary"
+          style={{ width: '100%', justifyContent: 'center' }}
+          aria-label={`Testar o jogo ${m.name} na sessão demonstrativa`}
+        >
+          Testar Jogo em Sessão
+        </Link>
+      </div>
     </Card>
   );
 }

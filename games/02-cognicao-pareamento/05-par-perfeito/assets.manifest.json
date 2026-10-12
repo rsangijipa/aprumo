@@ -1,0 +1,62 @@
+{
+  "name": "PsicoPlay ABA-01 Par Perfeito Asset Manifest",
+  "version": "1.0.0",
+  "description": "60 alvos do cotidiano brasileiro categorizados em 6 grupos com 3 camadas de estímulos (foto, ilustração, pictograma) e biblioteca de áudio",
+  "categories": [
+    "alimentos",
+    "animais",
+    "brinquedos",
+    "roupas",
+    "utensilios",
+    "veiculos"
+  ],
+  "layers": [
+    {
+      "id": "foto",
+      "name": "Foto Real Recortada",
+      "description": "Fundo branco puro recortado, alta fidelidade e iluminação natural"
+    },
+    {
+      "id": "ilustracao",
+      "name": "Ilustração em Recorte de Papel",
+      "description": "Formas planas estilizadas, 2-3 tons, profundidade sutil"
+    },
+    {
+      "id": "picto",
+      "name": "Pictograma de Traço",
+      "description": "Minimalista, traço preto 6px, reconhecimento geométrico imediato"
+    }
+  ],
+  "audio": {
+    "sd": {
+      "text": "Junta igual",
+      "variants": ["Junta igual", "Coloca com o igual", "Acha o igual"],
+      "locutores": [
+        { "id": "locutor_1", "gender": "feminina", "style": "calma e encorajadora" },
+        { "id": "locutor_2", "gender": "masculina", "style": "suave e clara" },
+        { "id": "locutor_3", "gender": "amigavel", "style": "expressiva e acolhedora" }
+      ]
+    },
+    "praises": [
+      "Muito bem!",
+      "Isso aí, igualzinho!",
+      "Excelente!",
+      "Que capricho!",
+      "Você acertou!",
+      "Parabéns!",
+      "Show de bola!",
+      "Certinho!"
+    ],
+    "sfx": {
+      "snap": {
+        "description": "Clique de encaixe suave < 150 ms",
+        "source": "Kenney Audio / CC0"
+      },
+      "error": {
+        "description": "Silêncio absoluto (sem som aversivo em erro)",
+        "source": "PsicoPlay ABA Design Guideline"
+      }
+    }
+  },
+  "targetsCount": 60
+}

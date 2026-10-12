@@ -1,6 +1,22 @@
-import { describe, it, expect } from 'vitest';
+// @vitest-environment jsdom
+import { describe, it, expect, beforeAll, vi } from 'vitest';
 import { GameManifest } from '@aprumo/protocol';
 import { GAMES, SUPPORT_RESOURCES } from './registry';
+
+vi.mock('phaser3spectorjs', () => ({ default: {} }));
+
+beforeAll(() => {
+  if (typeof HTMLCanvasElement !== 'undefined') {
+    HTMLCanvasElement.prototype.getContext = (() => ({
+      fillStyle: '',
+      fillRect: () => {},
+      getImageData: () => ({ data: [0, 0, 0, 0] }),
+      putImageData: () => {},
+      createImageData: () => ({ data: [0, 0, 0, 0] }),
+      drawImage: () => {},
+    })) as any;
+  }
+});
 
 describe('Game Registry Release Gate', () => {
   it('registers all games with valid clinical manifests and matching keys', () => {
@@ -57,6 +73,21 @@ describe('Game Registry Release Gate', () => {
     expect(GAMES['rampa-maluca']!.manifest.name).toBe('Rampa Maluca');
     expect(GAMES['lanche-do-urso']!.manifest.name).toBe('Hora do Lanche do Urso');
     expect(GAMES['fazendinha-sonora']!.manifest.name).toBe('Fazendinha Sonora');
+  });
+
+  it('includes all newly incorporated games with total 34 games', () => {
+    expect(GAMES['leitura-de-cena']).toBeDefined();
+    expect(GAMES['par-perfeito']).toBeDefined();
+    expect(GAMES['cada-um-no-seu-pote']).toBeDefined();
+    expect(GAMES['mutirao-do-parque']).toBeDefined();
+    expect(GAMES['banda-do-tico']).toBeDefined();
+    expect(GAMES['torre-derruba']).toBeDefined();
+    expect(GAMES['mercadinho-da-esquina']).toBeDefined();
+    expect(GAMES['passo-a-passo']).toBeDefined();
+    expect(GAMES['quadro-de-conquistas']).toBeDefined();
+    expect(GAMES['escape-room-kids']).toBeDefined();
+    expect(GAMES['vida-online']).toBeDefined();
+    expect(Object.keys(GAMES).length).toBe(34);
   });
 
   it('validates support resources manifests', () => {

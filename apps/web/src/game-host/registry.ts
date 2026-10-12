@@ -28,6 +28,17 @@ import { manifest as encaixaAi } from '@aprumo/game-encaixa-ai/manifest';
 import { manifest as rampaMaluca } from '@aprumo/game-rampa-maluca/manifest';
 import { manifest as lancheDoUrso } from '@aprumo/game-lanche-do-urso/manifest';
 import { manifest as fazendinhaSonora } from '@aprumo/game-fazendinha-sonora/manifest';
+import { manifest as leituraDeCena } from '@aprumo/game-leitura-de-cena/manifest';
+import { manifest as parPerfeito } from '@aprumo/game-par-perfeito/manifest';
+import { manifest as cadaUmNoSeuPote } from '@aprumo/game-cada-um-no-seu-pote/manifest';
+import { manifest as mutiraoDoParque } from '@aprumo/game-mutirao-do-parque/manifest';
+import { manifest as bandaDoTico } from '@aprumo/game-banda-do-tico/manifest';
+import { manifest as torreDerruba } from '@aprumo/game-torre-derruba/manifest';
+import { manifest as mercadinhoDaEsquina } from '@aprumo/game-mercadinho-da-esquina/manifest';
+import { manifest as passoAPasso } from '@aprumo/game-passo-a-passo/manifest';
+import { manifest as quadroDeConquistas } from '@aprumo/game-quadro-de-conquistas/manifest';
+import { manifest as escapeRoomKids } from '@aprumo/game-escape-room-kids/manifest';
+import { manifest as vidaOnline } from '@aprumo/game-vida-online/manifest';
 import { manifest as quadroDeFichas } from '@aprumo/resource-quadro-de-fichas/manifest';
 import { manifest as agendaVisual } from '@aprumo/resource-agenda-visual/manifest';
 
@@ -60,6 +71,17 @@ export const GAMES: Record<string, GameEntry> = {
   'rampa-maluca': { manifest: rampaMaluca, load: () => import('@aprumo/game-rampa-maluca').then((m) => m.Game) },
   'lanche-do-urso': { manifest: lancheDoUrso, load: () => import('@aprumo/game-lanche-do-urso').then((m) => m.Game) },
   'fazendinha-sonora': { manifest: fazendinhaSonora, load: () => import('@aprumo/game-fazendinha-sonora').then((m) => m.Game) },
+  'leitura-de-cena': { manifest: leituraDeCena, load: () => import('@aprumo/game-leitura-de-cena').then((m) => m.Game) },
+  'par-perfeito': { manifest: parPerfeito, load: () => import('@aprumo/game-par-perfeito').then((m) => m.Game) },
+  'cada-um-no-seu-pote': { manifest: cadaUmNoSeuPote, load: () => import('@aprumo/game-cada-um-no-seu-pote').then((m) => m.Game) },
+  'mutirao-do-parque': { manifest: mutiraoDoParque, load: () => import('@aprumo/game-mutirao-do-parque').then((m) => m.Game) },
+  'banda-do-tico': { manifest: bandaDoTico, load: () => import('@aprumo/game-banda-do-tico').then((m) => m.Game) },
+  'torre-derruba': { manifest: torreDerruba, load: () => import('@aprumo/game-torre-derruba').then((m) => m.Game) },
+  'mercadinho-da-esquina': { manifest: mercadinhoDaEsquina, load: () => import('@aprumo/game-mercadinho-da-esquina').then((m) => m.Game) },
+  'passo-a-passo': { manifest: passoAPasso, load: () => import('@aprumo/game-passo-a-passo').then((m) => m.Game) },
+  'quadro-de-conquistas': { manifest: quadroDeConquistas, load: () => import('@aprumo/game-quadro-de-conquistas').then((m) => m.Game) },
+  'escape-room-kids': { manifest: escapeRoomKids, load: () => import('@aprumo/game-escape-room-kids').then((m) => m.Game) },
+  'vida-online': { manifest: vidaOnline, load: () => import('@aprumo/game-vida-online').then((m) => m.Game) },
 };
 
 /** Recursos de apoio rodam na própria moldura infantil (não em iframe): são da plataforma. */

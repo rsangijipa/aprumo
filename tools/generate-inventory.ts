@@ -45,11 +45,21 @@ const rootDir = process.cwd();
 
 // 1. Scan Games
 const gamesDir = path.join(rootDir, 'games');
-const gameDirs = fs.readdirSync(gamesDir).filter((f) => fs.statSync(path.join(gamesDir, f)).isDirectory());
+const categoryDirs = fs.readdirSync(gamesDir).filter((f) => f.startsWith('0') && fs.statSync(path.join(gamesDir, f)).isDirectory());
 
-const gamesList: GameInfo[] = gameDirs.map((dir) => {
-  const manifestPath = path.join(gamesDir, dir, 'src', 'manifest.ts');
-  const pkgPath = path.join(gamesDir, dir, 'package.json');
+const gameEntries: { cat: string; dir: string; fullPath: string }[] = [];
+for (const cat of categoryDirs) {
+  const catPath = path.join(gamesDir, cat);
+  const subDirs = fs.readdirSync(catPath).filter((f) => fs.statSync(path.join(catPath, f)).isDirectory());
+  for (const sub of subDirs) {
+    gameEntries.push({ cat, dir: sub, fullPath: path.join(catPath, sub) });
+  }
+}
+
+const gamesList: GameInfo[] = gameEntries.map(({ cat, dir, fullPath }) => {
+  const manifestPath = path.join(fullPath, 'src', 'manifest.ts');
+  const pkgPath = path.join(fullPath, 'package.json');
+  let appId = dir.replace(/^\d+-/, '');
   let name = dir;
   let version = '1.0.0';
   let summary = '';
@@ -68,6 +78,8 @@ const gamesList: GameInfo[] = gameDirs.map((dir) => {
 
   if (fs.existsSync(manifestPath)) {
     const code = fs.readFileSync(manifestPath, 'utf8');
+    const appIdMatch = code.match(/appId:\s*['"]([^'"]+)['"]/);
+    if (appIdMatch) appId = appIdMatch[1];
     const nameMatch = code.match(/name:\s*['"]([^'"]+)['"]/);
     if (nameMatch) name = nameMatch[1];
     const summaryMatch = code.match(/summary:\s*['"]([^'"]+)['"]/);
@@ -88,16 +100,25 @@ const gamesList: GameInfo[] = gameDirs.map((dir) => {
 
   let renderType = 'DOM / SVG vetorial';
   let engine = 'Compartilhado (@aprumo/game-sdk)';
-  if (dir === 'minimundos') {
+  if (appId === 'minimundos') {
     renderType = 'Canvas 2D + DOM';
     engine = 'Própria (Canvas 2D loop + @aprumo/game-sdk)';
-  } else if (dir === 'social-city') {
+  } else if (appId === 'social-city') {
     renderType = 'Canvas 2D Pseudo-3D isométrico (Nota: NÃO é 3D real até Three.js)';
     engine = 'Própria (Projeção isométrica canvas + @aprumo/game-sdk)';
+  } else if (appId === 'escape-room-kids') {
+    renderType = 'WebGL 3D (Three.js) + DOM';
+    engine = 'Three.js / WebGL + @aprumo/game-sdk';
+  } else if (appId === 'banda-do-tico' || appId === 'mutirao-do-parque' || appId === 'cada-um-no-seu-pote') {
+    renderType = 'Canvas 2D (Phaser) + DOM';
+    engine = 'Phaser 3 / Web Audio + @aprumo/game-sdk';
+  } else if (appId === 'torre-derruba') {
+    renderType = 'Canvas 2D Física + DOM';
+    engine = 'Engine de Física Customizada + Web Audio';
   }
 
   return {
-    appId: dir,
+    appId,
     name,
     version,
     summary,

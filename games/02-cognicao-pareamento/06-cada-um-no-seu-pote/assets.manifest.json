@@ -1,0 +1,26 @@
+{
+  "name": "PsicoPlay ABA-02 Cada Um no Seu Pote Asset Manifest",
+  "version": "1.0.0",
+  "description": "Ativos de potes com padrões redundantes para daltonismo, itens categorizados por cor, forma, tamanho e categoria, com sons de impacto de material e clique de tampa Kenney CC0",
+  "bins": [
+    { "id": "bin-vermelho", "pattern": "liso", "color": "#E63946" },
+    { "id": "bin-azul", "pattern": "listrado", "color": "#1D3557" },
+    { "id": "bin-amarelo", "pattern": "pontilhado", "color": "#FFB703" },
+    { "id": "bin-verde", "pattern": "xadrez", "color": "#2D6A4F" }
+  ],
+  "audio": {
+    "materialImpacts": ["plastico", "pelucia", "madeira", "papel"],
+    "lidSnap": "Kenney Audio CC0",
+    "sd": "Coloca com os iguais",
+    "praises": [
+      "Muito bem!",
+      "No pote certinho!",
+      "Excelente!",
+      "Que capricho!",
+      "Isso aí!",
+      "Você conseguiu!",
+      "Show de bola!",
+      "Certinho!"
+    ]
+  }
+}

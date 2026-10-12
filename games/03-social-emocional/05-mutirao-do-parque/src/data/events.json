@@ -1,0 +1,167 @@
+[
+  {
+    "id": "event_chuva_verao",
+    "name": "Chuva Mansa de Verão",
+    "description": "Uma chuva refrescante cai sobre o parque! Todos os canteiros recebem rega natural automática.",
+    "warningDuration": 6,
+    "duration": 30,
+    "type": "weather",
+    "icon": "CloudRain",
+    "effectDescription": "Canteiros não precisam de regador enquanto durar a chuva!",
+    "requiresTeamCoordination": false
+  },
+  {
+    "id": "event_caixa_perdida",
+    "name": "Caixa de Chaves Extraviada",
+    "description": "Um vizinho deixou uma maleta de ferramentas práticas no meio do gramado.",
+    "warningDuration": 5,
+    "duration": 40,
+    "type": "item",
+    "icon": "Briefcase",
+    "effectDescription": "Encontre a maleta no gramado para duplicar a agilidade de reparos!",
+    "requiresTeamCoordination": true
+  },
+  {
+    "id": "event_interdicao_segura",
+    "name": "Trecho em Secagem Segura",
+    "description": "Um canteiro recém-adubado foi demarcado com cones suaves para ninguém pisar.",
+    "warningDuration": 6,
+    "duration": 35,
+    "type": "blockade",
+    "icon": "AlertTriangle",
+    "effectDescription": "Use as rampas e caminhos laterais acessíveis para contornar.",
+    "requiresTeamCoordination": true
+  },
+  {
+    "id": "event_entrega_flores",
+    "name": "Entrega Comunitária no Portão",
+    "description": "Chegou uma van com caixas de mudas floridas de presente dos vizinhos no portão de entrada!",
+    "warningDuration": 7,
+    "duration": 45,
+    "type": "delivery",
+    "icon": "Truck",
+    "effectDescription": "Carreguem as caixas com o carrinho de mão até o depósito ou canteiro.",
+    "requiresTeamCoordination": true
+  },
+  {
+    "id": "event_ajuste_palco",
+    "name": "Sombra Nova para o Coreto",
+    "description": "O sol mudou de ângulo e o pessoal do coral sugeriu direcionar as mesas para a copa das árvores.",
+    "warningDuration": 6,
+    "duration": 40,
+    "type": "delivery",
+    "icon": "Umbrella",
+    "effectDescription": "Ajudem a aproximar duas mesas adicionais para acomodar o público na sombra!",
+    "requiresTeamCoordination": true
+  },
+  {
+    "id": "event_teste_eletrico",
+    "name": "Checagem do Disjuntor Solar",
+    "description": "Um aviso luminoso na oficina avisa que as baterias solares precisam de um teste conjunto.",
+    "warningDuration": 5,
+    "duration": 30,
+    "type": "item",
+    "icon": "Zap",
+    "effectDescription": "Dois voluntários juntos no painel da oficina acendem todas as luminárias do parque de uma vez!",
+    "requiresTeamCoordination": true
+  },
+  {
+    "id": "event_visitantes_curiosos",
+    "name": "Crianças da Vizinha Chegando",
+    "description": "Um grupo de crianças se aproxima do gradil batendo palmas e torcendo pelo mutirão!",
+    "warningDuration": 5,
+    "duration": 35,
+    "type": "visitor",
+    "icon": "Users",
+    "effectDescription": "A empolgação das crianças aumenta em 20% a velocidade de todo mundo!",
+    "requiresTeamCoordination": false
+  },
+  {
+    "id": "event_brisa_outono",
+    "name": "Vento de Folhas Douradas",
+    "description": "Uma brisa agradável espalhou folhas secas ao redor da praça central.",
+    "warningDuration": 6,
+    "duration": 35,
+    "type": "nature",
+    "icon": "Wind",
+    "effectDescription": "Varrer o caminho dá um brilho especial ao parque e alimenta a composteira.",
+    "requiresTeamCoordination": true
+  },
+  {
+    "id": "event_cachorrinho_caramelo",
+    "name": "Visita do Caramelo",
+    "description": "O mascote do bairro, um cãozinho caramelo com coleira, veio dar uma espiadinha alegre!",
+    "warningDuration": 5,
+    "duration": 30,
+    "type": "visitor",
+    "icon": "Heart",
+    "effectDescription": "Chegar perto do Caramelo para fazer um carinho recarrega a stamina do grupo!",
+    "requiresTeamCoordination": false
+  },
+  {
+    "id": "event_abastecer_cisterna",
+    "name": "Uso da Cisterna Ecológica",
+    "description": "A torneira da rede está em manutenção rápida; a água da cisterna da horta está transbordando!",
+    "warningDuration": 7,
+    "duration": 40,
+    "type": "nature",
+    "icon": "Droplets",
+    "effectDescription": "Abasteçam os regadores na cisterna do jardim com o dobro de capacidade.",
+    "requiresTeamCoordination": false
+  },
+  {
+    "id": "event_passarinhos_cantores",
+    "name": "Bando de Canários da Terra",
+    "description": "Pássaros pousaram perto das sementes; o canto deles acalma e alegra o mutirão.",
+    "warningDuration": 5,
+    "duration": 30,
+    "type": "nature",
+    "icon": "Bird",
+    "effectDescription": "A música do ambiente ganha melodias alegres e diminui a fadiga de esforço.",
+    "requiresTeamCoordination": false
+  },
+  {
+    "id": "event_mudas_raras",
+    "name": "Doação de Mudas de Manacá",
+    "description": "Dona Lourdes doou lindas mudas floridas de Manacá-da-Serra na caçamba do depósito.",
+    "warningDuration": 6,
+    "duration": 45,
+    "type": "delivery",
+    "icon": "Gift",
+    "effectDescription": "Plantar essas mudas rende flores perfumadas especiais para a comemoração final.",
+    "requiresTeamCoordination": true
+  },
+  {
+    "id": "event_galho_na_trilha",
+    "name": "Tronco Suave na Trilha",
+    "description": "Um tronco seco caiu sobre a trilha. Com duas pessoas empurrando, é liberado em segundos.",
+    "warningDuration": 7,
+    "duration": 40,
+    "type": "blockade",
+    "icon": "Shuffle",
+    "effectDescription": "Cooperem para mover o tronco para o lado e transformar em banco rústico!",
+    "requiresTeamCoordination": true
+  },
+  {
+    "id": "event_lanche_comunitario",
+    "name": "Mesa de Frutas e Água Fresca",
+    "description": "A associação de moradores montou uma mesa com melancia fatiada e suco natural geladinho!",
+    "warningDuration": 5,
+    "duration": 40,
+    "type": "boost",
+    "icon": "Apple",
+    "effectDescription": "Comer uma fatia de fruta enche a barra de energia e dá velocidade ao personagem.",
+    "requiresTeamCoordination": false
+  },
+  {
+    "id": "event_arco_boas_vindas",
+    "name": "Arco Festivo de Entrada",
+    "description": "Faltam apenas algumas fitas coloridas para inaugurar o portal da grande festa!",
+    "warningDuration": 6,
+    "duration": 35,
+    "type": "boost",
+    "icon": "PartyPopper",
+    "effectDescription": "Decorem o arco de entrada para receber o aplauso coletivo no fim do dia!",
+    "requiresTeamCoordination": true
+  }
+]

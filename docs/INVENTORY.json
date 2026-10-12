@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-10-05T04:07:51.052Z",
+  "generatedAt": "2026-10-12T16:10:48.602Z",
   "counts": {
-    "games": 23,
+    "games": 34,
     "migrations": 18,
     "therapeuticResources": 14,
     "publicRoutes": 16,
@@ -14,7 +14,7 @@
       "appId": "bolhas-magicas",
       "name": "Bolhas Mágicas",
       "version": "1.0.0",
-      "summary": "Treino de pedido (mand) e estimulação sensorial: estouro de bolhas e pausa comportamental para pedir mais.",
+      "summary": "Treino de mando com reforçador natural: a varinha sopra bolhas com física real (empuxo, colisão, bolhona que se divide); na pausa a criança pede em 3 fases (MAIS → escolha → frase QUERO + item), com dicas graduais reais (gesto, modelo verbal, demonstração).",
       "renderType": "DOM / SVG vetorial",
       "engine": "Compartilhado (@aprumo/game-sdk)",
       "touchSupport": true,
@@ -32,142 +32,6 @@
       "models": {
         "ABA": "support",
         "DENVER": "joint-routine"
-      }
-    },
-    {
-      "appId": "causa-efeito",
-      "name": "Causa e Efeito",
-      "version": "1.0.0",
-      "summary": "Intencionalidade e regulação: toques táteis criam estrelas flutuantes e sons pentatônicos calmantes sem frustração.",
-      "renderType": "DOM / SVG vetorial",
-      "engine": "Compartilhado (@aprumo/game-sdk)",
-      "touchSupport": true,
-      "webAudio": true,
-      "manifestCompliant": true,
-      "repertoires": [
-        "play"
-      ],
-      "purposes": [
-        "regulation",
-        "reinforcer",
-        "teaching"
-      ],
-      "models": {
-        "ABA": "support",
-        "DENVER": "joint-routine"
-      }
-    },
-    {
-      "appId": "circuito-executivo",
-      "name": "Circuito Executivo",
-      "version": "1.0.0",
-      "summary": "Funções executivas: desafios adaptativos de controle inibitório (Go/No-Go), flexibilidade cognitiva (troca de regra) e memória operacional de trabalho.",
-      "renderType": "DOM / SVG vetorial",
-      "engine": "Compartilhado (@aprumo/game-sdk)",
-      "touchSupport": true,
-      "webAudio": true,
-      "manifestCompliant": true,
-      "repertoires": [
-        "academic"
-      ],
-      "purposes": [
-        "teaching",
-        "probe"
-      ],
-      "models": {
-        "ABA": "trial-based",
-        "DENVER": "joint-routine"
-      }
-    },
-    {
-      "appId": "danca-do-congelar",
-      "name": "Dança do Congelar",
-      "version": "1.0.0",
-      "summary": "Regulação auditivo-motora e controle de impulsos (ABA e Denver): dançar com a música e congelar imediatamente quando a música parar.",
-      "renderType": "DOM / SVG vetorial",
-      "engine": "Compartilhado (@aprumo/game-sdk)",
-      "touchSupport": true,
-      "webAudio": true,
-      "manifestCompliant": true,
-      "repertoires": [
-        "play",
-        "alternative_behavior"
-      ],
-      "purposes": [
-        "teaching",
-        "regulation",
-        "reinforcer"
-      ],
-      "models": {
-        "ABA": "trial-based",
-        "DENVER": "joint-routine"
-      }
-    },
-    {
-      "appId": "detetive-das-emocoes",
-      "name": "Detetive das Emoções",
-      "version": "1.0.0",
-      "summary": "Cognição social e teoria da mente: analise pistas faciais, postura corporal e contexto situacional para desvendar sentimentos e intenções sem infantilização.",
-      "renderType": "DOM / SVG vetorial",
-      "engine": "Compartilhado (@aprumo/game-sdk)",
-      "touchSupport": true,
-      "webAudio": true,
-      "manifestCompliant": true,
-      "repertoires": [
-        "social"
-      ],
-      "purposes": [
-        "teaching",
-        "probe"
-      ],
-      "models": {
-        "ABA": "trial-based",
-        "DENVER": "joint-routine"
-      }
-    },
-    {
-      "appId": "encaixa-ai",
-      "name": "Encaixa Aí",
-      "version": "1.0.0",
-      "summary": "Quebra-cabeça de encaixe com pino ensinado como cadeia (encadeamento reverso, direto ou tarefa total): cada peça é um passo registrado, com raio de captura e tolerância angular por nível.",
-      "renderType": "DOM / SVG vetorial",
-      "engine": "Compartilhado (@aprumo/game-sdk)",
-      "touchSupport": true,
-      "webAudio": true,
-      "manifestCompliant": true,
-      "repertoires": [
-        "matching",
-        "play"
-      ],
-      "purposes": [
-        "teaching",
-        "probe"
-      ],
-      "models": {
-        "ABA": "trial-based",
-        "DENVER": "not-indicated"
-      }
-    },
-    {
-      "appId": "encontre-o-igual",
-      "name": "Match Lab",
-      "version": "1.0.0",
-      "summary": "Laboratório de pareamento: idêntico, cor, forma, categoria e associação funcional, com campo de 2 a 12 estímulos, toque ou arrastar e visual por idade (Soft Clay, Cozy Cartoon, Laboratório Clean).",
-      "renderType": "DOM / SVG vetorial",
-      "engine": "Compartilhado (@aprumo/game-sdk)",
-      "touchSupport": true,
-      "webAudio": true,
-      "manifestCompliant": true,
-      "repertoires": [
-        "matching"
-      ],
-      "purposes": [
-        "teaching",
-        "probe"
-      ],
-      "models": {
-        "ABA": "trial-based",
-        "DENVER": "not-indicated"
       }
     },
     {
@@ -191,28 +55,6 @@
       "models": {
         "ABA": "trial-based",
         "DENVER": "not-indicated"
-      }
-    },
-    {
-      "appId": "espelho-magico",
-      "name": "Espelho Mágico",
-      "version": "1.0.0",
-      "summary": "Imitação motora: um personagem no espelho demonstra ações (palmas, braços, tambor, blocos) e o adulto registra a ajuda usada.",
-      "renderType": "DOM / SVG vetorial",
-      "engine": "Compartilhado (@aprumo/game-sdk)",
-      "touchSupport": true,
-      "webAudio": true,
-      "manifestCompliant": true,
-      "repertoires": [
-        "imitation"
-      ],
-      "purposes": [
-        "teaching",
-        "probe"
-      ],
-      "models": {
-        "ABA": "trial-based",
-        "DENVER": "joint-routine"
       }
     },
     {
@@ -243,17 +85,84 @@
       }
     },
     {
-      "appId": "historia-ordem",
-      "name": "História em Ordem",
+      "appId": "leitura-de-cena",
+      "name": "Leitura de Cena",
       "version": "1.0.0",
-      "summary": "Sequenciamento temporal e causalidade: a criança organiza 3 etapas cronológicas de uma rotina ou evento.",
+      "summary": "Interpretação de situações sociais e leitura de contexto: identificação de emoções em personagens, pistas no ambiente e escolha de respostas adaptativas.",
       "renderType": "DOM / SVG vetorial",
       "engine": "Compartilhado (@aprumo/game-sdk)",
       "touchSupport": true,
       "webAudio": true,
       "manifestCompliant": true,
       "repertoires": [
-        "intraverbal",
+        "social",
+        "listener",
+        "tact"
+      ],
+      "purposes": [
+        "teaching",
+        "reinforcer",
+        "regulation"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "encontre-o-igual",
+      "name": "Match Lab",
+      "version": "1.0.0",
+      "summary": "Laboratório de pareamento: idêntico, cor, forma, categoria e associação funcional, com campo de 2 a 12 estímulos, toque ou arrastar e visual por idade (Soft Clay, Cozy Cartoon, Laboratório Clean).",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "matching"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "not-indicated"
+      }
+    },
+    {
+      "appId": "encaixa-ai",
+      "name": "Encaixa Aí",
+      "version": "1.0.0",
+      "summary": "Quebra-cabeça de encaixe com pino ensinado como cadeia (encadeamento reverso, direto ou tarefa total): cada peça é um passo registrado, com raio de captura e tolerância angular por nível.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "matching",
+        "play"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "not-indicated"
+      }
+    },
+    {
+      "appId": "organize-categoria",
+      "name": "Organize por Categoria",
+      "version": "1.0.0",
+      "summary": "Categorização funcional (RFFC: onde guardamos?): esteira com atrito, item lançado em arco até 9 recipientes ilustrados, fases de 2 a 5 caixas, arrastar ou tocar e correção sem erro.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "matching",
         "listener",
         "academic"
       ],
@@ -267,35 +176,10 @@
       }
     },
     {
-      "appId": "lanche-do-urso",
-      "name": "Hora do Lanche do Urso",
-      "version": "1.0.0",
-      "summary": "Brincar de faz de conta (Denver): dar comida, água, limpar e pôr o urso para dormir; de ações isoladas a sequências e substituição simbólica. Formato espelho com o kit real ao lado do tablet.",
-      "renderType": "DOM / SVG vetorial",
-      "engine": "Compartilhado (@aprumo/game-sdk)",
-      "touchSupport": true,
-      "webAudio": true,
-      "manifestCompliant": true,
-      "repertoires": [
-        "play",
-        "imitation",
-        "listener",
-        "social"
-      ],
-      "purposes": [
-        "teaching",
-        "probe"
-      ],
-      "models": {
-        "ABA": "not-indicated",
-        "DENVER": "joint-routine"
-      }
-    },
-    {
       "appId": "memoria-bichos",
       "name": "Memória dos Bichos",
       "version": "1.0.0",
-      "summary": "Memória de trabalho visual e pareamento diferido: a criança vira cartas para encontrar os pares de bichinhos.",
+      "summary": "Memória de trabalho visual e pareamento diferido: fases de 2 a 6 pares com 12 bichos ilustrados, espiada inicial (ensino sem erro), dica PEEK e registro de posição, revisitas e erros com par já visto.",
       "renderType": "DOM / SVG vetorial",
       "engine": "Compartilhado (@aprumo/game-sdk)",
       "touchSupport": true,
@@ -304,6 +188,91 @@
       "repertoires": [
         "matching",
         "play"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
+      "appId": "par-perfeito",
+      "name": "Par Perfeito",
+      "version": "1.0.0",
+      "summary": "Programa estruturado de pareamento idêntico ABA com máquina de estados finitos (XState), suporte a ponte física-digital e esvanecimento gradual de ajuda.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "matching"
+      ],
+      "purposes": [
+        "teaching",
+        "reinforcer",
+        "regulation"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "cada-um-no-seu-pote",
+      "name": "Cada Um no Seu Pote",
+      "version": "1.0.0",
+      "summary": "Classificação tátil e conceitual de objetos em potes temáticos por cor, forma e categoria com física interativa e reforçamento imediato.",
+      "renderType": "Canvas 2D (Phaser) + DOM",
+      "engine": "Phaser 3 / Web Audio + @aprumo/game-sdk",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "matching",
+        "play"
+      ],
+      "purposes": [
+        "teaching",
+        "reinforcer",
+        "regulation"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "detetive-das-emocoes",
+      "name": "Detetive das Emoções",
+      "version": "1.0.0",
+      "summary": "Cognição social e teoria da mente: analise pistas faciais, postura corporal e contexto situacional para desvendar sentimentos e intenções sem infantilização.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "social"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
+      "appId": "olha-comigo",
+      "name": "Olha Comigo",
+      "version": "1.0.0",
+      "summary": "Atenção compartilhada: um guia amigo olha, aponta e diz ",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "social"
       ],
       "purposes": [
         "teaching",
@@ -337,6 +306,214 @@
       }
     },
     {
+      "appId": "social-city",
+      "name": "Social City 3D",
+      "version": "1.0.0",
+      "summary": "Simulação urbana 3D para adolescentes: prática de interações sociais reais em cafeteria, transporte público, conversas em grupo e estabelecimento assertivo de limites.",
+      "renderType": "Canvas 2D Pseudo-3D isométrico (Nota: NÃO é 3D real até Three.js)",
+      "engine": "Própria (Projeção isométrica canvas + @aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "social",
+        "play"
+      ],
+      "purposes": [
+        "teaching",
+        "probe",
+        "reinforcer"
+      ],
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
+      "appId": "mutirao-do-parque",
+      "name": "Mutirão do Parque",
+      "version": "1.0.0",
+      "summary": "Experiência cooperativa de convivência comunitária, divisão de papéis e trabalho em equipe no cuidado e limpeza de um parque público.",
+      "renderType": "Canvas 2D (Phaser) + DOM",
+      "engine": "Phaser 3 / Web Audio + @aprumo/game-sdk",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "social",
+        "play"
+      ],
+      "purposes": [
+        "teaching",
+        "reinforcer",
+        "regulation"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "espelho-magico",
+      "name": "Espelho Mágico",
+      "version": "1.0.0",
+      "summary": "Imitação motora: um personagem no espelho demonstra ações (palmas, braços, tambor, blocos) e o adulto registra a ajuda usada.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "imitation"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
+      "appId": "tambor-da-imitacao",
+      "name": "Tambor da Imitação",
+      "version": "1.0.0",
+      "summary": "Imitação motora com objetos (Denver e ABA): reciprocidade musical com Tico e treino de imitação de sequências no tambor.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "imitation",
+        "play"
+      ],
+      "purposes": [
+        "teaching",
+        "reinforcer"
+      ],
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
+      "appId": "siga-o-mestre",
+      "name": "Siga o Mestre",
+      "version": "1.0.0",
+      "summary": "Discriminação auditiva e controle inibitório (ABA): seguir comandos apenas quando o mestre mandar e segurar o impulso nas pegadinhas.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "listener",
+        "alternative_behavior"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "not-indicated"
+      }
+    },
+    {
+      "appId": "danca-do-congelar",
+      "name": "Dança do Congelar",
+      "version": "1.0.0",
+      "summary": "Controle inibitório motor com música: dançarino com física de molas, música que para no congela, gelo que racha com toques impulsivos e 4 fases (estátua curta, longa, pegadinha com distrações, gelo ou folha go/no-go).",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "play",
+        "alternative_behavior"
+      ],
+      "purposes": [
+        "teaching",
+        "regulation",
+        "reinforcer"
+      ],
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
+      "appId": "banda-do-tico",
+      "name": "Banda do Tico",
+      "version": "1.0.0",
+      "summary": "Jogo musical de ritmo, imitação sonora e resposta imediata com instrumentos e personagens originais, estimulando antecipação e sincronização.",
+      "renderType": "Canvas 2D (Phaser) + DOM",
+      "engine": "Phaser 3 / Web Audio + @aprumo/game-sdk",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "imitation",
+        "social",
+        "play"
+      ],
+      "purposes": [
+        "teaching",
+        "reinforcer",
+        "regulation"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "rampa-maluca",
+      "name": "Rampa Maluca",
+      "version": "1.0.0",
+      "summary": "Rotina de atividade conjunta (Denver) com carrinhos e bolinhas na rampa: o adulto conduz ",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "mand",
+        "echoic",
+        "social",
+        "play"
+      ],
+      "purposes": [
+        "teaching"
+      ],
+      "models": {
+        "ABA": "not-indicated",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
+      "appId": "lanche-do-urso",
+      "name": "Hora do Lanche do Urso",
+      "version": "1.0.0",
+      "summary": "Brincar de faz de conta (Denver): dar comida, água, limpar e pôr o urso para dormir; de ações isoladas a sequências e substituição simbólica. Formato espelho com o kit real ao lado do tablet.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "play",
+        "imitation",
+        "listener",
+        "social"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {
+        "ABA": "not-indicated",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
       "appId": "minimundos",
       "name": "MiniMundos",
       "version": "1.0.0",
@@ -348,6 +525,73 @@
       "manifestCompliant": true,
       "repertoires": [
         "play"
+      ],
+      "purposes": [
+        "teaching",
+        "probe"
+      ],
+      "models": {
+        "ABA": "trial-based",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
+      "appId": "torre-derruba",
+      "name": "Torre Derruba",
+      "version": "1.0.0",
+      "summary": "Rotina de atividade conjunta Denver (JAR) de empilhamento e derrubada de blocos de madeira com física realista, troca de turnos e contagem regressiva.",
+      "renderType": "Canvas 2D Física + DOM",
+      "engine": "Engine de Física Customizada + Web Audio",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "play",
+        "imitation",
+        "social"
+      ],
+      "purposes": [
+        "teaching",
+        "reinforcer",
+        "regulation"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "causa-efeito",
+      "name": "Causa e Efeito",
+      "version": "1.0.0",
+      "summary": "Jardim de Luzes: 5 fases de contingência causa-efeito (tocar, estourar bolhas, segurar e soltar, arrastar, acionar um único alvo) com física suave, som espacial pentatônico e zero frustração.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "play"
+      ],
+      "purposes": [
+        "regulation",
+        "reinforcer",
+        "teaching"
+      ],
+      "models": {
+        "ABA": "support",
+        "DENVER": "joint-routine"
+      }
+    },
+    {
+      "appId": "circuito-executivo",
+      "name": "Circuito Executivo",
+      "version": "1.0.0",
+      "summary": "Funções executivas em circuito de 3 estações com o robô Bip: Go/No-Go com itens caindo por gravidade adaptativa (baterias vs. gotas), troca de regra DCCS (cor → forma → misto) e memória Corsi com 9 luzes e span crescente.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "academic"
       ],
       "purposes": [
         "teaching",
@@ -383,52 +627,6 @@
       }
     },
     {
-      "appId": "olha-comigo",
-      "name": "Olha Comigo",
-      "version": "1.0.0",
-      "summary": "Atenção compartilhada: um guia amigo olha, aponta e diz ",
-      "renderType": "DOM / SVG vetorial",
-      "engine": "Compartilhado (@aprumo/game-sdk)",
-      "touchSupport": true,
-      "webAudio": true,
-      "manifestCompliant": true,
-      "repertoires": [
-        "social"
-      ],
-      "purposes": [
-        "teaching",
-        "probe"
-      ],
-      "models": {
-        "ABA": "trial-based",
-        "DENVER": "joint-routine"
-      }
-    },
-    {
-      "appId": "organize-categoria",
-      "name": "Organize por Categoria",
-      "version": "1.0.0",
-      "summary": "Categorização e RFFC: a criança classifica o estímulo na caixa temática correta (alimentos, animais, veículos ou roupas).",
-      "renderType": "DOM / SVG vetorial",
-      "engine": "Compartilhado (@aprumo/game-sdk)",
-      "touchSupport": true,
-      "webAudio": true,
-      "manifestCompliant": true,
-      "repertoires": [
-        "matching",
-        "listener",
-        "academic"
-      ],
-      "purposes": [
-        "teaching",
-        "probe"
-      ],
-      "models": {
-        "ABA": "trial-based",
-        "DENVER": "joint-routine"
-      }
-    },
-    {
       "appId": "pequeno-chef",
       "name": "Pequeno Chef",
       "version": "1.0.0",
@@ -454,42 +652,19 @@
       }
     },
     {
-      "appId": "rampa-maluca",
-      "name": "Rampa Maluca",
+      "appId": "historia-ordem",
+      "name": "História em Ordem",
       "version": "1.0.0",
-      "summary": "Rotina de atividade conjunta (Denver) com carrinhos e bolinhas na rampa: o adulto conduz ",
+      "summary": "Sequenciamento temporal e causalidade: 9 histórias ilustradas de 3, 4 e 5 cenas em escada adaptativa, arrastar ou tocar, correção sem erro (cenas certas travam) e replay narrado da história.",
       "renderType": "DOM / SVG vetorial",
       "engine": "Compartilhado (@aprumo/game-sdk)",
       "touchSupport": true,
       "webAudio": true,
       "manifestCompliant": true,
       "repertoires": [
-        "mand",
-        "echoic",
-        "social",
-        "play"
-      ],
-      "purposes": [
-        "teaching"
-      ],
-      "models": {
-        "ABA": "not-indicated",
-        "DENVER": "joint-routine"
-      }
-    },
-    {
-      "appId": "siga-o-mestre",
-      "name": "Siga o Mestre",
-      "version": "1.0.0",
-      "summary": "Discriminação auditiva e controle inibitório (ABA): seguir comandos apenas quando o mestre mandar e segurar o impulso nas pegadinhas.",
-      "renderType": "DOM / SVG vetorial",
-      "engine": "Compartilhado (@aprumo/game-sdk)",
-      "touchSupport": true,
-      "webAudio": true,
-      "manifestCompliant": true,
-      "repertoires": [
+        "intraverbal",
         "listener",
-        "alternative_behavior"
+        "academic"
       ],
       "purposes": [
         "teaching",
@@ -497,55 +672,114 @@
       ],
       "models": {
         "ABA": "trial-based",
-        "DENVER": "not-indicated"
-      }
-    },
-    {
-      "appId": "social-city",
-      "name": "Social City 3D",
-      "version": "1.0.0",
-      "summary": "Simulação urbana 3D para adolescentes: prática de interações sociais reais em cafeteria, transporte público, conversas em grupo e estabelecimento assertivo de limites.",
-      "renderType": "Canvas 2D Pseudo-3D isométrico (Nota: NÃO é 3D real até Three.js)",
-      "engine": "Própria (Projeção isométrica canvas + @aprumo/game-sdk)",
-      "touchSupport": true,
-      "webAudio": true,
-      "manifestCompliant": true,
-      "repertoires": [
-        "social",
-        "play"
-      ],
-      "purposes": [
-        "teaching",
-        "probe",
-        "reinforcer"
-      ],
-      "models": {
-        "ABA": "trial-based",
         "DENVER": "joint-routine"
       }
     },
     {
-      "appId": "tambor-da-imitacao",
-      "name": "Tambor da Imitação",
+      "appId": "mercadinho-da-esquina",
+      "name": "Mercadinho da Esquina",
       "version": "1.0.0",
-      "summary": "Imitação motora com objetos (Denver e ABA): reciprocidade musical com Tico e treino de imitação de sequências no tambor.",
+      "summary": "Simulação realista de compras cotidianas, pagamento com dinheiro em reais, cálculo de troco, lista de compras e script social de caixa.",
       "renderType": "DOM / SVG vetorial",
       "engine": "Compartilhado (@aprumo/game-sdk)",
       "touchSupport": true,
       "webAudio": true,
       "manifestCompliant": true,
       "repertoires": [
-        "imitation",
-        "play"
+        "adl",
+        "academic",
+        "social"
       ],
       "purposes": [
         "teaching",
-        "reinforcer"
+        "reinforcer",
+        "regulation"
       ],
-      "models": {
-        "ABA": "trial-based",
-        "DENVER": "joint-routine"
-      }
+      "models": {}
+    },
+    {
+      "appId": "passo-a-passo",
+      "name": "Passo a Passo (Análise de Tarefas)",
+      "version": "1.0.0",
+      "summary": "Encadeamento de atividades de vida diária (AVDs) através de análise de tarefas passo a passo, suporte visual de prancha e registro de independência.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "adl",
+        "listener"
+      ],
+      "purposes": [
+        "teaching",
+        "reinforcer",
+        "regulation"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "quadro-de-conquistas",
+      "name": "Quadro de Conquistas",
+      "version": "1.0.0",
+      "summary": "Sistema dinâmico de economia de fichas (token economy) com cardápio de reforçadores, metas visuais e temporizador comemorativo.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "adl",
+        "social"
+      ],
+      "purposes": [
+        "teaching",
+        "reinforcer",
+        "regulation"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "escape-room-kids",
+      "name": "Escape Room Kids",
+      "version": "1.0.0",
+      "summary": "Desafios de raciocínio lógico e pistas em diorama 3D interativo, promovendo cooperação, dedução e persistência cognitiva.",
+      "renderType": "WebGL 3D (Three.js) + DOM",
+      "engine": "Three.js / WebGL + @aprumo/game-sdk",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "academic",
+        "social"
+      ],
+      "purposes": [
+        "teaching",
+        "reinforcer",
+        "regulation"
+      ],
+      "models": {}
+    },
+    {
+      "appId": "vida-online",
+      "name": "Vida Online",
+      "version": "1.0.0",
+      "summary": "Simulação interativa de smartphone para jovens autistas: segurança digital, privacidade, navegação consciente e reflexão Pensar Antes.",
+      "renderType": "DOM / SVG vetorial",
+      "engine": "Compartilhado (@aprumo/game-sdk)",
+      "touchSupport": true,
+      "webAudio": true,
+      "manifestCompliant": true,
+      "repertoires": [
+        "adl",
+        "social"
+      ],
+      "purposes": [
+        "teaching",
+        "reinforcer",
+        "regulation"
+      ],
+      "models": {}
     }
   ],
   "migrations": [

@@ -1,0 +1,355 @@
+:root {
+  /* Design System Igarapé Tokens */
+  --fundo: #FBF9F5;
+  --fundo-card: #FFFFFF;
+  --fundo-card-ilustracao: #F6F3EC;
+  --tinta: #1E252B;
+  --tinta-15: rgba(30, 37, 43, 0.15);
+  --tinta-30: rgba(30, 37, 43, 0.30);
+  --tinta-60: rgba(30, 37, 43, 0.60);
+  
+  --igarape: #0E8388;
+  --igarape-light: #2A9D8F;
+  --igarape-glow: rgba(14, 131, 136, 0.35);
+
+  --vitoria-regia: #2D6A4F;
+  --vitoria-regia-light: #52B788;
+  
+  --buriti: #F4A261;
+  --buriti-glow: rgba(244, 162, 97, 0.6);
+  --buriti-bright: #FFB703;
+  
+  --acai: #581845;
+  --acai-light: #900C3F;
+  
+  --neutro: #94A3B8;
+  --neutro-light: #E2E8F0;
+  --neutro-dark: #64748B;
+
+  /* Paper Cut Shadows */
+  --sombra-papel: 0 2px 4px rgba(30, 37, 43, 0.08);
+  --sombra-papel-elevado: 0 10px 25px rgba(30, 37, 43, 0.12);
+  --sombra-papel-arrasto: 0 14px 30px rgba(14, 131, 136, 0.25);
+  
+  /* Fonts */
+  --font-corpo: 'Andika', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-hud: 'Outfit', sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background-color: var(--fundo);
+  color: var(--tinta);
+  font-family: var(--font-corpo);
+  overflow-x: hidden;
+  touch-action: manipulation;
+}
+
+/* Base App Layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  position: relative;
+  background-color: var(--fundo);
+}
+
+/* Accessibility: Safe motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Card Common Styles (180x180 px on desktop/tablet) */
+.card-base {
+  width: 180px;
+  height: 180px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--fundo-card);
+  box-shadow: var(--sombra-papel);
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.2s ease;
+  overflow: hidden;
+  padding: 16px;
+}
+
+/* Responsive adjustment for compact screens */
+@media (max-width: 768px) {
+  .card-base {
+    width: 140px;
+    height: 140px;
+    border-radius: 16px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-base {
+    width: 110px;
+    height: 110px;
+    border-radius: 14px;
+    padding: 8px;
+  }
+}
+
+/* Comparison Card */
+.comparison-card {
+  border: 3px solid var(--tinta-15);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.comparison-card.is-target {
+  /* Base state */
+}
+
+/* Visual Prompt: Pulse (scale 1.00 -> 1.04, 600ms, 2 cycles, frequency < 2Hz) */
+@keyframes visPulse {
+  0% {
+    transform: scale(1);
+    border-color: var(--tinta-15);
+    box-shadow: var(--sombra-papel);
+  }
+  50% {
+    transform: scale(var(--pulse-scale, 1.04));
+    border-color: var(--igarape);
+    box-shadow: 0 0 16px var(--igarape-glow);
+  }
+  100% {
+    transform: scale(1);
+    border-color: var(--tinta-15);
+    box-shadow: var(--sombra-papel);
+  }
+}
+
+.comparison-card.vis-prompt-active {
+  animation: visPulse 0.65s ease-in-out 2;
+}
+
+/* Positive Match Feedback: Glow --buriti for 500ms + jump */
+@keyframes buritiMatchGlow {
+  0% {
+    box-shadow: 0 0 0 var(--buriti-glow);
+    transform: scale(1);
+  }
+  40% {
+    box-shadow: 0 0 25px var(--buriti-glow);
+    transform: scale(1.06) translateY(-8px);
+  }
+  100% {
+    box-shadow: 0 0 0 transparent;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.comparison-card.matched-glow {
+  border-color: var(--buriti) !important;
+  animation: buritiMatchGlow 0.5s ease-out forwards;
+}
+
+/* Sample Card (Draggable, with --igarape border) */
+.sample-card {
+  border: 3.5px solid var(--igarape);
+  background-color: var(--fundo-card);
+  cursor: grab;
+  touch-action: none;
+  z-index: 10;
+}
+
+.sample-card:active,
+.sample-card.is-dragging {
+  cursor: grabbing;
+  box-shadow: var(--sombra-papel-arrasto);
+  transform: scale(1.05);
+}
+
+.sample-card.is-returning-neutral {
+  border-color: var(--neutro) !important;
+  opacity: 0.65;
+  transition: all 0.4s ease;
+}
+
+/* Tap mode indicator on sample */
+.sample-card.tap-mode-selected {
+  border-color: var(--buriti);
+  box-shadow: 0 0 16px var(--buriti-glow);
+}
+
+/* HUD Styling */
+.hud-panel {
+  font-family: var(--font-hud);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1.5px solid var(--tinta-15);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  z-index: 50;
+}
+
+/* Button & Control Micro-interactions */
+.btn-igarape {
+  background-color: var(--igarape);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-family: var(--font-hud);
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 6px rgba(14, 131, 136, 0.25);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.btn-igarape:hover {
+  background-color: #0b6c70;
+  transform: translateY(-1px);
+}
+
+.btn-igarape:active {
+  transform: translateY(1px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--tinta);
+  border: 1.5px solid var(--tinta-30);
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-family: var(--font-hud);
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn-outline:hover {
+  border-color: var(--igarape);
+  color: var(--igarape);
+  background: rgba(14, 131, 136, 0.05);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.badge-igarape {
+  background-color: rgba(14, 131, 136, 0.12);
+  color: var(--igarape);
+}
+
+.badge-buriti {
+  background-color: rgba(244, 162, 97, 0.2);
+  color: #c9621b;
+}
+
+.badge-vitoria {
+  background-color: rgba(45, 106, 79, 0.12);
+  color: var(--vitoria-regia);
+}
+
+.badge-acai {
+  background-color: rgba(88, 24, 69, 0.12);
+  color: var(--acai);
+}
+
+/* Arena & Comparison Field */
+.arena-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 20px 32px 20px;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.comparison-field-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  min-height: 200px;
+  width: 100%;
+  padding: 12px 0;
+}
+
+/* Portrait mode: 2x3 grid */
+@media (orientation: portrait) {
+  .comparison-field-row {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 20px;
+    justify-content: center;
+  }
+}
+
+.sample-base-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 210px;
+  width: 100%;
+  position: relative;
+}
+
+.sample-base-placeholder {
+  width: 180px;
+  height: 180px;
+  border-radius: 20px;
+  border: 2px dashed var(--neutro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(241, 245, 249, 0.5);
+}
+
+@media (max-width: 768px) {
+  .sample-base-placeholder {
+    width: 140px;
+    height: 140px;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sample-base-placeholder {
+    width: 110px;
+    height: 110px;
+    border-radius: 14px;
+  }
+}

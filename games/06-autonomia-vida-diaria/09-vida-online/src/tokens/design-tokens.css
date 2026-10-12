@@ -1,0 +1,211 @@
+/* ==========================================================================
+   VIDA ONLINE — DESIGN SYSTEM TOKENS (NEXO OS)
+   Three-Layer Token Architecture: Primitives -> Semantics -> Components
+   ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------------
+     1. PRIMITIVES
+     ------------------------------------------------------------------------ */
+  /* Palette - Contemporary Youth UI (05_vida_online.md spec) */
+  --primitive-color-grafite: #20252c;
+  --primitive-color-slate-900: #1b2129;
+  --primitive-color-slate-800: #262e3b;
+  --primitive-color-slate-700: #344052;
+  --primitive-color-slate-600: #4a596f;
+  --primitive-color-slate-400: #8896aa;
+  --primitive-color-slate-200: #d6dde7;
+  --primitive-color-slate-100: #eef2f6;
+
+  --primitive-color-azul-500: #536dfe;
+  --primitive-color-azul-600: #3d5afe;
+  --primitive-color-azul-400: #758dfe;
+  --primitive-color-azul-glow: rgba(83, 109, 254, 0.25);
+
+  --primitive-color-turquesa-500: #45b5a4;
+  --primitive-color-turquesa-600: #359889;
+  --primitive-color-turquesa-400: #62c7b8;
+  --primitive-color-turquesa-glow: rgba(69, 181, 164, 0.25);
+
+  --primitive-color-lilas-500: #8b75d7;
+  --primitive-color-lilas-600: #765ec4;
+  --primitive-color-lilas-400: #a491e3;
+  --primitive-color-lilas-glow: rgba(139, 117, 215, 0.25);
+
+  --primitive-color-coral-500: #e16c68;
+  --primitive-color-coral-600: #c95753;
+  --primitive-color-coral-400: #eb8784;
+  --primitive-color-coral-glow: rgba(225, 108, 104, 0.25);
+
+  --primitive-color-offwhite: #f6f6f3;
+  --primitive-color-purewhite: #ffffff;
+  --primitive-color-pureblack: #0c0e12;
+
+  /* Typography Scales */
+  --font-family-sans: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-dyslexic: 'OpenDyslexic', 'Comic Sans MS', sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Spacing Scale (4px base) */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+  --space-12: 3rem;    /* 48px */
+
+  /* Radii */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 30px;
+  --radius-pill: 9999px;
+
+  /* Elevation / Shadows */
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.14);
+  --shadow-lg: 0 16px 36px rgba(0, 0, 0, 0.22);
+  --shadow-glow-azul: 0 0 20px var(--primitive-color-azul-glow);
+  --shadow-glow-coral: 0 0 20px var(--primitive-color-coral-glow);
+
+  /* Transitions & Motion (spec: stiffness 260, damping 28) */
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  --ease-smooth: cubic-bezier(0.4, 0.0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 240ms;
+  --duration-slow: 380ms;
+
+  /* Safe areas */
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* --------------------------------------------------------------------------
+   2. SEMANTIC TOKENS — DARK MODE (DEFAULT)
+   -------------------------------------------------------------------------- */
+[data-theme='dark'], :root {
+  --bg-app-ambient: radial-gradient(circle at 50% 20%, #2a3444 0%, #151920 100%);
+  --bg-device-frame: #1b2129;
+  --bg-device-border: #344052;
+  --bg-nexo-screen: #191f27;
+  --bg-surface-elevated: #242c38;
+  --bg-surface-subtle: #2d3746;
+  --bg-surface-glass: rgba(36, 44, 56, 0.82);
+  --border-subtle: rgba(214, 221, 231, 0.12);
+  --border-focus: var(--primitive-color-azul-500);
+
+  --text-primary: #f6f6f3;
+  --text-secondary: #d6dde7;
+  --text-muted: #8896aa;
+  --text-inverse: #151920;
+
+  --accent-brand: var(--primitive-color-azul-500);
+  --accent-secondary: var(--primitive-color-lilas-500);
+  --accent-success: var(--primitive-color-turquesa-500);
+  --accent-warning: #eab308;
+  --accent-danger: var(--primitive-color-coral-500);
+
+  --chat-bubble-received-bg: #2b3543;
+  --chat-bubble-received-text: #f6f6f3;
+  --chat-bubble-sent-bg: #536dfe;
+  --chat-bubble-sent-text: #ffffff;
+  --chat-bubble-system-bg: rgba(52, 64, 82, 0.6);
+  --chat-bubble-system-text: #d6dde7;
+
+  --indicator-privacidade: var(--primitive-color-turquesa-500);
+  --indicator-clareza: var(--primitive-color-azul-500);
+  --indicator-limites: var(--primitive-color-coral-500);
+  --indicator-confianca: var(--primitive-color-lilas-500);
+}
+
+/* --------------------------------------------------------------------------
+   2. SEMANTIC TOKENS — LIGHT MODE
+   -------------------------------------------------------------------------- */
+[data-theme='light'] {
+  --bg-app-ambient: radial-gradient(circle at 50% 20%, #e2e8f0 0%, #cbd5e1 100%);
+  --bg-device-frame: #ffffff;
+  --bg-device-border: #d6dde7;
+  --bg-nexo-screen: #f6f6f3;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #eef2f6;
+  --bg-surface-glass: rgba(255, 255, 255, 0.88);
+  --border-subtle: rgba(52, 64, 82, 0.14);
+  --border-focus: var(--primitive-color-azul-600);
+
+  --text-primary: #20252c;
+  --text-secondary: #344052;
+  --text-muted: #64748b;
+  --text-inverse: #ffffff;
+
+  --accent-brand: var(--primitive-color-azul-600);
+  --accent-secondary: var(--primitive-color-lilas-600);
+  --accent-success: var(--primitive-color-turquesa-600);
+  --accent-warning: #ca8a04;
+  --accent-danger: var(--primitive-color-coral-600);
+
+  --chat-bubble-received-bg: #e2e8f0;
+  --chat-bubble-received-text: #20252c;
+  --chat-bubble-sent-bg: #536dfe;
+  --chat-bubble-sent-text: #ffffff;
+  --chat-bubble-system-bg: #eef2f6;
+  --chat-bubble-system-text: #475569;
+}
+
+/* --------------------------------------------------------------------------
+   HIGH CONTRAST MODE
+   -------------------------------------------------------------------------- */
+[data-high-contrast='true'] {
+  --bg-nexo-screen: #000000 !important;
+  --bg-surface-elevated: #111111 !important;
+  --bg-surface-subtle: #222222 !important;
+  --text-primary: #ffffff !important;
+  --text-secondary: #ffff00 !important;
+  --text-muted: #00ffff !important;
+  --border-subtle: #ffffff !important;
+  --border-focus: #ffff00 !important;
+  --chat-bubble-received-bg: #1c1c1c !important;
+  --chat-bubble-received-text: #ffffff !important;
+  --chat-bubble-sent-bg: #0044ff !important;
+  --chat-bubble-sent-text: #ffffff !important;
+}
+
+/* --------------------------------------------------------------------------
+   DYSLEXIA FRIENDLY MODE
+   -------------------------------------------------------------------------- */
+[data-dyslexia='true'] {
+  --font-family-sans: var(--font-family-dyslexic) !important;
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   REDUCED MOTION
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+[data-reduced-motion='true'] * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* --------------------------------------------------------------------------
+   FONT SIZE OVERRIDES
+   -------------------------------------------------------------------------- */
+[data-font-size='large'] {
+  font-size: 112.5%;
+}
+[data-font-size='xlarge'] {
+  font-size: 125%;
+}

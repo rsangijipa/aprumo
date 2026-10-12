@@ -25,6 +25,7 @@ import {
 } from '../../data/store';
 import type { ChildTheme } from '../../data/types';
 import { GAMES } from '../../game-host/registry';
+import { GameIllustration } from '../../components/GameIllustration';
 import {
   ArtListener,
   ArtMatch,
@@ -318,7 +319,9 @@ function GameTile({ appId, stars, locked, teen, onPlay, compact }: { appId: stri
   const name = teen ? GAMES[appId]!.manifest.name : GAME_KID_NAME[appId] ?? GAMES[appId]!.manifest.name;
   return (
     <button className="cs-game" data-compact={compact} disabled={locked} onClick={onPlay} aria-label={`${name}${locked ? ' (tela descansando)' : ''}`}>
-      <span className="cs-game__art" aria-hidden="true">{GAME_ART[appId]}</span>
+      <span className="cs-game__art" aria-hidden="true">
+        <GameIllustration appId={appId} name={name} fallbackArt={GAME_ART[appId]} />
+      </span>
       <span className="cs-game__body">
         <strong>{name}</strong>
         <span className="cs-game__stars"><StarIcon /> {stars}</span>

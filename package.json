@@ -19,6 +19,7 @@
     "eslint-plugin-jsx-a11y": "^6",
     "eslint-plugin-react-hooks": "^7",
     "globals": "^17.13.0",
+    "phaser3spectorjs": "^0.0.8",
     "prettier": "^3.9.9",
     "turbo": "^2.11.7",
     "typescript": "^6.0.3",

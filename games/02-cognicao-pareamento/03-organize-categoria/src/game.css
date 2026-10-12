@@ -1,0 +1,299 @@
+/* Organize por Categoria — tokens próprios (--opc-*). Depósito de brinquedos com esteira. */
+.opc {
+  --opc-bg: #eef3ea;
+  --opc-floor: #dfe7d6;
+  --opc-ink: #33302d;
+  --opc-card: #ffffff;
+  --opc-belt: #6f7a83;
+  --opc-belt-stripe: #8c97a0;
+  --opc-hint: #f2b632;
+  --opc-ok: #4f9d69;
+  --opc-focus: #2f6fb0;
+  --opc-chip: rgb(255 255 255 / 0.85);
+  --opc-scale: 1;
+  --opc-n: 2;
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(150px, 1fr) auto auto;
+  gap: 0.6rem;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 0.8rem 1rem 0.8rem;
+  user-select: none;
+  font-family: 'Fredoka', system-ui, sans-serif;
+  color: var(--opc-ink);
+  background: linear-gradient(180deg, var(--opc-bg) 0 62%, var(--opc-floor) 62%);
+}
+.opc[data-palette='vivid'] {
+  --opc-bg: #dff4ff;
+  --opc-floor: #ffe1a8;
+  --opc-belt: #2f6fb0;
+  --opc-belt-stripe: #4f8fd0;
+}
+.opc[data-palette='high-contrast'] {
+  --opc-bg: #000;
+  --opc-floor: #000;
+  --opc-ink: #fff;
+  --opc-card: #fff;
+  --opc-belt: #333;
+  --opc-belt-stripe: #ffe500;
+  --opc-hint: #ffe500;
+  --opc-ok: #00e0ff;
+  --opc-focus: #ffe500;
+  --opc-chip: #000;
+  background: #000;
+}
+
+.opc-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+.opc-instruction {
+  margin: 0;
+  font-size: clamp(1.15rem, 3vw, 1.7rem);
+  font-weight: 600;
+  text-align: center;
+}
+.opc-say {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  background: var(--opc-chip);
+  color: var(--opc-ink);
+  cursor: pointer;
+}
+.opc-say svg { width: 24px; height: 24px; }
+.opc-say:focus-visible { outline: 4px solid var(--opc-focus); outline-offset: 3px; }
+
+/* ------------------------------------------------------------ esteira e item */
+.opc-stage {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 0;
+  padding-bottom: 44px;
+}
+.opc-belt {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: 6px;
+  height: 40px;
+}
+.opc-belt__svg { width: 100%; height: 100%; display: block; }
+.opc-belt::after {
+  /* Listras que andam (a esteira "puxa" o item). */
+  content: '';
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  top: 12px;
+  height: 16px;
+  border-radius: 8px;
+  background: repeating-linear-gradient(90deg, var(--opc-belt-stripe) 0 10px, transparent 10px 26px);
+  opacity: 0.8;
+}
+.opc-belt[data-moving='true']::after { animation: opc-belt 0.5s linear infinite; }
+@keyframes opc-belt {
+  to { background-position: 26px 0; }
+}
+
+.opc-item {
+  position: relative;
+  z-index: 10;
+  width: calc(clamp(110px, 22vmin, 180px) * var(--opc-scale));
+  aspect-ratio: 1;
+  max-height: 100%;
+  cursor: grab;
+  touch-action: none;
+  will-change: transform;
+}
+.opc-item:active { cursor: grabbing; }
+.opc-item__card {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 12%;
+  box-sizing: border-box;
+  border-radius: 24px;
+  border: 4px solid var(--opc-ink);
+  background: var(--opc-card);
+  box-shadow: 0 8px 0 rgb(0 0 0 / 0.15);
+}
+.opc-item__shadow {
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  bottom: -10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.15);
+}
+.opc[data-motion='full'] .opc-item,
+.opc[data-motion='reduced'] .opc-item {
+  /* Chegada pela esteira: desacelera com atrito e balança ao parar. */
+  animation: opc-arrive 0.75s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+@keyframes opc-arrive {
+  0% { translate: -60vw 0; rotate: 0deg; }
+  80% { translate: 8px 0; rotate: 3deg; }
+  100% { translate: 0 0; rotate: 0deg; }
+}
+.opc-item[data-hint='true'] .opc-item__card { box-shadow: 0 0 0 6px var(--opc-hint), 0 8px 0 rgb(0 0 0 / 0.15); }
+
+/* ------------------------------------------------------------ caixas */
+.opc-boxes {
+  display: grid;
+  grid-template-columns: repeat(var(--opc-n), minmax(0, 1fr));
+  gap: clamp(8px, 2vw, 20px);
+  max-width: calc(var(--opc-n) * 220px);
+  width: 100%;
+  margin: 0 auto;
+}
+.opc-box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-height: calc(110px * var(--opc-scale));
+  padding: 6px 6px 8px;
+  border: 3px solid transparent;
+  border-radius: 18px;
+  background: var(--opc-chip);
+  font: inherit;
+  color: var(--opc-ink);
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s, border-color 0.2s;
+}
+.opc-box:hover { transform: translateY(-3px); }
+.opc-box:focus-visible { outline: 5px solid var(--opc-focus); outline-offset: 3px; }
+.opc-box[data-over='true'] { border-color: var(--opc-hint); transform: scale(1.06); }
+.opc-box[data-hint='true'] { border-color: var(--opc-hint); animation: opc-glow 1.1s ease-in-out infinite; }
+.opc-box[data-faded='true'] { opacity: 0.45; }
+.opc-box[data-gulp='true'] .opc-box__art { animation: opc-gulp 0.5s cubic-bezier(0.34, 1.6, 0.64, 1); }
+.opc[data-motion='static'] .opc-box[data-gulp='true'] .opc-box__art,
+.opc[data-motion='static'] .opc-box[data-hint='true'] { animation: none; }
+@keyframes opc-gulp {
+  0% { transform: scale(1, 1); }
+  30% { transform: scale(1.18, 0.82); }
+  60% { transform: scale(0.94, 1.08); }
+  100% { transform: scale(1, 1); }
+}
+@keyframes opc-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(242 182 50 / 0); }
+  50% { box-shadow: 0 0 0 10px rgb(242 182 50 / 0.35); }
+}
+.opc-box__art {
+  width: 100%;
+  max-width: 150px;
+  aspect-ratio: 6 / 5;
+  transform-origin: 50% 100%;
+}
+.opc-box__label {
+  font-weight: 600;
+  font-size: clamp(0.85rem, 2vw, 1.05rem);
+}
+.opc-box__peek {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  display: flex;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.opc-box__peek span {
+  width: 30px;
+  height: 30px;
+  margin-left: -8px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--opc-ink);
+  transform: rotate(calc((var(--k) - 1) * 12deg));
+}
+
+.opc-pins {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.opc-pin {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--opc-ink);
+  opacity: 0.35;
+}
+.opc-pin[data-done='true'] { background: var(--opc-ok); border-color: var(--opc-ok); opacity: 1; }
+.opc-pin[data-current='true'] { opacity: 1; transform: scale(1.3); }
+
+.opc-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.opc-banner {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  z-index: 30;
+  padding: 0.9rem 1.8rem;
+  border-radius: 22px;
+  background: var(--opc-chip);
+  font-size: 1.5rem;
+  font-weight: 600;
+  box-shadow: 0 14px 36px rgb(0 0 0 / 0.18);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.opc-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(20 30 25 / 0.42);
+  backdrop-filter: blur(4px);
+}
+.opc-overlay--done { background: rgb(238 243 234 / 0.7); }
+.opc-overlay__badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.5rem 2.5rem;
+  border-radius: 1.5rem;
+  background: #fff;
+  color: #33302d;
+  font-weight: 600;
+  font-size: 1.35rem;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.15);
+  text-align: center;
+}
+.opc-done-boxes {
+  display: flex;
+  gap: 8px;
+}
+.opc-done-boxes span { width: 72px; height: 60px; }
+
+@media (max-width: 560px) {
+  .opc-box__label { font-size: 0.8rem; }
+  .opc-box__peek span { width: 22px; height: 22px; }
+}

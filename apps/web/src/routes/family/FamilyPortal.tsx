@@ -9,6 +9,14 @@ import { StimulusArt } from '@aprumo/stimuli';
 import { Button, IconArrowRight, IconBook, IconChart, IconCheck, IconFile, IconHeart, IconHome, IconLogout, Logo } from '@aprumo/ui';
 import { actions, db, formatAge, screenMinutesToday, summariesFor, useStore } from '../../data/store';
 import type { Child, Guidance, HomeTask } from '../../data/types';
+import { GAMES } from '../../game-host/registry';
+import { GameIllustration } from '../../components/GameIllustration';
+import {
+  GAME_CATEGORIES,
+  GAME_TO_CATEGORY,
+  getCategoryOfGame,
+  type GameCategoryId,
+} from '../../data/gameCategories';
 import './family.css';
 
 const GUARDIAN_ID = 'gd-teo-mae';

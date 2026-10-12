@@ -101,7 +101,7 @@
 .cs-game:active { translate: 0 4px; box-shadow: 0 2px 0 color-mix(in srgb, var(--cs-ink) 10%, transparent); }
 .cs-game__art { display: block; aspect-ratio: 16 / 10; }
 .cs-game[data-compact='true'] .cs-game__art { aspect-ratio: 16 / 9; }
-.cs-game__art svg { width: 100%; height: 100%; display: block; }
+.cs-game__art svg, .cs-game__art img { width: 100%; height: 100%; display: block; object-fit: cover; }
 .cs-game__body { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.85rem 1rem; }
 .cs-game__body strong { font-size: 1.2rem; font-weight: 600; }
 .cs-game__stars { display: inline-flex; align-items: center; gap: 0.25rem; font-weight: 600; color: var(--cs-muted); }

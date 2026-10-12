@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="100%" height="100%">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e11d48"/>
+      <stop offset="100%" stop-color="#9f1239"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.15"/>
+    </radialGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" rx="24" fill="url(#grad)"/>
+  <rect width="640" height="360" rx="24" fill="url(#glow)"/>
+  <circle cx="80" cy="70" r="45" fill="#ffffff" opacity="0.1"/>
+  <circle cx="570" cy="280" r="70" fill="#ffffff" opacity="0.08"/>
+  <circle cx="540" cy="80" r="35" fill="#ffffff" opacity="0.12"/>
+  <g id="hero-art">
+    <ellipse cx="320" cy="130" rx="65" ry="25" fill="#fef08a" stroke="#ffffff" stroke-width="4"/><path d="M255 130 L255 180 Q320 220 385 180 L385 130 Z" fill="#fb7185"/><ellipse cx="320" cy="180" rx="65" ry="22" fill="#f43f5e"/><line x1="280" y1="85" x2="305" y2="120" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/><circle cx="280" cy="85" r="8" fill="#facc15"/><line x1="360" y1="85" x2="335" y2="120" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/><circle cx="360" cy="85" r="8" fill="#facc15"/>
+  </g>
+  <rect x="60" y="260" width="520" height="68" rx="16" fill="#000000" fill-opacity="0.25" stroke="#ffffff" stroke-opacity="0.2" stroke-width="1.5"/>
+  <text x="320" y="292" text-anchor="middle" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">Tambor da Imitação</text>
+  <text x="320" y="313" text-anchor="middle" fill="#fef08a" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" letter-spacing="0.05em">RITMO & RESPOSTA SONORA</text>
+</svg>

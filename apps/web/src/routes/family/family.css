@@ -487,3 +487,61 @@
 }
 @media (hover: none) { .fam-space:hover { transform: none; } }
 @media (prefers-reduced-motion: reduce) { .fam-space { transition: none; } .fam-space:hover { transform: none; } }
+
+/* Jogos e Atividades Recomendadas para a Família */
+.fam-game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 1.25rem;
+}
+.fam-game-card {
+  background: var(--ap-surface);
+  border: 1px solid var(--ap-border);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--ap-dur-1), box-shadow var(--ap-dur-1);
+  box-shadow: var(--ap-shadow-1);
+}
+.fam-game-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--ap-shadow-2);
+  border-color: var(--ap-sage-300);
+}
+.fam-game-card__art {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--ap-surface-sunken);
+}
+.fam-game-card__body {
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+.fam-game-card__title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ap-sage-900);
+  margin: 0;
+}
+.fam-game-card__desc {
+  font-size: 0.92rem;
+  color: var(--ap-text-muted);
+  line-height: 1.45;
+  margin: 0;
+  flex: 1;
+}
+.fam-game-card__tip {
+  background: var(--ap-sage-50);
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.82rem;
+  color: var(--ap-sage-800);
+  border-left: 3px solid var(--ap-primary);
+  margin-top: 0.25rem;
+}
+

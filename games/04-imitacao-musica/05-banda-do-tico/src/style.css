@@ -1,0 +1,477 @@
+/* src/style.css */
+/* Banda do Tico - Paper Cut Concert Aesthetic & Design Tokens */
+
+:root {
+  --color-azul-noite: #283B5B;
+  --color-coral: #E96A5F;
+  --color-amarelo: #F3C24F;
+  --color-verde: #63A675;
+  --color-lilas: #8A79C7;
+  --color-creme: #FFF8E8;
+  --color-ciano: #48CAE4;
+  --color-card-shadow: rgba(27, 38, 59, 0.4);
+
+  --font-display: 'Fredoka', cursive, sans-serif;
+  --font-body: 'Outfit', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--color-azul-noite);
+  color: var(--color-creme);
+  font-family: var(--font-body);
+}
+
+#app-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+#game-canvas-container {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#game-canvas-container canvas {
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+}
+
+/* ==========================================
+   MODAL OVERLAY & PAPER-CUT DIALOGS
+   ========================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 27, 42, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-card {
+  background: var(--color-creme);
+  color: var(--color-azul-noite);
+  width: 90%;
+  max-width: 580px;
+  max-height: 85vh;
+  border-radius: 20px;
+  box-shadow: 0 16px 40px var(--color-card-shadow), 0 0 0 4px var(--color-amarelo);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-card.modal-large {
+  max-width: 880px;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+  padding: 18px 24px;
+  background: var(--color-azul-noite);
+  color: var(--color-creme);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid var(--color-amarelo);
+}
+
+.modal-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  letter-spacing: 0.5px;
+}
+
+.btn-close {
+  background: var(--color-coral);
+  color: #FFF;
+  border: none;
+  font-size: 1.1rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: transform 0.15s, background-color 0.15s;
+}
+
+.btn-close:hover {
+  transform: scale(1.1);
+  background: #C44B41;
+}
+
+.modal-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-footer {
+  padding: 14px 24px;
+  background: #F3EBD9;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #E5D8BE;
+}
+
+/* Setting Controls */
+.setting-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.setting-group label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.setting-group input[type="range"] {
+  accent-color: var(--color-coral);
+  height: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.setting-checkbox {
+  background: #FFF;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 2px solid #E3D9C3;
+}
+
+.setting-checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.setting-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-verde);
+  cursor: pointer;
+}
+
+.btn-confirm {
+  background: var(--color-verde);
+  color: #FFF;
+  border: none;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  padding: 10px 24px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(99, 166, 117, 0.4);
+  transition: transform 0.15s, background-color 0.15s;
+}
+
+.btn-confirm:hover {
+  transform: scale(1.04);
+  background: #4F8C60;
+}
+
+.btn-action-small {
+  background: var(--color-amarelo);
+  color: var(--color-azul-noite);
+  border: none;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* ==========================================
+   CALIBRATION STYLES
+   ========================================== */
+.calibration-display {
+  background: var(--color-azul-noite);
+  color: var(--color-creme);
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.calib-counter {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--color-amarelo);
+}
+
+.calib-pulse {
+  font-size: 3.5rem;
+  transition: transform 0.1s;
+}
+
+.calib-pulse.pulse {
+  transform: scale(1.4) rotate(8deg);
+}
+
+.btn-calib-pad {
+  background: var(--color-amarelo);
+  color: var(--color-azul-noite);
+  border: 4px solid #FFF;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  padding: 22px 40px;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(243, 194, 79, 0.5);
+  transition: transform 0.08s;
+}
+
+.btn-calib-pad.active-tap {
+  transform: scale(0.92);
+  background: var(--color-coral);
+  color: #FFF;
+}
+
+/* ==========================================
+   RHYTHM LIBRARY GRID
+   ========================================== */
+.rhythm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.rhythm-item-card {
+  background: #FFF;
+  border: 2px solid #E5D8BE;
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.rhythm-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rhythm-badge {
+  background: var(--color-lilas);
+  color: #FFF;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.rhythm-item-desc {
+  font-size: 0.85rem;
+  color: #555;
+  line-height: 1.3;
+}
+
+.rhythm-item-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: #777;
+  font-weight: 600;
+}
+
+.btn-play-rhythm {
+  background: var(--color-coral);
+  color: #FFF;
+  border: none;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.btn-play-rhythm:hover {
+  background: #C44B41;
+}
+
+/* ==========================================
+   SEQUENCER GRID
+   ========================================== */
+.modal-toolbar {
+  padding: 12px 24px;
+  background: #EFE4CC;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-bottom: 2px solid #D8C8A6;
+}
+
+.btn-seq-action, .btn-seq-save {
+  background: var(--color-azul-noite);
+  color: #FFF;
+  border: none;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-seq-save {
+  background: var(--color-verde);
+  margin-left: auto;
+}
+
+.seq-preset-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.btn-preset {
+  background: #FFF;
+  border: 1px solid #CCC;
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.btn-preset:hover {
+  background: var(--color-amarelo);
+}
+
+.seq-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.seq-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.seq-track-label {
+  width: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.seq-track-name {
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.seq-track-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.btn-seq-mute, .btn-seq-solo {
+  font-size: 0.7rem;
+  font-weight: bold;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 1px solid #CCC;
+  background: #FFF;
+  cursor: pointer;
+}
+
+.btn-seq-mute.on {
+  background: var(--color-coral);
+  color: #FFF;
+}
+
+.btn-seq-solo.on {
+  background: var(--color-amarelo);
+  color: var(--color-azul-noite);
+}
+
+.seq-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(16, 26px);
+  gap: 4px;
+}
+
+.seq-step {
+  width: 26px;
+  height: 32px;
+  background: #E8DFC8;
+  border: 2px solid #C4BBA5;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.05s;
+}
+
+.seq-step.downbeat {
+  border-left: 3px solid var(--color-azul-noite);
+}
+
+.seq-step.active {
+  box-shadow: 0 0 6px rgba(0,0,0,0.3);
+}
+
+.seq-step:hover {
+  transform: scale(1.1);
+}
+
+/* High Contrast Mode Accessibility */
+body.high-contrast {
+  --color-azul-noite: #000000;
+  --color-creme: #FFFFFF;
+}
+
+body.high-contrast .modal-card {
+  box-shadow: 0 0 0 6px #FFFF00;
+}
