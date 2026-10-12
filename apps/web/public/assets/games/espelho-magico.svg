@@ -1,26 +1,87 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="100%" height="100%">
   <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#14b8a6"/>
-      <stop offset="100%" stop-color="#0f766e"/>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#be185d" />
+      <stop offset="50%" stop-color="#9d174d" />
+      <stop offset="100%" stop-color="#701a75" />
     </linearGradient>
-    <radialGradient id="glow" cx="50%" cy="35%" r="60%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#000000" stop-opacity="0.15"/>
+    <radialGradient id="ambientGlow" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#f472b6" stop-opacity="0.45" />
+      <stop offset="70%" stop-color="#f472b6" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.4" />
     </radialGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.25"/>
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.32" />
     </filter>
+    <filter id="glowFilter" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    
+      <linearGradient id="mirrorGlass" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#e0f2fe" />
+        <stop offset="50%" stop-color="#bae6fd" />
+        <stop offset="100%" stop-color="#7dd3fc" />
+      </linearGradient>
+    
   </defs>
-  <rect width="640" height="360" rx="24" fill="url(#grad)"/>
-  <rect width="640" height="360" rx="24" fill="url(#glow)"/>
-  <circle cx="80" cy="70" r="45" fill="#ffffff" opacity="0.1"/>
-  <circle cx="570" cy="280" r="70" fill="#ffffff" opacity="0.08"/>
-  <circle cx="540" cy="80" r="35" fill="#ffffff" opacity="0.12"/>
-  <g id="hero-art">
-    <ellipse cx="320" cy="145" rx="60" ry="70" fill="#5eead4" stroke="#ffffff" stroke-width="6" filter="url(#shadow)"/><circle cx="320" cy="135" r="26" fill="#ffe4e6"/><ellipse cx="320" cy="175" rx="35" ry="22" fill="#fda4af"/><circle cx="312" cy="132" r="3" fill="#be123c"/><circle cx="328" cy="132" r="3" fill="#be123c"/><path d="M315 142 Q320 148 325 142" stroke="#be123c" stroke-width="2" fill="none"/>
+
+  <!-- Fundo com gradiente imersivo e iluminação radial -->
+  <rect width="640" height="360" fill="url(#bgGrad)" />
+  <rect width="640" height="360" fill="url(#ambientGlow)" />
+
+  <!-- Vinheta sutil e textura de profundidade -->
+  <circle cx="80" cy="60" r="140" fill="#ffffff" opacity="0.05" />
+  <circle cx="560" cy="300" r="180" fill="#ffffff" opacity="0.04" />
+
+  <!-- Arte do Jogo com Iluminação e Profundidade 3D -->
+  
+      <!-- Moldura luxuosa de espelho barroco dourado infantil -->
+      <g filter="url(#dropShadow)" transform="translate(180, 40)">
+        <!-- Borda externa dourada esculpida -->
+        <rect x="0" y="0" width="280" height="270" rx="135" fill="#f59e0b" stroke="#fde68a" stroke-width="6" />
+        <rect x="12" y="12" width="256" height="246" rx="123" fill="#d97706" />
+
+        <!-- Vidro do espelho cristalino com reflexo suave -->
+        <rect x="22" y="22" width="236" height="226" rx="113" fill="url(#mirrorGlass)" />
+
+        <!-- Reflexo brilhante diagonal no vidro -->
+        <path d="M50,25 L85,25 L45,210 L25,190 Z" fill="#ffffff" opacity="0.35" />
+        <path d="M95,25 L115,25 L55,230 L45,225 Z" fill="#ffffff" opacity="0.2" />
+
+        <!-- Rostinho sorridente carismático refletido no espelho -->
+        <g transform="translate(68, 55)">
+          <!-- Cabeça macia pêssego -->
+          <circle cx="70" cy="70" r="55" fill="#fed7aa" stroke="#f97316" stroke-width="3" />
+          <!-- Cabelinho fofo castanho -->
+          <path d="M22,50 C25,15 115,15 118,50 C105,35 85,35 70,42 C55,35 35,35 22,50 Z" fill="#78350f" />
+          <!-- Olhos piscando alegres (um aberto brilhante, uma piscadela travessa) -->
+          <circle cx="50" cy="65" r="7" fill="#1e293b" />
+          <circle cx="48" cy="62" r="2.5" fill="#ffffff" />
+          <!-- Piscadela -->
+          <path d="M82,65 Q92,58 102,65" stroke="#1e293b" stroke-width="4" stroke-linecap="round" fill="none" />
+          <!-- Bochechas rosadas -->
+          <ellipse cx="40" cy="78" rx="8" ry="5" fill="#f43f5e" opacity="0.45" />
+          <ellipse cx="100" cy="78" rx="8" ry="5" fill="#f43f5e" opacity="0.45" />
+          <!-- Sorriso com linguinha -->
+          <path d="M56,80 Q70,98 84,80" stroke="#991b1b" stroke-width="4" stroke-linecap="round" fill="#be123c" />
+          <path d="M64,88 Q70,96 76,88 Z" fill="#f43f5e" />
+        </g>
+      </g>
+
+      <!-- Brilhos e estrelas mágicas saltando do espelho -->
+      <g filter="url(#dropShadow)">
+        <path d="M140,80 L145,95 L160,100 L145,105 L140,120 L135,105 L120,100 L135,95 Z" fill="#fde047" />
+        <circle cx="140" cy="100" r="4" fill="#ffffff" />
+        <path d="M490,90 L494,102 L506,106 L494,110 L490,122 L486,110 L474,106 L486,102 Z" fill="#fde047" />
+        <circle cx="490" cy="106" r="3" fill="#ffffff" />
+      </g>
+    
+
+  <!-- Placa Transtranslúcida Inferior com Nome do Jogo e Habilidade Clínica -->
+  <g filter="url(#dropShadow)">
+    <rect x="40" y="272" width="560" height="66" rx="20" fill="#0f172a" fill-opacity="0.75" stroke="#ffffff" stroke-opacity="0.22" stroke-width="1.5" />
+    <text x="320" y="302" text-anchor="middle" fill="#ffffff" font-family="'Fredoka', 'Plus Jakarta Sans', system-ui, sans-serif" font-size="21" font-weight="700" letter-spacing="0.01em">Espelho Mágico</text>
+    <text x="320" y="323" text-anchor="middle" fill="#fde047" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11.5" font-weight="750" letter-spacing="0.06em">CONSCIÊNCIA CORPORAL & IMITAÇÃO</text>
   </g>
-  <rect x="60" y="260" width="520" height="68" rx="16" fill="#000000" fill-opacity="0.25" stroke="#ffffff" stroke-opacity="0.2" stroke-width="1.5"/>
-  <text x="320" y="292" text-anchor="middle" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">Espelho Mágico</text>
-  <text x="320" y="313" text-anchor="middle" fill="#fef08a" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" letter-spacing="0.05em">IMITAÇÃO DE GESTOS</text>
 </svg>

@@ -1,26 +1,77 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="100%" height="100%">
   <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ec4899"/>
-      <stop offset="100%" stop-color="#be185d"/>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0369a1" />
     </linearGradient>
-    <radialGradient id="glow" cx="50%" cy="35%" r="60%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#000000" stop-opacity="0.15"/>
+    <radialGradient id="ambientGlow" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#7dd3fc" stop-opacity="0.45" />
+      <stop offset="70%" stop-color="#7dd3fc" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.4" />
     </radialGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.25"/>
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.32" />
     </filter>
+    <filter id="glowFilter" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    
   </defs>
-  <rect width="640" height="360" rx="24" fill="url(#grad)"/>
-  <rect width="640" height="360" rx="24" fill="url(#glow)"/>
-  <circle cx="80" cy="70" r="45" fill="#ffffff" opacity="0.1"/>
-  <circle cx="570" cy="280" r="70" fill="#ffffff" opacity="0.08"/>
-  <circle cx="540" cy="80" r="35" fill="#ffffff" opacity="0.12"/>
-  <g id="hero-art">
-    <ellipse cx="280" cy="150" rx="35" ry="22" fill="#ffffff" filter="url(#shadow)"/><circle cx="288" cy="150" r="14" fill="#38bdf8"/><circle cx="291" cy="147" r="5" fill="#ffffff"/><ellipse cx="360" cy="150" rx="35" ry="22" fill="#ffffff" filter="url(#shadow)"/><circle cx="368" cy="150" r="14" fill="#38bdf8"/><circle cx="371" cy="147" r="5" fill="#ffffff"/><polygon points="410,135 440,150 410,165" fill="#fef08a"/>
+
+  <!-- Fundo com gradiente imersivo e iluminação radial -->
+  <rect width="640" height="360" fill="url(#bgGrad)" />
+  <rect width="640" height="360" fill="url(#ambientGlow)" />
+
+  <!-- Vinheta sutil e textura de profundidade -->
+  <circle cx="80" cy="60" r="140" fill="#ffffff" opacity="0.05" />
+  <circle cx="560" cy="300" r="180" fill="#ffffff" opacity="0.04" />
+
+  <!-- Arte do Jogo com Iluminação e Profundidade 3D -->
+  
+      <!-- Céu ensolarado com nuvens fofas brancas -->
+      <path d="M70,110 Q90,80 120,90 Q150,70 180,95 Q200,90 210,110 Z" fill="#ffffff" opacity="0.85" />
+      <path d="M420,130 Q440,105 470,115 Q495,100 520,120 Q540,115 550,130 Z" fill="#ffffff" opacity="0.8" />
+
+      <!-- Balão de ar quente multicolorido subindo no céu -->
+      <g filter="url(#dropShadow)" transform="translate(300, 45)">
+        <!-- Envelope do balão listrado -->
+        <path d="M40,0 C85,0 95,45 65,85 L55,100 L25,100 L15,85 C-15,45 -5,0 40,0 Z" fill="#f43f5e" stroke="#ffffff" stroke-width="3" />
+        <path d="M40,0 C60,0 65,45 48,85 L44,100 L36,100 L32,85 C15,45 20,0 40,0 Z" fill="#facc15" />
+        <!-- Cordas e cestinha do balão -->
+        <line x1="26" y1="100" x2="30" y2="114" stroke="#78350f" stroke-width="1.5" />
+        <line x1="54" y1="100" x2="50" y2="114" stroke="#78350f" stroke-width="1.5" />
+        <rect x="26" y="114" width="28" height="20" rx="5" fill="#b45309" stroke="#78350f" stroke-width="1.5" />
+        <circle cx="40" cy="120" r="5" fill="#fde047" />
+      </g>
+
+      <!-- Dois amiguinhos na base olhando e apontando juntos para o balão -->
+      <g filter="url(#dropShadow)" transform="translate(130, 190)">
+        <!-- Menino apontando o dedinho para cima -->
+        <circle cx="50" cy="40" r="30" fill="#fed7aa" stroke="#ea580c" stroke-width="2.5" />
+        <!-- Cabelo castanho -->
+        <path d="M22,35 C28,15 72,15 78,35 C68,25 55,25 50,30 C45,25 32,25 22,35 Z" fill="#78350f" />
+        <!-- Olhando para cima com admiração -->
+        <circle cx="56" cy="34" r="5" fill="#1e293b" />
+        <circle cx="58" cy="32" r="1.5" fill="#ffffff" />
+        <circle cx="70" cy="34" r="5" fill="#1e293b" />
+        <circle cx="72" cy="32" r="1.5" fill="#ffffff" />
+        <ellipse cx="66" cy="48" rx="6" ry="4" fill="#f43f5e" />
+        <!-- Bracinho apontando em direção ao balão -->
+        <path d="M70,65 L115,20 C118,17 122,21 118,25 L85,75 Z" fill="#fed7aa" stroke="#ea580c" stroke-width="2" />
+        <!-- Dedo indicador esticado -->
+        <circle cx="120" cy="18" r="5" fill="#fed7aa" stroke="#ea580c" stroke-width="1.5" />
+      </g>
+
+      <!-- Feixe visual suave guiando a atenção da mãozinha ao balão -->
+      <line x1="250" y1="205" x2="330" y2="140" stroke="#fde047" stroke-width="4" stroke-dasharray="10 8" stroke-linecap="round" opacity="0.8" />
+    
+
+  <!-- Placa Transtranslúcida Inferior com Nome do Jogo e Habilidade Clínica -->
+  <g filter="url(#dropShadow)">
+    <rect x="40" y="272" width="560" height="66" rx="20" fill="#0f172a" fill-opacity="0.75" stroke="#ffffff" stroke-opacity="0.22" stroke-width="1.5" />
+    <text x="320" y="302" text-anchor="middle" fill="#ffffff" font-family="'Fredoka', 'Plus Jakarta Sans', system-ui, sans-serif" font-size="21" font-weight="700" letter-spacing="0.01em">Olha Comigo</text>
+    <text x="320" y="323" text-anchor="middle" fill="#fde047" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11.5" font-weight="750" letter-spacing="0.06em">ATENÇÃO COMPARTILHADA DENVER</text>
   </g>
-  <rect x="60" y="260" width="520" height="68" rx="16" fill="#000000" fill-opacity="0.25" stroke="#ffffff" stroke-opacity="0.2" stroke-width="1.5"/>
-  <text x="320" y="292" text-anchor="middle" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">Olha Comigo</text>
-  <text x="320" y="313" text-anchor="middle" fill="#fef08a" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" letter-spacing="0.05em">ATENÇÃO COMPARTILHADA</text>
 </svg>

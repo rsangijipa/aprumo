@@ -1,0 +1,197 @@
+/* ==========================================================================
+   Aprumo Game Host — Tema e Acessibilidade Universal dos Jogos
+   Garante fontes legíveis, caixas arredondadas, alvos de toque amplos (touch),
+   profundidade visual, cores harmoniosas e background acolhedor em todos os jogos.
+   ========================================================================== */
+
+:root {
+  --ap-game-font: 'Fredoka', 'Plus Jakarta Sans', ui-rounded, system-ui, sans-serif;
+  --ap-game-radius-sm: 14px;
+  --ap-game-radius-md: 20px;
+  --ap-game-radius-lg: 28px;
+  --ap-game-shadow-sm: 0 4px 0 rgba(0, 0, 0, 0.1);
+  --ap-game-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08), 0 3px 0 rgba(0, 0, 0, 0.08);
+  --ap-game-shadow-lg: 0 16px 36px rgba(0, 0, 0, 0.12);
+  --ap-game-touch-min: 48px;
+  --ap-game-touch-comfortable: 56px;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: var(--ap-game-font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  overflow: hidden;
+  background-color: #f4f8f5;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* ---------------------------------------------------------------- Backgrounds Temáticos por Jogo */
+
+/* 1. Mesa acolhedora (Padrão para pareamento, cognição, cartas, tabletop) */
+html body,
+html body[data-bg="table"] {
+  background-image:
+    radial-gradient(45rem 30rem at 10% 10%, rgba(224, 242, 254, 0.72) 0%, transparent 65%),
+    radial-gradient(40rem 25rem at 90% 90%, rgba(254, 243, 199, 0.72) 0%, transparent 65%),
+    linear-gradient(160deg, rgba(244, 248, 245, 0.82) 0%, rgba(235, 229, 216, 0.82) 100%),
+    url('/assets/games/bg-playful-table.jpg') !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+/* 2. Parque Mágico (Jogos de movimento, ar livre, natureza, música e exploração) */
+html body[data-bg="park"] {
+  background-image:
+    radial-gradient(45rem 30rem at 15% 10%, rgba(220, 245, 230, 0.75) 0%, transparent 65%),
+    radial-gradient(40rem 25rem at 85% 90%, rgba(254, 240, 210, 0.75) 0%, transparent 65%),
+    linear-gradient(160deg, rgba(240, 248, 242, 0.80) 0%, rgba(228, 242, 232, 0.84) 100%),
+    url('/assets/games/bg-magic-park.jpg') !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+/* 3. Brinquedoteca Acolhedora (Rotinas, autonomia, narrativas, faz-de-conta) */
+html body[data-bg="playroom"] {
+  background-image:
+    radial-gradient(45rem 30rem at 15% 15%, rgba(254, 243, 199, 0.7) 0%, transparent 65%),
+    radial-gradient(40rem 25rem at 85% 85%, rgba(255, 237, 213, 0.7) 0%, transparent 65%),
+    linear-gradient(160deg, rgba(250, 245, 238, 0.82) 0%, rgba(244, 235, 224, 0.85) 100%),
+    url('/assets/games/bg-cozy-playroom.jpg') !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+#game {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+}
+
+/* Permitir que o background temático brilhe através dos containers de jogos */
+.app-container,
+.den02-app,
+.mercadinho-app,
+.passo-app,
+.quadro-app,
+.escape-app,
+.game-container {
+  background-color: transparent !important;
+}
+
+/* ---------------------------------------------------------------- Tipografia e Legibilidade */
+h1, h2, h3, h4, h5, h6, p, span, button, text {
+  font-family: var(--ap-game-font);
+  letter-spacing: 0.01em;
+}
+
+/* Aumenta a nitidez e o contraste dos textos e instruções */
+p, .ap-text, .det-instructions, .fs-title, .bm-badge {
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+/* ---------------------------------------------------------------- Caixas com Bordas Arredondadas */
+.det-case-card,
+.det-choice-btn,
+.det-clue-item,
+.fs-card,
+.fs-cover,
+.mlab-card,
+.bm-badge,
+.epi-niche,
+.card,
+.panel,
+.board-card,
+.target-card,
+.turn-indicator-card,
+.hud-container,
+.game-hud,
+.chef-recipe-tab,
+.circ-card,
+.mercadinho-card,
+.passo-card,
+.fichas-card,
+.card-item,
+.choice-card,
+.match-slot {
+  border-radius: var(--ap-game-radius-md) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* ---------------------------------------------------------------- Otimização Touch (Tablet & Celular) */
+button,
+[role="button"],
+.det-choice-btn,
+.ap-game-intro__button,
+.fs-btn,
+.bm-bubble,
+.epi-niche,
+.btn-primary,
+.btn-tab,
+.btn-choice,
+.chef-recipe-tab,
+.hud-btn {
+  min-height: var(--ap-game-touch-min);
+  min-width: var(--ap-game-touch-min);
+  touch-action: manipulation;
+  cursor: pointer;
+  outline-offset: 3px;
+  border-radius: var(--ap-game-radius-sm);
+  transition: transform 120ms cubic-bezier(0.2, 0, 0, 1), box-shadow 120ms cubic-bezier(0.2, 0, 0, 1), filter 120ms ease;
+}
+
+/* Feedback tátil imediato no toque/clique em telas sensíveis ao toque */
+button:active,
+[role="button"]:active,
+.det-choice-btn:active,
+.ap-game-intro__button:active,
+.btn-primary:active,
+.btn-tab:active,
+.btn-choice:active,
+.chef-recipe-tab:active,
+.hud-btn:active,
+.card-item:active {
+  transform: scale(0.96) !important;
+  filter: brightness(0.96);
+}
+
+/* Foco acessível */
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 4px solid #f59e0b;
+}
+
+/* ---------------------------------------------------------------- Ajustes Responsivos em Telas Pequenas */
+@media (max-width: 600px), (max-height: 500px) {
+  :root {
+    --ap-game-touch-min: 44px;
+    --ap-game-touch-comfortable: 50px;
+  }
+
+  body {
+    font-size: 0.95rem;
+  }
+}
+
+/* ---------------------------------------------------------------- Movimento Reduzido */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

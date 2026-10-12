@@ -1,26 +1,78 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="100%" height="100%">
   <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#10b981"/>
-      <stop offset="100%" stop-color="#047857"/>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ea580c" />
+      <stop offset="50%" stop-color="#c2410c" />
+      <stop offset="100%" stop-color="#9a3412" />
     </linearGradient>
-    <radialGradient id="glow" cx="50%" cy="35%" r="60%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#000000" stop-opacity="0.15"/>
+    <radialGradient id="ambientGlow" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#fb923c" stop-opacity="0.45" />
+      <stop offset="70%" stop-color="#fb923c" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.4" />
     </radialGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.25"/>
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.32" />
     </filter>
+    <filter id="glowFilter" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    
   </defs>
-  <rect width="640" height="360" rx="24" fill="url(#grad)"/>
-  <rect width="640" height="360" rx="24" fill="url(#glow)"/>
-  <circle cx="80" cy="70" r="45" fill="#ffffff" opacity="0.1"/>
-  <circle cx="570" cy="280" r="70" fill="#ffffff" opacity="0.08"/>
-  <circle cx="540" cy="80" r="35" fill="#ffffff" opacity="0.12"/>
-  <g id="hero-art">
-    <rect x="240" y="110" width="75" height="80" rx="14" fill="#34d399" filter="url(#shadow)"/><rect x="330" y="110" width="75" height="80" rx="14" fill="#fbbf24" filter="url(#shadow)"/><circle cx="277" cy="150" r="20" fill="#ffffff"/><polygon points="367,130 385,165 350,165" fill="#ffffff"/>
+
+  <!-- Fundo com gradiente imersivo e iluminação radial -->
+  <rect width="640" height="360" fill="url(#bgGrad)" />
+  <rect width="640" height="360" fill="url(#ambientGlow)" />
+
+  <!-- Vinheta sutil e textura de profundidade -->
+  <circle cx="80" cy="60" r="140" fill="#ffffff" opacity="0.05" />
+  <circle cx="560" cy="300" r="180" fill="#ffffff" opacity="0.04" />
+
+  <!-- Arte do Jogo com Iluminação e Profundidade 3D -->
+  
+      <!-- Três caixas organizadoras coloridas com rótulos claros -->
+      <!-- Caixa 1: Brinquedos (Azul) -->
+      <g filter="url(#dropShadow)" transform="translate(80, 150)">
+        <rect x="0" y="25" width="135" height="100" rx="16" fill="#3b82f6" stroke="#93c5fd" stroke-width="2.5" />
+        <rect x="-6" y="16" width="147" height="18" rx="8" fill="#1d4ed8" />
+        <!-- Carrinho de brinquedo dentro da caixa -->
+        <g transform="translate(42, -5)">
+          <rect x="5" y="12" width="40" height="22" rx="7" fill="#facc15" stroke="#ca8a04" stroke-width="2" />
+          <circle cx="15" cy="34" r="7" fill="#1e293b" />
+          <circle cx="35" cy="34" r="7" fill="#1e293b" />
+        </g>
+        <rect x="25" y="65" width="85" height="26" rx="13" fill="#ffffff" />
+        <text x="67" y="83" fill="#1e3a8a" font-size="11" font-weight="800" text-anchor="middle">BRINQUEDOS</text>
+      </g>
+
+      <!-- Caixa 2: Frutas / Alimentos (Verde) -->
+      <g filter="url(#dropShadow)" transform="translate(252, 140)">
+        <rect x="0" y="25" width="135" height="110" rx="16" fill="#16a34a" stroke="#86efac" stroke-width="2.5" />
+        <rect x="-6" y="16" width="147" height="18" rx="8" fill="#15803d" />
+        <!-- Banana e maçã saltando -->
+        <g transform="translate(40, -15)">
+          <circle cx="28" cy="24" r="18" fill="#ef4444" stroke="#ffffff" stroke-width="2" />
+          <path d="M28,6 Q34,2 38,10 Z" fill="#15803d" />
+        </g>
+        <rect x="25" y="75" width="85" height="26" rx="13" fill="#ffffff" />
+        <text x="67" y="93" fill="#14532d" font-size="11" font-weight="800" text-anchor="middle">FRUTAS</text>
+      </g>
+
+      <!-- Caixa 3: Roupas (Roxa) -->
+      <g filter="url(#dropShadow)" transform="translate(425, 150)">
+        <rect x="0" y="25" width="135" height="100" rx="16" fill="#9333ea" stroke="#d8b4fe" stroke-width="2.5" />
+        <rect x="-6" y="16" width="147" height="18" rx="8" fill="#7e22ce" />
+        <!-- Meia listrada saindo da caixa -->
+        <path d="M50,5 L65,5 L65,25 L75,32 L68,40 L50,25 Z" fill="#ec4899" stroke="#ffffff" stroke-width="2" />
+        <rect x="25" y="65" width="85" height="26" rx="13" fill="#ffffff" />
+        <text x="67" y="83" fill="#581c87" font-size="11" font-weight="800" text-anchor="middle">ROUPAS</text>
+      </g>
+    
+
+  <!-- Placa Transtranslúcida Inferior com Nome do Jogo e Habilidade Clínica -->
+  <g filter="url(#dropShadow)">
+    <rect x="40" y="272" width="560" height="66" rx="20" fill="#0f172a" fill-opacity="0.75" stroke="#ffffff" stroke-opacity="0.22" stroke-width="1.5" />
+    <text x="320" y="302" text-anchor="middle" fill="#ffffff" font-family="'Fredoka', 'Plus Jakarta Sans', system-ui, sans-serif" font-size="21" font-weight="700" letter-spacing="0.01em">Organize as Coisas</text>
+    <text x="320" y="323" text-anchor="middle" fill="#fde047" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11.5" font-weight="750" letter-spacing="0.06em">CATEGORIZAÇÃO SEMÂNTICA</text>
   </g>
-  <rect x="60" y="260" width="520" height="68" rx="16" fill="#000000" fill-opacity="0.25" stroke="#ffffff" stroke-opacity="0.2" stroke-width="1.5"/>
-  <text x="320" y="292" text-anchor="middle" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">Organize as Coisas</text>
-  <text x="320" y="313" text-anchor="middle" fill="#fef08a" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" letter-spacing="0.05em">CATEGORIAS & PAREAMENTO</text>
 </svg>

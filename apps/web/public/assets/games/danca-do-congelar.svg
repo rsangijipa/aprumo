@@ -1,26 +1,110 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="100%" height="100%">
   <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0ea5e9"/>
-      <stop offset="100%" stop-color="#0369a1"/>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed" />
+      <stop offset="50%" stop-color="#6d28d9" />
+      <stop offset="100%" stop-color="#4c1d95" />
     </linearGradient>
-    <radialGradient id="glow" cx="50%" cy="35%" r="60%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#000000" stop-opacity="0.15"/>
+    <radialGradient id="ambientGlow" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.45" />
+      <stop offset="70%" stop-color="#a78bfa" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.4" />
     </radialGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.25"/>
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.32" />
     </filter>
+    <filter id="glowFilter" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    
   </defs>
-  <rect width="640" height="360" rx="24" fill="url(#grad)"/>
-  <rect width="640" height="360" rx="24" fill="url(#glow)"/>
-  <circle cx="80" cy="70" r="45" fill="#ffffff" opacity="0.1"/>
-  <circle cx="570" cy="280" r="70" fill="#ffffff" opacity="0.08"/>
-  <circle cx="540" cy="80" r="35" fill="#ffffff" opacity="0.12"/>
-  <g id="hero-art">
-    <circle cx="320" cy="145" r="55" fill="#bae6fd" filter="url(#shadow)"/><polygon points="320,105 332,135 365,135 338,153 348,185 320,165 292,185 302,153 275,135 308,135" fill="#ffffff"/><circle cx="320" cy="145" r="12" fill="#38bdf8"/>
+
+  <!-- Fundo com gradiente imersivo e iluminação radial -->
+  <rect width="640" height="360" fill="url(#bgGrad)" />
+  <rect width="640" height="360" fill="url(#ambientGlow)" />
+
+  <!-- Vinheta sutil e textura de profundidade -->
+  <circle cx="80" cy="60" r="140" fill="#ffffff" opacity="0.05" />
+  <circle cx="560" cy="300" r="180" fill="#ffffff" opacity="0.04" />
+
+  <!-- Arte do Jogo com Iluminação e Profundidade 3D -->
+  
+      <!-- Pista de dança colorida estilo disco retrô -->
+      <g opacity="0.4">
+        <polygon points="120,340 220,340 250,260 170,260" fill="#ec4899" />
+        <polygon points="230,340 330,340 340,260 260,260" fill="#3b82f6" />
+        <polygon points="340,340 440,340 430,260 350,260" fill="#10b981" />
+        <polygon points="450,340 550,340 520,260 440,260" fill="#f59e0b" />
+      </g>
+
+      <!-- Globo Espelhado no topo refletindo feixes -->
+      <g filter="url(#dropShadow)">
+        <line x1="320" y1="0" x2="320" y2="55" stroke="#cbd5e1" stroke-width="3" />
+        <circle cx="320" cy="85" r="34" fill="#e2e8f0" stroke="#ffffff" stroke-width="2.5" />
+        <!-- Facetas do globo -->
+        <circle cx="310" cy="78" r="8" fill="#ffffff" opacity="0.8" />
+        <circle cx="330" cy="85" r="7" fill="#cbd5e1" />
+        <circle cx="316" cy="95" r="6" fill="#94a3b8" />
+        <!-- Brilhos estelares -->
+        <path d="M280,85 L360,85 M320,45 L320,125" stroke="#ffffff" stroke-width="2" opacity="0.4" />
+      </g>
+
+      <!-- Personagem 1: Pandinha dançando animado à esquerda -->
+      <g filter="url(#dropShadow)" transform="translate(150, 160)">
+        <ellipse cx="45" cy="115" rx="35" ry="9" fill="#000000" opacity="0.3" />
+        <!-- Orelhas pretas -->
+        <circle cx="22" cy="30" r="14" fill="#1e293b" />
+        <circle cx="68" cy="30" r="14" fill="#1e293b" />
+        <!-- Cabeça branca -->
+        <circle cx="45" cy="55" r="34" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+        <!-- Manchas nos olhos -->
+        <ellipse cx="34" cy="52" rx="9" ry="12" fill="#1e293b" transform="rotate(-15, 34, 52)" />
+        <ellipse cx="56" cy="52" rx="9" ry="12" fill="#1e293b" transform="rotate(15, 56, 52)" />
+        <circle cx="35" cy="50" r="3" fill="#ffffff" />
+        <circle cx="55" cy="50" r="3" fill="#ffffff" />
+        <!-- Nariz e focinho -->
+        <ellipse cx="45" cy="65" rx="5" ry="3.5" fill="#1e293b" />
+        <!-- Fone de ouvido estiloso -->
+        <path d="M12,50 C12,18 78,18 78,50" stroke="#f43f5e" stroke-width="6" fill="none" stroke-linecap="round" />
+        <rect x="8" y="44" width="10" height="18" rx="5" fill="#f43f5e" />
+        <rect x="72" y="44" width="10" height="18" rx="5" fill="#f43f5e" />
+      </g>
+
+      <!-- Personagem 2: Raposinha no modo "CONGELAR / ESTÁTUA" com cubinho de gelo divertido -->
+      <g filter="url(#dropShadow)" transform="translate(390, 150)">
+        <ellipse cx="50" cy="125" rx="36" ry="10" fill="#000000" opacity="0.3" />
+        <!-- Cabeça laranja com orelhas pontudas -->
+        <path d="M20,20 L40,65 L10,60 Z" fill="#ea580c" />
+        <path d="M80,20 L60,65 L90,60 Z" fill="#ea580c" />
+        <circle cx="50" cy="65" r="36" fill="#f97316" stroke="#c2410c" stroke-width="2" />
+        <!-- Focinho branco -->
+        <path d="M30,70 Q50,90 70,70 Q50,60 30,70 Z" fill="#ffffff" />
+        <circle cx="50" cy="74" r="4" fill="#1e293b" />
+        <!-- Olhos congelados em surpresa fofa -->
+        <circle cx="38" cy="56" r="4.5" fill="#1e293b" />
+        <circle cx="62" cy="56" r="4.5" fill="#1e293b" />
+        <circle cx="39" cy="54" r="1.5" fill="#ffffff" />
+        <circle cx="63" cy="54" r="1.5" fill="#ffffff" />
+        <!-- Cristal de gelo brilhante no topo indicando congelar -->
+        <g transform="translate(75, 20)">
+          <path d="M0,-12 L0,12 M-12,0 L12,0 M-8,-8 L8,8 M-8,8 L8,-8" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" />
+          <circle cx="0" cy="0" r="3" fill="#ffffff" />
+        </g>
+      </g>
+
+      <!-- Notas Musicais flutuantes com cores vivas -->
+      <g fill="#fde047" filter="url(#dropShadow)">
+        <path d="M280,180 L280,150 L310,140 L310,170 M280,160 L310,150" stroke="#fde047" stroke-width="4" fill="none" stroke-linecap="round" />
+        <ellipse cx="274" cy="182" rx="9" ry="6" transform="rotate(-20, 274, 182)" />
+        <ellipse cx="304" cy="172" rx="9" ry="6" transform="rotate(-20, 304, 172)" />
+      </g>
+    
+
+  <!-- Placa Transtranslúcida Inferior com Nome do Jogo e Habilidade Clínica -->
+  <g filter="url(#dropShadow)">
+    <rect x="40" y="272" width="560" height="66" rx="20" fill="#0f172a" fill-opacity="0.75" stroke="#ffffff" stroke-opacity="0.22" stroke-width="1.5" />
+    <text x="320" y="302" text-anchor="middle" fill="#ffffff" font-family="'Fredoka', 'Plus Jakarta Sans', system-ui, sans-serif" font-size="21" font-weight="700" letter-spacing="0.01em">Dança da Estátua</text>
+    <text x="320" y="323" text-anchor="middle" fill="#fde047" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11.5" font-weight="750" letter-spacing="0.06em">CONTROLE INIBITÓRIO & RITMO</text>
   </g>
-  <rect x="60" y="260" width="520" height="68" rx="16" fill="#000000" fill-opacity="0.25" stroke="#ffffff" stroke-opacity="0.2" stroke-width="1.5"/>
-  <text x="320" y="292" text-anchor="middle" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">Dança do Congelar</text>
-  <text x="320" y="313" text-anchor="middle" fill="#fef08a" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" letter-spacing="0.05em">CONTROLE INIBITÓRIO MUSICAL</text>
 </svg>

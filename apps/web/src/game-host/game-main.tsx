@@ -12,6 +12,7 @@ import '@fontsource/fredoka/600.css';
 import { GAMES } from './registry';
 import { GAME_INTRODUCTIONS } from './narration';
 import './intro.css';
+import './game-theme.css';
 
 function GameRoot() {
   const appId = new URLSearchParams(location.search).get('app') ?? '';
@@ -24,6 +25,27 @@ function GameRoot() {
   const [sound, setSound] = useState<SoundLevel>('low');
   const [reading, setReading] = useState(false);
   const introClient = useMemo(() => entry ? createGameClient({ appId, appVersion: entry.manifest.version }) : null, [appId, entry]);
+
+  useEffect(() => {
+    if (!appId) return;
+    document.body.dataset.app = appId;
+    const parkGames = [
+      'mutirao-do-parque', 'bolhas-magicas', 'rampa-maluca', 'fazendinha-sonora',
+      'danca-do-congelar', 'social-city'
+    ];
+    const playroomGames = [
+      'lanche-do-urso', 'minimundos', 'pequeno-chef', 'historia-ordem',
+      'circuito-executivo', 'passo-a-passo', 'quadro-de-conquistas', 'torre-derruba',
+      'mercadinho-da-esquina', 'escape-room-kids'
+    ];
+    if (parkGames.includes(appId)) {
+      document.body.dataset.bg = 'park';
+    } else if (playroomGames.includes(appId)) {
+      document.body.dataset.bg = 'playroom';
+    } else {
+      document.body.dataset.bg = 'table';
+    }
+  }, [appId]);
 
   useEffect(() => {
     if (!introClient || started) return;
@@ -80,6 +102,6 @@ function GameRoot() {
   return Game ? <Game /> : <p className="ap-game-intro ap-game-intro__note">Abrindo o jogo…</p>;
 }
 
-document.documentElement.style.background = '#222';
+document.documentElement.style.background = '#f4f8f5';
 document.body.style.margin = '0';
 createRoot(document.getElementById('game')!).render(<StrictMode><GameRoot /></StrictMode>);

@@ -1,26 +1,76 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="100%" height="100%">
   <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#d97706"/>
-      <stop offset="100%" stop-color="#b45309"/>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f766e" />
+      <stop offset="50%" stop-color="#115e59" />
+      <stop offset="100%" stop-color="#134e4a" />
     </linearGradient>
-    <radialGradient id="glow" cx="50%" cy="35%" r="60%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#000000" stop-opacity="0.15"/>
+    <radialGradient id="ambientGlow" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.45" />
+      <stop offset="70%" stop-color="#2dd4bf" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.4" />
     </radialGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.25"/>
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.32" />
     </filter>
+    <filter id="glowFilter" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    
   </defs>
-  <rect width="640" height="360" rx="24" fill="url(#grad)"/>
-  <rect width="640" height="360" rx="24" fill="url(#glow)"/>
-  <circle cx="80" cy="70" r="45" fill="#ffffff" opacity="0.1"/>
-  <circle cx="570" cy="280" r="70" fill="#ffffff" opacity="0.08"/>
-  <circle cx="540" cy="80" r="35" fill="#ffffff" opacity="0.12"/>
-  <g id="hero-art">
-    <polygon points="320,95 336,138 382,141 346,170 357,215 320,190 283,215 294,170 258,141 304,138" fill="#fbbf24" filter="url(#shadow)"/><polygon points="320,108 332,142 368,145 340,168 348,202 320,183 292,202 300,168 272,145 308,142" fill="#fef08a"/>
+
+  <!-- Fundo com gradiente imersivo e iluminação radial -->
+  <rect width="640" height="360" fill="url(#bgGrad)" />
+  <rect width="640" height="360" fill="url(#ambientGlow)" />
+
+  <!-- Vinheta sutil e textura de profundidade -->
+  <circle cx="80" cy="60" r="140" fill="#ffffff" opacity="0.05" />
+  <circle cx="560" cy="300" r="180" fill="#ffffff" opacity="0.04" />
+
+  <!-- Arte do Jogo com Iluminação e Profundidade 3D -->
+  
+      <!-- Mural de cortiça aconchegante com moldura de madeira -->
+      <g filter="url(#dropShadow)" transform="translate(60, 45)">
+        <rect x="0" y="0" width="520" height="260" rx="24" fill="#b45309" stroke="#fef3c7" stroke-width="4" />
+        <rect x="12" y="12" width="496" height="236" rx="16" fill="#d97706" opacity="0.6" />
+
+        <!-- Troféu dourado campeão com estrelas reluzentes -->
+        <g transform="translate(195, 25)">
+          <ellipse cx="65" cy="175" rx="45" ry="12" fill="#000000" opacity="0.25" />
+          <rect x="40" y="130" width="50" height="35" rx="8" fill="#78350f" stroke="#fde047" stroke-width="2" />
+          <!-- Taça do troféu -->
+          <path d="M25,25 C25,100 105,100 105,25 Z" fill="#facc15" stroke="#eab308" stroke-width="4" />
+          <ellipse cx="65" cy="25" rx="40" ry="12" fill="#fef08a" stroke="#eab308" stroke-width="2.5" />
+          <!-- Alças laterais da taça -->
+          <path d="M25,40 C0,40 0,80 28,80" stroke="#facc15" stroke-width="7" stroke-linecap="round" fill="none" />
+          <path d="M105,40 C130,40 130,80 102,80" stroke="#facc15" stroke-width="7" stroke-linecap="round" fill="none" />
+          <!-- Estrela cravada no troféu -->
+          <path d="M65,45 L69,57 L81,59 L72,68 L75,80 L65,73 L55,80 L58,68 L49,59 L61,57 Z" fill="#ffffff" />
+        </g>
+
+        <!-- Medalha com fita azul de conquista -->
+        <g transform="translate(50, 60)">
+          <!-- Fitas vermelha e azul -->
+          <polygon points="35,50 20,110 35,95 50,110" fill="#3b82f6" />
+          <polygon points="55,50 40,110 55,95 70,110" fill="#ef4444" />
+          <circle cx="45" cy="45" r="28" fill="#facc15" stroke="#ffffff" stroke-width="3" />
+          <circle cx="45" cy="45" r="20" fill="#fef08a" />
+          <text x="45" y="52" fill="#ca8a04" font-size="20" font-weight="900" text-anchor="middle">★</text>
+        </g>
+
+        <!-- Estrelas brilhantes fixadas no mural com tachinhas coloridas -->
+        <g transform="translate(390, 70)">
+          <polygon points="45,15 54,34 74,37 59,51 63,71 45,61 27,71 31,51 16,37 36,34" fill="#fde047" stroke="#ffffff" stroke-width="2.5" />
+          <circle cx="45" cy="42" r="6" fill="#ef4444" />
+        </g>
+      </g>
+    
+
+  <!-- Placa Transtranslúcida Inferior com Nome do Jogo e Habilidade Clínica -->
+  <g filter="url(#dropShadow)">
+    <rect x="40" y="272" width="560" height="66" rx="20" fill="#0f172a" fill-opacity="0.75" stroke="#ffffff" stroke-opacity="0.22" stroke-width="1.5" />
+    <text x="320" y="302" text-anchor="middle" fill="#ffffff" font-family="'Fredoka', 'Plus Jakarta Sans', system-ui, sans-serif" font-size="21" font-weight="700" letter-spacing="0.01em">Quadro de Conquistas</text>
+    <text x="320" y="323" text-anchor="middle" fill="#fde047" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11.5" font-weight="750" letter-spacing="0.06em">GAMIFICAÇÃO SAUDÁVEL & MOTIVAÇÃO</text>
   </g>
-  <rect x="60" y="260" width="520" height="68" rx="16" fill="#000000" fill-opacity="0.25" stroke="#ffffff" stroke-opacity="0.2" stroke-width="1.5"/>
-  <text x="320" y="292" text-anchor="middle" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">Quadro de Conquistas</text>
-  <text x="320" y="313" text-anchor="middle" fill="#fef08a" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" letter-spacing="0.05em">REFORÇAMENTO POSITIVO & METAS</text>
 </svg>

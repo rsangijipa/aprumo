@@ -14,8 +14,7 @@
 }
 .kid[data-palette='vivid'] { --kid-bg: #e3edf5; }
 .kid[data-palette='high-contrast'] { --kid-bg: #fff; }
-.kid-top { grid-column: 1 / -1; }
-.kid-stage { position: relative; min-width: 0; min-height: 0; margin: 10px; border-radius: 26px; overflow: hidden; box-shadow: 0 8px 24px rgb(0 0 0 / 0.12); background: #222; }
+.kid-stage { position: relative; min-width: 0; min-height: 0; margin: 10px; border-radius: 26px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); background: #f4f8f5; border: 2px solid #ddd7ca; }
 .kid-stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .kid-rail { padding: 10px 10px 10px 0; display: grid; align-content: center; }
 
