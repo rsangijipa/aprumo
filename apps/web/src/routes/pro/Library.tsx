@@ -73,7 +73,7 @@ const ART: Record<string, ReactNode> = {
   'fazendinha-sonora': <ArtFazendinhaSonora />,
 };
 
-const DefaultGameArt = ({ name }: { name: string }) => (
+const _DefaultGameArt = ({ name }: { name: string }) => (
   <svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
     <rect width="160" height="120" fill="var(--ap-sage-100)" />
     <circle cx="80" cy="50" r="28" fill="var(--ap-sage-200)" />

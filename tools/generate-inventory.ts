@@ -56,7 +56,7 @@ for (const cat of categoryDirs) {
   }
 }
 
-const gamesList: GameInfo[] = gameEntries.map(({ cat, dir, fullPath }) => {
+const gamesList: GameInfo[] = gameEntries.map(({ cat: _cat, dir, fullPath }) => {
   const manifestPath = path.join(fullPath, 'src', 'manifest.ts');
   const pkgPath = path.join(fullPath, 'package.json');
   let appId = dir.replace(/^\d+-/, '');

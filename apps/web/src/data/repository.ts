@@ -180,7 +180,7 @@ export class DemoRepository implements AprumoRepository {
       valid: true,
       preferred_name: ch.preferredName,
       age_months: 48,
-      allowed_apps: ['encontre-o-igual', 'escolha-pela-instrucao', 'minha-vez-sua-vez'],
+      allowed_apps: ALL_MOCK_APPS,
       expires_at: new Date(Date.now() + 45 * 60 * 1000).toISOString(),
     };
   }

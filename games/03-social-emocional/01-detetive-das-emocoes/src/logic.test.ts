@@ -45,7 +45,7 @@ describe('Detetive das Emoções — logic', () => {
   it('plans trials according to config block limits', () => {
     const trials = planDetectiveTrials();
     expect(trials.length).toBeGreaterThan(0);
-    expect(trials[0].choices.length).toBe(4);
-    expect(trials[0].choices.filter((ch) => ch.isCorrect).length).toBe(1);
+    expect(trials[0]!.choices.length).toBe(4);
+    expect(trials[0]!.choices.filter((ch) => ch.isCorrect).length).toBe(1);
   });
 });
