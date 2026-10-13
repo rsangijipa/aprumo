@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, MessageSquare, ThumbsUp, Sparkles, Filter, ShieldAlert } from 'lucide-react';
+import { ArrowLeft, MessageSquare, ThumbsUp, Sparkles } from 'lucide-react';
 import { useNarrativeStore } from '../../../narrative/engine/narrativeStore';
 import { CHARACTERS } from '../../../narrative/content/characters';
 import { CharacterAvatar } from '../../../assets/svg/Avatars';

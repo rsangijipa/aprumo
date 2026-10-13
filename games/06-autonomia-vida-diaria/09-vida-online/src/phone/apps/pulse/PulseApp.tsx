@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Brain, BookOpen, Volume2, Search, ArrowLeft, MoreVertical, Eye, ShieldCheck } from 'lucide-react';
+import { Brain, BookOpen, Volume2, Search, ArrowLeft, Eye, ShieldCheck } from 'lucide-react';
 import { useNarrativeStore } from '../../../narrative/engine/narrativeStore';
 import { EPISODES } from '../../../narrative/content/episodes';
 import { CHARACTERS } from '../../../narrative/content/characters';
@@ -10,12 +10,10 @@ export const PulseApp: React.FC = () => {
   const {
     currentEpisodeId,
     currentNodeId,
-    currentPerspective,
     isTyping,
     makeChoice,
     setModal,
     closeApp,
-    switchPerspective,
     resetPerspective,
     settings
   } = useNarrativeStore();
@@ -39,13 +37,11 @@ export const PulseApp: React.FC = () => {
         speechReader.speak(lastMsg.text);
       }
     }
-  }, [currentNodeId, settings.speechEnabled]);
+  }, [currentNode?.messages, currentNodeId, settings.speechEnabled]);
 
   const handleSpeak = (text: string) => {
     speechReader.speak(text);
   };
-
-  const isPerspectiveSwitched = currentPerspective !== 'player';
 
   return (
     <div className="flex flex-col h-full bg-[var(--bg-nexo-screen)] text-[var(--text-primary)] relative select-none">

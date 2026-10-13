@@ -81,10 +81,11 @@ export const RealWorldPurchaseModal: React.FC<RealWorldPurchaseModalProps> = ({
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
+            <label htmlFor="purchase-store-name" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
               Local da Compra
             </label>
             <input
+              id="purchase-store-name"
               type="text"
               value={storeName}
               onChange={(e) => setStoreName(e.target.value)}
@@ -93,10 +94,11 @@ export const RealWorldPurchaseModal: React.FC<RealWorldPurchaseModalProps> = ({
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
+            <label htmlFor="purchase-total-spent" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
               Valor Total Pago
             </label>
             <input
+              id="purchase-total-spent"
               type="text"
               value={totalSpent}
               onChange={(e) => setTotalSpent(e.target.value)}
@@ -106,10 +108,11 @@ export const RealWorldPurchaseModal: React.FC<RealWorldPurchaseModalProps> = ({
         </div>
 
         <div>
-          <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
+          <label htmlFor="purchase-items-bought" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
             Itens Comprados
           </label>
           <input
+            id="purchase-items-bought"
             type="text"
             value={itemsBought}
             onChange={(e) => setItemsBought(e.target.value)}
@@ -118,10 +121,11 @@ export const RealWorldPurchaseModal: React.FC<RealWorldPurchaseModalProps> = ({
         </div>
 
         <div>
-          <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
+          <label htmlFor="purchase-prompt-level" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
             Nível Geral de Ajuda Necessário
           </label>
           <select
+            id="purchase-prompt-level"
             value={promptLevel}
             onChange={(e) => setPromptLevel(e.target.value)}
             style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1.5px solid var(--tinta-15)', backgroundColor: '#FFFFFF' }}
@@ -134,10 +138,11 @@ export const RealWorldPurchaseModal: React.FC<RealWorldPurchaseModalProps> = ({
         </div>
 
         <div>
-          <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
+          <label htmlFor="purchase-notes" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
             Observações Clínicas (Interação Social no Caixa)
           </label>
           <textarea
+            id="purchase-notes"
             rows={3}
             placeholder="Descreva se o jovem cumprimentou o atendente, guardou o troco com calma e pegou a sacola..."
             value={notes}

@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { InventorySystem } from '../src/simulation/InventorySystem';
-import { ALL_ITEMS } from '../src/data/items';
 
 describe('InventorySystem', () => {
   it('should initialize with exactly 3 empty slots', () => {

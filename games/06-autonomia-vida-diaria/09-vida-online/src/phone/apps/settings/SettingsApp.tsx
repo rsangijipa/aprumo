@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Moon, Sun, Eye, Volume2, Type, Sparkles, RotateCcw, ShieldCheck, Zap } from 'lucide-react';
+import { ArrowLeft, Moon, Sun, Eye, Volume2, Type, Sparkles, RotateCcw } from 'lucide-react';
 import { useNarrativeStore } from '../../../narrative/engine/narrativeStore';
 
 export const SettingsApp: React.FC = () => {

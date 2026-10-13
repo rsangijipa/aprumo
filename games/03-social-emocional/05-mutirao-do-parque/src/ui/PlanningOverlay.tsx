@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { TaskDef } from '../types';
 import tasksData from '../data/tasks.json';
-import { Check, Clock, Play, MapPin, Sparkles } from 'lucide-react';
+import { Check, Clock, Play, Sparkles } from 'lucide-react';
 
 export const PlanningOverlay: React.FC = () => {
   const [countdown, setCountdown] = useState(45);

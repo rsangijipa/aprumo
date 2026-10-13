@@ -126,7 +126,7 @@ export const cadaUmNoSeuPoteMachine = setup({
       }
 
       // Update independent task stats if in task mode
-      let taskStats = { ...context.taskStats };
+      const taskStats = { ...context.taskStats };
       if (context.mode === 'tarefa_independente') {
         if (isCorrect) taskStats.itemsCorrect += 1;
         else taskStats.errorsCount += 1;

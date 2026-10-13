@@ -5,16 +5,7 @@
 
 import React from 'react';
 import { useGameStore } from '../../state/gameStore';
-import { X as _X, Volume2 as _V2, VolumeX as _VX, Eye as _Eye, Sparkles as _Sp, RotateCcw as _Rc, Home as _Hm, Compass as _Cp } from 'lucide-react';
-
-const X = _X as any;
-const Volume2 = _V2 as any;
-const VolumeX = _VX as any;
-const Eye = _Eye as any;
-const Sparkles = _Sp as any;
-const RotateCcw = _Rc as any;
-const Home = _Hm as any;
-const Compass = _Cp as any;
+import { X, Volume2, VolumeX, Eye, RotateCcw, Home, Compass } from 'lucide-react';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -37,6 +28,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Configurações e Acessibilidade"
       style={{
         position: 'fixed',
         inset: 0,
@@ -49,8 +43,22 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
         padding: '16px',
         animation: 'popIn 180ms ease-out',
       }}
-      onClick={onClose}
     >
+      <button
+        type="button"
+        aria-label="Fechar configurações"
+        onClick={onClose}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'transparent',
+          border: 'none',
+          padding: 0,
+          cursor: 'pointer',
+          width: '100%',
+          height: '100%',
+        }}
+      />
       <div
         className="clay-card"
         style={{
@@ -61,8 +69,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           display: 'flex',
           flexDirection: 'column',
           position: 'relative',
+          zIndex: 1,
         }}
-        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div

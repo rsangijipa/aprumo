@@ -19,14 +19,15 @@ export const PuzzleModal: React.FC = () => {
     activePuzzle,
     closePuzzle,
     solvePuzzle,
-    inventory,
-    showToast,
   } = useGameStore();
 
   if (!activePuzzle) return null;
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Enigma Atual"
       style={{
         position: 'fixed',
         inset: 0,
@@ -39,8 +40,22 @@ export const PuzzleModal: React.FC = () => {
         padding: '16px',
         animation: 'popIn 200ms ease-out',
       }}
-      onClick={closePuzzle}
     >
+      <button
+        type="button"
+        aria-label="Fechar enigma"
+        onClick={closePuzzle}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'transparent',
+          border: 'none',
+          padding: 0,
+          cursor: 'pointer',
+          width: '100%',
+          height: '100%',
+        }}
+      />
       <div
         className="clay-card"
         style={{
@@ -50,8 +65,8 @@ export const PuzzleModal: React.FC = () => {
           display: 'flex',
           flexDirection: 'column',
           position: 'relative',
+          zIndex: 1,
         }}
-        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div
@@ -183,7 +198,8 @@ const GearTrainGame: React.FC<{ onSolve: () => void }> = ({ onSolve }) => {
           <span style={{ fontSize: '32px' }}>⚙️</span>
         </div>
         <span style={{ fontSize: '20px', color: '#F59E0B' }}>➔</span>
-        <div
+        <button
+          type="button"
           onClick={handlePlace}
           className={`inventory-slot ${placed ? 'active' : ''}`}
           style={{
@@ -191,6 +207,8 @@ const GearTrainGame: React.FC<{ onSolve: () => void }> = ({ onSolve }) => {
             height: '110px',
             border: placed ? '3px solid #10B981' : '3px dashed #F59E0B',
             cursor: hasBrassGear ? 'pointer' : 'default',
+            background: 'none',
+            padding: 0,
           }}
         >
           {placed ? (
@@ -200,7 +218,7 @@ const GearTrainGame: React.FC<{ onSolve: () => void }> = ({ onSolve }) => {
               {hasBrassGear ? 'Clique para Encaixar a Engrenagem de Bronze!' : 'Falta a Engrenagem de Bronze (encontre no baú)'}
             </span>
           )}
-        </div>
+        </button>
       </div>
       {placed && (
         <div style={{ color: '#10B981', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -497,7 +515,7 @@ const SoundSequenceGame: React.FC<{ onSolve: () => void }> = ({ onSolve }) => {
 // 7. WEIGHT BALANCE MINI-GAME
 // ==========================================
 const WeightBalanceGame: React.FC<{ onSolve: () => void }> = ({ onSolve }) => {
-  const [leftPan, setLeftPan] = useState<number[]>([3]); // Solar Acorn = 3
+  const [leftPan] = useState<number[]>([3]); // Solar Acorn = 3
   const [rightPan, setRightPan] = useState<number[]>([1]); // Moon Seed = 1
   const [pool, setPool] = useState<number[]>([2]); // Crystal Berry = 2
 

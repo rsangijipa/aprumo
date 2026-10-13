@@ -18,7 +18,9 @@ export const CurrencyDisplay: React.FC<CurrencyDisplayProps> = ({
 }) => {
   if (item.type === 'moeda') {
     return (
-      <div
+      <button
+        type="button"
+        disabled={!onClick}
         onClick={onClick}
         style={{
           width: item.width * scale,
@@ -38,6 +40,8 @@ export const CurrencyDisplay: React.FC<CurrencyDisplayProps> = ({
           transition: 'all 0.18s ease',
           userSelect: 'none',
           position: 'relative',
+          padding: 0,
+          font: 'inherit',
         }}
         title={`Moeda de ${item.label}`}
       >
@@ -86,13 +90,15 @@ export const CurrencyDisplay: React.FC<CurrencyDisplayProps> = ({
             {count}
           </div>
         )}
-      </div>
+      </button>
     );
   }
 
   // Cédula de Treino
   return (
-    <div
+    <button
+      type="button"
+      disabled={!onClick}
       onClick={onClick}
       style={{
         width: item.width * scale,
@@ -114,6 +120,7 @@ export const CurrencyDisplay: React.FC<CurrencyDisplayProps> = ({
         userSelect: 'none',
         position: 'relative',
         background: `linear-gradient(135deg, ${item.color}, ${item.accentColor})`,
+        font: 'inherit',
       }}
       title={`Cédula de ${item.label}`}
     >
@@ -178,6 +185,6 @@ export const CurrencyDisplay: React.FC<CurrencyDisplayProps> = ({
           {count}
         </div>
       )}
-    </div>
+    </button>
   );
 };

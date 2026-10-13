@@ -40,6 +40,9 @@ export const PhysicalBridgeModal: React.FC<PhysicalBridgeModalProps> = ({
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Ponte para o Físico"
       style={{
         position: 'fixed',
         inset: 0,
@@ -51,8 +54,21 @@ export const PhysicalBridgeModal: React.FC<PhysicalBridgeModalProps> = ({
         zIndex: 10000,
         padding: '16px'
       }}
-      onClick={onClose}
     >
+      <button
+        type="button"
+        aria-label="Fechar modal"
+        onClick={onClose}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          background: 'transparent',
+          border: 'none',
+          cursor: 'default'
+        }}
+      />
       <div
         style={{
           backgroundColor: '#FFFFFF',
@@ -64,9 +80,9 @@ export const PhysicalBridgeModal: React.FC<PhysicalBridgeModalProps> = ({
           boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
           padding: '28px',
           fontFamily: 'var(--font-hud)',
-          position: 'relative'
+          position: 'relative',
+          zIndex: 1
         }}
-        onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '18px' }}>

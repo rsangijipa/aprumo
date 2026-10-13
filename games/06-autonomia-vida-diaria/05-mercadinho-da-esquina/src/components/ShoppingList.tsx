@@ -112,7 +112,8 @@ export const ShoppingList: React.FC<ShoppingListProps> = ({
 
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
             {basketItems.map((item, idx) => (
-              <span
+              <button
+                type="button"
                 key={`${item.id}-${idx}`}
                 onClick={() => onRemoveFromBasket(idx)}
                 style={{
@@ -125,11 +126,13 @@ export const ShoppingList: React.FC<ShoppingListProps> = ({
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '4px',
+                  font: 'inherit',
+                  color: 'inherit',
                 }}
                 title="Clique para remover da cesta"
               >
                 {item.iconEmoji} {item.name} ✕
-              </span>
+              </button>
             ))}
           </div>
         </div>

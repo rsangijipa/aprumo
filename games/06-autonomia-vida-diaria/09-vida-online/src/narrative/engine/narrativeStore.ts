@@ -243,11 +243,11 @@ export const useNarrativeStore = create<NarrativeStoreState>((set, get) => {
         : state.flags;
 
       // Notificação disparada
-      let newNotifications = [...state.notifications];
+      const newNotifications = [...state.notifications];
       if (choice.effects?.triggerNotification) {
         newNotifications.unshift({
           id: 'notif_' + Date.now(),
-          app: choice.effects.triggerNotification.app as any,
+          app: choice.effects.triggerNotification.app as NexoNotification['app'],
           title: choice.effects.triggerNotification.title,
           body: choice.effects.triggerNotification.body,
           timestamp: 'Agora',

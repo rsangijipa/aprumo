@@ -28,6 +28,9 @@ export const HintModal: React.FC = () => {
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Dicas"
       style={{
         position: 'fixed',
         inset: 0,
@@ -40,8 +43,22 @@ export const HintModal: React.FC = () => {
         padding: '16px',
         animation: 'popIn 180ms ease-out',
       }}
-      onClick={closeHintModal}
     >
+      <button
+        type="button"
+        aria-label="Fechar modal de dicas"
+        onClick={closeHintModal}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'transparent',
+          border: 'none',
+          padding: 0,
+          cursor: 'pointer',
+          width: '100%',
+          height: '100%',
+        }}
+      />
       <div
         className="clay-card"
         style={{
@@ -50,8 +67,8 @@ export const HintModal: React.FC = () => {
           display: 'flex',
           flexDirection: 'column',
           position: 'relative',
+          zIndex: 1,
         }}
-        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div

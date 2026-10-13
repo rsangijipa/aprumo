@@ -3,13 +3,12 @@
 // Allows 360-degree item rotation, detailed clue examination, and item merging
 // ==========================================================================
 
-import React, { Suspense, useState } from 'react';
+import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { useGameStore } from '../../state/gameStore';
 import { soundManager } from '../../audio/soundManager';
 import { X, Sparkles, Eye, RotateCw } from 'lucide-react';
-import { ALL_ITEMS } from '../../game/roomsData';
 
 // 3D Procedural representation for inspected items
 const InspectItem3D: React.FC<{ modelType: string; color: string }> = ({ modelType, color }) => {
@@ -155,8 +154,6 @@ export const ItemInspectModal: React.FC = () => {
     combineItems,
   } = useGameStore();
 
-  const [combineTargetId, setCombineTargetId] = useState<string | null>(null);
-
   if (!inspectingItem) return null;
 
   // Filter other inventory items that can combine with this
@@ -169,6 +166,9 @@ export const ItemInspectModal: React.FC = () => {
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Inspecionar Item"
       style={{
         position: 'fixed',
         inset: 0,
@@ -181,8 +181,22 @@ export const ItemInspectModal: React.FC = () => {
         padding: '16px',
         animation: 'popIn 200ms ease-out',
       }}
-      onClick={closeInspection}
     >
+      <button
+        type="button"
+        aria-label="Fechar inspeção"
+        onClick={closeInspection}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'transparent',
+          border: 'none',
+          padding: 0,
+          cursor: 'pointer',
+          width: '100%',
+          height: '100%',
+        }}
+      />
       <div
         className="clay-card"
         style={{
@@ -193,8 +207,8 @@ export const ItemInspectModal: React.FC = () => {
           flexDirection: 'column',
           position: 'relative',
           overflow: 'hidden',
+          zIndex: 1,
         }}
-        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div

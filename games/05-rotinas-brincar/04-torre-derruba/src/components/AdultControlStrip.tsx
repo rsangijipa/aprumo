@@ -69,7 +69,7 @@ export const AdultControlStrip: React.FC<AdultControlStripProps> = ({
 
           {/* Material Control: Give blocks to child */}
           <div className="control-group highlight-group">
-            <label className="control-group-title">Entregar Blocos à Criança (Oportunidade de Mand/Pedido):</label>
+            <div className="control-group-title">Entregar Blocos à Criança (Oportunidade de Mand/Pedido):</div>
             <div className="button-row">
               <button
                 type="button"
@@ -100,7 +100,7 @@ export const AdultControlStrip: React.FC<AdultControlStripProps> = ({
 
           {/* Social Climax: 1-2-3 Countdown & Knockdown */}
           <div className="control-group climax-group">
-            <label className="control-group-title">Clímax Social: Contagem & Derrubada</label>
+            <div className="control-group-title">Clímax Social: Contagem & Derrubada</div>
             <button
               type="button"
               className="adult-btn countdown-btn"
@@ -121,7 +121,7 @@ export const AdultControlStrip: React.FC<AdultControlStripProps> = ({
 
           {/* Expectant Pause & Quick Log */}
           <div className="control-group">
-            <label className="control-group-title">Pausa Expectante (Contato Visual/Vocal):</label>
+            <div className="control-group-title">Pausa Expectante (Contato Visual/Vocal):</div>
             <div className="button-row">
               <button
                 type="button"
@@ -143,10 +143,10 @@ export const AdultControlStrip: React.FC<AdultControlStripProps> = ({
 
           {/* Stability Assist Level (0 to 3) */}
           <div className="control-group">
-            <label className="control-group-title">
+            <div className="control-group-title">
               <Shield className="w-4 h-4 inline mr-1 text-emerald-600" />
               Assistência de Estabilidade ({stabilityAssist}/3):
-            </label>
+            </div>
             <div className="stability-selector">
               {([0, 1, 2, 3] as StabilityAssist[]).map((lvl) => (
                 <button
@@ -175,10 +175,10 @@ export const AdultControlStrip: React.FC<AdultControlStripProps> = ({
 
           {/* Variations for Imitation */}
           <div className="control-group">
-            <label className="control-group-title">
+            <div className="control-group-title">
               <Layers className="w-4 h-4 inline mr-1 text-indigo-600" />
               Variações Temáticas (Imitação):
-            </label>
+            </div>
             <div className="variation-chips">
               {(['padrao', 'alternada', 'ponte', 'trem', 'bamba', 'animal'] as TowerVariation[]).map((v) => (
                 <button

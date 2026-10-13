@@ -130,7 +130,7 @@ export class TowerPhysicsEngine {
     if (isNearCenter && block.y < topY + 60) {
       // Snap to tower center based on stability assistance
       let finalX = block.x;
-      let finalY = Math.min(block.y, topY - block.height / 2);
+      const finalY = Math.min(block.y, topY - block.height / 2);
 
       if (this.config.stabilityAssist >= 1) {
         // Horizontal snap

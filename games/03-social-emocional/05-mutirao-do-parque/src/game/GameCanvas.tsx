@@ -11,9 +11,6 @@ export const GameCanvas: React.FC = () => {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const width = Math.min(window.innerWidth, selectedMap.gridWidth * 32);
-    const height = Math.min(window.innerHeight, selectedMap.gridHeight * 32);
-
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
       parent: containerRef.current,

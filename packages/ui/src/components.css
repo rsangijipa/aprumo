@@ -4,22 +4,45 @@
   --_fg: var(--ap-text);
   --_bd: var(--ap-border-strong);
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-  min-height: 44px; padding: 0 1.1rem;
+  min-height: 44px; padding: 0 1.15rem;
   border-radius: var(--ap-radius-md);
   border: 1px solid var(--_bd);
   background: var(--_bg); color: var(--_fg);
   font-weight: 600; font-size: var(--ap-text-sm); line-height: 1;
   text-decoration: none; cursor: pointer; white-space: nowrap;
-  transition: background var(--ap-dur-1) var(--ap-ease), border-color var(--ap-dur-1), transform var(--ap-dur-1);
+  box-shadow: 0 1px 2px rgb(33 58 56 / 0.05);
+  transition: background var(--ap-dur-1) var(--ap-ease), border-color var(--ap-dur-1), transform var(--ap-dur-1), box-shadow var(--ap-dur-1);
 }
-.ap-btn:hover { background: var(--ap-surface-sunken); }
-.ap-btn:active { transform: translateY(1px); }
-.ap-btn[disabled] { opacity: 0.5; cursor: not-allowed; }
-.ap-btn--primary { --_bg: var(--ap-primary); --_fg: var(--ap-text-inverse); --_bd: var(--ap-primary); }
-.ap-btn--primary:hover { background: var(--ap-primary-hover); border-color: var(--ap-primary-hover); }
-.ap-btn--ghost { --_bg: transparent; --_bd: transparent; }
-.ap-btn--ghost:hover { background: var(--ap-primary-soft); }
+.ap-btn:hover {
+  background: var(--ap-surface-sunken);
+  border-color: var(--ap-border-strong);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px -1px rgb(33 58 56 / 0.1);
+}
+.ap-btn:active { transform: translateY(1px); box-shadow: 0 1px 2px rgb(33 58 56 / 0.06); }
+.ap-btn[disabled] { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+.ap-btn--primary {
+  --_bg: var(--ap-primary); --_fg: var(--ap-text-inverse); --_bd: var(--ap-primary);
+  box-shadow: 0 2px 6px -1px color-mix(in srgb, var(--ap-primary) 35%, transparent);
+}
+.ap-btn--primary:hover {
+  background: var(--ap-primary-hover); border-color: var(--ap-primary-hover);
+  box-shadow: 0 4px 14px -2px color-mix(in srgb, var(--ap-primary) 45%, transparent);
+}
+.ap-btn--secondary {
+  --_bg: var(--ap-surface);
+  --_fg: var(--ap-primary);
+  --_bd: color-mix(in srgb, var(--ap-primary) 45%, transparent);
+}
+.ap-btn--secondary:hover {
+  background: var(--ap-primary-soft);
+  border-color: var(--ap-primary);
+  color: var(--ap-primary-hover);
+}
+.ap-btn--ghost { --_bg: transparent; --_bd: transparent; box-shadow: none; }
+.ap-btn--ghost:hover { background: var(--ap-primary-soft); box-shadow: none; color: var(--ap-primary); }
 .ap-btn--danger { --_fg: var(--ap-danger); --_bd: color-mix(in srgb, var(--ap-danger) 40%, transparent); }
+.ap-btn--danger:hover { background: var(--ap-danger-soft); border-color: var(--ap-danger); }
 .ap-btn--lg { min-height: 52px; padding: 0 1.5rem; font-size: var(--ap-text-md); border-radius: var(--ap-radius-lg); }
 .ap-btn--sm { min-height: 36px; padding: 0 0.8rem; font-size: var(--ap-text-xs); }
 .ap-btn--icon { padding: 0; width: 44px; }
@@ -31,12 +54,19 @@
   border: 1px solid var(--ap-border);
   border-radius: var(--ap-radius-lg);
   box-shadow: var(--ap-shadow-1);
+  transition: border-color var(--ap-dur-1), box-shadow var(--ap-dur-1), transform var(--ap-dur-1);
+}
+.ap-card--interactive { cursor: pointer; }
+.ap-card--interactive:hover {
+  border-color: var(--ap-sage-300);
+  box-shadow: var(--ap-shadow-hover);
+  transform: translateY(-2px);
 }
 .ap-card__head {
   display: flex; align-items: center; justify-content: space-between; gap: 1rem;
   padding: 1rem 1.25rem; border-bottom: 1px solid var(--ap-border);
 }
-.ap-card__title { font-size: var(--ap-text-md); font-weight: 700; }
+.ap-card__title { font-size: var(--ap-text-md); font-weight: 700; color: var(--ap-text); }
 .ap-card__body { padding: 1.25rem; }
 
 /* ------------------------------------------------------------ selos */
@@ -81,10 +111,17 @@
 .ap-input, .ap-textarea, .ap-select {
   width: 100%; min-height: 46px; padding: 0.65rem 0.85rem;
   border: 1px solid var(--ap-border-strong); border-radius: var(--ap-radius-md);
-  background: var(--ap-surface); transition: border-color var(--ap-dur-1);
+  background: var(--ap-surface); color: var(--ap-text);
+  box-shadow: var(--ap-shadow-inner);
+  transition: border-color var(--ap-dur-1), box-shadow var(--ap-dur-1);
 }
 .ap-textarea { min-height: 110px; resize: vertical; line-height: 1.5; }
-.ap-input:hover, .ap-textarea:hover { border-color: var(--ap-sage-500); }
+.ap-input:hover, .ap-textarea:hover, .ap-select:hover { border-color: var(--ap-sage-500); }
+.ap-input:focus, .ap-textarea:focus, .ap-select:focus {
+  border-color: var(--ap-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ap-primary) 20%, transparent);
+}
 
 /* ------------------------------------------------------------ diálogo nativo */
 .ap-dialog {
@@ -95,7 +132,7 @@
 }
 .ap-dialog[open] { display: flex; flex-direction: column; animation: ap-dialog-in var(--ap-dur-2) var(--ap-ease); }
 .ap-dialog--lg { width: min(820px, calc(100vw - 2rem)); }
-.ap-dialog::backdrop { background: rgb(33 58 56 / 0.4); backdrop-filter: blur(2px); }
+.ap-dialog::backdrop { background: rgb(33 58 56 / 0.45); backdrop-filter: blur(6px); }
 @keyframes ap-dialog-in { from { opacity: 0; translate: 0 12px; } }
 .ap-dialog__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1.25rem 1.25rem 0.5rem 1.5rem; }
 .ap-dialog__title { font-size: var(--ap-text-xl); }
@@ -150,8 +187,10 @@
 
 /* ------------------------------------------------------------ tabela */
 .ap-table { width: 100%; border-collapse: collapse; font-size: var(--ap-text-sm); }
-.ap-table th { text-align: left; font-size: var(--ap-text-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ap-text-muted); font-weight: 650; padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--ap-border); }
-.ap-table td { padding: 0.7rem 0.75rem; border-bottom: 1px solid var(--ap-border); }
+.ap-table th { text-align: left; font-size: var(--ap-text-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ap-text-muted); font-weight: 650; padding: 0.75rem 0.85rem; border-bottom: 1px solid var(--ap-border); }
+.ap-table td { padding: 0.75rem 0.85rem; border-bottom: 1px solid var(--ap-border); }
+.ap-table tbody tr { transition: background var(--ap-dur-1); }
+.ap-table tbody tr:hover { background: color-mix(in srgb, var(--ap-surface-sunken) 70%, transparent); }
 .ap-table tr:last-child td { border-bottom: none; }
 
 /* ------------------------------------------------------------ marca */

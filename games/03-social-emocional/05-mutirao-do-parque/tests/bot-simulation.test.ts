@@ -1,9 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { WorldState, mapTaskSpotsToDefs } from '../src/simulation/WorldState';
 import { GoalSystem } from '../src/simulation/GoalSystem';
-import { TaskSystem } from '../src/simulation/TaskSystem';
 import mapsData from '../src/data/maps.json';
-import { MapDef, TaskDef } from '../src/types';
+import { MapDef } from '../src/types';
 
 describe('Bot Match Simulation (100 Partidas)', () => {
   const maps = mapsData as MapDef[];

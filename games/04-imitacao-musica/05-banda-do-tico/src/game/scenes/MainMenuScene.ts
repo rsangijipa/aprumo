@@ -2,7 +2,7 @@
 // Main Menu Screen with 8 Game Modes, 7 Stages, Settings & Calibration.
 
 import Phaser from 'phaser';
-import { STAGES, StageDef } from '../../data/stages';
+import { STAGES } from '../../data/stages';
 import { soundSynth } from '../../audio/synth';
 import { transport } from '../../audio/transport';
 
@@ -96,7 +96,6 @@ export default class MainMenuScene extends Phaser.Scene {
     const { width, height } = this.scale;
 
     // Background gradient canvas or rectangle
-    const currentStage = STAGES[this.selectedStageIndex];
     this.stageBgRect = this.add.rectangle(width / 2, height / 2, width, height, 0x283b5b);
 
     // Decorative paper-cut bunting header
@@ -120,7 +119,7 @@ export default class MainMenuScene extends Phaser.Scene {
       ease: 'Sine.easeInOut',
     });
 
-    const sub = this.add.text(width / 2, 80, 'Concerto Musical Infantil — Toque, Crie e Sinta o Ritmo!', {
+    this.add.text(width / 2, 80, 'Concerto Musical Infantil — Toque, Crie e Sinta o Ritmo!', {
       fontFamily: 'Outfit, sans-serif',
       fontSize: '15px',
       color: '#F3C24F',
@@ -214,9 +213,8 @@ export default class MainMenuScene extends Phaser.Scene {
     this.stageBgRect.setFillStyle(hex);
   }
 
-  private createModeCardsGrid(width: number, height: number): void {
+  private createModeCardsGrid(width: number, _height: number): void {
     const cols = 4;
-    const rows = 2;
     const cardW = 220;
     const cardH = 150;
     const startX = (width - (cols * cardW + (cols - 1) * 20)) / 2 + cardW / 2;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGameStore } from '../store/gameStore';
-import { Volume2, VolumeX, Eye, ShieldCheck, History, X, Check } from 'lucide-react';
+import { Volume2, VolumeX, Eye, ShieldCheck, History, X } from 'lucide-react';
 
 interface SettingsModalProps {
   onClose: () => void;
@@ -11,8 +11,19 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ onClose }) => {
   const saveUserPreferences = useGameStore(s => s.saveUserPreferences);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-[#E8DCC8]">
-      <div className="bg-[#283033] border-2 border-white/10 rounded-3xl p-6 max-w-md w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Configurações e Acessibilidade"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-[#E8DCC8]"
+    >
+      <button
+        type="button"
+        aria-label="Fechar configurações"
+        onClick={onClose}
+        className="absolute inset-0 w-full h-full bg-transparent border-0 cursor-default"
+      />
+      <div className="bg-[#283033] border-2 border-white/10 rounded-3xl p-6 max-w-md w-full shadow-2xl relative max-h-[90vh] overflow-y-auto z-10">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white transition-colors"

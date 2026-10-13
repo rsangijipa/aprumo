@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Play, ShieldAlert, Users, Trophy, Sparkles } from 'lucide-react';
+import { ArrowLeft, Play, ShieldAlert, Users, Trophy } from 'lucide-react';
 import { useNarrativeStore } from '../../../narrative/engine/narrativeStore';
 
 export const PlayHubApp: React.FC = () => {

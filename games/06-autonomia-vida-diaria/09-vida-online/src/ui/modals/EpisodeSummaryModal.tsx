@@ -16,7 +16,7 @@ export const EpisodeSummaryModal: React.FC = () => {
         origin: { y: 0.6 },
         colors: ['#536DFE', '#45B5A4', '#8B75D7', '#E16C68']
       });
-    } catch (e) {
+    } catch {
       // Ignora caso confetti não carregue
     }
   }, []);

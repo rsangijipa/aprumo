@@ -79,9 +79,10 @@
 
 .cs-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 52px; padding: 0 1.15rem; border-radius: 18px; border: 0; background: var(--cs-soft); color: var(--cs-ink); font: inherit; font-weight: 600; font-size: 1.05rem; cursor: pointer; box-shadow: 0 4px 0 color-mix(in srgb, var(--cs-ink) 12%, transparent); transition: translate var(--ap-dur-1), box-shadow var(--ap-dur-1); }
 .cs-btn svg { width: 24px; height: 24px; }
+.cs-btn:hover { translate: 0 -2px; box-shadow: 0 6px 0 color-mix(in srgb, var(--cs-ink) 14%, transparent); }
 .cs-btn:active { translate: 0 3px; box-shadow: 0 1px 0 color-mix(in srgb, var(--cs-ink) 12%, transparent); }
 .cs-btn--primary { background: var(--cs-primary); color: var(--cs-primary-ink); }
-.cs-btn:disabled { opacity: 0.45; }
+.cs-btn:disabled { opacity: 0.45; cursor: not-allowed; translate: none; }
 .cs button:focus-visible { outline: 4px solid var(--cs-ring); outline-offset: 3px; }
 
 /* tempo de tela */
@@ -98,6 +99,7 @@
 .cs-row-scroll > * { scroll-snap-align: start; flex: 0 0 min(78%, 280px); }
 .cs-games { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 0.85rem; }
 .cs-game { position: relative; display: grid; grid-template-rows: auto auto; border: 0; padding: 0; overflow: hidden; border-radius: var(--cs-radius); background: var(--cs-surface); color: inherit; font: inherit; text-align: left; cursor: pointer; box-shadow: 0 5px 0 color-mix(in srgb, var(--cs-ink) 10%, transparent); transition: translate var(--ap-dur-1), box-shadow var(--ap-dur-1); }
+.cs-game:hover { translate: 0 -2px; box-shadow: 0 7px 0 color-mix(in srgb, var(--cs-ink) 12%, transparent); }
 .cs-game:active { translate: 0 3px; box-shadow: 0 2px 0 color-mix(in srgb, var(--cs-ink) 10%, transparent); }
 .cs-game__art { display: block; aspect-ratio: 16 / 10; }
 .cs-game[data-compact='true'] .cs-game__art { aspect-ratio: 16 / 9; }

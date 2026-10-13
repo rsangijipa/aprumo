@@ -1,4 +1,4 @@
-import { PingData, InventorySlot, ItemDef } from '../types';
+import { PingData, ItemDef } from '../types';
 
 export const QUICK_COMM_MESSAGES = [
   { id: 'comm_pegar_material', text: 'Vou pegar material.', icon: 'Package' },

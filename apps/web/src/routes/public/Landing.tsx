@@ -197,13 +197,13 @@ export function Landing() {
         {/* ------------------------------------------------------------ vitrine de games */}
         <section className="lp-section lp-section--sunken" aria-labelledby="vitrine-games">
           <div className="lp-wrap">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
+            <div className="lp-games-showcase__head">
               <div>
                 <span className="ap-eyebrow">Jogos Clínicos</span>
-                <h2 id="vitrine-games" className="lp-h2 ap-display" style={{ margin: '0.25rem 0 0' }}>
+                <h2 id="vitrine-games" className="lp-h2 ap-display">
                   34 Jogos Terapêuticos Padronizados
                 </h2>
-                <p className="lp-sub" style={{ margin: '0.5rem 0 0', maxWidth: '42rem' }}>
+                <p className="lp-sub">
                   Categorizados em 6 domínios de desenvolvimento com ilustrações exclusivas, acessibilidade sensorial e conformidade aos protocolos ABA e Denver.
                 </p>
               </div>
@@ -212,21 +212,21 @@ export function Landing() {
               </Link>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '1.25rem' }}>
+            <div className="lp-games-showcase__grid">
               {FEATURED_GAMES.map((g) => (
                 <div key={g.id} className="ap-game-card">
                   <div className="ap-game-card__art" aria-hidden="true">
                     <GameIllustration appId={g.id} name={g.name} interactive />
                   </div>
                   <div className="ap-game-card__body">
-                    <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                    <div className="ap-game-card__badges">
                       <span className="ap-badge">{g.category}</span>
                       <span className="ap-badge ap-badge--info">{g.model}</span>
                     </div>
-                    <h3 className="ap-game-card__title" style={{ marginTop: '0.25rem' }}>{g.name}</h3>
+                    <h3 className="ap-game-card__title">{g.name}</h3>
                     <p className="ap-game-card__summary">{g.summary}</p>
-                    <div className="ap-game-card__actions" style={{ marginTop: 'auto', paddingTop: '0.5rem' }}>
-                      <Link to="/demonstracao" className="ap-btn ap-btn--sm ap-btn--secondary" style={{ width: '100%', justifyContent: 'center' }}>
+                    <div className="ap-game-card__actions">
+                      <Link to="/demonstracao" className="ap-btn ap-btn--sm ap-btn--secondary">
                         Experimentar jogo
                       </Link>
                     </div>

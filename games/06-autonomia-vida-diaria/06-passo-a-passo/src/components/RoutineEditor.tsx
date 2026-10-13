@@ -140,10 +140,11 @@ export const RoutineEditor: React.FC<RoutineEditorProps> = ({
         <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
+              <label htmlFor="routine-name-input" style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
                 Nome da Rotina
               </label>
               <input
+                id="routine-name-input"
                 type="text"
                 placeholder="Ex: Tomar Banho de Chuveiro"
                 value={name}
@@ -160,10 +161,11 @@ export const RoutineEditor: React.FC<RoutineEditorProps> = ({
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
+              <label htmlFor="routine-category-select" style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
                 Categoria
               </label>
               <select
+                id="routine-category-select"
                 value={category}
                 onChange={(e) => setCategory(e.target.value as Routine['category'])}
                 style={{
@@ -185,10 +187,11 @@ export const RoutineEditor: React.FC<RoutineEditorProps> = ({
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
+            <label htmlFor="routine-description-input" style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
               Descrição da Rotina
             </label>
             <input
+              id="routine-description-input"
               type="text"
               placeholder="Instruções para família ou aplicador..."
               value={description}
@@ -204,9 +207,9 @@ export const RoutineEditor: React.FC<RoutineEditorProps> = ({
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
+            <span style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
               Público-Alvo
-            </label>
+            </span>
             <div style={{ display: 'flex', gap: '8px' }}>
               <button
                 type="button"

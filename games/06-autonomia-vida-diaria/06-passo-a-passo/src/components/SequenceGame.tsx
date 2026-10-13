@@ -184,9 +184,11 @@ export const SequenceGame: React.FC<SequenceGameProps> = ({
             const isHighlighted = playbackStepIndex === idx;
 
             return (
-              <div
+              <button
+                type="button"
                 key={`slot-${idx}`}
                 onClick={() => handleSlotClick(idx)}
+                aria-label={step ? `Passo ${idx + 1}: ${step.title}` : `Espaço vazio para o Passo ${idx + 1}`}
                 style={{
                   minWidth: '130px',
                   width: '130px',
@@ -208,6 +210,8 @@ export const SequenceGame: React.FC<SequenceGameProps> = ({
                   transform: isHighlighted ? 'scale(1.06)' : 'scale(1)',
                   boxShadow: isHighlighted ? '0 8px 20px rgba(244, 162, 97, 0.4)' : step ? '0 4px 10px rgba(0,0,0,0.06)' : 'none',
                   transition: 'all 0.25s ease',
+                  textAlign: 'inherit',
+                  font: 'inherit',
                 }}
               >
                 {/* Step Number Badge */}
@@ -264,7 +268,7 @@ export const SequenceGame: React.FC<SequenceGameProps> = ({
                     Passo {idx + 1}
                   </div>
                 )}
-              </div>
+              </button>
             );
           })}
         </div>

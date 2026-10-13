@@ -51,7 +51,9 @@ export class StorageManager {
       if (stored) {
         return { ...defaults, ...JSON.parse(stored) };
       }
-    } catch {}
+    } catch {
+      /* ignore storage failure */
+    }
     return defaults;
   }
 
@@ -60,7 +62,9 @@ export class StorageManager {
       const current = this.getSettings();
       const updated = { ...current, ...settings };
       localStorage.setItem(SETTINGS_KEY, JSON.stringify(updated));
-    } catch {}
+    } catch {
+      /* ignore storage failure */
+    }
   }
 
   public getSavedBeats(): SavedBeat[] {
@@ -69,7 +73,9 @@ export class StorageManager {
       if (stored) {
         return JSON.parse(stored);
       }
-    } catch {}
+    } catch {
+      /* ignore storage failure */
+    }
     return [];
   }
 
@@ -78,14 +84,18 @@ export class StorageManager {
       const list = this.getSavedBeats().filter((b) => b.id !== beat.id);
       list.unshift(beat);
       localStorage.setItem(BEATS_KEY, JSON.stringify(list));
-    } catch {}
+    } catch {
+      /* ignore storage failure */
+    }
   }
 
   public deleteBeat(id: string): void {
     try {
       const list = this.getSavedBeats().filter((b) => b.id !== id);
       localStorage.setItem(BEATS_KEY, JSON.stringify(list));
-    } catch {}
+    } catch {
+      /* ignore storage failure */
+    }
   }
 }
 

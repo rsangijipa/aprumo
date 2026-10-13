@@ -178,14 +178,18 @@ export class RhythmJudge {
       if (storedFree !== null) {
         this.setJudgmentFreeMode(storedFree === 'true');
       }
-    } catch {}
+    } catch {
+      /* ignore storage failure */
+    }
   }
 
   private saveSettings(): void {
     try {
       localStorage.setItem('banda_accessible_timing', String(this.config.isAccessible));
       localStorage.setItem('banda_judgment_free', String(this.config.judgmentFree));
-    } catch {}
+    } catch {
+      /* ignore storage failure */
+    }
   }
 }
 

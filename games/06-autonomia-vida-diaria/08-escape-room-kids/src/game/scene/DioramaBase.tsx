@@ -4,7 +4,6 @@
 // ==========================================================================
 
 import React from 'react';
-import * as THREE from 'three';
 
 interface DioramaBaseProps {
   floorColor: string;

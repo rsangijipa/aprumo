@@ -70,7 +70,7 @@ export const App: React.FC = () => {
           colors: ['#2D6A4F', '#52B788', '#FFB703', '#F4A261'],
           disableForReducedMotion: true
         });
-      } catch (e) {
+      } catch {
         // Safe fallback
       }
 

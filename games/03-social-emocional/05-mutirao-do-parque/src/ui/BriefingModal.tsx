@@ -2,7 +2,7 @@ import React from 'react';
 import { useGameStore } from '../store/gameStore';
 import { MapDef } from '../types';
 import mapsData from '../data/maps.json';
-import { Users, Clock, Compass, ArrowRight, ShieldCheck, HeartHandshake } from 'lucide-react';
+import { Users, Clock, Compass, ArrowRight, HeartHandshake } from 'lucide-react';
 
 export const BriefingModal: React.FC = () => {
   const selectedMap = useGameStore(s => s.selectedMap);

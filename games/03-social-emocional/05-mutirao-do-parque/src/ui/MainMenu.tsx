@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { SettingsModal } from './SettingsModal';
-import { Play, Settings, HeartHandshake, Sparkles, Users, Award, ShieldCheck } from 'lucide-react';
+import { Play, Settings, HeartHandshake, Sparkles, Users, ShieldCheck } from 'lucide-react';
 
 export const MainMenu: React.FC = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);

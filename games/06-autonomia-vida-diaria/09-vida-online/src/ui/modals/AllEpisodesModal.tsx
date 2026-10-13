@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, CheckCircle2, Play, Lock, Sparkles } from 'lucide-react';
+import { X, CheckCircle2, Play, Sparkles } from 'lucide-react';
 import { useNarrativeStore } from '../../narrative/engine/narrativeStore';
 import { EPISODES } from '../../narrative/content/episodes';
 

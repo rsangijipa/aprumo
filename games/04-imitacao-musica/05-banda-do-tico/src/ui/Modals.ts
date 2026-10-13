@@ -9,7 +9,6 @@ import { PATTERNS_LIBRARY, RhythmPattern } from '../rhythm/patterns/library';
 import { beatSequencer } from '../composer/Sequencer';
 import { storageManager } from '../save/storage';
 import { soundSynth } from '../audio/synth';
-import { transport } from '../audio/transport';
 
 export class ModalManager {
   private overlayContainer: HTMLElement;

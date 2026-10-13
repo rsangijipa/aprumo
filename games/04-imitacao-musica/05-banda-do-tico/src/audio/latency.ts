@@ -54,7 +54,9 @@ export class LatencyManager {
   private saveOffset(): void {
     try {
       localStorage.setItem(this.STORAGE_KEY, this._offsetMs.toString());
-    } catch {}
+    } catch {
+      /* ignore storage failure */
+    }
   }
 
   public startCalibration(onProgress: (step: number, total: number) => void): void {

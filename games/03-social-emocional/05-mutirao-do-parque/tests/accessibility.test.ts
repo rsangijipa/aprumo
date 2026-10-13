@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { WorldState, mapTaskSpotsToDefs } from '../src/simulation/WorldState';
+import { WorldState } from '../src/simulation/WorldState';
 import { CharacterSystem } from '../src/simulation/CharacterSystem';
 import mapsData from '../src/data/maps.json';
 import { MapDef } from '../src/types';

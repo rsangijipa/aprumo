@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGameStore } from '../store/gameStore';
-import { MessageSquare, Hand, Sparkles, Wrench } from 'lucide-react';
+import { MessageSquare, Hand, Wrench } from 'lucide-react';
 import { soundEngine } from '../audio/SoundEngine';
 
 export const TouchControls: React.FC = () => {

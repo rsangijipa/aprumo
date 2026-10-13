@@ -4,7 +4,7 @@
 // ==========================================================================
 
 import { create } from 'zustand';
-import { AgeProfile, CameraMode, InventoryItem, PuzzleDefinition, RoomDefinition } from '../game/types';
+import { AgeProfile, CameraMode, InventoryItem, PuzzleDefinition } from '../game/types';
 import { ROOMS_DATA, ALL_ITEMS } from '../game/roomsData';
 import { soundManager } from '../audio/soundManager';
 import { saveManager } from '../save/saveManager';
@@ -192,7 +192,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     soundManager.startAmbientTone(targetRoom);
 
     // Initial items per room (e.g., workbench key blank in workshop)
-    let initialInventory = [...get().inventory];
+    const initialInventory = [...get().inventory];
     if (targetRoom === 'workshop' && !initialInventory.some(i => i.id === 'key_blank' || i.id === 'master_key')) {
       initialInventory.push(ALL_ITEMS.key_blank);
     }

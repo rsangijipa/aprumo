@@ -50,7 +50,8 @@ export const Shelf: React.FC<ShelfProps> = ({ products, onSelectProduct }) => {
         }}
       >
         {products.map((product) => (
-          <div
+          <button
+            type="button"
             key={product.id}
             onClick={() => onSelectProduct(product)}
             style={{
@@ -67,6 +68,8 @@ export const Shelf: React.FC<ShelfProps> = ({ products, onSelectProduct }) => {
               transition: 'transform 0.15s ease, box-shadow 0.15s ease',
               minHeight: '140px',
               position: 'relative',
+              textAlign: 'inherit',
+              font: 'inherit',
             }}
             onPointerDown={(e) => (e.currentTarget.style.transform = 'scale(0.96)')}
             onPointerUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
@@ -104,7 +107,7 @@ export const Shelf: React.FC<ShelfProps> = ({ products, onSelectProduct }) => {
                 {formatBRL(product.priceCents)}
               </div>
             </div>
-          </div>
+          </button>
         ))}
       </div>
     </div>

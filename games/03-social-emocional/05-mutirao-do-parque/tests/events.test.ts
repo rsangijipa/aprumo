@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { EventSystem } from '../src/simulation/EventSystem';
-import eventsData from '../src/data/events.json';
 
 describe('EventSystem', () => {
   it('should include exactly 15 dynamic collaborative events', () => {

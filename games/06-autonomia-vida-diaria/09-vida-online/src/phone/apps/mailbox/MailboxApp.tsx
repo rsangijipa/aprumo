@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Mail, AlertTriangle, ShieldCheck, Star } from 'lucide-react';
+import { ArrowLeft, AlertTriangle } from 'lucide-react';
 import { useNarrativeStore } from '../../../narrative/engine/narrativeStore';
 
 export const MailboxApp: React.FC = () => {

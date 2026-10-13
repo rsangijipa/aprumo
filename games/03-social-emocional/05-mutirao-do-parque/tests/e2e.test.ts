@@ -1,9 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { WorldState, mapTaskSpotsToDefs } from '../src/simulation/WorldState';
+import { WorldState } from '../src/simulation/WorldState';
 import { TaskSystem } from '../src/simulation/TaskSystem';
-import { GoalSystem } from '../src/simulation/GoalSystem';
 import { InventorySystem } from '../src/simulation/InventorySystem';
-import { CoopSystem, QUICK_COMM_MESSAGES } from '../src/simulation/CoopSystem';
+import { QUICK_COMM_MESSAGES } from '../src/simulation/CoopSystem';
 import mapsData from '../src/data/maps.json';
 import charactersData from '../src/data/characters.json';
 import { MapDef, CharacterDef } from '../src/types';
@@ -36,6 +35,7 @@ describe('E2E Match & Lifecycle Flows', () => {
     // 5. Complete an essential task cooperatively
     const firstTaskSpot = map.taskSpots[0];
     const taskDef = TaskSystem.getTaskDefById(firstTaskSpot.taskId)!;
+    expect(taskDef.id).toBe(firstTaskSpot.taskId);
     const taskState = world.activeTasks.get(firstTaskSpot.taskId)!;
 
     // Give player the needed tools

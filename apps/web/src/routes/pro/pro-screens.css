@@ -80,15 +80,39 @@
 .pro-shortcut:focus-visible { outline: 3px solid var(--ap-focus); outline-offset: 2px; }
 .pro-shortcut__n { font-variant-numeric: tabular-nums; font-size: var(--ap-text-xs); padding: 1px 7px; border-radius: 99px; background: var(--ap-surface-sunken); color: var(--ap-text-muted); }
 
-.pro-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 0.75rem; }
-.pro-stat { border-radius: 18px; transition: border-color var(--ap-dur-1); }
-.pro-stat:hover { border-color: var(--ap-sage-300); }
-.pro-stat .ap-card__body { padding: 0.85rem 1rem; }
-.pro-stat--alert { border-color: color-mix(in srgb, var(--ap-danger) 45%, var(--ap-border)); }
+.pro-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 0.85rem; }
+.pro-stat {
+  border-radius: 18px;
+  background: var(--ap-surface);
+  border: 1px solid var(--ap-border);
+  box-shadow: var(--ap-shadow-1);
+  transition: border-color var(--ap-dur-1), box-shadow var(--ap-dur-1), transform var(--ap-dur-1);
+}
+.pro-stat:hover {
+  border-color: var(--ap-sage-300);
+  box-shadow: var(--ap-shadow-hover);
+  transform: translateY(-2px);
+}
+.pro-stat .ap-card__body { padding: 1rem 1.15rem; }
+.pro-stat--alert {
+  border-color: color-mix(in srgb, var(--ap-danger) 45%, var(--ap-border));
+  background: color-mix(in srgb, var(--ap-danger-soft) 35%, var(--ap-surface));
+}
 .pro-stat--alert .stat__value { color: var(--ap-danger); }
 @media (max-width: 480px) { .pro-stats { grid-template-columns: 1fr 1fr; gap: 0.5rem; } .pro-stat .stat__value { font-size: var(--ap-text-xl); } .pro-stat .ap-card__body { padding: 0.75rem; } }
 
-.case-card { border-radius: 18px; transition: border-color var(--ap-dur-1), box-shadow var(--ap-dur-1); }
+.case-card {
+  border-radius: 18px;
+  background: var(--ap-surface);
+  border: 1px solid var(--ap-border);
+  box-shadow: var(--ap-shadow-1);
+  transition: border-color var(--ap-dur-1), box-shadow var(--ap-dur-1), transform var(--ap-dur-1);
+}
+.case-card:hover {
+  border-color: var(--ap-sage-300);
+  box-shadow: var(--ap-shadow-hover);
+  transform: translateY(-2px);
+}
 .case-card:active { transform: scale(0.99); }
 .case-card__id { min-width: 0; flex: 1; }
 .case-card__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

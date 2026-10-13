@@ -6,8 +6,7 @@ import {
   GameMode,
   PingData,
   CompletedStats,
-  InventorySlot,
-  ItemDef
+  InventorySlot
 } from '../types';
 import { InventorySystem } from './InventorySystem';
 import { CharacterSystem, PlayerSimulationState } from './CharacterSystem';
@@ -15,7 +14,6 @@ import { TaskSystem } from './TaskSystem';
 import { EventSystem, ActiveEventState } from './EventSystem';
 import { GoalSystem } from './GoalSystem';
 import { CoopSystem, WheelbarrowState } from './CoopSystem';
-import { ALL_ITEMS } from '../data/items';
 
 export interface GroundItem {
   id: string;

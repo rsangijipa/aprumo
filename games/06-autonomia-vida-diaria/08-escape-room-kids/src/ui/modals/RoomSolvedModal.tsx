@@ -6,13 +6,7 @@
 import React from 'react';
 import { useGameStore } from '../../state/gameStore';
 import { ROOMS_DATA } from '../../game/roomsData';
-import { Sparkles as _Sp, Trophy as _Tr, Star as _St, ArrowRight as _Ar, Home as _Hm } from 'lucide-react';
-
-const Sparkles = _Sp as any;
-const Trophy = _Tr as any;
-const Star = _St as any;
-const ArrowRight = _Ar as any;
-const Home = _Hm as any;
+import { Trophy, Star, ArrowRight, Home } from 'lucide-react';
 
 export const RoomSolvedModal: React.FC = () => {
   const {

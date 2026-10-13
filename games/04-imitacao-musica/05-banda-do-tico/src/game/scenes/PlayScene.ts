@@ -148,7 +148,7 @@ export default class PlayScene extends Phaser.Scene {
     this.add.rectangle(width / 2, 15, width, 30, curtainCol);
   }
 
-  private buildBandCharacters(width: number, height: number): void {
+  private buildBandCharacters(width: number, _height: number): void {
     const stageY = 170;
     const charSpacing = width / 7;
 
@@ -265,7 +265,6 @@ export default class PlayScene extends Phaser.Scene {
     this.padsContainer = this.add.container(0, 0);
 
     const padY = height - 100;
-    const isMobileBank = width < 768;
 
     // Dueto Mode: P1 on Left (4 pads), P2 on Right (4 pads)
     if (this.currentModeId === 'dueto') {
@@ -685,7 +684,6 @@ export default class PlayScene extends Phaser.Scene {
   // ==========================================
 
   public handlePlayerInstrumentHit(id: InstrumentId, touchX?: number, touchY?: number): void {
-    const ctx = soundSynth as unknown; // context access handled in synth
     const nowAudio = transport.beatToAudioTime(transport.currentBeat);
 
     // 1. Play sound immediately (< 1 frame latency)

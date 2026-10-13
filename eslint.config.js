@@ -6,7 +6,7 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 import globals from 'globals';
 
 export default tseslint.config(
-  { ignores: ['**/dist/**', '**/node_modules/**', '**/.turbo/**', '**/dev-dist/**', '**/_legado-prototipos/**', 'tools/*.cjs', '**/*.d.ts'] },
+  { ignores: ['**/dist/**', '**/node_modules/**', '**/.turbo/**', '**/dev-dist/**', '**/_legado-prototipos/**', 'tools/*.cjs', '**/*.d.ts', '**/.agents/**', '**/*.cjs'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {

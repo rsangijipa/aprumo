@@ -6,8 +6,7 @@ import { QuickComms } from './QuickComms';
 import { TouchControls } from './TouchControls';
 import { EventBanner } from './EventBanner';
 import { SettingsModal } from './SettingsModal';
-import { Clock, Settings, Volume2, VolumeX, Pause, Play, Flag } from 'lucide-react';
-import { soundEngine } from '../audio/SoundEngine';
+import { Clock, Settings, Volume2, VolumeX, Flag } from 'lucide-react';
 
 export const GameHUD: React.FC = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);

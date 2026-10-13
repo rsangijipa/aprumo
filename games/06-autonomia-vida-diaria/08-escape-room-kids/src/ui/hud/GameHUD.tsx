@@ -35,7 +35,6 @@ export const GameHUD: React.FC<GameHUDProps> = ({ onOpenSettings }) => {
     inspectItem,
     openHintModal,
     toastMessage,
-    settings,
   } = useGameStore();
 
   const [inventoryCollapsed, setInventoryCollapsed] = useState(false);
@@ -245,7 +244,8 @@ export const GameHUD: React.FC<GameHUDProps> = ({ onOpenSettings }) => {
               const isSelected = item && selectedItemId === item.id;
 
               return (
-                <div
+                <button
+                  type="button"
                   key={slotIdx}
                   onClick={() => handleSlotClick(item)}
                   className={`inventory-slot ${isSelected ? 'active' : ''}`}
@@ -254,6 +254,12 @@ export const GameHUD: React.FC<GameHUDProps> = ({ onOpenSettings }) => {
                       ? `${item.name} (Clique para usar, clique 2x para inspecionar em 3D)`
                       : 'Slot vazio'
                   }
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: 0,
+                    cursor: item ? 'pointer' : 'default',
+                  }}
                 >
                   {item ? (
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -280,7 +286,7 @@ export const GameHUD: React.FC<GameHUDProps> = ({ onOpenSettings }) => {
                   ) : (
                     <span style={{ fontSize: '18px', color: '#CBD5E1' }}>•</span>
                   )}
-                </div>
+                </button>
               );
             })}
           </div>

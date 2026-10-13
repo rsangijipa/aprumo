@@ -162,11 +162,12 @@ export const ClinicControlModal: React.FC<ClinicControlModalProps> = ({
         {/* Manual Slots Adjustment */}
         {state.phase !== 'pareamento' && (
           <div>
-            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
+            <label htmlFor="clinic-slots-range" style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
               Número de Fichas no Quadro (N)
             </label>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <input
+                id="clinic-slots-range"
                 type="range"
                 min={1}
                 max={15}
@@ -259,10 +260,11 @@ export const ClinicControlModal: React.FC<ClinicControlModalProps> = ({
           </p>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
+            <label htmlFor="supervisor-justification-input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--tinta-60)', marginBottom: '4px' }}>
               Justificativa Clínica Registrada do Supervisor (Obrigatória)
             </label>
             <input
+              id="supervisor-justification-input"
               type="text"
               placeholder="Ex: Aprovado pelo BCBA para conduta de agressão em protocolo individualizado..."
               value={justificationInput}
@@ -283,6 +285,7 @@ export const ClinicControlModal: React.FC<ClinicControlModalProps> = ({
                 type="number"
                 min={1}
                 max={5}
+                aria-label="Quantidade de fichas a deduzir"
                 value={deductAmount}
                 onChange={(e) => setDeductAmount(parseInt(e.target.value, 10) || 1)}
                 style={{ width: '60px', padding: '6px', borderRadius: '8px', border: '1.5px solid var(--tinta-15)', textAlign: 'center' }}
@@ -290,6 +293,7 @@ export const ClinicControlModal: React.FC<ClinicControlModalProps> = ({
               <input
                 type="text"
                 placeholder="Motivo imediato da dedução..."
+                aria-label="Motivo imediato da dedução"
                 value={deductJustification}
                 onChange={(e) => setDeductJustification(e.target.value)}
                 style={{ flex: 1, padding: '6px 10px', borderRadius: '8px', border: '1.5px solid var(--tinta-15)', fontSize: '0.85rem' }}

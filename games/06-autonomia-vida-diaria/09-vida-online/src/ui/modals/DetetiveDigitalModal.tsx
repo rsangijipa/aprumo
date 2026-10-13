@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { X, Search, ShieldCheck, AlertTriangle, Layers, Lock, Sliders, CheckCircle, ExternalLink } from 'lucide-react';
+import { X, Search, AlertTriangle, Layers, Lock, Sliders, CheckCircle, ExternalLink } from 'lucide-react';
 import { useNarrativeStore } from '../../narrative/engine/narrativeStore';
 
 export const DetetiveDigitalModal: React.FC = () => {
-  const { activeModal, setModal } = useNarrativeStore();
+  const { setModal } = useNarrativeStore();
   const [tab, setTab] = useState<'url' | 'print' | 'perms' | 'password'>('url');
 
   // URL Detective State

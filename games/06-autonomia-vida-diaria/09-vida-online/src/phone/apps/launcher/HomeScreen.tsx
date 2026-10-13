@@ -1,6 +1,6 @@
 import React from 'react';
-import { Shield, Eye, Flame, HeartHandshake, Play, Map, Bell, Sparkles } from 'lucide-react';
-import { useNarrativeStore } from '../../../narrative/engine/narrativeStore';
+import { Shield, Eye, Flame, HeartHandshake, Play, Map } from 'lucide-react';
+import { useNarrativeStore, type AppId } from '../../../narrative/engine/narrativeStore';
 import { EPISODES } from '../../../narrative/content/episodes';
 import { 
   PulseIcon, 
@@ -19,7 +19,6 @@ export const HomeScreen: React.FC = () => {
     setModal, 
     currentEpisodeId, 
     indicators, 
-    completedEpisodeIds, 
     notifications 
   } = useNarrativeStore();
 
@@ -136,7 +135,7 @@ export const HomeScreen: React.FC = () => {
               return (
                 <button
                   key={app.id}
-                  onClick={() => openApp(app.id as any)}
+                  onClick={() => openApp(app.id as AppId)}
                   className="flex flex-col items-center gap-1.5 group focus:outline-none"
                 >
                   <div className="relative p-1 rounded-2xl group-hover:scale-105 group-active:scale-95 transition-all shadow-sm">

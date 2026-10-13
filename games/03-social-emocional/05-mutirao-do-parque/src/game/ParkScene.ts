@@ -2,9 +2,7 @@ import Phaser from 'phaser';
 import { WorldState } from '../simulation/WorldState';
 import { useGameStore } from '../store/gameStore';
 import { soundEngine } from '../audio/SoundEngine';
-import { TaskDef } from '../types';
 import { ALL_ITEMS } from '../data/items';
-import tasksData from '../data/tasks.json';
 
 export class ParkScene extends Phaser.Scene {
   private world!: WorldState;
@@ -216,7 +214,6 @@ export class ParkScene extends Phaser.Scene {
 
     // Special action (Space)
     if (Phaser.Input.Keyboard.JustDown(this.keySpace)) {
-      const msg = this.world.players.length > 0 ? (this.world.players[0].characterDef.specialActionName) : '';
       if (p1.specialCooldownRemaining <= 0) {
         p1.specialCooldownRemaining = p1.characterDef.specialCooldown;
         p1.currentSpeechBubble = `✨ ${p1.characterDef.specialActionName}!`;
@@ -293,16 +290,6 @@ export class ParkScene extends Phaser.Scene {
     const pushers = this.world.players.filter(p => cart.pushingPlayerIds.includes(p.id));
 
     if (pushers.length > 0) {
-      // Average direction of pushers
-      let avgVx = 0;
-      let avgVy = 0;
-      pushers.forEach(p => {
-        avgVx += p.vx;
-        avgVy += p.vy;
-      });
-      avgVx /= pushers.length;
-      avgVy /= pushers.length;
-
       // Keep cart ahead of primary pusher
       const leadPusher = pushers[0];
       const forwardDist = 28;
@@ -435,7 +422,6 @@ export class ParkScene extends Phaser.Scene {
       const sx = spot.x * 32 + 16;
       const sy = spot.y * 32 + 16;
       const state = this.world.activeTasks.get(spot.taskId);
-      const def = (tasksData as TaskDef[]).find(t => t.id === spot.taskId);
       const isDone = state?.isCompleted || false;
 
       // Base pedestal

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { useGameStore } from '../store/gameStore';
-import { Sparkles, HeartHandshake, CheckCircle2, RotateCcw, Play, ArrowRight } from 'lucide-react';
+import { Sparkles, HeartHandshake, CheckCircle2, RotateCcw, Play } from 'lucide-react';
 
 export const Results: React.FC = () => {
   const lastResults = useGameStore(s => s.lastResults);

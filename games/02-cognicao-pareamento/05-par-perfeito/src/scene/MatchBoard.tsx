@@ -140,7 +140,7 @@ export const MatchBoard: React.FC<MatchBoardProps> = ({
           colors: ['#0E8388', '#F4A261', '#52B788', '#FFB703'],
           disableForReducedMotion: true
         });
-      } catch (e) {
+      } catch {
         // Safe fallback
       }
 

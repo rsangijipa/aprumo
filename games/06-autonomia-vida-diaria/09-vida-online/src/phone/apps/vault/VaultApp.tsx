@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Shield, Lock, Sliders, CheckCircle2, AlertTriangle, KeyRound, Smartphone } from 'lucide-react';
+import { ArrowLeft, Shield, Lock, Sliders, KeyRound } from 'lucide-react';
 import { useNarrativeStore } from '../../../narrative/engine/narrativeStore';
 
 export const VaultApp: React.FC = () => {

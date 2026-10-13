@@ -2,7 +2,7 @@ import React from 'react';
 import { useGameStore } from '../store/gameStore';
 import { CharacterDef } from '../types';
 import charactersData from '../data/characters.json';
-import { Sparkles, ArrowRight, ArrowLeft, Shield } from 'lucide-react';
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 
 export const CharacterSelect: React.FC = () => {
   const selectedChar1 = useGameStore(s => s.selectedChar1);

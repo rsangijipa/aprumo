@@ -41,16 +41,19 @@ export const ComparisonCard: React.FC<ComparisonCardProps> = ({
   const pulseScale = 1.0 + (0.04 * promptIntensity);
 
   return (
-    <div
-      ref={setNodeRef}
+    <button
+      type="button"
+      ref={setNodeRef as any}
       id={`slot-${slot.slotIndex}`}
       data-testid={`comparison-slot-${slot.slotIndex}`}
+      aria-label={`Comparar com ${target.name}`}
       className={`card-base comparison-card ${isVisPromptActive && slot.isCorrect ? 'vis-prompt-active' : ''} ${isMatched ? 'matched-glow' : ''} ${isOver ? 'scale-105' : ''}`}
       style={{
         opacity,
         backgroundColor: layer === 'foto' ? 'var(--fundo-card)' : 'var(--fundo-card-ilustracao)',
         cursor: 'pointer',
         touchAction: 'manipulation',
+        font: 'inherit',
         '--pulse-scale': pulseScale,
         ...posStyle
       } as React.CSSProperties}
@@ -84,6 +87,6 @@ export const ComparisonCard: React.FC<ComparisonCardProps> = ({
       >
         {target.name}
       </span>
-    </div>
+    </button>
   );
 };
